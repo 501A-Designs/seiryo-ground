@@ -1,9 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Antique&family=Shippori+Antique+B1&display=swap');
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: Helvetica Neue, sans-serif;
+  letter-spacing:-0.5px;
+}
+
+.seiryoGroundFont{
+  font-family: 'Shippori Antique', sans-serif;
+  letter-spacing:-2px;
+  font-weight:normal;
+}
+
+h1,h2,h3,h4,h5,h6{
+  font-weight: normal;
 }
 
 a {
@@ -13,4 +25,20 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+main{
+  padding:5%;
+}
+
+.grid-1fr-3fr{
+  display: grid;  
+  grid-template-columns: 1fr 3fr;
+  gap: 1em;
+}
+
+.grid-1fr-1fr-1fr-1fr-1fr{
+  display: grid;  
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 1em;
 }
