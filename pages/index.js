@@ -22,32 +22,24 @@ export default function Home() {
         <section
           style={{
             maxWidth: '300px',
+            minWidth: '250px',
             position: 'sticky',
             top: '20px'
           }}
         >
           <Image src={logo} width="290" height="100"/>
-          <p>
-            SEIRYO GROUND｜清涼広場へようこそ。
-            <br/>
-            にぎやか。カオス。我々が今生きる世界には様々なことが同時に起こっている。清涼広場はそんなカオティックな世間に清涼感を求めるあなたの場所です。
-          </p>
+          <p>外を歩き回り、今までいって良かった場所をまとめました。</p>
           <AlignItems>
-            <Button>アカウント登録</Button>
             <Button onClick={()=>router.push('/about')}>清涼広場について</Button>
           </AlignItems>
         </section>
         <section
           className="grid-1fr-1fr-1fr-1fr-1fr"
         >
-          <PostThumbNail name="小石川後楽園"/>
-          <PostThumbNail name="東京大学大学院理学系研究科附属植物園"/>
-          <PostThumbNail name="新宿御苑"/>
-          <PostThumbNail name="東郷元帥記念公園"/>
-          <PostThumbNail name="外濠公園"/>
-          <PostThumbNail name="代々木公園・明治神宮"/>
-          <PostThumbNail name="東京都立光が丘公園"/>
-          <PostThumbNail name="国営昭和記念公園"/>
+          <PostThumbNail title="外濠公園" type="green"/>
+          <PostThumbNail title="代々木公園・明治神宮" type="purple"/>
+          <PostThumbNail title="東京都立光が丘公園" type="red"/>
+          <PostThumbNail title="国営昭和記念公園" type="blue"/>
         </section>
       </main>
 
