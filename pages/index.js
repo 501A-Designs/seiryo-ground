@@ -7,9 +7,26 @@ import styles from '../styles/Home.module.css'
 import logo from '../public/sg-banner-logo.png'
 import PostThumbNail from '../lib/PostThumbNail'
 import { useRouter } from 'next/router'
+import { createClient } from 'contentful'
 
-export default function Home() {
+export async function getStaticProps(){
+  const client = createClient({
+    space:process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,
+    accessToken:process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_KEY,
+  })
+  const res = await client.getEntries({
+    content_type:'sgPage'
+  })
+  return{
+    props:{
+      sgPosts:res.items
+    }
+  }
+}
+
+export default function Home({sgPosts}) {
   const router = useRouter()
+  console.log(sgPosts)
   return (
     <div className={styles.container}>
       <Head>
@@ -36,10 +53,17 @@ export default function Home() {
         <section
           className="grid-1fr-1fr-1fr-1fr-1fr"
         >
-          <PostThumbNail title="外濠公園" type="green"/>
-          <PostThumbNail title="代々木公園・明治神宮" type="purple"/>
-          <PostThumbNail title="東京都立光が丘公園" type="red"/>
-          <PostThumbNail title="国営昭和記念公園" type="blue"/>
+          {sgPosts.map(data =>{
+            return(
+              <PostThumbNail
+                key={data.sys.id}
+                slug={data.fields.slug}
+                title={data.fields.title}
+                type={data.fields.type}
+                date={data.fields.date.split('T')[0]}
+              />
+            )
+          })}
         </section>
       </main>
 
