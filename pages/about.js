@@ -9,7 +9,7 @@ export default function About() {
     const router = useRouter();
 
     return (
-        <main>
+        <div className="pageCenter">
             <div style={{display:'flex',justifyContent: 'center',flexDirection: 'column',alignItems: 'center'}}>
                 <Image src={sgCenteredLogo} width={300} height={230}/>
                 <div style={{marginBottom:'1.5em'}}>
@@ -29,6 +29,6 @@ export default function About() {
                     <Button onClick={()=> router.push('/')}>作者のウェブサイト</Button>
                 </AlignItems>
             </div>
-        </main>
+        </div>
     )
 }

@@ -48,49 +48,58 @@ export default function PlaceName({pageDetails}) {
     let slug = 'koishikawakorakuen'
     let img = 'https://s3-ap-northeast-1.amazonaws.com/thegate/2020/09/07/15/19/22/koishikawakorakuen.jpg'
 
+    console.log(pageDetails.fields.pricing)
+
     return (
-        <main>
-            <section className="grid-1fr-2fr">
-                <div style={{display: 'flex', flexDirection: 'column', gap:'1em'}}>
-                    <AlignItems spaceBetween={true}>
-                        <Button onClick={()=> router.push('/')}>
-                            戻る
-                        </Button>
-                        <a href="https://www.tokyo-park.or.jp/park/format/index030.html">公式サイト</a>
-                    </AlignItems>
-                    <iframe
-                        src={`https://www.google.com/maps?output=embed&q=${pageDetails.fields.slug}`}
-                        width="100%"
-                        height="400px"
-                        loading="lazy"
-                    />
-                </div>
+        <div
+            className="pageCenter"
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap:'1em'
+            }}
+        >
+            <AlignItems spaceBetween={true}>
+                <Button onClick={()=> router.push('/')}>
+                    戻る
+                </Button>
+                {pageDetails.fields.officialSite && 
+                    <a href={pageDetails.fields.officialSite} target="_blank">
+                        公式サイト
+                    </a>
+                }
+            </AlignItems>
+            <div className="grid-1fr-2fr">
                 <div>
-                    <AlignItems spaceBetween={true}>
-                        <h1>{pageDetails.fields.title}</h1>
-                        <AlignItems>
-                            <TypeBadge type={pageDetails.fields.type}/>
-                            <time>{pageDetails.fields.date.split('T')[0]}</time>
-                        </AlignItems>
+                    <h1>{pageDetails.fields.title}</h1>
+                    <AlignItems>
+                        <TypeBadge type={pageDetails.fields.type}/>
+                        <time>{pageDetails.fields.date.split('T')[0]}</time>
                     </AlignItems>
                     <p>{pageDetails.fields.description}</p>
-
-                    <h3>写真</h3>
-                    <p></p>
-                    <h3>料金</h3>
-                    <table>
-                        <tr>
-                            <td>大人・大学生</td>
-                            <td>500円</td>
-                        </tr>
-                        <tr>
-                            <td>子供</td>
-                            <td>200円</td>
-                        </tr>
-                    </table>
-                    <h3>同じ場所</h3>
-                </div>
-            </section>
-        </main>
+                    {pageDetails.fields.pricing == undefined ?
+                        <p>無料です。</p>:
+                        <table>
+                            {pageDetails.fields.pricing.pricing.map(data =>{
+                                return (
+                                    <tr>
+                                        {
+                                            data.map(detailData =>{
+                                                return <td>{detailData}</td>
+                                            })
+                                        }
+                                    </tr>
+                                )
+                            })}
+                        </table>
+                    }
+                </div>                
+                <iframe
+                    src={`https://www.google.com/maps?output=embed&q=${pageDetails.fields.slug}`}
+                    width="100%"
+                    height="400px"
+                />
+            </div>
+        </div>
     )
 }
