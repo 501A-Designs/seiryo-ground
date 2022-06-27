@@ -4,51 +4,9 @@ import React from 'react'
 import AlignItems from '../../lib/AlignItems'
 import Button from '../../lib/Button'
 import TypeBadge from '../../lib/TypeBadge'
-import { createClient } from 'contentful'
 
-const client = createClient({
-  space:process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,
-  accessToken:process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_KEY,
-})
-
-export async function getStaticPaths(){
-    const res = await client.getEntries({
-        content_type:'sgPage'
-    })
-    const paths = res.items.map(item => {
-        return{
-            params: {
-                slug: item.fields.slug
-            }
-        }
-    })
-
-  return{
-    paths,
-    fallback:false
-  }
-}
-
-export async function getStaticProps({params}) {
-    const { items } = await client.getEntries({
-        content_type:'sgPage',
-        'fields.slug':params.slug
-    })
-    return{
-        props:{
-            pageDetails:items[0]
-        }
-    }
-}
-
-export default function PlaceName({pageDetails}) {
+export default function PlaceName() {
     const router = useRouter();
-    console.log(pageDetails)
-    let title = '小石川後楽園'
-    let slug = 'koishikawakorakuen'
-    let img = 'https://s3-ap-northeast-1.amazonaws.com/thegate/2020/09/07/15/19/22/koishikawakorakuen.jpg'
-
-    console.log(pageDetails.fields.pricing)
 
     return (
         <div
@@ -93,7 +51,7 @@ export default function PlaceName({pageDetails}) {
                             })}
                         </table>
                     }
-                </div>                
+                </div>
                 <iframe
                     src={`https://www.google.com/maps?output=embed&q=${pageDetails.fields.slug}`}
                     width="100%"

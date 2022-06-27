@@ -1,9 +1,8 @@
-.postThumbNail{
+.updatePostThumbNail{
     cursor:pointer;
     background-color:white;
     color:black;
-    border-bottom:1px solid black;
-    border-right:1px solid black;
+    border-bottom:1px solid rgb(207, 207, 207);
     padding:0.5em;
     display:flex;
     justify-content: center;
@@ -11,8 +10,7 @@
     justify-content: space-between;
     transition: 0.3s;
 }
-.postThumbNail:hover{
-    /* transform:translateX(-15px); */
+.updatePostThumbNail:hover{
     background-color:black;
     color:white;
     font-style: italic;

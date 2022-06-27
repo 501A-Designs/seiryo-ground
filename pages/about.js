@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router'
 import React from 'react'
+import { VscChevronLeft,VscChevronRight } from 'react-icons/vsc';
 import AlignItems from '../lib/AlignItems';
 import Button from '../lib/Button'
 import sgCenteredLogo from '../public/sg-centered-logo.png'
@@ -25,8 +26,20 @@ export default function About() {
                     </p>
                 </div>
                 <AlignItems>
-                    <Button onClick={()=> router.push('/')}>戻る</Button>
-                    <Button onClick={()=> router.push('/')}>作者のウェブサイト</Button>
+                    <Button
+                        iconPosition={'left'}
+                        icon={<VscChevronLeft/>}
+                        onClick={()=> router.push('/')}
+                    >
+                        戻る
+                    </Button>
+                    <Button
+                        iconPosition={'right'}
+                        icon={<VscChevronRight/>}
+                        onClick={()=> router.push('/')}
+                    >
+                        作者のウェブサイト
+                    </Button>
                 </AlignItems>
             </div>
         </div>
