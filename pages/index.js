@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState,useEffect,useRef} from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
 import AlignItems from '../lib/AlignItems'
@@ -10,25 +10,112 @@ import PostThumbNail from '../lib/PostThumbNail'
 
 import { useRouter } from 'next/router'
 
-import { VscChevronRight,VscAccount,VscLinkExternal,VscAdd,VscHeart,VscLocation,VscMegaphone,VscBook,VscSignOut,VscSignIn } from "react-icons/vsc";
+import { VscChevronRight,VscAccount,VscLinkExternal,VscAdd,VscHeart,VscLocation,VscMegaphone,VscBook,VscSignOut,VscSignIn, VscSave, VscClose, VscRocket } from "react-icons/vsc";
 
 import {app,analytics,auth,db} from '../firebase'
-import { getAuth } from 'firebase/auth';
 import { useAuthState, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+
 import LoadingBar from 'react-top-loading-bar';
+
+import Input from '../lib/Input'
+import TextArea from '../lib/TextArea'
+
+import StaticGrid from '../lib/StaticGrid'
+import TypeButton from '../lib/TypeButton'
+
+import { doc, addDoc, collection, query, where, getDocs } from "firebase/firestore";
+import { useCollection, useDocumentData } from 'react-firebase-hooks/firestore';
+
+
+import * as Scroll from 'react-scroll';
+// import { Link, Button, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
+
 
 export default function Home() {
   const router = useRouter();
+  let scroll = Scroll.animateScroll;
 
   const [signInWithGoogle] = useSignInWithGoogle(auth);
   const [user, loading, error] = useAuthState(auth);
   const [progress, setProgress] = useState(0);
 
-  useEffect(() => {
-    if (user) {
-      setProgress(100);
+  let placesArray = [];
+  const [fetchedData, setFetchedData] = useState()
+
+  const fetchData = async () => {
+    // , where("published", "==", true)
+    const querySnapshot = await getDocs(query(collection(db, "places")))
+    if (placesArray.length === 0) {                
+      querySnapshot.forEach((doc) => {
+        placesArray.push(
+          {
+            data:doc.data(),
+            id:doc.id
+          }
+        );
+      });
+      setFetchedData(placesArray);
     }
+    setProgress(100);
+  }
+  
+  useEffect(() => {
+    fetchData();
   }, [user])
+
+  const [createNew, setCreateNew] = useState(false);
+  let newPostNumber = 0;
+
+
+  const [placeInput, setPlaceInput] = useState('');
+  const [locationInput, setLocationInput] = useState('');
+  const [descriptionInput, setDescriptionInput] = useState('');
+  const [typeInput, setTypeInput] = useState('');
+
+  const createNewRef = useRef();
+
+  const createNewPlace = async() => {
+    if (user) {
+      const docRef = await addDoc(collection(db, "places"), {
+        name: placeInput,
+        location: locationInput,
+        description: descriptionInput,
+        authorUid:user.uid,
+        type: typeInput,
+      });
+    }
+    setCreateNew(false);
+    setplaceInput('');
+    setLocationInput('');
+    setDescriptionInput('');
+    setTypeInput('');
+  }
+  
+  function GradientSquare(props) {
+    const [hover, setHover] = useState(false)
+    const [mousePosition, setMousePosition] = useState({x: 0, y: 0})
+    const gradientSquare = {
+      background: props.gradient,
+      color: 'black',
+      width: '100%',
+      height: '80vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      cursor: 'pointer',
+      transition: '1s ease-out',
+      transform: `${hover ? 'scale(0.8, 0.8)':'none'}`,
+      borderRadius: `${hover ? '300px':'0px'}`
+    }
+    return (
+      <div
+        style={gradientSquare}
+        onMouseOver={()=>setHover(true)}
+        onMouseLeave={()=>setHover(false)}
+      />
+    )
+  }
+  
   
   return (
     <div
@@ -49,8 +136,6 @@ export default function Home() {
       >
         <section
           style={{
-            // maxWidth: '350px',
-            // minWidth: '250px',
             width:'400px',
             position: 'sticky',
             top: '0px',
@@ -58,51 +143,43 @@ export default function Home() {
             height: '100vh',
             flexDirection: 'column',
             justifyContent:'space-between',
-            // paddingTop: '5%'
-            // borderRight: '1px solid black'
           }}
         >
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr',
-            }}
-          >
-            {!user &&            
-              <div
+          <StaticGrid>
+            <div
+              style={{
+                padding:'1.5em 0'
+              }}
+            >
+              <h1
+                className="seiryoGroundFont"
                 style={{
-                  padding:'1.5em 0'
+                  letterSpacing:'-6px',
+                  lineHeight:'0.9em',
+                  margin:0
                 }}
               >
-                {/* <Image
-                  src={logo}
-                  width="290"
-                  height="100"
-                /> */}
-                <h1
-                  className="seiryoGroundFont"
-                  style={{
-                    letterSpacing:'-6px',
-                    lineHeight:'0.9em',
-                    margin:0
-                  }}
-                >
-                  SEIRYO<br/>GROUND
-                </h1>
-              </div>
-            }
+                SEIRYO<br/>GROUND
+                {/* {user.displayName.split(' ')[0]} */}
+              </h1>
+            </div>
+
             {user ?
               <>
                 <Button
                   iconPosition={'right'}
                   icon={<VscAdd/>}
-                  onClick={()=>signInWithGoogle()}
+                  onClick={()=>{
+                    scroll.scrollToTop();
+                    setCreateNew(true);
+                  }}
                 >
                   場所を追加
                 </Button>
                 <Button
                   icon={<VscHeart/>}
                   iconPosition={'right'}
+                  onClick={()=>router.push('/like')}
                 >
                   好きな場所
                 </Button>
@@ -152,18 +229,12 @@ export default function Home() {
                 ログアウト
               </Button>
             }
-          </div>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns:'1fr',
-              padding: '0.5em'
-            }}
-          >
+          </StaticGrid>
+          <StaticGrid>
             {user ? 
               <div style={{padding:'0em',backgroundColor: 'white'}}>
                 <AlignItems gap={'1em'}>
-                  <img src={user.photoURL} width="40" height="40" style={{borderRadius: '0px'}}/>
+                  <img src={user.photoURL} width="40" height="40" style={{borderRadius: '15px'}}/>
                   <h3 style={{color:'black'}}>{user.displayName}</h3>
                 </AlignItems>
               </div>:            
@@ -172,64 +243,152 @@ export default function Home() {
               </p>
             }
             <Footer></Footer>
-          </div>
+          </StaticGrid>
         </section>
-        <section
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr',
-            width: '100%',
-            // padding: '7% 0',
-            // margin:0
-          }}
-        >
+        <StaticGrid>
           {user ?
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <h2
-                style={{
-                  writingMode:'vertical-rl',
-                  textOrientation:'mixed'
-                }}
-              >
-                追加した場所はありません
-                <br/>
-                No places created by you
-              </h2>
-            </div>:
             <>
-            <div
-              style={{
-                background: 'linear-gradient(90deg, #ECFC8D 0%, #91FB5F 100%)',
-                color: 'black',
-                width: '100%',
-                height: '80vh'
-              }}
-            >
-            </div>
-            <h2 style={{height: '20vh'}}>
-              Trees. Green. Creating our O2
-              <br/>
-              植物。緑。我々の酸素を。
-            </h2>
-            <div
-              style={{
-                background: 'linear-gradient(90deg, #8DFCE8 0%, #5FC3FB 100%)',
-                color: 'black',
-                width: '100%',
-                height: '80vh'
-              }}
-            >
-            </div>
-            <h2 style={{height: '20vh'}}>Oceans. Blue. Borders<br/>海。青。境目</h2>
+              {createNew &&   
+                <div
+                  style={{
+                    // margin: '5% 0',
+                    border: '1px solid var(--sgGray)',
+                    padding: '1em',
+                    boxShadow: '0px 0px 15px #f0f0f0'
+                  }}
+                  ref={createNewRef}
+                >
+                  <StaticGrid gap={'1em'}>
+                    <AlignItems spaceBetween={true}>
+                      <h3 style={{margin:0}}>新規追加</h3>
+                      <Button
+                        iconPosition={'left'}
+                        icon={<VscClose/>}
+                        onClick={()=>setCreateNew(false)}
+                      />
+                    </AlignItems>
+                    <StaticGrid>
+                      <Input
+                        placeHolder={"場所の名前"}
+                        value={placeInput}
+                        onChange={(e)=>setPlaceInput(e.target.value)}
+                      />
+                      <TextArea
+                        placeHolder={"概要"}
+                        value={descriptionInput}
+                        onChange={(e)=>setDescriptionInput(e.target.value)}
+                      />
+                    </StaticGrid>
+                    <div className="grid-2fr-1fr">
+                      <StaticGrid>
+                        <Input
+                          placeHolder={"場所（スペース無し英語表記｜例：koishikawa-korakuen）"}
+                          value={locationInput}
+                          onChange={(e)=>setLocationInput(e.target.value)}
+                        />
+                        <iframe
+                          src={`https://www.google.com/maps?output=embed&q=${locationInput}`}
+                          width="100%"
+                          height="250px"
+                        />
+                      </StaticGrid>
+                      <div>
+                        <StaticGrid gap={'0.5em'}>
+                          <TypeButton
+                            type="green"
+                            onClick={()=>setTypeInput('green')}
+                            selectedInput={typeInput}
+                          />
+                          <TypeButton
+                            type="blue"
+                            onClick={()=>setTypeInput('blue')}
+                            selectedInput={typeInput}
+                          />
+                          <TypeButton
+                            type="red"
+                            onClick={()=>setTypeInput('red')}
+                            selectedInput={typeInput}
+                          />
+                          <TypeButton
+                            type="purple"
+                            onClick={()=>setTypeInput('purple')}
+                            selectedInput={typeInput}
+                          />
+                        </StaticGrid>
+                      </div>
+                    </div>
+                    {placeInput && descriptionInput && locationInput && typeInput &&
+                      <AlignItems spaceBetween={true}>
+                        {/* <Button iconPosition={'left'} icon={<VscSave/>}>保存</Button> */}
+                        <br/>
+                        <AlignItems>
+                          <Button
+                            iconPosition={'right'}
+                            icon={<VscRocket/>}
+                            onClick={()=>createNewPlace()}
+                          >
+                            公開
+                          </Button>
+                        </AlignItems>
+                      </AlignItems>
+                    }
+                  </StaticGrid>
+                </div>
+              }
+            </>:
+            <>
+              <GradientSquare gradient={'linear-gradient(90deg, #ECFC8D 0%, #91FB5F 100%)'}/>
+              <h2 style={{minHeight: '20vh'}}>Trees. Green. Creating our O2<br/>植物。緑。我々の酸素。</h2>
+
+              <GradientSquare gradient={'linear-gradient(90deg, #8DFCE8 0%, #5FC3FB 100%)'}/>
+              <h2 style={{minHeight: '20vh'}}>Oceans. Blue. The Source of Life.<br/>海。青。生命の源。</h2>
+
+              <GradientSquare gradient={'linear-gradient(90deg, #FCD68D 0%, #FB7B5F 100%)'}/>
+              <h2 style={{minHeight: '20vh'}}>Artifacts. Red. Our Culture.<br/>人工物。赤。我々の文化。</h2>
+
+              <GradientSquare gradient={'linear-gradient(90deg, #D88DFC 0%, #755FFB 100%)'}/>
+              <h2 style={{minHeight: '20vh'}}>Beauty that doesn't fit descriptions.<br/>枠組みに嵌らない美しいもの。</h2>
             </>
           }
-        </section>
+          {newPostNumber > 0 && <p>新しい場所追加：{newPostNumber}個</p>}
+          {fetchedData && fetchedData.map(doc => {
+            return (
+              <PostThumbNail
+                id={doc.id}
+                title={doc.data.name}
+                type={doc.data.type}
+              />
+            )
+          })}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'column',
+              gap: '1em',
+              padding: '5% 0',
+            }}
+          >
+            <div
+              style={{
+                backgroundColor:'black',
+                width:'1px',
+                height: '100px',
+              }}
+            />
+            <h2
+              style={{
+                writingMode:'vertical-rl',
+                textOrientation:'mixed'
+              }}
+            >
+              終わり。
+              <br/>
+              The End.
+            </h2>
+          </div>
+        </StaticGrid>
       </div>
     </div>
   )

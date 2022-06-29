@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router'
 import React from 'react'
-import { VscChevronLeft,VscChevronRight } from 'react-icons/vsc';
+import { VscChevronLeft,VscChevronRight, VscLinkExternal } from 'react-icons/vsc';
 import AlignItems from '../lib/AlignItems';
 import Button from '../lib/Button'
 import sgCenteredLogo from '../public/sg-centered-logo.png'
@@ -11,7 +11,7 @@ export default function About() {
 
     return (
         <div className="pageCenter">
-            <div style={{display:'flex',justifyContent: 'center',flexDirection: 'column',alignItems: 'center'}}>
+            <div style={{display:'flex',justifyContent: 'center',flexDirection: 'column',alignItems: 'center',marginTop: '5%'}}>
                 <Image src={sgCenteredLogo} width={300} height={230}/>
                 <div style={{marginBottom:'1.5em'}}>
                     <p style={{textAlign: 'center', maxWidth:'500px'}}>ご興味を持ってくださりありがとうございます</p>
@@ -35,7 +35,7 @@ export default function About() {
                     </Button>
                     <Button
                         iconPosition={'right'}
-                        icon={<VscChevronRight/>}
+                        icon={<VscLinkExternal/>}
                         onClick={()=> router.push('/')}
                     >
                         作者のウェブサイト

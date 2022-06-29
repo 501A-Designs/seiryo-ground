@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Shippori+Antique&family=Shippori+Antique+B1&display=swap');
+:root{
+  --sgGray:rgb(207, 207, 207);
+}
 
 html,
 body {
@@ -35,8 +38,7 @@ a {
 }
 
 iframe{
-  border: 1px solid black;
-  border-left: 2px solid black;
+  border: 1px solid var(--sgGray);
   filter: grayscale(1);
 }
 
@@ -74,9 +76,8 @@ a:hover{
   text-decoration-style: none;
 }
 
-.grid-1fr-1fr-1fr{
+.grid-2fr-1fr{
   display: grid;  
-  grid-template-columns: 1fr 1fr 1fr;
   gap: 1em;
 }
 
@@ -86,11 +87,17 @@ a:hover{
 }
 
 @media screen and (max-width: 900px) and (min-width: 0px) {
+  .grid-2fr-1fr{
+    grid-template-columns: 1fr;
+	}
   .grid-1fr-2fr{
     grid-template-columns: 1fr;
 	}
 }
 @media screen and (min-width: 901px) {
+  .grid-2fr-1fr{
+    grid-template-columns: 2fr 1fr;
+	}
   .grid-1fr-2fr{
     grid-template-columns: 1fr 2fr;
 	}
