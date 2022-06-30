@@ -11,17 +11,17 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 
 export default function PlaceName() {
     const router = useRouter();
-    const placeId = router.query.id;
+    const placeId = router.query.slug;
 
     const [user, loading, error] = useAuthState(auth);
-
     const [placeData, setPlaceData] = useState()
-
-    const getDocument = async() =>{
-        if (placeId != '') {            
+    
+    const getDocument = async () =>{
+        if (placeId) {            
             const docRef = doc(db, "places", placeId);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
+                console.log(docSnap.data());
                 setPlaceData(docSnap.data());
             } else {
                 alert("ページは見つかりませんでした");
@@ -31,55 +31,44 @@ export default function PlaceName() {
 
     useEffect(() => {
         getDocument();
-    }, [user])
+    }, [placeId])
     
 
     return (
-        <div
-            className="pagePadding"
-            style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap:'1em'
-            }}
-        >
-            <AlignItems spaceBetween={true}>
-                <Button onClick={()=> router.push('/')}>
-                    戻る
-                </Button>
+        <>
+            {placeData &&             
+                <div
+                    className="pagePadding"
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap:'1em'
+                    }}
+                >
+                    <AlignItems spaceBetween={true}>
+                        <Button onClick={()=> router.push('/')}>
+                            戻る
+                        </Button>
 
-                {/* {pageDetails.fields.officialSite && 
-                    <a href={pageDetails.fields.officialSite} target="_blank">
-                        公式サイト
-                    </a>
-                } */}
-            </AlignItems>
-            <div className="grid-1fr-2fr">
-                <div>
-                    <h1>{placeData && placeData.name}</h1>
-                    <AlignItems>
-                        {/* <TypeBadge type={pageDetails.fields.type}/>
-                        <time>{pageDetails.fields.date.split('T')[0]}</time> */}
+                        {placeData.officialSite && 
+                            <a href={placeData.officialSite} target="_blank">
+                                公式サイト
+                            </a>
+                        }
                     </AlignItems>
-                    {/* <p>{pageDetails.fields.description}</p>
-                    {pageDetails.fields.pricing == undefined ?
-                        <p>無料です。</p>:
-                        <table>
-                            {pageDetails.fields.pricing.pricing.map(data =>{
-                                return (
-                                    <tr>
-                                        {
-                                            data.map(detailData =>{
-                                                return <td>{detailData}</td>
-                                            })
-                                        }
-                                    </tr>
-                                )
-                            })}
-                        </table>
-                    } */}
+                    <h1 style={{marginBottom:0}}>{placeData.name}</h1>
+                    <TypeBadge type={placeData.type}/>
+                    <div className="grid-1fr-2fr">
+                        <p>{placeData.description}</p>
+                        <iframe
+                            src={`https://www.google.com/maps?output=embed&q=${placeData.location}`}
+                            width="100%"
+                            height="250px"
+                        />
+                    </div>
+                    <h2>レビュー</h2>
                 </div>
-            </div>
-        </div>
+            }
+        </>
     )
 }
