@@ -49,9 +49,12 @@ export default function PlaceName() {
                         <Button onClick={()=> router.push('/')}>
                             戻る
                         </Button>
-
                         {placeData.officialSite && 
-                            <a href={placeData.officialSite} target="_blank">
+                            <a
+                                href={placeData.officialSite}
+                                target="_blank"
+                                rel="noreferrer"
+                            >
                                 公式サイト
                             </a>
                         }
