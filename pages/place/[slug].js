@@ -8,6 +8,8 @@ import TypeBadge from '../../lib/TypeBadge'
 import { db,auth } from '../../firebase'
 import { doc, getDoc } from "firebase/firestore";
 import { useAuthState } from 'react-firebase-hooks/auth';
+import Rating from '../../lib/Rating'
+import StaticGrid from '../../lib/StaticGrid'
 
 export default function PlaceName() {
     const router = useRouter();
@@ -62,14 +64,23 @@ export default function PlaceName() {
                     <h1 style={{marginBottom:0}}>{placeData.name}</h1>
                     <TypeBadge type={placeData.type}/>
                     <div className="grid-1fr-2fr">
-                        <p>{placeData.description}</p>
-                        <iframe
-                            src={`https://www.google.com/maps?output=embed&q=${placeData.location}`}
-                            width="100%"
-                            height="250px"
-                        />
+                        <div>
+                            <p>{placeData.description}</p>
+                            <iframe
+                                src={`https://www.google.com/maps?output=embed&q=${placeData.location}`}
+                                width="100%"
+                                height="250px"
+                            />
+                        </div>
+                        <div style={{height:'fit-content'}}>
+                            <StaticGrid grid={'1fr 1fr'}>
+                                <Rating rating={4} description={'デートスポット適正'}/>
+                                <Rating rating={4} description={'最寄駅からのアクセス'}/>
+                                <Rating rating={4} description={'設備管理の状況'}/>
+                                <Rating rating={4} description={'清涼広場上でのいいね数'} hideMax={true}/>
+                            </StaticGrid>
+                        </div>
                     </div>
-                    <h2>レビュー</h2>
                 </div>
             }
         </>

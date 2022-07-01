@@ -247,16 +247,23 @@ export default function Home() {
             </>
           }
           {newPostNumber > 0 && <p>新しい場所追加：{newPostNumber}個</p>}
-          {fetchedData && fetchedData.map(doc => {
-            return (
-              <PostThumbNail
-                key={doc.id}
-                id={doc.id}
-                title={doc.data.name}
-                type={doc.data.type}
-              />
-            )
-          })}
+            {fetchedData && fetchedData.map(doc => {
+              return (
+                <div
+                  style={{
+                    transformStyle: 'flat',
+                    perspective: '600px'
+                  }}
+                  key={doc.id}
+                >
+                  <PostThumbNail
+                    id={doc.id}
+                    title={doc.data.name}
+                    type={doc.data.type}
+                  />
+                </div>
+              )
+            })}
           <div
             style={{
               display: 'flex',
