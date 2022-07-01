@@ -111,14 +111,29 @@ main{
   .pagePadding{
     padding: 0% 5%;
 	}
+  .stickySide{
+    display: grid;
+    grid-template-columns:1fr;
+    gap:1.5em;
+  }
 }
 @media screen and (max-width: 900px) and (min-width: 501px) {
   .pagePadding{
     padding: 0% 10%;
   }
+  .stickySide{
+    display: flex;
+    align-items: flex-start;
+    gap:1.5em;
+  }
 }
 @media screen and (max-width: 2000px) and (min-width: 901px) {
   .pagePadding{
     padding: 0% 15%;
+  }
+  .stickySide{
+    display: flex;
+    align-items: flex-start;
+    gap:1.5em;
   }
 }

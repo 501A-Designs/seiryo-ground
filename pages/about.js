@@ -10,7 +10,7 @@ export default function About() {
     const router = useRouter();
 
     return (
-        <div className="pageCenter">
+        <div className="pagePadding">
             <div style={{display:'flex',justifyContent: 'center',flexDirection: 'column',alignItems: 'center',marginTop: '5%'}}>
                 <Image src={sgCenteredLogo} width={300} height={230}/>
                 <div style={{marginBottom:'1.5em'}}>
@@ -36,7 +36,7 @@ export default function About() {
                     <Button
                         iconPosition={'right'}
                         icon={<VscLinkExternal/>}
-                        onClick={()=> router.push('/')}
+                        onClick={()=> router.push('https://501a.netlify.app/')}
                     >
                         作者のウェブサイト
                     </Button>

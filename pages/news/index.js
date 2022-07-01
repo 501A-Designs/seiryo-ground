@@ -4,6 +4,8 @@ import UpdatePostThumbNail from '../../lib/UpdatePostThumbNail'
 import Button from '../../lib/Button'
 import { VscChevronLeft } from 'react-icons/vsc'
 import { useRouter } from 'next/router'
+import { isBrowser } from 'react-device-detect';
+import StaticGrid from '../../lib/StaticGrid'
 
 export async function getStaticProps(){
   const client = createClient({
@@ -27,28 +29,25 @@ export default function News({sgPosts}) {
     <div
       className={'pagePadding'}
     >
-      <Button
-        iconPosition={'left'}
-        icon={<VscChevronLeft/>}
-        onClick={()=> router.push('/')}
-      >
-        戻る
-      </Button>
-      <div style={{display: 'grid', gridTemplateColumns:'1fr 2fr',gap:'1em'}}>
-        <div>
-          <div
-            style={{
-              display:'grid',
-              gridTemplateColumns:'1fr',
-              margin:'2em 0'
-            }}
-          >
-            <h1 style={{margin:0}}>SG News</h1>
-            <h3 style={{margin:0}}>SEIRYO GROUND NEWS</h3>
-          </div>
+      <div className={'stickySide'}>
+        <div
+          style={{
+            maxWidth:`${isBrowser ? '300px':'400px'}`,
+            position: 'sticky',
+            top: '0px',
+            height: 'fit-content',
+            flexDirection: 'column',
+            justifyContent:'space-between',
+            backdropFilter: 'blur(16px)',
+            background: 'radial-gradient(86.36% 107.55% at 6.49% 12.32%,white 0%,rgba(255, 255, 255, 0.5) 100%)',
+            zIndex:10
+          }}
+        >
+          <h1 style={{margin:'1em 0 0 0'}}>SG News</h1>
+          <h3 style={{margin:0}}>SEIRYO GROUND NEWS</h3>
           <p>清涼広場に関する新情報を徹底的に更新していきたいと思います。作成者は501Aです。</p>
         </div>
-        <div style={{display: 'grid', gridTemplateColumns:'1fr', height:'fit-content'}}>
+        <StaticGrid>
           {sgPosts.map(data =>{
             return(
               <UpdatePostThumbNail
@@ -59,7 +58,7 @@ export default function News({sgPosts}) {
               />
             )
           })}
-        </div>
+        </StaticGrid>
       </div>
     </div>
   )

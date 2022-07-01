@@ -10,7 +10,7 @@ import PostThumbNail from '../lib/PostThumbNail'
 
 import { useRouter } from 'next/router'
 
-import { VscChevronRight,VscAccount,VscLinkExternal,VscAdd,VscHeart,VscLocation,VscMegaphone,VscBook,VscSignOut,VscSignIn, VscSave, VscClose, VscRocket } from "react-icons/vsc";
+import { VscChevronRight,VscAccount,VscLinkExternal,VscAdd,VscHeart,VscLocation,VscMegaphone,VscBook,VscSignOut,VscSignIn, VscSave, VscClose, VscRocket, VscMenu, VscFold } from "react-icons/vsc";
 
 import {app,analytics,auth,db} from '../firebase'
 import { useAuthState, useSignInWithGoogle } from 'react-firebase-hooks/auth';
@@ -28,6 +28,10 @@ import TypeButton from '../lib/TypeButton'
 
 import * as Scroll from 'react-scroll';
 import CreatePlaceForm from '../lib/CreatePlaceForm'
+import DistortionCarousel from '../lib/DistortionCarousel'
+
+
+import { isBrowser } from 'react-device-detect';
 
 
 export default function Home() {
@@ -65,32 +69,13 @@ export default function Home() {
   const [createNew, setCreateNew] = useState(false);
   const createNewRef = useRef();
   let newPostNumber = 0;
-
   
-  function GradientSquare(props) {
-    const [hover, setHover] = useState(false)
-    const [mousePosition, setMousePosition] = useState({x: 0, y: 0})
-    const gradientSquare = {
-      background: props.gradient,
-      color: 'black',
-      width: '100%',
-      height: '80vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      cursor: 'pointer',
-      transition: '1s ease-out',
-      transform: `${hover ? 'scale(0.8, 0.8)':'none'}`,
-      borderRadius: `${hover ? '300px':'0px'}`
+  const [menuDisplay, setMenuDisplay] = useState(false);
+  useEffect(() => {
+    if (isBrowser) {
+      setMenuDisplay(true);
     }
-    return (
-      <div
-        style={gradientSquare}
-        onMouseOver={()=>setHover(true)}
-        onMouseLeave={()=>setHover(false)}
-      />
-    )
-  }
+  }, [isBrowser])
   
   
   return (
@@ -104,21 +89,20 @@ export default function Home() {
       </Head>
 
       <div
-        style={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          gap:'1.5em'
-        }}
+        className={'stickySide'}
       >
         <section
           style={{
-            width:'400px',
+            maxWidth:`${isBrowser ? '300px':'400px'}`,
             position: 'sticky',
             top: '0px',
             display: 'flex',
-            height: '100vh',
+            height: `${isBrowser ? '100vh':'fit-content'}`,
             flexDirection: 'column',
             justifyContent:'space-between',
+            backdropFilter: 'blur(16px)',
+            background: 'radial-gradient(86.36% 107.55% at 6.49% 12.32%,white 0%,rgba(255, 255, 255, 0.5) 100%)',
+            zIndex:10
           }}
         >
           <StaticGrid>
@@ -127,99 +111,117 @@ export default function Home() {
                 padding:'1.5em 0'
               }}
             >
-              <h1
-                className="seiryoGroundFont"
-                style={{
-                  letterSpacing:'-6px',
-                  lineHeight:'0.9em',
-                  margin:0
-                }}
-              >
-                SEIRYO<br/>GROUND
-                {/* {user.displayName.split(' ')[0]} */}
-              </h1>
-            </div>
-
-            {user ?
-              <>
-                <Button
-                  iconPosition={'right'}
-                  icon={<VscAdd/>}
-                  onClick={()=>{
-                    scroll.scrollToTop();
-                    setCreateNew(true);
+              <AlignItems spaceBetween={true} alignItems={'start'}>
+                <h1
+                  className="seiryoGroundFont"
+                  style={{
+                    letterSpacing:'-6px',
+                    lineHeight:'0.9em',
+                    margin:0
                   }}
                 >
-                  場所を追加
+                  SEIRYO<br/>GROUND
+                </h1>
+                {!isBrowser &&
+                  <Button
+                    iconPosition={'right'}
+                    icon={menuDisplay ? <VscFold/>:<VscMenu/>}
+                    onClick={()=>{menuDisplay ? setMenuDisplay(false):setMenuDisplay(true)}}
+                  />
+                }
+              </AlignItems>
+            </div>
+
+            {menuDisplay &&
+              <>
+                {isBrowser &&
+                  <>                  
+                    {user ?
+                      <>
+                        <Button
+                          iconPosition={'right'}
+                          icon={<VscAdd/>}
+                          onClick={()=>{
+                            scroll.scrollToTop();
+                            setCreateNew(true);
+                          }}
+                        >
+                          場所を追加
+                        </Button>
+                        <Button
+                          icon={<VscHeart/>}
+                          iconPosition={'right'}
+                          onClick={()=>router.push('/like')}
+                        >
+                          好きな場所
+                        </Button>
+                      </>:
+                      <Button
+                        iconPosition={'right'}
+                        icon={<VscSignIn/>}
+                        onClick={()=>signInWithGoogle()}
+                      >
+                        GOOGLEでログイン
+                      </Button>
+                    }
+                  </>
+                }
+                <Button
+                  iconPosition={'right'}
+                  icon={<VscLocation/>}
+                  onClick={()=>router.push('/place')}
+                >
+                  場所を探す
                 </Button>
                 <Button
-                  icon={<VscHeart/>}
                   iconPosition={'right'}
-                  onClick={()=>router.push('/like')}
+                  icon={<VscMegaphone/>}
+                  onClick={()=>router.push('/news')}
                 >
-                  好きな場所
+                  SG NEWS
                 </Button>
-              </>:
-              <Button
-                iconPosition={'right'}
-                icon={<VscSignIn/>}
-                onClick={()=>signInWithGoogle()}
-              >
-                 GOOGLEでログイン
-              </Button>
-            }
-            <Button
-              iconPosition={'right'}
-              icon={<VscLocation/>}
-              onClick={()=>router.push('/place')}
-            >
-              場所を探す
-            </Button>
-            <Button
-              iconPosition={'right'}
-              icon={<VscMegaphone/>}
-              onClick={()=>router.push('/news')}
-            >
-              SG NEWS
-            </Button>
-            <Button
-              iconPosition={'right'}
-              icon={<VscBook/>}
-              onClick={()=>router.push('/about')}
-            >
-              SEIRYO GROUNDについて
-            </Button>
-            <Button
-              iconPosition={'right'}
-              icon={<VscLinkExternal/>}
-              onClick={()=>router.push('/about')}
-            >
-              GITHUBを開く
-            </Button>
-            {user && 
-              <Button
-                iconPosition={'right'}
-                icon={<VscSignOut/>}
-                onClick={()=>signInWithGoogle()}
-              >
-                ログアウト
-              </Button>
+                <Button
+                  iconPosition={'right'}
+                  icon={<VscBook/>}
+                  onClick={()=>router.push('/about')}
+                >
+                  SEIRYO GROUNDについて
+                </Button>
+                <Button
+                  iconPosition={'right'}
+                  icon={<VscLinkExternal/>}
+                  onClick={()=>router.push('https://github.com/501A-Designs/seiryo-ground')}
+                >
+                  GITHUBを開く
+                </Button>
+                {user && 
+                  <Button
+                    iconPosition={'right'}
+                    icon={<VscSignOut/>}
+                    onClick={()=>signInWithGoogle()}
+                  >
+                    ログアウト
+                  </Button>
+                }
+              </>
             }
           </StaticGrid>
-          <StaticGrid>
-            {user ? 
-              <div style={{padding:'0em',backgroundColor: 'white'}}>
-                <AlignItems gap={'1em'}>
-                  <img src={user.photoURL} width="40" height="40" style={{borderRadius: '15px'}}/>
-                  <h3 style={{color:'black'}}>{user.displayName}</h3>
-                </AlignItems>
-              </div>:            
-              <p>
-                外を歩き回り、今までいって良かった場所を一箇所にまとめた場所。カードをクリックして頂くと詳細やレビューを見ることができます。
-              </p>
-            }
-            <Footer></Footer>
-          </StaticGrid>
+          {isBrowser && 
+            <StaticGrid>
+              {user ? 
+                <div style={{padding:'0em',backgroundColor: 'white'}}>
+                  <AlignItems gap={'1em'}>
+                    <img src={user.photoURL} width="40" height="40" style={{borderRadius: '15px'}}/>
+                    <h3 style={{color:'black'}}>{user.displayName}</h3>
+                  </AlignItems>
+                </div>:            
+                <p>
+                  外を歩き回り、今までいって良かった場所を一箇所にまとめた場所。カードをクリックして頂くと詳細やレビューを見ることができます。
+                </p>
+              }
+              <Footer></Footer>
+            </StaticGrid>
+          }
         </section>
         <StaticGrid>
           {user ?
@@ -233,17 +235,17 @@ export default function Home() {
               }
             </>:
             <>
-              <GradientSquare gradient={'linear-gradient(90deg, #ECFC8D 0%, #91FB5F 100%)'}/>
-              <h2 style={{minHeight: '20vh'}}>Trees. Green. Creating our O2<br/>植物。緑。我々の酸素。</h2>
-
-              <GradientSquare gradient={'linear-gradient(90deg, #8DFCE8 0%, #5FC3FB 100%)'}/>
-              <h2 style={{minHeight: '20vh'}}>Oceans. Blue. The Source of Life.<br/>海。青。生命の源。</h2>
-
-              <GradientSquare gradient={'linear-gradient(90deg, #FCD68D 0%, #FB7B5F 100%)'}/>
-              <h2 style={{minHeight: '20vh'}}>Artifacts. Red. Our Culture.<br/>人工物。赤。我々の文化。</h2>
-
-              <GradientSquare gradient={'linear-gradient(90deg, #D88DFC 0%, #755FFB 100%)'}/>
-              <h2 style={{minHeight: '20vh'}}>Beauty that doesnt fit descriptions.<br/>枠組みに嵌らない美しいもの。</h2>
+              <DistortionCarousel
+                images={[
+                  '/seiryo-green.png',
+                  '/seiryo-blue.png',
+                  '/seiryo-red.png',
+                  '/seiryo-purple.png',
+                ]}
+                displacmentImage={'https://raw.githubusercontent.com/robin-dela/hover-effect/master/images/heightMap.png'}
+                speed={5}
+              />
+              <h2 style={{minHeight: '20vh'}}>Welcome to Seiryo Ground.<br/>清涼広場へようこそ。</h2>
             </>
           }
           {newPostNumber > 0 && <p>新しい場所追加：{newPostNumber}個</p>}
