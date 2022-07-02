@@ -11,20 +11,25 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import Rating from '../../lib/Rating'
 import StaticGrid from '../../lib/StaticGrid'
 
+import LoadingBar from 'react-top-loading-bar';
+
 export default function PlaceName() {
     const router = useRouter();
     const placeId = router.query.slug;
+    const [progress, setProgress] = useState(0);
 
     const [user, loading, error] = useAuthState(auth);
     const [placeData, setPlaceData] = useState()
     
     const getDocument = async () =>{
+        setProgress(0);
         if (placeId) {            
             const docRef = doc(db, "places", placeId);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
                 console.log(docSnap.data());
                 setPlaceData(docSnap.data());
+                setProgress(100)
             } else {
                 alert("ページは見つかりませんでした");
             }
@@ -38,6 +43,11 @@ export default function PlaceName() {
 
     return (
         <>
+            <LoadingBar
+                color='black'
+                progress={progress}
+                onLoaderFinished={() => setProgress(0)}
+            />
             {placeData &&             
                 <div
                     className="pagePadding"
@@ -78,6 +88,9 @@ export default function PlaceName() {
                                 <Rating rating={4} description={'最寄駅からのアクセス'}/>
                                 <Rating rating={4} description={'設備管理の状況'}/>
                                 <Rating rating={4} description={'清涼広場上でのいいね数'} hideMax={true}/>
+                            </StaticGrid>
+                            <StaticGrid>
+                                
                             </StaticGrid>
                         </div>
                     </div>
