@@ -242,11 +242,12 @@ export default function Home() {
             <>
               <DistortionCarousel
                 images={[
-                  '/seiryo-green.png',
-                  '/seiryo-blue.png',
-                  '/seiryo-red.png',
-                  '/seiryo-purple.png',
-                  // '/sg-centered-logo.png'
+                  '/sg-mountain.png',
+                  '/sg-mountain2.png',
+                  // '/seiryo-green.png',
+                  // '/seiryo-blue.png',
+                  // '/seiryo-red.png',
+                  // '/seiryo-purple.png',
                 ]}
                 displacmentImage={'https://raw.githubusercontent.com/robin-dela/hover-effect/master/images/heightMap.png'}
                 speed={5}
