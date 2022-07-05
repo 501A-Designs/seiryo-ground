@@ -32,6 +32,7 @@ import DistortionCarousel from '../lib/DistortionCarousel'
 
 
 import { isBrowser } from 'react-device-detect';
+import Link from 'next/link'
 
 
 export default function Home() {
@@ -100,13 +101,14 @@ export default function Home() {
         <section
           style={{
             maxWidth:`${isBrowser ? '300px':'400px'}`,
+            minWidth:`${isBrowser ? '200px':'200px'}`,
             position: 'sticky',
             top: '0px',
             display: 'flex',
             height: `${isBrowser ? '100vh':'fit-content'}`,
             flexDirection: 'column',
             justifyContent:'space-between',
-            backgroundColor:'white',
+            background: 'linear-gradient(to top, rgba(255, 255, 255, 0.9) 0%,white 100%)',
             zIndex:10
           }}
         >
@@ -116,17 +118,19 @@ export default function Home() {
                 padding:'1.5em 0'
               }}
             >
-              <AlignItems spaceBetween={true} alignItems={'start'}>
-                <h1
+              <AlignItems spaceBetween={true} justifyContent={'space-between'}>
+                <h3
                   className="seiryoGroundFont"
                   style={{
-                    letterSpacing:'-6px',
+                    letterSpacing:'-1.5px',
+                    fontWeight:'normal',
                     lineHeight:'0.9em',
+                    minWidth:'max-content',
                     margin:0
                   }}
                 >
-                  SEIRYO<br/>GROUND
-                </h1>
+                  SEIRYO GROUND
+                </h3>
                 {!isBrowser &&
                   <Button
                     iconPosition={'right'}
@@ -144,8 +148,6 @@ export default function Home() {
                     {user ?
                       <>
                         <Button
-                          iconPosition={'right'}
-                          icon={<VscAdd/>}
                           onClick={()=>{
                             scroll.scrollToTop();
                             setCreateNew(true);
@@ -154,16 +156,12 @@ export default function Home() {
                           場所を追加
                         </Button>
                         <Button
-                          icon={<VscHeart/>}
-                          iconPosition={'right'}
                           onClick={()=>router.push('/like')}
                         >
                           好きな場所
                         </Button>
                       </>:
                       <Button
-                        iconPosition={'right'}
-                        icon={<VscSignIn/>}
                         onClick={()=>signInWithGoogle()}
                       >
                         GOOGLEでログイン
@@ -172,37 +170,27 @@ export default function Home() {
                   </>
                 }
                 <Button
-                  iconPosition={'right'}
-                  icon={<VscLocation/>}
                   onClick={()=>router.push('/place')}
                 >
                   場所を探す
                 </Button>
                 <Button
-                  iconPosition={'right'}
-                  icon={<VscMegaphone/>}
                   onClick={()=>router.push('/news')}
                 >
                   SG NEWS
                 </Button>
                 <Button
-                  iconPosition={'right'}
-                  icon={<VscBook/>}
                   onClick={()=>router.push('/about')}
                 >
                   SGについて
                 </Button>
                 <Button
-                  iconPosition={'right'}
-                  icon={<VscLinkExternal/>}
                   onClick={()=>router.push('https://github.com/501A-Designs/seiryo-ground')}
                 >
                   GITHUBを開く
                 </Button>
                 {user && 
                   <Button
-                    iconPosition={'right'}
-                    icon={<VscSignOut/>}
                     onClick={()=>signInWithGoogle()}
                   >
                     ログアウト
@@ -217,7 +205,7 @@ export default function Home() {
                 <div style={{padding:'0em',backgroundColor: 'white'}}>
                   <AlignItems gap={'1em'}>
                     <img src={user.photoURL} width="40" height="40" style={{borderRadius: '15px'}}/>
-                    <h3 style={{color:'black'}}>{user.displayName}</h3>
+                    <h3 style={{color:'black',minWidth:'max-content',}}>{user.displayName}</h3>
                   </AlignItems>
                 </div>:            
                 <p>
@@ -252,10 +240,16 @@ export default function Home() {
                 displacmentImage={'https://raw.githubusercontent.com/robin-dela/hover-effect/master/images/heightMap.png'}
                 speed={5}
               />
-              <h2 style={{minHeight: '20vh'}}>Welcome to Seiryo Ground.<br/>清涼広場へようこそ。</h2>
+              <div style={{minHeight: '20vh', textAlign:'right'}}>
+                <p>Photo By <Link href="https://twitter.com/EyesObsolete"><a>@EyesObsolete</a></Link></p>
+                <h3>
+                  Welcome to Seiryo Ground<br/>清涼広場へようこそ
+                </h3>
+              </div>
             </>
           }
           {newPostNumber > 0 && <p>新しい場所追加：{newPostNumber}個</p>}
+          <StaticGrid grid={isBrowser ? '1fr 1fr':'1fr'}>
             {fetchedData && fetchedData.map(doc => {
               return (
                 <div
@@ -273,6 +267,7 @@ export default function Home() {
                 </div>
               )
             })}
+          </StaticGrid>
           <div
             style={{
               display: 'flex',
@@ -290,7 +285,7 @@ export default function Home() {
                 height: '100px',
               }}
             />
-            <h2
+            <h4
               style={{
                 writingMode:'vertical-rl',
                 textOrientation:'mixed'
@@ -299,7 +294,7 @@ export default function Home() {
               終わり。
               <br/>
               The End.
-            </h2>
+            </h4>
           </div>
         </StaticGrid>
       </div>

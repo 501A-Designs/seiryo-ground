@@ -1,6 +1,6 @@
 .postThumbNail{
     cursor:pointer;
-    /* background-color:white; */
+    background-color:white;
     color:black;
     border-bottom:1px solid var(--sgGray);
     border-right:1px solid var(--sgGray);
@@ -16,8 +16,14 @@
 }
 .postThumbNail:hover{
     z-index: 100;
+    color:gray;
     background-color:black;
     color:white;
-    transform: rotateX(15deg) rotateY(-5deg);
-    box-shadow: -5px 20px 15px rgb(192, 192, 192);
+    border-radius: 5px;
+    border:1px solid black;
+    /* box-shadow: 0px 0px 5px rgb(192, 192, 192); */
+    transform:scale(0.9);
+    /* transform: rotateX(15deg); */
+    /* rotateY(-2deg) */
+    /* box-shadow: -5px 20px 15px rgb(192, 192, 192); */
 }

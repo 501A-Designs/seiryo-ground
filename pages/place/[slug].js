@@ -71,7 +71,7 @@ export default function PlaceName() {
                             </a>
                         }
                     </AlignItems>
-                    <h1 style={{marginBottom:0}}>{placeData.name}</h1>
+                    <h2 style={{marginBottom:0}}>{placeData.name}</h2>
                     <TypeBadge type={placeData.type}/>
                     <div className="grid-1fr-2fr">
                         <div>
@@ -84,10 +84,10 @@ export default function PlaceName() {
                         </div>
                         <div style={{height:'fit-content'}}>
                             <StaticGrid grid={'1fr 1fr'}>
-                                <Rating rating={4} description={'デートスポット適正'}/>
-                                <Rating rating={4} description={'最寄駅からのアクセス'}/>
-                                <Rating rating={4} description={'設備管理の状況'}/>
-                                <Rating rating={4} description={'清涼広場上でのいいね数'} hideMax={true}/>
+                                <Rating borderRadius={'5px 0 0 0'} rating={4} description={'デートスポット適正'}/>
+                                <Rating borderRadius={'0 5px 0 0'} rating={4} description={'最寄駅からのアクセス'}/>
+                                <Rating borderRadius={'0 0 0 5px'} rating={4} description={'設備管理の状況'}/>
+                                <Rating borderRadius={'0 0 5px 0'} rating={4} description={'清涼広場上でのいいね数'} hideMax={true}/>
                             </StaticGrid>
                             <StaticGrid>
                                 

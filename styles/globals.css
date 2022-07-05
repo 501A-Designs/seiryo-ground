@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Shippori+Antique&family=Shippori+Antique+B1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap');
+
 :root{
   --sgGray:rgb(207, 207, 207);
 }
@@ -7,7 +9,10 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: Helvetica Neue, sans-serif;
+  /* font-family: Helvetica Neue, sans-serif; */
+  /* font-family: 'Shippori Antique', sans-serif; */
+  font-family: 'Noto Sans JP', sans-serif;
+
   letter-spacing:-0.5px;
 }
 
@@ -21,7 +26,7 @@ h1{
   letter-spacing:-2px;
 }
 h2{
-  font-size:2.5em;
+  font-size:2em;
 }
 
 h1,h2,h3,h4,h5,h6{
@@ -40,6 +45,7 @@ a {
 iframe{
   border: 1px solid var(--sgGray);
   filter: grayscale(1);
+  border-radius: 5px;
 }
 
 table {
@@ -136,4 +142,8 @@ main{
     align-items: flex-start;
     gap:1.5em;
   }
+}
+
+p{
+  font-size:0.8em;
 }

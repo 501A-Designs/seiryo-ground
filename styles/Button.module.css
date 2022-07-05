@@ -3,19 +3,21 @@
     align-items: center;
     justify-content: space-between;
     gap:1em;
-    background-color:#f0f0f0;
-    color:black;
+    background-color: transparent;
+    /* background-color:#f0f0f0; */
+    color:gray;
     border:0px solid transparent;
     cursor:pointer;
-    padding:0.7em 1em;
-    letter-spacing:-1px;
-    font-size:1em;
+    padding:0.5em;
+    width:fit-content;
+    letter-spacing:-0.5px;
+    font-size:0.8em;
     cursor:pointer;
     transition:0.3s;
 }
 .button:hover{
-    transform: scale(1.1);
-    background-color:black;
-    color: white;
-    font-style: italic;
+    transform: scale(1.05);
+    /* background-color:#f0f0f0; */
+    /* border-radius:15px; */
+    color: black;
 }
