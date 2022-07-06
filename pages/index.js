@@ -33,6 +33,7 @@ import DistortionCarousel from '../lib/DistortionCarousel'
 
 import { isBrowser } from 'react-device-detect';
 import Link from 'next/link'
+import End from '../lib/End'
 
 
 export default function Home() {
@@ -268,34 +269,7 @@ export default function Home() {
               )
             })}
           </StaticGrid>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection: 'column',
-              gap: '1em',
-              padding: '5% 0',
-            }}
-          >
-            <div
-              style={{
-                backgroundColor:'black',
-                width:'1px',
-                height: '100px',
-              }}
-            />
-            <h4
-              style={{
-                writingMode:'vertical-rl',
-                textOrientation:'mixed'
-              }}
-            >
-              終わり。
-              <br/>
-              The End.
-            </h4>
-          </div>
+          <End/>
         </StaticGrid>
       </div>
     </div>

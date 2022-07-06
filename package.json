@@ -12,6 +12,7 @@
     "contentful": "^9.1.32",
     "distortion-effect-carousel": "^1.1.0",
     "firebase": "^9.8.4",
+    "moment": "^2.29.3",
     "next": "12.1.6",
     "react": "18.1.0",
     "react-device-detect": "^2.2.2",
