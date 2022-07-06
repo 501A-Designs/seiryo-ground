@@ -345,6 +345,7 @@ export default function PlaceName() {
                                     {placeData.reviews && placeData.reviews.map((review) =>{
                                         return (
                                             <Review
+                                                key={review.title+review.rating.dateRating}
                                                 title={review.title}
                                                 dateRating={review.rating.dateRating}
                                                 accessRating={review.rating.accessRating}
