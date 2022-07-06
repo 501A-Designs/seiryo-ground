@@ -10,7 +10,7 @@ import PostThumbNail from '../lib/PostThumbNail'
 
 import { useRouter } from 'next/router'
 
-import { VscChevronRight,VscAccount,VscLinkExternal,VscAdd,VscHeart,VscLocation,VscMegaphone,VscBook,VscSignOut,VscSignIn, VscSave, VscClose, VscRocket, VscMenu, VscFold } from "react-icons/vsc";
+import { VscChevronRight,VscAccount,VscLinkExternal,VscAdd,VscHeart,VscLocation,VscMegaphone,VscBook,VscSignOut,VscSignIn, VscSave, VscClose, VscRocket, VscMenu, VscFold, VscGithubAlt, VscComment } from "react-icons/vsc";
 
 import {app,analytics,auth,db} from '../firebase'
 import { useAuthState, useSignInWithGoogle } from 'react-firebase-hooks/auth';
@@ -149,6 +149,8 @@ export default function Home() {
                     {user ?
                       <>
                         <Button
+                          iconPosition={'left'}
+                          icon={<VscAdd/>}
                           onClick={()=>{
                             scroll.scrollToTop();
                             setCreateNew(true);
@@ -157,12 +159,16 @@ export default function Home() {
                           場所を追加
                         </Button>
                         <Button
+                          iconPosition={'left'}
+                          icon={<VscHeart/>}
                           onClick={()=>router.push('/like')}
                         >
                           好きな場所
                         </Button>
                       </>:
                       <Button
+                        iconPosition={'left'}
+                        icon={<VscSignIn/>}
                         onClick={()=>signInWithGoogle()}
                       >
                         GOOGLEでログイン
@@ -171,27 +177,30 @@ export default function Home() {
                   </>
                 }
                 <Button
-                  onClick={()=>router.push('/place')}
-                >
-                  場所を探す
-                </Button>
-                <Button
+                  iconPosition={'left'}
+                  icon={<VscComment/>}
                   onClick={()=>router.push('/news')}
                 >
                   SG NEWS
                 </Button>
                 <Button
+                  iconPosition={'left'}
+                  icon={<VscBook/>}
                   onClick={()=>router.push('/about')}
                 >
                   SGについて
                 </Button>
                 <Button
+                  iconPosition={'left'}
+                  icon={<VscGithubAlt/>}
                   onClick={()=>router.push('https://github.com/501A-Designs/seiryo-ground')}
                 >
                   GITHUBを開く
                 </Button>
                 {user && 
                   <Button
+                    iconPosition={'left'}
+                    icon={<VscSignOut/>}
                     onClick={()=>signInWithGoogle()}
                   >
                     ログアウト
@@ -205,7 +214,7 @@ export default function Home() {
               {user ? 
                 <div style={{padding:'0em',backgroundColor: 'white'}}>
                   <AlignItems gap={'1em'}>
-                    <img src={user.photoURL} width="40" height="40" style={{borderRadius: '15px'}}/>
+                    <img src={user.photoURL} width="40" height="40" style={{borderRadius: '10px'}}/>
                     <h3 style={{color:'black',minWidth:'max-content',}}>{user.displayName}</h3>
                   </AlignItems>
                 </div>:            

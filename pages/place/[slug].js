@@ -6,7 +6,7 @@ import Button from '../../lib/Button'
 import TypeBadge from '../../lib/TypeBadge'
 
 import { db,auth } from '../../firebase'
-import { arrayRemove, doc, getDoc, updateDoc } from "firebase/firestore";
+import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Rating from '../../lib/Rating'
 import StaticGrid from '../../lib/StaticGrid'
@@ -15,7 +15,7 @@ import LoadingBar from 'react-top-loading-bar';
 import Review from '../../lib/Review'
 import Input from '../../lib/Input'
 import TextArea from '../../lib/TextArea'
-import { VscAccount, VscAdd, VscClose, VscEdit, VscHeart, VscRedo } from 'react-icons/vsc'
+import { VscAccount, VscAdd, VscClose, VscEdit, VscHeart, VscRedo, VscRocket, VscSave, VscSaveAs } from 'react-icons/vsc'
 import End from '../../lib/End'
 import NoReviews from '../../lib/NoReviews'
 
@@ -32,6 +32,7 @@ export default function PlaceName() {
 
     const [createReview, setCreateReview] = useState(false);
     const [hasReviewed, setHasReviewed] = useState(false);
+    const [thisReview, setThisReview] = useState({})
 
     const [user, loading, error] = useAuthState(auth);
     const [placeData, setPlaceData] = useState();
@@ -47,7 +48,13 @@ export default function PlaceName() {
                 if (docSnap.data().reviews) {                    
                     docSnap.data().reviews.map((review) =>{
                         if (review.authorUid == user.uid) {
-                            setHasReviewed(true)
+                            setHasReviewed(true);
+                            setThisReview(review)
+                            setTitleInput(review.title);
+                            setDescriptionInput(review.description);
+                            setDateRatingInput(review.rating.dateRating);
+                            setAccessRatingInput(review.rating.accessRating);
+                            setManagementRatingInput(review.rating.managementRating);
                         }
                     })
                 }
@@ -65,9 +72,9 @@ export default function PlaceName() {
     const [managementRatingInput, setManagementRatingInput] = useState(0);
     const [descriptionInput, setDescriptionInput] = useState('');
 
+    let timeNow = moment().format('MMMM Do YYYY, h:mm a');
     const publishReview = async() =>{
         if (placeId && user) {
-            let timeNow = moment().format('MMMM Do YYYY, h:mm a');
             await updateDoc(doc(db, "places", placeId), {
                 reviews: arrayUnion({
                     authorUid:user.uid,
@@ -83,29 +90,73 @@ export default function PlaceName() {
             });
         }
         setHasReviewed(true);
+        setCreateReview(false);
+    }
+
+    const removeReview = async() =>{
+        if (placeId && user) {
+            await updateDoc(doc(db, "places", placeId), {
+                reviews: arrayRemove({
+                    authorUid:user.uid,
+                    title:thisReview.title,
+                    description: thisReview.description,
+                    rating: {
+                        dateRating: thisReview.rating.dateRating,
+                        accessRating: thisReview.rating.accessRating,
+                        managementRating: thisReview.rating.managementRating,
+                    },
+                    lastUpdated:thisReview.lastUpdated
+                })
+            });
+        }
+        setCreateReview(true)
+    }
+
+    const updateReview = async() =>{
+        if (placeId && user) {
+            await updateDoc(doc(db, "places", placeId), {
+                reviews: arrayUnion({
+                    authorUid:user.uid,
+                    title:titleInput,
+                    description: descriptionInput,
+                    rating: {
+                        dateRating:dateRatingInput,
+                        accessRating:accessRatingInput,
+                        managementRating:managementRatingInput,
+                    },
+                    lastUpdated:timeNow
+                })
+            });
+        }
+        setCreateReview(false);
+        getDocument();
     }
 
     useEffect(() => {
         getDocument();
-    }, [placeId])
+    }, [user,hasReviewed])
 
-    let arrayOfDateRating = [];
-    let arrayOfAccessRating = [];
-    let arrayOfManagementRating = [];
+    // useEffect(() => {
+    //     if (hasReviewed) {
+    //     }
+    // },[createReview])
 
-    if (placeData && placeData.reviews) {
-        placeData.reviews.map((review) =>{
-            arrayOfDateRating.push(review.rating.dateRating);
-            arrayOfAccessRating.push(review.rating.accessRating);
-            arrayOfManagementRating.push(review.rating.managementRating);
-        })
-        console.log('bruh')
-    }
+    // let arrayOfDateRating = [];
+    // let arrayOfAccessRating = [];
+    // let arrayOfManagementRating = [];
 
-    let sumOfArrayOfDateRating = arrayOfDateRating.reduce((sum, element) => sum + element, 0);
-    let sumOfArrayOfAccessRating = arrayOfAccessRating.reduce((sum, element) => sum + element, 0);
-    let sumOfArrayOfManagementRating = arrayOfManagementRating.reduce((sum, element) => sum + element, 0);
-    
+    // if (placeData && placeData.reviews) {
+    //     placeData.reviews.map((review) =>{
+    //         arrayOfDateRating.push(review.rating.dateRating);
+    //         arrayOfAccessRating.push(review.rating.accessRating);
+    //         arrayOfManagementRating.push(review.rating.managementRating);
+    //     })
+
+    // }
+
+    // let sumOfArrayOfDateRating = arrayOfDateRating.reduce((sum, element) => sum + element, 0);
+    // let sumOfArrayOfAccessRating = arrayOfAccessRating.reduce((sum, element) => sum + element, 0);
+    // let sumOfArrayOfManagementRating = arrayOfManagementRating.reduce((sum, element) => sum + element, 0);
 
     return (
         <>
@@ -166,10 +217,10 @@ export default function PlaceName() {
                             <p>{placeData.description}</p>
                             {placeData.reviews && placeData.reviews.length > 0 &&
                                 <StaticGrid grid={'1fr 1fr'}  gap={'0.25em'}>
-                                    <Rating rating={sumOfArrayOfDateRating/placeData.reviews.length} description={'デートスポット適正'}/>
+                                    {/* <Rating rating={sumOfArrayOfDateRating/placeData.reviews.length} description={'デートスポット適正'}/>
                                     <Rating rating={sumOfArrayOfAccessRating/placeData.reviews.length} description={'最寄駅からのアクセス'}/>
                                     <Rating rating={sumOfArrayOfManagementRating/placeData.reviews.length} description={'設備管理の状況'}/>
-                                    <Rating rating={placeData.likes} description={'清涼広場上でのいいね数'} hideMax={true}/>
+                                    <Rating rating={placeData.likes} description={'清涼広場上でのいいね数'} hideMax={true}/> */}
                                 </StaticGrid>
                             }
                             <iframe
@@ -186,18 +237,18 @@ export default function PlaceName() {
                                         <AlignItems justifyContent={'center'}>
                                             {hasReviewed ?
                                                 <Button
-                                                    onClick={()=> setCreateReview(true)}
+                                                    onClick={()=> {createReview ? updateReview():removeReview()}}
                                                     iconPosition={'left'}
-                                                    icon={<VscRedo/>}
+                                                    icon={createReview ? <VscClose/>:<VscRedo/>}
                                                 >
-                                                    書いたレビューを編集
+                                                    {createReview ? '保存して閉じる':'書いたレビューを編集'}
                                                 </Button>:
                                                 <Button
-                                                    onClick={()=> setCreateReview(true)}
+                                                    onClick={()=> {createReview ? setCreateReview(false):setCreateReview(true)}}
                                                     iconPosition={'left'}
-                                                    icon={<VscAdd/>}
+                                                    icon={createReview ? <VscClose/>:<VscAdd/>}
                                                 >
-                                                    レビューを書く
+                                                    {createReview ? '閉じる':'レビューを書く'}
                                                 </Button>
                                             }
                                         </AlignItems>:
@@ -237,18 +288,15 @@ export default function PlaceName() {
                                             }}
                                         >
                                             <StaticGrid gap={'0.25em'}>
-                                                <AlignItems spaceBetween={true}>
-                                                    <h3>新規レビュー</h3>
-                                                    <Button
-                                                        iconPosition={'left'}
-                                                        icon={<VscClose/>}
-                                                        onClick={()=> setCreateReview(false)}
-                                                    />
-                                                </AlignItems>
+                                                <h3>
+                                                    {hasReviewed ?
+                                                        '内容を更新':'新規レビュー'
+                                                    }
+                                                </h3>
                                                 <Input
                                                     value={titleInput}
                                                     onChange={(e)=> setTitleInput(e.target.value)}
-                                                    placeHolder={'レビュータイトル'}
+                                                    placeholder={'レビュータイトル'}
                                                 />
                                                 <StaticGrid grid={'1fr 1fr 1fr'} gap={'0.25em'}>
                                                     <DisplayRatingInput
@@ -256,30 +304,40 @@ export default function PlaceName() {
                                                         onChange={(e)=> setDateRatingInput(e.target.value)}
                                                         maxValue={10}
                                                         minValue={0}
-                                                        placeHolder={'デートスポット適正'}
+                                                        placeholder={'デートスポット適正'}
                                                     />
                                                     <DisplayRatingInput
                                                         value={accessRatingInput}
                                                         onChange={(e)=> setAccessRatingInput(e.target.value)}
                                                         maxValue={10}
                                                         minValue={0}
-                                                        placeHolder={'最寄駅からのアクセス'}
+                                                        placeholder={'最寄駅からのアクセス'}
                                                     />
                                                     <DisplayRatingInput
                                                         value={managementRatingInput}
                                                         onChange={(e)=> setManagementRatingInput(e.target.value)}
                                                         maxValue={10}
                                                         minValue={0}
-                                                        placeHolder={'設備管理の状況'}
+                                                        placeholder={'設備管理の状況'}
                                                     />
                                                 </StaticGrid>
                                                 <TextArea
                                                     value={descriptionInput}
                                                     onChange={(e)=> setDescriptionInput(e.target.value)}
-                                                    placeHolder={'行って感じた事、評価項目に写らない場所の良さ等。'}
+                                                    placeholder={'行って感じた事、評価項目に写らない場所の良さ等。'}
                                                 />
                                                 {titleInput && descriptionInput &&
-                                                    <Button onClick={()=>publishReview()}>レビューを追加</Button>
+                                                    <AlignItems justifyContent={'center'}>
+                                                        {!hasReviewed &&
+                                                            <Button
+                                                                iconPosition={'right'}
+                                                                icon={<VscSave/>}
+                                                                onClick={()=>publishReview()}
+                                                            >
+                                                                レビューを公開
+                                                            </Button>
+                                                        }
+                                                    </AlignItems>
                                                 }
                                             </StaticGrid>
                                         </div>
