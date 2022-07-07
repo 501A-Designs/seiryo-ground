@@ -36,18 +36,25 @@ export default function PlaceName() {
 
     const [user, loading, error] = useAuthState(auth);
     const [placeData, setPlaceData] = useState();
+
+    // let arrayOfDateRating = [];
+    // let arrayOfAccessRating = [];
+    // let arrayOfManagementRating = [];
+
+    const [arrayOfDateRating, setArrayOfDateRating] = useState([])
+    const [arrayOfAccessRating, setArrayOfAccessRating] = useState([])
+    const [arrayOfManagementRating, setArrayOfManagementRating] = useState([])
     
     const getDocument = async () =>{
         setProgress(0);
-        if (placeId && user) {            
+        if (placeId) {            
             const docRef = doc(db, "places", placeId);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
-                console.log(docSnap.data());
                 setPlaceData(docSnap.data());
-                if (docSnap.data().reviews) {                    
+                if (docSnap.data().reviews) {            
                     docSnap.data().reviews.map((review) =>{
-                        if (review.authorUid == user.uid) {
+                        if (user && review.authorUid === user.uid) {
                             setHasReviewed(true);
                             setThisReview(review)
                             setTitleInput(review.title);
@@ -56,6 +63,9 @@ export default function PlaceName() {
                             setAccessRatingInput(review.rating.accessRating);
                             setManagementRatingInput(review.rating.managementRating);
                         }
+                        setArrayOfDateRating([ ...arrayOfDateRating, parseInt(review.rating.dateRating)]);
+                        setArrayOfAccessRating([ ...arrayOfAccessRating, parseInt(review.rating.accessRating)]);
+                        setArrayOfManagementRating([ ...arrayOfManagementRating, parseInt(review.rating.managementRating)]);
                     })
                 }
                 setProgress(100);
@@ -95,6 +105,9 @@ export default function PlaceName() {
 
     const removeReview = async() =>{
         if (placeId && user) {
+            setArrayOfDateRating([]);
+            setArrayOfAccessRating([]);
+            setArrayOfManagementRating([]);
             await updateDoc(doc(db, "places", placeId), {
                 reviews: arrayRemove({
                     authorUid:user.uid,
@@ -134,25 +147,9 @@ export default function PlaceName() {
 
     useEffect(() => {
         getDocument();
-    }, [user,hasReviewed])
+    }, [placeId,hasReviewed])
 
-    // useEffect(() => {
-    //     if (hasReviewed) {
-    //     }
-    // },[createReview])
-
-    // let arrayOfDateRating = [];
-    // let arrayOfAccessRating = [];
-    // let arrayOfManagementRating = [];
-
-    // if (placeData && placeData.reviews) {
-    //     placeData.reviews.map((review) =>{
-    //         arrayOfDateRating.push(review.rating.dateRating);
-    //         arrayOfAccessRating.push(review.rating.accessRating);
-    //         arrayOfManagementRating.push(review.rating.managementRating);
-    //     })
-
-    // }
+    console.log(arrayOfDateRating)
 
     // let sumOfArrayOfDateRating = arrayOfDateRating.reduce((sum, element) => sum + element, 0);
     // let sumOfArrayOfAccessRating = arrayOfAccessRating.reduce((sum, element) => sum + element, 0);
@@ -217,10 +214,10 @@ export default function PlaceName() {
                             <p>{placeData.description}</p>
                             {placeData.reviews && placeData.reviews.length > 0 &&
                                 <StaticGrid grid={'1fr 1fr'}  gap={'0.25em'}>
-                                    {/* <Rating rating={sumOfArrayOfDateRating/placeData.reviews.length} description={'デートスポット適正'}/>
-                                    <Rating rating={sumOfArrayOfAccessRating/placeData.reviews.length} description={'最寄駅からのアクセス'}/>
-                                    <Rating rating={sumOfArrayOfManagementRating/placeData.reviews.length} description={'設備管理の状況'}/>
-                                    <Rating rating={placeData.likes} description={'清涼広場上でのいいね数'} hideMax={true}/> */}
+                                    <Rating rating={arrayOfDateRating.reduce((sum, element) => sum + element, 0)/arrayOfDateRating.length} description={'デートスポット適正'}/>
+                                    <Rating rating={arrayOfAccessRating.reduce((sum, element) => sum + element, 0)/arrayOfAccessRating.length} description={'最寄駅からのアクセス'}/>
+                                    <Rating rating={arrayOfManagementRating.reduce((sum, element) => sum + element, 0)/arrayOfManagementRating.length} description={'設備管理の状況'}/>
+                                    <Rating rating={placeData.likes ? placeData.likes:0} description={'清涼広場上でのいいね数'} hideMax={true}/>
                                 </StaticGrid>
                             }
                             <iframe
