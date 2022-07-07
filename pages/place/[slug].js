@@ -6,7 +6,7 @@ import Button from '../../lib/Button'
 import TypeBadge from '../../lib/TypeBadge'
 
 import { db,auth } from '../../firebase'
-import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, query, setDoc, updateDoc } from "firebase/firestore";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Rating from '../../lib/Rating'
 import StaticGrid from '../../lib/StaticGrid'
@@ -30,49 +30,69 @@ export default function PlaceName() {
     const [progress, setProgress] = useState(0);
 
 
-    const [createReview, setCreateReview] = useState(false);
+    const [openCreateReview, setOpenCreateReview] = useState(false);
     const [hasReviewed, setHasReviewed] = useState(false);
-    const [thisReview, setThisReview] = useState({})
 
     const [user, loading, error] = useAuthState(auth);
     const [placeData, setPlaceData] = useState();
+    const [reviewData, setReviewData] = useState();
 
-    // let arrayOfDateRating = [];
-    // let arrayOfAccessRating = [];
-    // let arrayOfManagementRating = [];
+    const [averageOfDateRating, setAverageOfDateRating] = useState(0);
+    const [averageOfAccessRating, setAverageOfAccessRating] = useState(0);
+    const [averageOfManagementRating, setAverageOfManagementRating] = useState(0);
 
-    const [arrayOfDateRating, setArrayOfDateRating] = useState([])
-    const [arrayOfAccessRating, setArrayOfAccessRating] = useState([])
-    const [arrayOfManagementRating, setArrayOfManagementRating] = useState([])
+    useEffect(() => {
+        getDocument();
+    }, [user])
     
     const getDocument = async () =>{
         setProgress(0);
-        if (placeId) {            
-            const docRef = doc(db, "places", placeId);
-            const docSnap = await getDoc(docRef);
+        if (placeId) {
+            const placeDocRef = doc(db, `places/${placeId}`);
+            const docSnap = await getDoc(placeDocRef);
             if (docSnap.exists()) {
                 setPlaceData(docSnap.data());
-                if (docSnap.data().reviews) {            
-                    docSnap.data().reviews.map((review) =>{
-                        if (user && review.authorUid === user.uid) {
-                            setHasReviewed(true);
-                            setThisReview(review)
-                            setTitleInput(review.title);
-                            setDescriptionInput(review.description);
-                            setDateRatingInput(review.rating.dateRating);
-                            setAccessRatingInput(review.rating.accessRating);
-                            setManagementRatingInput(review.rating.managementRating);
-                        }
-                        setArrayOfDateRating([ ...arrayOfDateRating, parseInt(review.rating.dateRating)]);
-                        setArrayOfAccessRating([ ...arrayOfAccessRating, parseInt(review.rating.accessRating)]);
-                        setArrayOfManagementRating([ ...arrayOfManagementRating, parseInt(review.rating.managementRating)]);
-                    })
-                }
+                getReviews(); 
                 setProgress(100);
             } else {
                 alert("ページは見つかりませんでした");
             }
         }
+    }
+
+    const reviewsCollectionRef = collection(db, `places/${placeId}/reviews`);
+    
+    const getReviews = async () => {
+        let reviewsArray = [];
+        const querySnapshot = await getDocs(reviewsCollectionRef)
+        querySnapshot.forEach((doc) => {
+            reviewsArray.push(doc);
+            if (user && user.uid === doc.id) {
+                setHasReviewed(true);
+                setTitleInput(doc.data().title);
+                setDescriptionInput(doc.data().description);
+                setDateRatingInput(doc.data().dateRating);
+                setAccessRatingInput(doc.data().accessRating);
+                setManagementRatingInput(doc.data().managementRating);
+            }
+        });
+        setReviewData(reviewsArray);
+        updateAverageRatings();
+    }
+
+    const updateAverageRatings = async　() => {
+        let arrayOfDateRating = [];
+        let arrayOfAccessRating = [];
+        let arrayOfManagementRating = [];
+        const querySnapshot = await getDocs(reviewsCollectionRef)
+        querySnapshot.forEach((doc) => {
+            arrayOfDateRating.push(parseInt(doc.data().dateRating));
+            arrayOfAccessRating.push(parseInt(doc.data().accessRating));
+            arrayOfManagementRating.push(parseInt(doc.data().managementRating));
+        })
+        setAverageOfDateRating(arrayOfDateRating.reduce((sum, element) => sum + element, 0)/arrayOfDateRating.length);
+        setAverageOfAccessRating(arrayOfAccessRating.reduce((sum, element) => sum + element, 0)/arrayOfAccessRating.length);
+        setAverageOfManagementRating(arrayOfManagementRating.reduce((sum, element) => sum + element, 0)/arrayOfManagementRating.length);
     }
 
 
@@ -83,73 +103,38 @@ export default function PlaceName() {
     const [descriptionInput, setDescriptionInput] = useState('');
 
     let timeNow = moment().format('MMMM Do YYYY, h:mm a');
+
     const publishReview = async() =>{
-        if (placeId && user) {
-            await updateDoc(doc(db, "places", placeId), {
-                reviews: arrayUnion({
-                    authorUid:user.uid,
-                    title:titleInput,
-                    description: descriptionInput,
-                    rating: {
-                        dateRating:dateRatingInput,
-                        accessRating:accessRatingInput,
-                        managementRating:managementRatingInput,
-                    },
-                    lastUpdated:timeNow
-                })
-            });
-        }
-        setHasReviewed(true);
-        setCreateReview(false);
+        await setDoc(doc(collection(db, `places/${placeId}/reviews/`), `${user && user.uid}`), {
+            title: titleInput,
+            description: descriptionInput,
+            dateRating: dateRatingInput,
+            accessRating: accessRatingInput,
+            managementRating: managementRatingInput,
+            lastUpdated:timeNow
+        });
     }
 
-    const removeReview = async() =>{
-        if (placeId && user) {
-            setArrayOfDateRating([]);
-            setArrayOfAccessRating([]);
-            setArrayOfManagementRating([]);
-            await updateDoc(doc(db, "places", placeId), {
-                reviews: arrayRemove({
-                    authorUid:user.uid,
-                    title:thisReview.title,
-                    description: thisReview.description,
-                    rating: {
-                        dateRating: thisReview.rating.dateRating,
-                        accessRating: thisReview.rating.accessRating,
-                        managementRating: thisReview.rating.managementRating,
-                    },
-                    lastUpdated:thisReview.lastUpdated
-                })
-            });
-        }
-        setCreateReview(true)
+    const updateReview = async() =>{    
+        await updateDoc(doc(db, `places/${placeId}/reviews/${user && user.uid}`), {
+            title: titleInput,
+            description: descriptionInput,
+            dateRating: dateRatingInput,
+            accessRating: accessRatingInput,
+            managementRating: managementRatingInput,
+            lastUpdated:timeNow
+        });
     }
 
-    const updateReview = async() =>{
-        if (placeId && user) {
-            await updateDoc(doc(db, "places", placeId), {
-                reviews: arrayUnion({
-                    authorUid:user.uid,
-                    title:titleInput,
-                    description: descriptionInput,
-                    rating: {
-                        dateRating:dateRatingInput,
-                        accessRating:accessRatingInput,
-                        managementRating:managementRatingInput,
-                    },
-                    lastUpdated:timeNow
-                })
-            });
+    const round = (number) =>{
+        if (number == 10) {
+            return 10
+        }if (number == 0) {
+            return 0
+        }else{
+            return (Math.round(number * 100) / 100).toFixed(1)
         }
-        setCreateReview(false);
-        getDocument();
     }
-
-    useEffect(() => {
-        getDocument();
-    }, [placeId,hasReviewed])
-
-    console.log(arrayOfDateRating)
 
     // let sumOfArrayOfDateRating = arrayOfDateRating.reduce((sum, element) => sum + element, 0);
     // let sumOfArrayOfAccessRating = arrayOfAccessRating.reduce((sum, element) => sum + element, 0);
@@ -178,14 +163,14 @@ export default function PlaceName() {
                         {user &&
                             <AlignItems>
                                 <Button
-                                    onClick={()=> setCreateReview(true)}
+                                    // onClick={()=> }
                                     iconPosition={'left'}
                                     icon={<VscEdit/>}
                                 >
                                     ページを編集
                                 </Button>
                                 <Button
-                                    onClick={()=> setCreateReview(true)}
+                                    // onClick={()=> }
                                     iconPosition={'left'}
                                     icon={<VscHeart/>}
                                 >
@@ -212,11 +197,11 @@ export default function PlaceName() {
                     <div className="grid-1fr-2fr">
                         <div>
                             <p>{placeData.description}</p>
-                            {placeData.reviews && placeData.reviews.length > 0 &&
+                            {reviewData && reviewData.length > 0 &&
                                 <StaticGrid grid={'1fr 1fr'}  gap={'0.25em'}>
-                                    <Rating rating={arrayOfDateRating.reduce((sum, element) => sum + element, 0)/arrayOfDateRating.length} description={'デートスポット適正'}/>
-                                    <Rating rating={arrayOfAccessRating.reduce((sum, element) => sum + element, 0)/arrayOfAccessRating.length} description={'最寄駅からのアクセス'}/>
-                                    <Rating rating={arrayOfManagementRating.reduce((sum, element) => sum + element, 0)/arrayOfManagementRating.length} description={'設備管理の状況'}/>
+                                    <Rating rating={round(averageOfDateRating)} description={'デートスポット適正'}/>
+                                    <Rating rating={round(averageOfAccessRating)} description={'最寄駅からのアクセス'}/>
+                                    <Rating rating={round(averageOfManagementRating)} description={'設備管理の状況'}/>
                                     <Rating rating={placeData.likes ? placeData.likes:0} description={'清涼広場上でのいいね数'} hideMax={true}/>
                                 </StaticGrid>
                             }
@@ -232,22 +217,13 @@ export default function PlaceName() {
                                 <StaticGrid gap={'0.5em'}>
                                     {user ? 
                                         <AlignItems justifyContent={'center'}>
-                                            {hasReviewed ?
-                                                <Button
-                                                    onClick={()=> {createReview ? updateReview():removeReview()}}
-                                                    iconPosition={'left'}
-                                                    icon={createReview ? <VscClose/>:<VscRedo/>}
-                                                >
-                                                    {createReview ? '保存して閉じる':'書いたレビューを編集'}
-                                                </Button>:
-                                                <Button
-                                                    onClick={()=> {createReview ? setCreateReview(false):setCreateReview(true)}}
-                                                    iconPosition={'left'}
-                                                    icon={createReview ? <VscClose/>:<VscAdd/>}
-                                                >
-                                                    {createReview ? '閉じる':'レビューを書く'}
-                                                </Button>
-                                            }
+                                            <Button
+                                                iconPosition={'left'}
+                                                icon={openCreateReview ? <VscClose/>:<>{hasReviewed ? <VscRedo/>:<VscAdd/>}</>}
+                                                onClick={()=> {openCreateReview ? setOpenCreateReview(false):setOpenCreateReview(true)}}
+                                            >
+                                                {openCreateReview ? '閉じる':<>{hasReviewed ? '書いたレビューを編集':'レビューを書く'}</>}
+                                            </Button>
                                         </AlignItems>:
                                         <div
                                             style={{
@@ -274,7 +250,7 @@ export default function PlaceName() {
                                             <Button onClick={()=>router.push('/')}>メインページから会員登録</Button>
                                         </div>
                                     }
-                                    {createReview &&                                     
+                                    {openCreateReview &&                                     
                                         <div
                                             style={{
                                                 border: '1px solid var(--sgGray)',
@@ -325,11 +301,26 @@ export default function PlaceName() {
                                                 />
                                                 {titleInput && descriptionInput &&
                                                     <AlignItems justifyContent={'center'}>
-                                                        {!hasReviewed &&
+                                                        {hasReviewed ?
                                                             <Button
                                                                 iconPosition={'right'}
                                                                 icon={<VscSave/>}
-                                                                onClick={()=>publishReview()}
+                                                                onClick={()=>{
+                                                                    updateReview();
+                                                                    setOpenCreateReview(false);
+                                                                    getReviews();
+                                                                }}
+                                                            >
+                                                                レビューの内容を更新
+                                                            </Button>:
+                                                            <Button
+                                                                iconPosition={'right'}
+                                                                icon={<VscSave/>}
+                                                                onClick={()=>{
+                                                                    publishReview();
+                                                                    setOpenCreateReview(false);
+                                                                    getReviews();
+                                                                }}
                                                             >
                                                                 レビューを公開
                                                             </Button>
@@ -339,15 +330,15 @@ export default function PlaceName() {
                                             </StaticGrid>
                                         </div>
                                     }
-                                    {placeData.reviews && placeData.reviews.map((review) =>{
+                                    {reviewData && reviewData.length > 0 && reviewData.map((review) =>{
                                         return (
                                             <Review
-                                                key={review.title+review.rating.dateRating}
-                                                title={review.title}
-                                                dateRating={review.rating.dateRating}
-                                                accessRating={review.rating.accessRating}
-                                                managementRating={review.rating.managementRating}
-                                                description={review.description && review.description}
+                                                key={review.id}
+                                                title={review.data().title}
+                                                dateRating={review.data().dateRating}
+                                                accessRating={review.data().accessRating}
+                                                managementRating={review.data().managementRating}
+                                                description={review.data().description && review.data().description}
                                             />
                                         )
                                     })}

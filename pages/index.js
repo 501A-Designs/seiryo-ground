@@ -48,7 +48,6 @@ export default function Home() {
   const [fetchedData, setFetchedData] = useState()
 
   const fetchData = async () => {
-    // , where("published", "==", true)
     const querySnapshot = await getDocs(query(collection(db, "places")))
     if (placesArray.length === 0) {                
       querySnapshot.forEach((doc) => {
