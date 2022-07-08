@@ -41,19 +41,22 @@ import FetchSinglePlace from '../lib/FetchSinglePlace'
 
 const customStyles = {
   content: {
-    top: '30%',
+    top: '5%',
     left: '80%',
     bottom: 'auto',
     padding: '0',
-    // marginRight: '-50%',
     width:'20%',
-    maxHeight:'60%',
+    maxHeight:'85%',
     overflowY:'scroll',
-    // transform: 'translate(-50%, -50%)',
-    // border: 'none',
     borderRadius: '5px 0 0 5px',
+    boxShadow: '0px 0px 15px #f0f0f0',
     zIndex:2,
   },
+  overlay: {
+    background: 'linear-gradient(to right,rgba(255,255,255,0) 0%,white 100%)',
+    backdropFilter: `blur(3px)`,
+    zIndex:20,
+  }
 };
 
 export default function Home() {
