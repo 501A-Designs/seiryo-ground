@@ -43,8 +43,13 @@ export default function News({sgPosts}) {
             zIndex:10
           }}
         >
-          <h1 style={{margin:'1em 0 0 0'}}>SG News</h1>
-          <h3 style={{margin:0}}>SEIRYO GROUND NEWS</h3>
+          <h2
+            style={{margin:'1em 0 0 0'}}
+            className={'seiryoGroundFont'}
+          >
+            SG News
+          </h2>
+          <h4 style={{margin:0}}>SEIRYO GROUND NEWS</h4>
           <p>清涼広場に関する新情報を徹底的に更新していきたいと思います。作成者は501Aです。</p>
         </div>
         <StaticGrid>

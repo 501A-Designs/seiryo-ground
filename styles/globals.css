@@ -116,22 +116,22 @@ main{
 
 @media screen and (max-width: 500px) and (min-width: 0px) {
   .pagePadding{
-    padding: 0% 5%;
+    padding: 0% 2.5%;
 	}
   .stickySide{
     display: grid;
     grid-template-columns:1fr;
-    gap:1.5em;
+    gap:0;
   }
 }
 @media screen and (max-width: 900px) and (min-width: 501px) {
   .pagePadding{
-    padding: 0% 10%;
+    padding: 0% 5%;
   }
   .stickySide{
     display: flex;
     align-items: flex-start;
-    gap:1.5em;
+    gap:1em;
   }
 }
 @media screen and (max-width: 2000px) and (min-width: 901px) {

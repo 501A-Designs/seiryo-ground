@@ -6,7 +6,7 @@ import Button from '../../lib/Button'
 import TypeBadge from '../../lib/TypeBadge'
 
 import { db,auth } from '../../firebase'
-import { addDoc, collection, doc, getDoc, getDocs, query, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, query, setDoc, updateDoc } from "firebase/firestore";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Rating from '../../lib/Rating'
 import StaticGrid from '../../lib/StaticGrid'
@@ -23,6 +23,7 @@ import NoReviews from '../../lib/NoReviews'
 import moment from 'moment';
 import 'moment/locale/ja'
 import DisplayRatingInput from '../../lib/DisplayRatingInput'
+import { isBrowser } from 'react-device-detect'
 
 export default function PlaceName() {
     const router = useRouter();
@@ -33,18 +34,16 @@ export default function PlaceName() {
     const [openCreateReview, setOpenCreateReview] = useState(false);
     const [hasReviewed, setHasReviewed] = useState(false);
 
-    const [user, loading, error] = useAuthState(auth);
+    const [user] = useAuthState(auth);
     const [placeData, setPlaceData] = useState();
     const [reviewData, setReviewData] = useState();
+
 
     const [averageOfDateRating, setAverageOfDateRating] = useState(0);
     const [averageOfAccessRating, setAverageOfAccessRating] = useState(0);
     const [averageOfManagementRating, setAverageOfManagementRating] = useState(0);
-
-    useEffect(() => {
-        getDocument();
-    }, [user])
     
+    const [liked, setLiked] = useState(false);
     const getDocument = async () =>{
         setProgress(0);
         if (placeId) {
@@ -52,7 +51,12 @@ export default function PlaceName() {
             const docSnap = await getDoc(placeDocRef);
             if (docSnap.exists()) {
                 setPlaceData(docSnap.data());
-                getReviews(); 
+                docSnap.data().likes.map((uid) => {
+                    if (user.uid == uid) {
+                        setLiked(true);
+                    }
+                })
+                getReviews();
                 setProgress(100);
             } else {
                 alert("ページは見つかりませんでした");
@@ -136,9 +140,28 @@ export default function PlaceName() {
         }
     }
 
-    // let sumOfArrayOfDateRating = arrayOfDateRating.reduce((sum, element) => sum + element, 0);
-    // let sumOfArrayOfAccessRating = arrayOfAccessRating.reduce((sum, element) => sum + element, 0);
-    // let sumOfArrayOfManagementRating = arrayOfManagementRating.reduce((sum, element) => sum + element, 0);
+    const addLike = async() =>{
+        await updateDoc(doc(db, `places/${placeId}/`), {
+            likes: arrayUnion(user && user.uid)
+        });
+        await updateDoc(doc(db, `users/${user && user.uid}/`), {
+            likes: arrayUnion(placeId)
+        });
+        setLiked(true);
+    }
+    const removeLike = async() =>{
+        await updateDoc(doc(db, `places/${placeId}/`), {
+            likes: arrayRemove(user && user.uid)
+        });
+        await updateDoc(doc(db, `users/${user && user.uid}/`), {
+            likes: arrayRemove(placeId)
+        });
+        setLiked(false);
+    }
+
+    useEffect(() => {
+        getDocument();
+    }, [user,placeId])
 
     return (
         <>
@@ -170,11 +193,11 @@ export default function PlaceName() {
                                     ページを編集
                                 </Button>
                                 <Button
-                                    // onClick={()=> }
+                                    onClick={()=> {liked ? removeLike():addLike()}}
                                     iconPosition={'left'}
                                     icon={<VscHeart/>}
                                 >
-                                    いいね
+                                    {liked ? 'いいねを外す':'いいね'}
                                 </Button>
                             </AlignItems>
                         }
@@ -202,7 +225,7 @@ export default function PlaceName() {
                                     <Rating rating={round(averageOfDateRating)} description={'デートスポット適正'}/>
                                     <Rating rating={round(averageOfAccessRating)} description={'最寄駅からのアクセス'}/>
                                     <Rating rating={round(averageOfManagementRating)} description={'設備管理の状況'}/>
-                                    <Rating rating={placeData.likes ? placeData.likes:0} description={'清涼広場上でのいいね数'} hideMax={true}/>
+                                    <Rating rating={placeData.likes ? placeData.likes.length:0} description={'清涼広場上でのいいね数'} hideMax={true}/>
                                 </StaticGrid>
                             }
                             <iframe
@@ -247,7 +270,10 @@ export default function PlaceName() {
                                             </div>
                                             <h4>ログインされておりません。</h4>
                                             <p>ログインしてアカウントを作成すると、レビューや場所を清涼広場上に投稿する事ができます！</p>
-                                            <Button onClick={()=>router.push('/')}>メインページから会員登録</Button>
+                                            {isBrowser ? 
+                                                <Button onClick={()=>router.push('/')}>メインページから会員登録</Button>:
+                                                <p>※モバイルからのログインは出来ないです。パソコンからアクセスして頂くとログインが可能となります。</p>
+                                            }
                                         </div>
                                     }
                                     {openCreateReview &&                                     
@@ -342,7 +368,7 @@ export default function PlaceName() {
                                             />
                                         )
                                     })}
-                                    {placeData.reviews && placeData.reviews.length > 0 ? 
+                                    {reviewData && reviewData.length > 0 ? 
                                         <End/>:
                                         <NoReviews/>
                                     }

@@ -12,7 +12,7 @@ export default function About() {
     return (
         <div className="pagePadding">
             <div style={{display:'flex',justifyContent: 'center',flexDirection: 'column',alignItems: 'center',marginTop: '5%'}}>
-                <Image src={sgCenteredLogo} width={300} height={230}/>
+                <Image src={sgCenteredLogo} width={200} height={160}/>
                 <div style={{marginBottom:'1.5em'}}>
                     <p style={{textAlign: 'center', maxWidth:'500px'}}>ご興味を持ってくださりありがとうございます</p>
                     <p style={{textAlign: 'left', maxWidth:'500px'}}>

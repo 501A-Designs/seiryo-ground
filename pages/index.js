@@ -10,11 +10,11 @@ import PostThumbNail from '../lib/PostThumbNail'
 
 import { useRouter } from 'next/router'
 
-import { VscChevronRight,VscAccount,VscLinkExternal,VscAdd,VscHeart,VscLocation,VscMegaphone,VscBook,VscSignOut,VscSignIn, VscSave, VscClose, VscRocket, VscMenu, VscFold, VscGithubAlt, VscComment } from "react-icons/vsc";
+import { VscChevronRight,VscAccount,VscLinkExternal,VscAdd,VscHeart,VscBook,VscSignOut,VscSignIn, VscSave, VscClose, VscRocket, VscMenu, VscFold, VscGithubAlt, VscComment } from "react-icons/vsc";
 
 import {app,analytics,auth,db} from '../firebase'
 import { useAuthState, useSignInWithGoogle } from 'react-firebase-hooks/auth';
-import { doc, addDoc, collection, query, where, getDocs } from "firebase/firestore";
+import { doc, addDoc, collection, query, where, getDocs,getDoc } from "firebase/firestore";
 
 import LoadingBar from 'react-top-loading-bar';
 
@@ -36,16 +36,39 @@ import Link from 'next/link'
 import End from '../lib/End'
 
 
+import Modal from 'react-modal';
+import FetchSinglePlace from '../lib/FetchSinglePlace'
+
+const customStyles = {
+  content: {
+    top: '30%',
+    left: '80%',
+    bottom: 'auto',
+    padding: '0',
+    // marginRight: '-50%',
+    width:'20%',
+    maxHeight:'60%',
+    overflowY:'scroll',
+    // transform: 'translate(-50%, -50%)',
+    // border: 'none',
+    borderRadius: '5px 0 0 5px',
+    zIndex:2,
+  },
+};
+
 export default function Home() {
   const router = useRouter();
   let scroll = Scroll.animateScroll;
 
+  const [modalIsOpen, setModalIsOpen] = useState(0);
+
   const [signInWithGoogle] = useSignInWithGoogle(auth);
-  const [user, loading, error] = useAuthState(auth);
+  const [user] = useAuthState(auth);
   const [progress, setProgress] = useState(0);
+  const [likesArray, setLikesArray] = useState();
 
   let placesArray = [];
-  const [fetchedData, setFetchedData] = useState()
+  const [fetchedData, setFetchedData] = useState();
 
   const fetchData = async () => {
     const querySnapshot = await getDocs(query(collection(db, "places")))
@@ -60,6 +83,13 @@ export default function Home() {
       });
       setFetchedData(placesArray);
       setProgress(30);
+    }
+    setProgress(60);
+
+    const userDocRef = doc(db, `users/${user && user.uid}`);
+    const docSnap = await getDoc(userDocRef);
+    if (docSnap.exists()) {
+      setLikesArray(docSnap.data().likes);
     }
     setProgress(100)
   }
@@ -95,6 +125,38 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <Modal
+        isOpen={modalIsOpen}
+        style={customStyles}
+        onRequestClose={()=>setModalIsOpen(false)}
+      >
+        <div
+          style={{
+            backgroundColor: 'black',
+            color: 'white',
+          }}
+        >
+          <AlignItems justifyContent={'center'}>
+            <h5>好きな場所一覧</h5>
+          </AlignItems>
+        </div>
+        <StaticGrid grid={'1fr'} gap={'0'}>
+          {likesArray && likesArray.length > 0 &&
+            <>
+              {likesArray.map((likes)=>{
+                return(
+                  <FetchSinglePlace
+                    key={likes}
+                    documentId={likes}
+                  />
+                )
+              })
+              }
+            </>
+          }
+        </StaticGrid>
+      </Modal>
+
       <div
         className={'stickySide'}
       >
@@ -109,7 +171,7 @@ export default function Home() {
             flexDirection: 'column',
             justifyContent:'space-between',
             background: 'linear-gradient(to top, rgba(255, 255, 255, 0.9) 0%,white 100%)',
-            zIndex:10
+            zIndex:1
           }}
         >
           <StaticGrid>
@@ -160,7 +222,7 @@ export default function Home() {
                         <Button
                           iconPosition={'left'}
                           icon={<VscHeart/>}
-                          onClick={()=>router.push('/like')}
+                          onClick={()=>setModalIsOpen(true)}
                         >
                           好きな場所
                         </Button>
