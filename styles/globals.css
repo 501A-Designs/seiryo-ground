@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Shippori+Antique&family=Shippori+Antique+B1&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Shippori+Antique&family=Shippori+Antique+B1&display=swap'); */
+/* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap'); */
 
 :root{
   --sgGray:rgb(207, 207, 207);
@@ -9,28 +9,20 @@ html,
 body {
   padding: 0;
   margin: 0;
-  /* font-family: Helvetica Neue, sans-serif; */
-  /* font-family: 'Shippori Antique', sans-serif; */
-  font-family: 'Noto Sans JP', sans-serif;
-
-  letter-spacing:-0.5px;
 }
 
-.seiryoGroundFont{
+* {
   font-family: 'Shippori Antique', sans-serif;
-  font-weight:normal;
+  font-weight: normal;
+  letter-spacing:-0.03em;
+  box-sizing: border-box;
 }
 
 h1{
   font-size:3.5em;
-  letter-spacing:-2px;
 }
 h2{
   font-size:2em;
-}
-
-h1,h2,h3,h4,h5,h6{
-  font-weight: normal;
 }
 
 a {
@@ -38,13 +30,9 @@ a {
   text-decoration: none;
 }
 
-* {
-  box-sizing: border-box;
-}
-
 iframe{
   border: 1px solid var(--sgGray);
-  filter: grayscale(1);
+  /* filter: grayscale(1); */
   border-radius: 5px;
 }
 
@@ -71,13 +59,9 @@ td {
 }
 
 a{
-  font-size: 0.8em;
+  font-size: 0.9em;
   text-decoration: underline;
   text-decoration-style: dashed;
-  /* text-decoration:none; */
-}
-a::after{
-  content: "↗︎";
 }
 a:hover{
   text-decoration-style: none;
@@ -115,6 +99,9 @@ main{
 }
 
 @media screen and (max-width: 500px) and (min-width: 0px) {
+  .landingPagePadding{
+    padding: 0% 2.5%;
+  }
   .pagePadding{
     padding: 0% 2.5%;
 	}
@@ -125,6 +112,9 @@ main{
   }
 }
 @media screen and (max-width: 900px) and (min-width: 501px) {
+  .landingPagePadding{
+    padding: 0% 2%;
+  }
   .pagePadding{
     padding: 0% 5%;
   }
@@ -135,6 +125,9 @@ main{
   }
 }
 @media screen and (max-width: 2000px) and (min-width: 901px) {
+  .landingPagePadding{
+    padding: 0% 5%;
+  }
   .pagePadding{
     padding: 0% 15%;
   }

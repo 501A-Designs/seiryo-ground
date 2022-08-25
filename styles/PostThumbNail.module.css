@@ -1,15 +1,16 @@
 .postThumbNail{
     cursor:pointer;
-    background-color:white;
+    /* background-color:rgb(246, 246, 246); */
+    background-color:#f3f3f3;
     color:black;
-    border-bottom:1px solid var(--sgGray);
-    border-right:1px solid var(--sgGray);
-    padding:2.5em 0.5em;
+    height:max-content;
+    padding:1.5em 0.5em;
     display:flex;
     justify-content: center;
     flex-direction:column;
     justify-content: space-between;
-    transition: 0.3s;
+    border-radius: 5px;
+    transition: 0.2s;
 }
 .postThumbNail h1{
     margin:0
@@ -19,11 +20,5 @@
     color:gray;
     background-color:black;
     color:white;
-    border-radius: 5px;
-    border:1px solid black;
-    /* box-shadow: 0px 0px 5px rgb(192, 192, 192); */
     transform:scale(0.95);
-    /* transform: rotateX(15deg); */
-    /* rotateY(-2deg) */
-    /* box-shadow: -5px 20px 15px rgb(192, 192, 192); */
 }
