@@ -52,7 +52,7 @@ export default function PlaceName() {
             if (docSnap.exists()) {
                 setPlaceData(docSnap.data());
                 docSnap.data().likes.map((uid) => {
-                    if (user.uid == uid) {
+                    if (user && user.uid == uid) {
                         setLiked(true);
                     }
                 })

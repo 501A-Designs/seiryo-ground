@@ -41,6 +41,14 @@ import FetchSinglePlace from '../lib/FetchSinglePlace'
 
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
+import { useAutoAnimate } from '@formkit/auto-animate/react'
+import Snd from 'snd-lib';
+const snd = new Snd();
+const clickBtnSound = () =>{
+  snd.load(Snd.KITS.SND01).then(() => {
+    snd.play(Snd.SOUNDS.TAP)
+  })
+}
 
 const customStyles = {
   content: {
@@ -66,6 +74,7 @@ const customStyles = {
 export default function Home() {
   const router = useRouter();
   let scroll = Scroll.animateScroll;
+  const [parent] = useAutoAnimate();
 
   const [modalIsOpen, setModalIsOpen] = useState(0);
 
@@ -146,7 +155,10 @@ export default function Home() {
             <h5>好きな場所一覧</h5>
           </AlignItems>
         </div>
-        <StaticGrid grid={'1fr'} gap={'0'}>
+        <StaticGrid
+          grid={'1fr'}
+          gap={'0'}
+        >
           {likesArray && likesArray.length > 0 &&
             <>
               {likesArray.map((likes)=>{
@@ -248,6 +260,7 @@ export default function Home() {
                   icon={<VscAdd/>}
                   onClick={()=>{
                     scroll.scrollToTop();
+                    clickBtnSound();
                     setCreateNew(true);
                   }}
                 >
@@ -256,7 +269,10 @@ export default function Home() {
                 <Button
                   iconPosition={'left'}
                   icon={<VscHeart/>}
-                  onClick={()=>setModalIsOpen(true)}
+                  onClick={()=>{
+                    setModalIsOpen(true)
+                    clickBtnSound();
+                  }}
                 >
                   好きな場所
                 </Button>
@@ -270,7 +286,9 @@ export default function Home() {
             </AlignItems>
           }
           {user ?
-            <>
+            <div
+              ref={parent}
+            >
               {createNew && 
                 <CreatePlaceForm
                   user={user}
@@ -278,7 +296,7 @@ export default function Home() {
                   closeThisForm={()=>setCreateNew(false)}
                 />
               }
-            </>:
+            </div>:
             <>
               <div
                 style={{
@@ -297,9 +315,14 @@ export default function Home() {
                   <h3 style={{ margin:0}}>
                     清涼広場へようこそ
                   </h3>
-                  <p style={{ margin:0}}>
-                    DMS Lat: 35° 39' 10.1952''N
-                    DMS Long: 139° 50' 22.1208''E
+                  <p
+                    style={{
+                      margin:0,
+                      // WebkitTextStroke: '1px black',
+                      // color: 'transparent'
+                    }}
+                  >
+                      DMS Lat: 35° 39' 10.1952''N DMS Long: 139° 50' 22.1208''E
                   </p>
                 </div>
               </div>
@@ -322,33 +345,9 @@ export default function Home() {
               gutter={'0.25em'}
             >
               {fetchedData && fetchedData.map(doc => {
-                return (
-                  <div
-                    style={{
-                      transformStyle: 'flat',
-                      perspective: '600px'
-                    }}
-                    key={doc.id}
-                  >
-                    <PostThumbNail
-                      id={doc.id}
-                      title={doc.data.name}
-                      type={doc.data.type}
-                    />
-                  </div>
-                )
-              })}
-            </Masonry>
-          </ResponsiveMasonry>
-
-          <h2 style={{marginBottom:'0.1em'}}>In Tokyo</h2>
-          <ResponsiveMasonry
-            columnsCountBreakPoints={{350: 1, 750: 2, 900: 3, 1200:4}}
-          >
-            <Masonry
-              gutter={'0.25em'}
-            >
-              {fetchedData && fetchedData.map(doc => {
+                if (doc.data) {
+                  
+                }
                 return (
                   <div
                     style={{
