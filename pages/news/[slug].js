@@ -2,6 +2,8 @@ import React from 'react'
 import { createClient } from 'contentful'
 import { useRouter } from 'next/router'
 import Button from '../../lib/Button'
+import AlignItems from '../../lib/AlignItems'
+import { buttonSound } from '../../lib/sound/audio'
 
 const client = createClient({
   space:process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,
@@ -15,7 +17,7 @@ export async function getStaticPaths(){
   const paths = res.items.map(item => {
     return{
       params: {
-          slug: item.fields.slug
+        slug: item.fields.slug
       }
     }
   })
@@ -43,7 +45,9 @@ export default function IndivisualNewsArticle({newsDetails}) {
 
   return (
     <div className={'pagePadding'}>
-      <Button onClick={()=> router.push('/news/')}>SG News ページに戻る</Button>
+      <AlignItems spaceBetween={true} margin={'0.5em 0 0 0'}>
+        <Button onClick={()=> {buttonSound();router.push('/news/')}}>ニュースページに戻る</Button>
+      </AlignItems>
       <h1>{newsDetailsData.title}</h1>
       <time>{newsDetailsData.date}</time>
       <p>

@@ -1,0 +1,16 @@
+.singlePlace{
+    padding:1em 1em;
+    margin:0.25em 1em 0em 1em;
+    border-radius: 5px;
+    background-color: var(--sgLightGray);
+    cursor:pointer;
+    transition: 0.2s;
+}
+.singlePlace:hover{
+    z-index: 100;
+    color:gray;
+    background-color:black;
+    color:white;
+    /* transform:scale(0.95); */
+    transform:scale(1.05);
+}

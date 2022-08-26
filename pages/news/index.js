@@ -6,6 +6,8 @@ import { VscChevronLeft } from 'react-icons/vsc'
 import { useRouter } from 'next/router'
 import { isBrowser } from 'react-device-detect';
 import StaticGrid from '../../lib/StaticGrid'
+import { buttonSound } from '../../lib/sound/audio'
+import AlignItems from '../../lib/AlignItems'
 
 export async function getStaticProps(){
   const client = createClient({
@@ -43,6 +45,9 @@ export default function News({sgPosts}) {
             zIndex:10
           }}
         >
+          <AlignItems spaceBetween={true} margin={'0.5em 0 0 0'}>
+            <Button onClick={()=> {buttonSound(); router.push('/')}}>メインに戻る</Button>
+          </AlignItems>
           <h2
             style={{margin:'1em 0 0 0'}}
             className={'seiryoGroundFont'}

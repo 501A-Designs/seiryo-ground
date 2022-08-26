@@ -2,6 +2,7 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap'); */
 
 :root{
+  --sgLightGray:rgb(244, 244, 244);
   --sgGray:rgb(207, 207, 207);
 }
 
@@ -180,7 +181,8 @@ input[type="range"]::-webkit-slider-thumb:active {
 }
 
 
-@keyframes scrollText {
-  from   { transform: translateX(0%); }
-  to { transform: translateX(-10%); }
+@keyframes popOut {
+  0%   { transform: scale(0) translateX(100%) translateY(-100%); }
+  70% { transform: scale(1.05); }
 }
+

@@ -29,7 +29,7 @@ import TypeButton from '../lib/TypeButton'
 import * as Scroll from 'react-scroll';
 import CreatePlaceForm from '../lib/CreatePlaceForm'
 import DistortionCarousel from '../lib/DistortionCarousel'
-
+import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 
 import { isBrowser } from 'react-device-detect';
 import Link from 'next/link'
@@ -42,32 +42,28 @@ import FetchSinglePlace from '../lib/FetchSinglePlace'
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import Snd from 'snd-lib';
-const snd = new Snd();
-const clickBtnSound = () =>{
-  snd.load(Snd.KITS.SND01).then(() => {
-    snd.play(Snd.SOUNDS.TAP)
-  })
-}
+import {buttonSound} from '../lib/sound/audio'
 
 const customStyles = {
   content: {
     top: '5%',
     left: '80%',
     bottom: 'auto',
-    padding: '0',
+    padding: '0 0 1em 0',
     width:'20%',
     maxHeight:'85%',
     overflowY:'scroll',
-    borderRadius: '5px 0 0 5px',
+    borderRadius: '10px 0 0 10px',
     boxShadow: '0px 0px 15px #f0f0f0',
     zIndex:2,
+    animation: 'popOut 0.4s'
   },
   overlay: {
     background: 'linear-gradient(to right,rgba(255,255,255,0) 0%,white 100%)',
     // backdropFilter: `blur(3px)`,
     zIndex:20,
-    cursor:'pointer'
+    cursor:'pointer',
+    transition: '0.2s'
   }
 };
 
@@ -75,44 +71,14 @@ export default function Home() {
   const router = useRouter();
   let scroll = Scroll.animateScroll;
   const [parent] = useAutoAnimate();
-
-  const [modalIsOpen, setModalIsOpen] = useState(0);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const [signInWithGoogle] = useSignInWithGoogle(auth);
   const [user] = useAuthState(auth);
   const [progress, setProgress] = useState(0);
-  const [likesArray, setLikesArray] = useState();
 
-  let placesArray = [];
-  const [fetchedData, setFetchedData] = useState();
-
-  const fetchData = async () => {
-    const querySnapshot = await getDocs(query(collection(db, "places")))
-    if (placesArray.length === 0) {                
-      querySnapshot.forEach((doc) => {
-        placesArray.push(
-          {
-            data:doc.data(),
-            id:doc.id
-          }
-        );
-      });
-      setFetchedData(placesArray);
-      setProgress(30);
-    }
-    setProgress(60);
-
-    const userDocRef = doc(db, `users/${user && user.uid}`);
-    const docSnap = await getDoc(userDocRef);
-    if (docSnap.exists()) {
-      setLikesArray(docSnap.data().likes);
-    }
-    setProgress(100)
-  }
-  
-  useEffect(() => {
-    fetchData();
-  }, [user])
+  const [placesCollection] = useCollection(collection(db, `places`))
+  const [userLikesArray] = useDocument(doc(db, `users/${user && user.uid}`));
 
   const [createNew, setCreateNew] = useState(false);
   const createNewRef = useRef();
@@ -140,7 +106,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      {user && 
       <Modal
+        ref={parent}
         isOpen={modalIsOpen}
         style={customStyles}
         onRequestClose={()=>setModalIsOpen(false)}
@@ -149,6 +117,7 @@ export default function Home() {
           style={{
             backgroundColor: 'black',
             color: 'white',
+            marginBottom:'0.5em'
           }}
         >
           <AlignItems justifyContent={'center'}>
@@ -159,21 +128,17 @@ export default function Home() {
           grid={'1fr'}
           gap={'0'}
         >
-          {likesArray && likesArray.length > 0 &&
-            <>
-              {likesArray.map((likes)=>{
-                return(
-                  <FetchSinglePlace
-                    key={likes}
-                    documentId={likes}
-                  />
-                )
-              })
-              }
-            </>
-          }
+          {userLikesArray && userLikesArray.data().likes.map((likes)=>{
+            return(
+              <FetchSinglePlace
+                key={likes}
+                documentId={likes}
+              />
+            )
+          })}
         </StaticGrid>
       </Modal>
+      }
 
       <div className={'stickySide'}>
         <section
@@ -190,7 +155,7 @@ export default function Home() {
             zIndex:1
           }}
         >
-          <h2
+          <div
             style={{
               minWidth:'max-content',
               margin:0,
@@ -200,17 +165,23 @@ export default function Home() {
               textOrientation:'mixed'
             }}
           >
-            SEIRYO GROUND
-            <br/>
-            清涼広場
-          </h2>
-          <StaticGrid>
+            <p style={{margin:0}}>Designed & Produced by 501A.<br/>Managed By Eminent, a Design Nerd Duo.</p>
+            <h2 style={{marginLeft:0}}>
+              SEIRYO GROUND
+              <br/>
+              清涼広場
+            </h2>
+          </div>
+          <Footer>
             <StaticGrid>
               {!user &&
                 <Button
                   iconPosition={'left'}
                   icon={<VscSignIn/>}
-                  onClick={()=>signInWithGoogle()}
+                  onClick={()=>{
+                    buttonSound();
+                    signInWithGoogle();
+                  }}
                 >
                   Googleでログイン
                 </Button>
@@ -218,21 +189,30 @@ export default function Home() {
               <Button
                 iconPosition={'left'}
                 icon={<VscComment/>}
-                onClick={()=>router.push('/news')}
+                onClick={()=>{
+                  buttonSound();
+                  router.push('/news');
+                }}
               >
                 ニュース
               </Button>
               <Button
                 iconPosition={'left'}
                 icon={<VscBook/>}
-                onClick={()=>router.push('/about')}
+                onClick={()=>{
+                  buttonSound();
+                  router.push('/about');
+                }}
               >
                 清涼広場について
               </Button>
               <Button
                 iconPosition={'left'}
                 icon={<VscGithubAlt/>}
-                onClick={()=>router.push('https://github.com/501A-Designs/seiryo-ground')}
+                onClick={()=>{
+                  buttonSound();
+                  router.push('https://github.com/501A-Designs/seiryo-ground');
+                }}
               >
                 GitHubを開く
               </Button>
@@ -240,14 +220,16 @@ export default function Home() {
                 <Button
                   iconPosition={'left'}
                   icon={<VscSignOut/>}
-                  onClick={()=>signInWithGoogle()}
+                  onClick={()=>{
+                    buttonSound();
+                    signInWithGoogle()
+                  }}
                 >
                   ログアウト
                 </Button>
               }
             </StaticGrid>
-            <Footer></Footer>
-          </StaticGrid>
+          </Footer>
         </section>
 
 
@@ -260,7 +242,7 @@ export default function Home() {
                   icon={<VscAdd/>}
                   onClick={()=>{
                     scroll.scrollToTop();
-                    clickBtnSound();
+                    buttonSound();
                     setCreateNew(true);
                   }}
                 >
@@ -270,8 +252,8 @@ export default function Home() {
                   iconPosition={'left'}
                   icon={<VscHeart/>}
                   onClick={()=>{
+                    buttonSound();
                     setModalIsOpen(true)
-                    clickBtnSound();
                   }}
                 >
                   好きな場所
@@ -293,7 +275,10 @@ export default function Home() {
                 <CreatePlaceForm
                   user={user}
                   ref={createNewRef}
-                  closeThisForm={()=>setCreateNew(false)}
+                  closeThisForm={()=>{
+                    buttonSound();
+                    setCreateNew(false);
+                  }}
                 />
               }
             </div>:
@@ -344,24 +329,14 @@ export default function Home() {
             <Masonry
               gutter={'0.25em'}
             >
-              {fetchedData && fetchedData.map(doc => {
-                if (doc.data) {
-                  
-                }
+              {placesCollection && placesCollection.docs.map(doc => {
                 return (
-                  <div
-                    style={{
-                      transformStyle: 'flat',
-                      perspective: '600px'
-                    }}
+                  <PostThumbNail
                     key={doc.id}
-                  >
-                    <PostThumbNail
-                      id={doc.id}
-                      title={doc.data.name}
-                      type={doc.data.type}
-                    />
-                  </div>
+                    id={doc.id}
+                    title={doc.data().name}
+                    type={doc.data().type}
+                  />
                 )
               })}
             </Masonry>
@@ -374,21 +349,14 @@ export default function Home() {
             <Masonry
               gutter={'0.25em'}
             >
-              {fetchedData && fetchedData.map(doc => {
+              {placesCollection && placesCollection.docs.map(doc => {
                 return (
-                  <div
-                    style={{
-                      transformStyle: 'flat',
-                      perspective: '600px'
-                    }}
+                  <PostThumbNail
                     key={doc.id}
-                  >
-                    <PostThumbNail
-                      id={doc.id}
-                      title={doc.data.name}
-                      type={doc.data.type}
-                    />
-                  </div>
+                    id={doc.id}
+                    title={doc.data().name}
+                    type={doc.data().type}
+                  />
                 )
               })}
             </Masonry>
