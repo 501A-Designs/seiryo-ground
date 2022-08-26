@@ -141,96 +141,99 @@ export default function Home() {
       }
 
       <div className={'stickySide'}>
-        <section
-          style={{
-            maxWidth:`${isBrowser ? '300px':'400px'}`,
-            minWidth:`${isBrowser ? '200px':'200px'}`,
-            position: 'sticky',
-            top: '0px',
-            display: 'flex',
-            height: `${isBrowser ? '100vh':'fit-content'}`,
-            flexDirection: 'column',
-            justifyContent:'space-between',
-            background: 'linear-gradient(to top, rgba(255, 255, 255, 0.9) 0%,white 100%)',
-            zIndex:1
-          }}
-        >
-          <div
+        {isBrowser &&         
+          <section
             style={{
-              minWidth:'max-content',
-              margin:0,
-              marginTop: '1em',
-              padding:0,
-              writingMode:'vertical-lr',
-              textOrientation:'mixed'
+              maxWidth:'300px',
+              minWidth:'200px',
+              position: 'sticky',
+              top: '0px',
+              display: 'flex',
+              height: '100vh',
+              flexDirection: 'column',
+              justifyContent:'space-between',
+              background: 'linear-gradient(to left, var(--sgLightGray) 0%,white 100%)',
+
+              zIndex:1
             }}
           >
-            <p style={{margin:0}}>Designed & Produced by 501A.<br/>Managed By Eminent, a Design Nerd Duo.</p>
-            <h2 style={{marginLeft:0}}>
-              SEIRYO GROUND
-              <br/>
-              清涼広場
-            </h2>
-          </div>
-          <Footer>
-            <StaticGrid>
-              {!user &&
+            <div
+              style={{
+                minWidth:'max-content',
+                margin:0,
+                marginTop: '1em',
+                padding:0,
+                writingMode:'vertical-lr',
+                textOrientation:'mixed'
+              }}
+            >
+              <p style={{margin:0}}>Designed & Produced by 501A.<br/>Managed By Eminent, a Design Nerd Duo.</p>
+              <h2 style={{marginLeft:0}}>
+                SEIRYO GROUND
+                <br/>
+                清涼広場
+              </h2>
+            </div>
+            <Footer>
+              <StaticGrid>
+                {!user &&
+                  <Button
+                    iconPosition={'left'}
+                    icon={<VscSignIn/>}
+                    onClick={()=>{
+                      buttonSound();
+                      signInWithGoogle();
+                    }}
+                  >
+                    Googleでログイン
+                  </Button>
+                }
                 <Button
                   iconPosition={'left'}
-                  icon={<VscSignIn/>}
+                  icon={<VscComment/>}
                   onClick={()=>{
                     buttonSound();
-                    signInWithGoogle();
+                    router.push('/news');
                   }}
                 >
-                  Googleでログイン
+                  ニュース
                 </Button>
-              }
-              <Button
-                iconPosition={'left'}
-                icon={<VscComment/>}
-                onClick={()=>{
-                  buttonSound();
-                  router.push('/news');
-                }}
-              >
-                ニュース
-              </Button>
-              <Button
-                iconPosition={'left'}
-                icon={<VscBook/>}
-                onClick={()=>{
-                  buttonSound();
-                  router.push('/about');
-                }}
-              >
-                清涼広場について
-              </Button>
-              <Button
-                iconPosition={'left'}
-                icon={<VscGithubAlt/>}
-                onClick={()=>{
-                  buttonSound();
-                  router.push('https://github.com/501A-Designs/seiryo-ground');
-                }}
-              >
-                GitHubを開く
-              </Button>
-              {user && 
                 <Button
                   iconPosition={'left'}
-                  icon={<VscSignOut/>}
+                  icon={<VscBook/>}
                   onClick={()=>{
                     buttonSound();
-                    signInWithGoogle()
+                    router.push('/about');
                   }}
                 >
-                  ログアウト
+                  清涼広場について
                 </Button>
-              }
-            </StaticGrid>
-          </Footer>
-        </section>
+                <Button
+                  iconPosition={'left'}
+                  icon={<VscGithubAlt/>}
+                  onClick={()=>{
+                    buttonSound();
+                    router.push('https://github.com/501A-Designs/seiryo-ground');
+                  }}
+                >
+                  GitHubを開く
+                </Button>
+                {user && 
+                  <Button
+                    iconPosition={'left'}
+                    icon={<VscSignOut/>}
+                    onClick={()=>{
+                      buttonSound();
+                      signInWithGoogle()
+                    }}
+                  >
+                    ログアウト
+                  </Button>
+                }
+              </StaticGrid>
+            </Footer>
+          </section>
+        }
 
 
         <StaticGrid gap={'0.5em'}>
@@ -307,7 +310,7 @@ export default function Home() {
                       // color: 'transparent'
                     }}
                   >
-                      DMS Lat: 35° 39' 10.1952''N DMS Long: 139° 50' 22.1208''E
+                      DMS Lat: 35° 39 10.1952N DMS Long: 139° 50 22.1208E
                   </p>
                 </div>
               </div>
