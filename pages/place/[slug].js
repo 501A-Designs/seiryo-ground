@@ -28,10 +28,20 @@ import { isBrowser } from 'react-device-detect'
 import {buttonSound, celebrationSound, notificationSound, sliderSound, typeSound} from '../../lib/sound/audio'
 import Head from 'next/head'
 
+
+import Parser from "rss-parser";
+
 export default function PlaceName() {
     const router = useRouter();
     const placeId = router.query.slug;
     const [progress, setProgress] = useState(0);
+
+
+    let Parser = require('rss-parser');
+    const parser = new Parser();
+    // console.log(parser.parseURL("https://dev.to/feed/inezabonte").items);
+    // let nitterParseUrl = 'https://cors-anywhere.herokuapp.com/https://nitter.it/eminent_gallery/rss';
+    let nitterParseUrl = 'https://dev.to/feed/inezabonte';
 
 
     const [openCreateReview, setOpenCreateReview] = useState(false);

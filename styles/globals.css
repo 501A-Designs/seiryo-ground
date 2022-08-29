@@ -3,7 +3,7 @@
 
 :root{
   --sgLightGray:rgb(244, 244, 244);
-  --sgGray:rgb(207, 207, 207);
+  --sgGray:rgb(230, 230, 230);
 }
 
 html,
@@ -117,7 +117,7 @@ main{
     padding: 0% 2%;
   }
   .pagePadding{
-    padding: 0% 5%;
+    padding: 0% 10%;
   }
   .stickySide{
     display: flex;
@@ -181,8 +181,8 @@ input[type="range"]::-webkit-slider-thumb:active {
 }
 
 
-@keyframes popOut {
-  0%   { transform: scale(0) translateX(100%) translateY(-100%); }
+@keyframes popOutFromRight {
+  0%   { transform: scale(0) translateX(-100%) translateY(-00%)}
   70% { transform: scale(1.05); }
 }
 

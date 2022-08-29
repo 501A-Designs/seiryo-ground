@@ -18,9 +18,6 @@ import { doc, addDoc, collection, query, where, getDocs,getDoc } from "firebase/
 
 import LoadingBar from 'react-top-loading-bar';
 
-import Input from '../lib/Input'
-import TextArea from '../lib/TextArea'
-
 import StaticGrid from '../lib/StaticGrid'
 import TypeButton from '../lib/TypeButton'
 
@@ -42,59 +39,93 @@ import FetchSinglePlace from '../lib/FetchSinglePlace'
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import {buttonSound} from '../lib/sound/audio'
-
-const customStyles = {
-  content: {
-    top: '5%',
-    left: '80%',
-    bottom: 'auto',
-    padding: '0 0 1em 0',
-    width:'20%',
-    maxHeight:'85%',
-    overflowY:'scroll',
-    borderRadius: '10px 0 0 10px',
-    boxShadow: '0px 0px 15px #f0f0f0',
-    zIndex:2,
-    animation: 'popOut 0.4s'
-  },
-  overlay: {
-    background: 'linear-gradient(to right,rgba(255,255,255,0) 0%,white 100%)',
-    // backdropFilter: `blur(3px)`,
-    zIndex:20,
-    cursor:'pointer',
-    transition: '0.2s'
-  }
-};
+import {buttonSound, selectSound} from '../lib/sound/audio'
+import { signOut } from 'firebase/auth'
+import SidePannel from '../lib/SidePannel'
+import Select from 'react-select'
+import { prefectureData } from '../prefectureData'
 
 export default function Home() {
   const router = useRouter();
+
+  // Animations
   let scroll = Scroll.animateScroll;
+  let scroller = Scroll.scroller;
+  let scrollAnimation = {
+    duration: 500,
+    delay: 100,
+    smooth: true,
+    offset: -100,
+  }
+
+
   const [parent] = useAutoAnimate();
+  const [progress, setProgress] = useState(0);  
+  
+  // Modal / Popup State
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
-  const [signInWithGoogle] = useSignInWithGoogle(auth);
-  const [user] = useAuthState(auth);
-  const [progress, setProgress] = useState(0);
-
-  const [placesCollection] = useCollection(collection(db, `places`))
-  const [userLikesArray] = useDocument(doc(db, `users/${user && user.uid}`));
-
+  const [gettingStartedModalIsOpen, setGettingStartedModalIsOpen] = useState(false);
   const [createNew, setCreateNew] = useState(false);
   const createNewRef = useRef();
-  
   const [menuDisplay, setMenuDisplay] = useState(false);
+
+  // Auth & Firestore
+  const [signInWithGoogle] = useSignInWithGoogle(auth);
+  const [user] = useAuthState(auth);
+  const [placesCollection] = useCollection(collection(db, `places`))
+
+  const [prefectureInput, setPrefectureInput] = useState('東京');
+  // const [filteredCollection] = useCollection(query(collection(db, `places`),where("prefecture", "==", prefectureInput && prefectureInput)));
+
+  const [userLikesArray] = useDocument(doc(db, `users/${user && user.uid}`));
+
   useEffect(() => {
-    if (isBrowser) {
-      setMenuDisplay(true);
+    if (user && user.metadata.creationTime == user.metadata.lastSignInTime) {
+      setGettingStartedModalIsOpen(true)
     }
-  }, [isBrowser])
+  }, [user])
+
+
+  const selectStyle = {
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected ? 'black' : 'white',
+      color: state.isSelected ? 'white' : 'black',
+      padding: '0.5em 1em',
+      "&:hover": {
+        cursor: 'pointer',
+        background: "var(--sgLightGray)",
+        color:'black',
+      }
+    }),
+    control: base => ({
+      ...base,
+      // none of react-select's styles are passed to <Control />
+      width: '100%',
+      borderRadius:'5px 5px 0px 0px',
+      border:'none',
+      borderBottom: '1px solid var(--sgGray)',
+      padding:'0em',
+      fontSize: '1.6em',
+      outline: 'none',
+      color: 'black',
+      boxShadow: 'none',
+      "&:hover": {
+        backgroundColor: 'var(--sgLightGray)',
+        cursor: 'pointer',
+        // borderColor: "var(--sgLightGray)"
+      }
+    }),
+    singleValue: (provided, state) => {
+      const opacity = state.isDisabled ? 0.5 : 1;
+      const transition = 'opacity 300ms';
+      return { ...provided, opacity, transition };
+    }
+  }
   
   
   return (
-    <div
-      className={'pagePadding'}
-    >
+    <div className={'pagePadding'}>
       <LoadingBar
         color='black'
         progress={progress}
@@ -107,37 +138,83 @@ export default function Home() {
       </Head>
 
       {user && 
-      <Modal
-        ref={parent}
-        isOpen={modalIsOpen}
-        style={customStyles}
-        onRequestClose={()=>setModalIsOpen(false)}
-      >
-        <div
-          style={{
-            backgroundColor: 'black',
-            color: 'white',
-            marginBottom:'0.5em'
-          }}
-        >
-          <AlignItems justifyContent={'center'}>
-            <h5>好きな場所一覧</h5>
-          </AlignItems>
-        </div>
-        <StaticGrid
-          grid={'1fr'}
-          gap={'0'}
-        >
-          {userLikesArray && userLikesArray.data().likes.map((likes)=>{
-            return(
-              <FetchSinglePlace
-                key={likes}
-                documentId={likes}
-              />
-            )
-          })}
-        </StaticGrid>
-      </Modal>
+        <>
+          <Modal
+            ref={parent}
+            isOpen={gettingStartedModalIsOpen}
+            style={{
+              content: {
+                top: '50%',
+                left: '50%',
+                right: 'auto',
+                bottom: 'auto',
+                marginRight: '-50%',
+                transform: 'translate(-50%, -50%)',
+                padding: '2em',
+                width:'400px',
+                height:'fit-content',
+                overflowY:'scroll',
+                borderRadius: '30px',
+                backgroundColor:'black',
+                color: 'white',
+                border:'1px solid black',
+                zIndex:2,
+                // boxShadow: '0px 0px 15px #f0f0f0',                
+                // animation: 'popOutFromRight 0.4s'
+              },
+              overlay: {
+                background: 'linear-gradient(to bottom,rgba(255,255,255,0) 0%,white 100%)',
+                backdropFilter:'blur(10px)',
+                zIndex:20,
+                cursor:'pointer',
+                transition: '0.2s'
+              }
+            }}
+            onRequestClose={()=>setGettingStartedModalIsOpen(false)}
+          >
+            <AlignItems justifyContent={'center'}>
+                <h2>初めまして</h2>
+            </AlignItems>
+            <StaticGrid
+              grid={'1fr'}
+              gap={'0'}
+            >
+              <p>
+                <strong>SEIRYO GROUNDへようこそ。</strong>
+                <br/>
+                本サイトにログインしてくださりありがとうございます。
+                <br/>
+                <br/>
+                清涼広場は、清涼感を味える場所・自然や文化と一体化できる場所等をご紹介するサイトです。場所はそれぞれ「緑」「青」「赤」「紫」という4つのカテゴリーに振り分けられており、誰もがログインして投稿できる形となっています。
+              </p>
+              <ul>
+                <li><a>清涼広場について</a></li>
+                <li><a>Eminentについて</a></li>
+                <li><a>清涼ニュース</a></li>
+                <li><a>SEIRYO Photographer</a></li>
+              </ul>
+              <p>※外をクリックすると消えます。</p>
+            </StaticGrid>
+          </Modal>
+          {/* <SidePannel>
+            <StaticGrid
+              grid={'1fr'}
+              gap={'0'}
+            >
+              {
+                userLikesArray &&
+                userLikesArray.data() && 
+                userLikesArray.data().likes.map((likes)=>{
+                  return(
+                    <FetchSinglePlace
+                      key={likes}
+                      documentId={likes}
+                    />
+                  )
+              })}
+            </StaticGrid>
+          </SidePannel> */}
+        </>
       }
 
       <div className={'stickySide'}>
@@ -224,7 +301,7 @@ export default function Home() {
                     icon={<VscSignOut/>}
                     onClick={()=>{
                       buttonSound();
-                      signInWithGoogle()
+                      signOut(auth)
                     }}
                   >
                     ログアウト
@@ -237,20 +314,73 @@ export default function Home() {
 
 
         <StaticGrid gap={'0.5em'}>
-          {user &&          
+          <div
+            style={{
+              minHeight: '20vh',
+              textAlign:'right',
+              display: 'flex',
+              justifyContent: 'right'
+            }}
+          >
+            <div
+              style={{
+                alignSelf: 'flex-end'
+              }}
+            >
+              <p>Photo By <Link href="https://twitter.com/EyesObsolete"><a>@EyesObsolete</a></Link></p>
+              <h3 style={{ margin:0}}>
+                清涼広場へようこそ
+              </h3>
+              <p
+                style={{
+                  margin:0,
+                  // WebkitTextStroke: '1px black',
+                  // color: 'transparent'
+                }}
+              >
+                  DMS Lat: 35° 39 10.1952N DMS Long: 139° 50 22.1208E
+              </p>
+            </div>
+          </div>
+          <DistortionCarousel
+            images={[
+              '/blue-sky.jpg',
+              '/mountain-green.jpg',
+              '/sg-mountain.png',
+              '/open-nakameguro.jpg',
+              '/sg-mountain2.png',
+            ]}
+            displacmentImage={'https://raw.githubusercontent.com/robin-dela/hover-effect/master/images/heightMap.png'}
+            speed={5}
+          />
+
+          {user &&
             <AlignItems spaceBetween margin={'1.5em 0 0 0'}>
               <AlignItems>
-                <Button
-                  iconPosition={'left'}
-                  icon={<VscAdd/>}
-                  onClick={()=>{
-                    scroll.scrollToTop();
-                    buttonSound();
-                    setCreateNew(true);
-                  }}
-                >
-                  場所を追加
-                </Button>
+                {
+                  createNew ?
+                  <Button
+                    iconPosition={'left'}
+                    icon={<VscClose/>}
+                    onClick={()=>{
+                      buttonSound();
+                      setCreateNew(false);
+                    }}
+                  >
+                    閉じる
+                  </Button>:
+                  <Button
+                    iconPosition={'left'}
+                    icon={<VscAdd/>}
+                    onClick={()=>{
+                      buttonSound();
+                      setCreateNew(true);
+                      scroller.scrollTo('createPlaceForm',scrollAnimation)
+                    }}
+                  >
+                    場所を追加
+                  </Button>
+                }
                 <Button
                   iconPosition={'left'}
                   icon={<VscHeart/>}
@@ -270,68 +400,46 @@ export default function Home() {
               </div>
             </AlignItems>
           }
-          {user ?
-            <div
-              ref={parent}
-            >
+          {user && 
+            <div ref={parent} name={'createPlaceForm'}>
               {createNew && 
                 <CreatePlaceForm
                   user={user}
                   ref={createNewRef}
-                  closeThisForm={()=>{
-                    buttonSound();
-                    setCreateNew(false);
-                  }}
                 />
               }
-            </div>:
-            <>
-              <div
-                style={{
-                  minHeight: '20vh',
-                  textAlign:'right',
-                  display: 'flex',
-                  justifyContent: 'right'
-                }}
-              >
-                <div
-                  style={{
-                    alignSelf: 'flex-end'
-                  }}
-                >
-                  <p>Photo By <Link href="https://twitter.com/EyesObsolete"><a>@EyesObsolete</a></Link></p>
-                  <h3 style={{ margin:0}}>
-                    清涼広場へようこそ
-                  </h3>
-                  <p
-                    style={{
-                      margin:0,
-                      // WebkitTextStroke: '1px black',
-                      // color: 'transparent'
-                    }}
-                  >
-                      DMS Lat: 35° 39 10.1952N DMS Long: 139° 50 22.1208E
-                  </p>
-                </div>
-              </div>
-              <DistortionCarousel
-                images={[
-                  '/sg-mountain.png',
-                  '/sg-mountain2.png',
-                ]}
-                displacmentImage={'https://raw.githubusercontent.com/robin-dela/hover-effect/master/images/heightMap.png'}
-                speed={5}
-              />
-            </>
+            </div>
           }
 
-          <h2 style={{marginBottom:'0.1em'}}>Recent</h2>
-          <ResponsiveMasonry
-            columnsCountBreakPoints={{350: 1, 750: 2, 900: 3, 1200:4}}
-          >
-            <Masonry
-              gutter={'0.25em'}
+          <AlignItems gap={'0.5em'} margin={'1em 0 0 0'}>
+            <h2 style={{margin:'0 0.2em 0 0'}}>Filter:</h2>
+            <Select
+              styles={selectStyle}
+              options={prefectureData}
+              components={{ DropdownIndicator:() => null, IndicatorSeparator:() => null }}
+              onChange={(e)=>{
+                selectSound();
+                setPrefectureInput(e.value);
+              }}
+              placeholder={prefectureInput ? prefectureInput:'都道府県を選択'}
+            />
+            {/* <button
+              style={{
+                border:'none',
+                background:'none',
+                padding:'0',
+                fontSize:'1.5em',
+                cursor: 'pointer',
+              }}
+              onClick={()=>{
+
+              }}
             >
+              を探す
+            </button> */}
+          </AlignItems>
+          <ResponsiveMasonry columnsCountBreakPoints={{350: 1, 750: 2, 900: 3, 1200:4}}>
+            <Masonry gutter={'0.25em'}>
               {placesCollection && placesCollection.docs.map(doc => {
                 return (
                   <PostThumbNail
@@ -345,7 +453,19 @@ export default function Home() {
             </Masonry>
           </ResponsiveMasonry>
 
-          <h2 style={{marginBottom:'0.1em'}}>All Location</h2>
+          <AlignItems spaceBetween margin={'3em 0 0 0'}>
+            <h2 style={{margin:'0', width:'fit-content'}}>
+              All Location
+            </h2>
+            <Button
+              onClick={()=> {
+                buttonSound();
+                router.push('/fullmap')
+              }}
+            >
+              地図で見る
+            </Button>
+          </AlignItems>
           <ResponsiveMasonry
             columnsCountBreakPoints={{350: 1, 750: 2, 900: 3, 1200:4}}
           >
@@ -364,8 +484,7 @@ export default function Home() {
               })}
             </Masonry>
           </ResponsiveMasonry>
-          {/* <StaticGrid grid={isBrowser ? '1fr 1fr 1fr':'1fr'} gap={'0.25em'}>
-          </StaticGrid> */}
+          <Button onClick={()=>{scroll.scrollToTop()}}>上へ戻る</Button>
           <End/>
         </StaticGrid>
       </div>

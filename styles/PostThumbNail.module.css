@@ -4,7 +4,7 @@
     background-color:var(--sgLightGray);
     color:black;
     height:max-content;
-    padding:1.5em 0.5em;
+    padding:1em;
     display:flex;
     justify-content: center;
     flex-direction:column;
@@ -16,10 +16,11 @@
     margin:0
 }
 .postThumbNail:hover{
+    border-radius: 15px;
     z-index: 100;
     color:gray;
     background-color:black;
     color:white;
-    transform:scale(0.95);
-    /* transform:scale(1.05); */
+    /* transform:scale(0.95); */
+    transform:scale(1.05);
 }
