@@ -381,7 +381,7 @@ export default function Home() {
                     場所を追加
                   </Button>
                 }
-                <Button
+                {/* <Button
                   iconPosition={'left'}
                   icon={<VscHeart/>}
                   onClick={()=>{
@@ -390,7 +390,7 @@ export default function Home() {
                   }}
                 >
                   好きな場所
-                </Button>
+                </Button> */}
               </AlignItems>
               <div style={{padding:'0em',backgroundColor: 'white'}}>
                 <AlignItems gap={'0.5em'}>
@@ -411,33 +411,39 @@ export default function Home() {
             </div>
           }
 
-          <AlignItems gap={'0.5em'} margin={'1em 0 0 0'}>
-            <h2 style={{margin:'0 0.2em 0 0'}}>Filter: </h2>
-            <Select
-              styles={selectStyle}
-              options={prefectureData}
-              components={{ DropdownIndicator:() => null, IndicatorSeparator:() => null }}
-              onChange={(e)=>{
-                selectSound();
-                setPrefectureInput(e.value);
-              }}
-              placeholder={prefectureInput ? prefectureInput:'都道府県を選択'}
-            />
+          <AlignItems margin={'3em 0 0 0'} spaceBetween>
+            <AlignItems gap={'0.5em'}>
+              <h2 style={{margin:'0 0.2em 0 0'}}>Filter: </h2>
+              <Select
+                styles={selectStyle}
+                options={prefectureData}
+                components={{ DropdownIndicator:() => null, IndicatorSeparator:() => null }}
+                onChange={(e)=>{
+                  selectSound();
+                  setPrefectureInput(e.value);
+                }}
+                placeholder={prefectureInput ? prefectureInput:'都道府県を選択'}
+              />
+            </AlignItems>
+            {filteredPlaces && filteredPlaces.docs.length > 0 && <h3 style={{margin:0}}>合計{filteredPlaces.docs.length}カ所</h3>}
           </AlignItems>
-          <ResponsiveMasonry columnsCountBreakPoints={{350: 1, 750: 2, 900: 3, 1200:4}}>
-            <Masonry gutter={'0.25em'}>
-              {filteredPlaces && filteredPlaces.docs.map(doc => {
-                return (
-                  <PostThumbNail
-                    key={doc.id}
-                    id={doc.id}
-                    title={doc.data().name}
-                    type={doc.data().type}
-                  />
-                )
-              })}
-            </Masonry>
-          </ResponsiveMasonry>
+          {filteredPlaces && filteredPlaces.docs.length > 0 ?
+            <ResponsiveMasonry columnsCountBreakPoints={{350: 1, 750: 2, 900: 3, 1200:4}}>
+              <Masonry gutter={'0.25em'}>
+                {filteredPlaces.docs.map(doc => {
+                  return (
+                    <PostThumbNail
+                      key={doc.id}
+                      id={doc.id}
+                      title={doc.data().name}
+                      type={doc.data().type}
+                    />
+                  )
+                })}
+              </Masonry>
+            </ResponsiveMasonry>:
+            <p>{prefectureInput}にある場所は現在何も見つかりません。</p>
+          }
 
 
           <AlignItems spaceBetween margin={'3em 0 0 0'}>
