@@ -74,9 +74,7 @@ export default function Home() {
   const [user] = useAuthState(auth);
   const [placesCollection] = useCollection(collection(db, `places`))
 
-  const [prefectureInput, setPrefectureInput] = useState('東京');
-  // const [filteredCollection] = useCollection(query(collection(db, `places`),where("prefecture", "==", prefectureInput && prefectureInput)));
-
+  const [prefectureInput, setPrefectureInput] = useState('東京都');
   const [userLikesArray] = useDocument(doc(db, `users/${user && user.uid}`));
 
   useEffect(() => {
@@ -85,6 +83,7 @@ export default function Home() {
     }
   }, [user])
 
+  const [filteredPlaces] = useCollection(query(collection(db, `places`),where("prefecture", "==",`${prefectureInput && prefectureInput}`)));
 
   const selectStyle = {
     option: (provided, state) => ({
@@ -110,6 +109,7 @@ export default function Home() {
       outline: 'none',
       color: 'black',
       boxShadow: 'none',
+      width:'fit-content',
       "&:hover": {
         backgroundColor: 'var(--sgLightGray)',
         cursor: 'pointer',
@@ -412,7 +412,7 @@ export default function Home() {
           }
 
           <AlignItems gap={'0.5em'} margin={'1em 0 0 0'}>
-            <h2 style={{margin:'0 0.2em 0 0'}}>Filter:</h2>
+            <h2 style={{margin:'0 0.2em 0 0'}}>Filter: </h2>
             <Select
               styles={selectStyle}
               options={prefectureData}
@@ -423,24 +423,10 @@ export default function Home() {
               }}
               placeholder={prefectureInput ? prefectureInput:'都道府県を選択'}
             />
-            {/* <button
-              style={{
-                border:'none',
-                background:'none',
-                padding:'0',
-                fontSize:'1.5em',
-                cursor: 'pointer',
-              }}
-              onClick={()=>{
-
-              }}
-            >
-              を探す
-            </button> */}
           </AlignItems>
           <ResponsiveMasonry columnsCountBreakPoints={{350: 1, 750: 2, 900: 3, 1200:4}}>
             <Masonry gutter={'0.25em'}>
-              {placesCollection && placesCollection.docs.map(doc => {
+              {filteredPlaces && filteredPlaces.docs.map(doc => {
                 return (
                   <PostThumbNail
                     key={doc.id}
@@ -453,18 +439,19 @@ export default function Home() {
             </Masonry>
           </ResponsiveMasonry>
 
+
           <AlignItems spaceBetween margin={'3em 0 0 0'}>
             <h2 style={{margin:'0', width:'fit-content'}}>
               All Location
             </h2>
-            <Button
+            {/* <Button
               onClick={()=> {
                 buttonSound();
                 router.push('/fullmap')
               }}
             >
               地図で見る
-            </Button>
+            </Button> */}
           </AlignItems>
           <ResponsiveMasonry
             columnsCountBreakPoints={{350: 1, 750: 2, 900: 3, 1200:4}}
