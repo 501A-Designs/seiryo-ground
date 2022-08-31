@@ -28,12 +28,13 @@ import { isBrowser } from 'react-device-detect'
 import {buttonSound, celebrationSound, notificationSound, sliderSound, typeSound} from '../../lib/sound/audio'
 import Head from 'next/head'
 
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
-import Parser from "rss-parser";
 
 export default function PlaceName() {
     const router = useRouter();
     const placeId = router.query.slug;
+    const [parent] = useAutoAnimate();
     const [progress, setProgress] = useState(0);
 
 
@@ -253,18 +254,22 @@ export default function PlaceName() {
                             {reviewData && reviewData.length > 0 &&
                                 <StaticGrid grid={'1fr 1fr'}  gap={'0.25em'}>
                                     <Rating
+                                        borderRadius={'10px 5px 5px 5px'}
                                         rating={round(averageOfDateRating)}
                                         description={'デートスポット適正'}
                                     />
                                     <Rating
+                                        borderRadius={'5px 10px 5px 5px'}
                                         rating={round(averageOfAccessRating)}
                                         description={'最寄駅からのアクセス'}
                                     />
                                     <Rating
+                                        borderRadius={'5px 5px 5px 10px'}
                                         rating={round(averageOfManagementRating)}
                                         description={'設備管理の状況'}
                                     />
                                     <Rating
+                                        borderRadius={'5px 5px 10px 5px'}
                                         rating={placeData.likes ? placeData.likes.length:0}
                                         description={'清涼広場上でのいいね数'} hideMax={true}
                                     />
@@ -328,99 +333,101 @@ export default function PlaceName() {
                                             }
                                         </div>
                                     }
-                                    {openCreateReview &&                                     
-                                        <div
-                                            style={{
-                                                border: '1px solid var(--sgGray)',
-                                                padding: '1em',
-                                                boxShadow: '0px 0px 15px #f0f0f0',
-                                                borderRadius: '10px',
-                                                marginTop: '0.5em'
-                                            }}
-                                        >
-                                            <StaticGrid gap={'0.25em'}>
-                                                <h3>{hasReviewed ? '内容を更新':'新規レビュー'}</h3>
-                                                <Input
-                                                    value={titleInput}
-                                                    onChange={(e)=> {
-                                                        typeSound();
-                                                        setTitleInput(e.target.value)
-                                                    }}
-                                                    placeholder={'レビュータイトル'}
-                                                />
-                                                <StaticGrid grid={'1fr 1fr 1fr'} gap={'0.25em'}>
-                                                    <DisplayRatingInput
-                                                        value={dateRatingInput}
+                                    <div ref={parent}>
+                                        {openCreateReview &&                                     
+                                            <div
+                                                style={{
+                                                    border: '1px solid var(--sgGray)',
+                                                    padding: '1em',
+                                                    boxShadow: '0px 0px 15px #f0f0f0',
+                                                    borderRadius: '10px',
+                                                    marginTop: '0.5em'
+                                                }}
+                                            >
+                                                <StaticGrid gap={'0.25em'}>
+                                                    <h3>{hasReviewed ? '内容を更新':'新規レビュー'}</h3>
+                                                    <Input
+                                                        value={titleInput}
                                                         onChange={(e)=> {
-                                                            sliderSound();
-                                                            setDateRatingInput(e.target.value)
+                                                            typeSound();
+                                                            setTitleInput(e.target.value)
                                                         }}
-                                                        maxValue={10}
-                                                        minValue={0}
-                                                        placeholder={'デートスポット適正'}
+                                                        placeholder={'レビュータイトル'}
                                                     />
-                                                    <DisplayRatingInput
-                                                        value={accessRatingInput}
+                                                    <StaticGrid grid={'1fr 1fr 1fr'} gap={'0.25em'}>
+                                                        <DisplayRatingInput
+                                                            value={dateRatingInput}
+                                                            onChange={(e)=> {
+                                                                sliderSound();
+                                                                setDateRatingInput(e.target.value)
+                                                            }}
+                                                            maxValue={10}
+                                                            minValue={0}
+                                                            placeholder={'デートスポット適正'}
+                                                        />
+                                                        <DisplayRatingInput
+                                                            value={accessRatingInput}
+                                                            onChange={(e)=> {
+                                                                sliderSound();
+                                                                setAccessRatingInput(e.target.value)
+                                                            }}
+                                                            maxValue={10}
+                                                            minValue={0}
+                                                            placeholder={'最寄駅からのアクセス'}
+                                                        />
+                                                        <DisplayRatingInput
+                                                            value={managementRatingInput}
+                                                            onChange={(e)=> {
+                                                                sliderSound();
+                                                                setManagementRatingInput(e.target.value)
+                                                            }}
+                                                            maxValue={10}
+                                                            minValue={0}
+                                                            placeholder={'設備管理の状況'}
+                                                        />
+                                                    </StaticGrid>
+                                                    <TextArea
+                                                        value={descriptionInput}
                                                         onChange={(e)=> {
-                                                            sliderSound();
-                                                            setAccessRatingInput(e.target.value)
+                                                            typeSound();
+                                                            setDescriptionInput(e.target.value)
                                                         }}
-                                                        maxValue={10}
-                                                        minValue={0}
-                                                        placeholder={'最寄駅からのアクセス'}
+                                                        placeholder={'行って感じた事、評価項目に写らない場所の良さ等。'}
                                                     />
-                                                    <DisplayRatingInput
-                                                        value={managementRatingInput}
-                                                        onChange={(e)=> {
-                                                            sliderSound();
-                                                            setManagementRatingInput(e.target.value)
-                                                        }}
-                                                        maxValue={10}
-                                                        minValue={0}
-                                                        placeholder={'設備管理の状況'}
-                                                    />
+                                                    {titleInput && descriptionInput &&
+                                                        <AlignItems justifyContent={'center'}>
+                                                            {hasReviewed ?
+                                                                <Button
+                                                                    iconPosition={'right'}
+                                                                    icon={<VscSave/>}
+                                                                    onClick={()=>{
+                                                                        buttonSound();
+                                                                        updateReview();
+                                                                        setOpenCreateReview(false);
+                                                                        getReviews();
+                                                                    }}
+                                                                >
+                                                                    レビューの内容を更新
+                                                                </Button>:
+                                                                <Button
+                                                                    iconPosition={'right'}
+                                                                    icon={<VscSave/>}
+                                                                    onClick={()=>{
+                                                                        buttonSound();
+                                                                        publishReview();
+                                                                        setOpenCreateReview(false);
+                                                                        getReviews();
+                                                                    }}
+                                                                >
+                                                                    レビューを公開
+                                                                </Button>
+                                                            }
+                                                        </AlignItems>
+                                                    }
                                                 </StaticGrid>
-                                                <TextArea
-                                                    value={descriptionInput}
-                                                    onChange={(e)=> {
-                                                        typeSound();
-                                                        setDescriptionInput(e.target.value)
-                                                    }}
-                                                    placeholder={'行って感じた事、評価項目に写らない場所の良さ等。'}
-                                                />
-                                                {titleInput && descriptionInput &&
-                                                    <AlignItems justifyContent={'center'}>
-                                                        {hasReviewed ?
-                                                            <Button
-                                                                iconPosition={'right'}
-                                                                icon={<VscSave/>}
-                                                                onClick={()=>{
-                                                                    buttonSound();
-                                                                    updateReview();
-                                                                    setOpenCreateReview(false);
-                                                                    getReviews();
-                                                                }}
-                                                            >
-                                                                レビューの内容を更新
-                                                            </Button>:
-                                                            <Button
-                                                                iconPosition={'right'}
-                                                                icon={<VscSave/>}
-                                                                onClick={()=>{
-                                                                    buttonSound();
-                                                                    publishReview();
-                                                                    setOpenCreateReview(false);
-                                                                    getReviews();
-                                                                }}
-                                                            >
-                                                                レビューを公開
-                                                            </Button>
-                                                        }
-                                                    </AlignItems>
-                                                }
-                                            </StaticGrid>
-                                        </div>
-                                    }
+                                            </div>
+                                        }
+                                    </div>
                                     {reviewData && reviewData.length > 0 && reviewData.map((review) =>{
                                         return (
                                             <Review

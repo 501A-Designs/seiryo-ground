@@ -9,7 +9,7 @@
     justify-content: center;
     flex-direction:column;
     justify-content: space-between;
-    border-radius: 5px;
+    border-radius: 10px;
     transition: 0.2s;
 }
 .postThumbNail h1{

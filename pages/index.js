@@ -39,11 +39,13 @@ import FetchSinglePlace from '../lib/FetchSinglePlace'
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import {buttonSound, selectSound} from '../lib/sound/audio'
+import {buttonSound, selectSound, tapSound} from '../lib/sound/audio'
 import { signOut } from 'firebase/auth'
 import SidePannel from '../lib/SidePannel'
 import Select from 'react-select'
 import { prefectureData } from '../prefectureData'
+import LoadingAnimation from '../lib/LoadingAnimation'
+import ThisMonthPlace from '../lib/ThisMonthPlace'
 
 export default function Home() {
   const router = useRouter();
@@ -57,8 +59,6 @@ export default function Home() {
     smooth: true,
     offset: -100,
   }
-
-
   const [parent] = useAutoAnimate();
   const [progress, setProgress] = useState(0);  
   
@@ -72,7 +72,7 @@ export default function Home() {
   // Auth & Firestore
   const [signInWithGoogle] = useSignInWithGoogle(auth);
   const [user] = useAuthState(auth);
-  const [placesCollection] = useCollection(collection(db, `places`))
+  const [placesCollection, placeCollectionLoading] = useCollection(collection(db, `places`))
 
   const [prefectureInput, setPrefectureInput] = useState('東京都');
   const [userLikesArray] = useDocument(doc(db, `users/${user && user.uid}`));
@@ -83,7 +83,7 @@ export default function Home() {
     }
   }, [user])
 
-  const [filteredPlaces] = useCollection(query(collection(db, `places`),where("prefecture", "==",`${prefectureInput && prefectureInput}`)));
+  const [filteredPlaces,filteredPlacesLoading] = useCollection(query(collection(db, `places`),where("prefecture", "==",`${prefectureInput && prefectureInput}`)));
 
   const selectStyle = {
     option: (provided, state) => ({
@@ -230,7 +230,7 @@ export default function Home() {
               flexDirection: 'column',
               justifyContent:'space-between',
               background: 'linear-gradient(to left, var(--sgLightGray) 0%,white 100%)',
-
+              borderRadius: '0 30px 30px 0',
               zIndex:1
             }}
           >
@@ -296,6 +296,7 @@ export default function Home() {
                   GitHubを開く
                 </Button>
                 {user && 
+                <>                
                   <Button
                     iconPosition={'left'}
                     icon={<VscSignOut/>}
@@ -306,6 +307,33 @@ export default function Home() {
                   >
                     ログアウト
                   </Button>
+                  <div
+                    style={{
+                      backgroundColor:'black',
+                      boxShadow:'0 0 10px var(--sgLightGray)',
+                      border: '1px solid var(--sgGray)',
+                      marginRight:'1em',
+                      marginTop:'1em',
+                      borderRadius: '15px',
+                      padding: '1em',
+                      display: 'flex',
+                      justifyContent: 'left'
+                    }}
+                  >
+                    <AlignItems gap={'1em'}>
+                      <img
+                        src={user.photoURL}
+                        width="25"
+                        height="25"
+                        style={{
+                          borderRadius: '50px',
+                          border: '1px solid var(--sgGray)',
+                        }}
+                      />
+                      <h4 style={{color:'var(--sgLightGray)',minWidth:'min-content', margin:0}}>{user.displayName.split(' ')[0]}</h4>
+                    </AlignItems>
+                  </div>
+                </>
                 }
               </StaticGrid>
             </Footer>
@@ -313,91 +341,85 @@ export default function Home() {
         }
 
 
-        <StaticGrid gap={'0.5em'}>
-          <div
-            style={{
-              minHeight: '20vh',
-              textAlign:'right',
-              display: 'flex',
-              justifyContent: 'right'
-            }}
-          >
+        <StaticGrid gap={'3em'}>
+          <StaticGrid gap={'2.5vh'}>
             <div
               style={{
-                alignSelf: 'flex-end'
+                minHeight: '15vh',
+                textAlign:'right',
+                display: 'flex',
+                justifyContent: 'right'
               }}
             >
-              <p>Photo By <Link href="https://twitter.com/EyesObsolete"><a>@EyesObsolete</a></Link></p>
-              <h3 style={{ margin:0}}>
-                清涼広場へようこそ
-              </h3>
-              <p
+              <div
                 style={{
-                  margin:0,
-                  // WebkitTextStroke: '1px black',
-                  // color: 'transparent'
+                  alignSelf: 'flex-end'
                 }}
               >
-                  DMS Lat: 35° 39 10.1952N DMS Long: 139° 50 22.1208E
-              </p>
-            </div>
-          </div>
-          <DistortionCarousel
-            images={[
-              '/blue-sky.jpg',
-              '/mountain-green.jpg',
-              '/sg-mountain.png',
-              '/open-nakameguro.jpg',
-              '/sg-mountain2.png',
-            ]}
-            displacmentImage={'https://raw.githubusercontent.com/robin-dela/hover-effect/master/images/heightMap.png'}
-            speed={5}
-          />
-
-          {user &&
-            <AlignItems spaceBetween margin={'1.5em 0 0 0'}>
-              <AlignItems>
-                {
-                  createNew ?
-                  <Button
-                    iconPosition={'left'}
-                    icon={<VscClose/>}
-                    onClick={()=>{
-                      buttonSound();
-                      setCreateNew(false);
-                    }}
-                  >
-                    閉じる
-                  </Button>:
-                  <Button
-                    iconPosition={'left'}
-                    icon={<VscAdd/>}
-                    onClick={()=>{
-                      buttonSound();
-                      setCreateNew(true);
-                      scroller.scrollTo('createPlaceForm',scrollAnimation)
-                    }}
-                  >
-                    場所を追加
-                  </Button>
-                }
-                {/* <Button
-                  iconPosition={'left'}
-                  icon={<VscHeart/>}
-                  onClick={()=>{
-                    buttonSound();
-                    setModalIsOpen(true)
+                <p>Photo By <Link href="https://twitter.com/EyesObsolete"><a>@EyesObsolete</a></Link></p>
+                <h3 style={{ margin:0}}>
+                  清涼広場へようこそ
+                </h3>
+                <p
+                  style={{
+                    margin:0,
+                    // WebkitTextStroke: '1px black',
+                    // color: 'transparent'
                   }}
                 >
-                  好きな場所
-                </Button> */}
-              </AlignItems>
-              <div style={{padding:'0em',backgroundColor: 'white'}}>
-                <AlignItems gap={'0.5em'}>
-                  <img src={user.photoURL} width="20" height="20" style={{borderRadius: '50px'}}/>
-                  <h4 style={{color:'black',minWidth:'max-content',}}>{user.displayName}</h4>
-                </AlignItems>
+                  DMS Lat: 35° 39 10.1952N DMS Long: 139° 50 22.1208E
+                </p>
               </div>
+            </div>
+            <DistortionCarousel
+              images={[
+                '/blue-sky.jpg',
+                '/mountain-green.jpg',
+                '/sg-mountain.png',
+                '/open-nakameguro.jpg',
+                '/sg-mountain2.png',
+              ]}
+              displacmentImage={'https://raw.githubusercontent.com/robin-dela/hover-effect/master/images/heightMap.png'}
+              speed={5}
+            />
+          </StaticGrid>
+
+          {user &&
+            <AlignItems justifyContent={'center'}>
+              {
+                createNew ?
+                <Button
+                  iconPosition={'left'}
+                  icon={<VscClose/>}
+                  onClick={()=>{
+                    buttonSound();
+                    setCreateNew(false);
+                  }}
+                >
+                  閉じる
+                </Button>:
+                <Button
+                  iconPosition={'left'}
+                  icon={<VscAdd/>}
+                  onClick={()=>{
+                    buttonSound();
+                    setCreateNew(true);
+                    scroller.scrollTo('createPlaceForm',scrollAnimation)
+                  }}
+                >
+                  場所を追加
+                </Button>
+              }
+              {/* <Button
+                iconPosition={'left'}
+                icon={<VscHeart/>}
+                onClick={()=>{
+                  buttonSound();
+                  setModalIsOpen(true)
+                }}
+              >
+                好きな場所
+              </Button> */}
             </AlignItems>
           }
           {user && 
@@ -411,72 +433,150 @@ export default function Home() {
             </div>
           }
 
-          <AlignItems margin={'3em 0 0 0'} spaceBetween>
-            <AlignItems gap={'0.5em'}>
-              <h2 style={{margin:'0 0.2em 0 0'}}>Filter: </h2>
-              <Select
-                styles={selectStyle}
-                options={prefectureData}
-                components={{ DropdownIndicator:() => null, IndicatorSeparator:() => null }}
-                onChange={(e)=>{
-                  selectSound();
-                  setPrefectureInput(e.value);
-                }}
-                placeholder={prefectureInput ? prefectureInput:'都道府県を選択'}
-              />
+          <StaticGrid gap={'0.7em'}>
+            <AlignItems spaceBetween>
+              <h2 style={{margin:'0 0.2em 0 0'}}>Monthly Special</h2>
+              {/* {filteredPlaces && filteredPlaces.docs.length > 0 && <h3 style={{margin:0}}>合計{filteredPlaces.docs.length}カ所</h3>} */}
             </AlignItems>
-            {filteredPlaces && filteredPlaces.docs.length > 0 && <h3 style={{margin:0}}>合計{filteredPlaces.docs.length}カ所</h3>}
-          </AlignItems>
-          {filteredPlaces && filteredPlaces.docs.length > 0 ?
-            <ResponsiveMasonry columnsCountBreakPoints={{350: 1, 750: 2, 900: 3, 1200:4}}>
+            <ResponsiveMasonry columnsCountBreakPoints={{350: 1, 750: 2,}}>
               <Masonry gutter={'0.25em'}>
-                {filteredPlaces.docs.map(doc => {
-                  return (
-                    <PostThumbNail
-                      key={doc.id}
-                      id={doc.id}
-                      title={doc.data().name}
-                      type={doc.data().type}
-                    />
-                  )
-                })}
+                <ThisMonthPlace
+                  prefecture={'東京都'}
+                  name={"OPEN NAKAMEGURO"}
+                  type="red"
+                  description={'中目黒にあるオシャレなカフェ。恵比寿駅から少し歩いた場所でもあります。'}
+                  onClick={() =>{
+                    tapSound();
+                  }}
+                />
               </Masonry>
-            </ResponsiveMasonry>:
-            <p>{prefectureInput}にある場所は現在何も見つかりません。</p>
-          }
+            </ResponsiveMasonry>
+          </StaticGrid>
 
 
-          <AlignItems spaceBetween margin={'3em 0 0 0'}>
-            <h2 style={{margin:'0', width:'fit-content'}}>
-              All Location
-            </h2>
-            {/* <Button
-              onClick={()=> {
-                buttonSound();
-                router.push('/fullmap')
-              }}
-            >
-              地図で見る
-            </Button> */}
-          </AlignItems>
-          <ResponsiveMasonry
-            columnsCountBreakPoints={{350: 1, 750: 2, 900: 3, 1200:4}}
-          >
-            <Masonry
-              gutter={'0.25em'}
-            >
-              {placesCollection && placesCollection.docs.map(doc => {
-                return (
-                  <PostThumbNail
-                    key={doc.id}
-                    id={doc.id}
-                    title={doc.data().name}
-                    type={doc.data().type}
-                  />
-                )
-              })}
-            </Masonry>
-          </ResponsiveMasonry>
+          <StaticGrid gap={'0.7em'}>
+            <AlignItems spaceBetween>
+              <h2 style={{margin:'0', width:'fit-content'}}>
+                Recent Reviews
+              </h2>
+              {/* <Button
+                onClick={()=> {
+                  buttonSound();
+                  router.push('/fullmap')
+                }}
+              >
+                地図で見る
+              </Button> */}
+            </AlignItems>
+            <div ref={parent}>
+              {placesCollection && <ResponsiveMasonry
+                columnsCountBreakPoints={{350: 1, 750: 2, 900: 3, 1200:4}}
+              >
+                <Masonry
+                  gutter={'0.25em'}
+                >
+                  {placesCollection.docs.map(doc => {
+                    return (
+                      <PostThumbNail
+                        key={doc.id}
+                        id={doc.id}
+                        title={doc.data().name}
+                        type={doc.data().type}
+                      />
+                    )
+                  })}
+                </Masonry>
+              </ResponsiveMasonry>}
+              {placeCollectionLoading && <LoadingAnimation/>}
+            </div>
+          </StaticGrid>
+
+          {/* <h3 style={{margin:'0 0.2em 0 0'}}>他の場所</h3> */}
+          {/* Filter Section */}
+          <StaticGrid gap={'0.7em'}>
+            <AlignItems spaceBetween>
+              <AlignItems gap={'0.5em'}>
+                <h2 style={{margin:'0 0.2em 0 0'}}>Filter: </h2>
+                <Select
+                  styles={selectStyle}
+                  options={prefectureData}
+                  components={{ DropdownIndicator:() => null, IndicatorSeparator:() => null }}
+                  onChange={(e)=>{
+                    selectSound();
+                    setPrefectureInput(e.value);
+                  }}
+                  placeholder={prefectureInput ? prefectureInput:'都道府県を選択'}
+                />
+              </AlignItems>
+              {filteredPlaces && filteredPlaces.docs.length > 0 && <h3 style={{margin:0}}>合計{filteredPlaces.docs.length}カ所</h3>}
+            </AlignItems>
+            <div ref={parent}>
+              {filteredPlaces && filteredPlaces.docs.length > 0 ?
+                <ResponsiveMasonry columnsCountBreakPoints={{350: 1, 750: 2, 900: 3, 1200:4}}>
+                  <Masonry gutter={'0.25em'}>
+                    {filteredPlaces.docs.map(doc => {
+                      return (
+                        <PostThumbNail
+                          key={doc.id}
+                          id={doc.id}
+                          title={doc.data().name}
+                          type={doc.data().type}
+                        />
+                      )
+                    })}
+                  </Masonry>
+                </ResponsiveMasonry>:
+                <>
+                  {!filteredPlacesLoading &&
+                    <LoadingAnimation noAnimation title=":(">
+                      <p>{prefectureInput}にある場所は現在何も見つかりません。</p>
+                    </LoadingAnimation>
+                  }
+                </>
+              }
+              {filteredPlacesLoading && <LoadingAnimation/>}
+            </div>
+          </StaticGrid>
+
+          {/* All Locations */}
+          <StaticGrid gap={'0.7em'}>
+            <AlignItems spaceBetween>
+              <h2 style={{margin:'0', width:'fit-content'}}>
+                All Locations
+              </h2>
+              {/* <Button
+                onClick={()=> {
+                  buttonSound();
+                  router.push('/fullmap')
+                }}
+              >
+                地図で見る
+              </Button> */}
+            </AlignItems>
+            <div ref={parent}>
+              {placesCollection && <ResponsiveMasonry
+                columnsCountBreakPoints={{350: 1, 750: 2, 900: 3, 1200:4}}
+              >
+                <Masonry
+                  gutter={'0.25em'}
+                >
+                  {placesCollection.docs.map(doc => {
+                    return (
+                      <PostThumbNail
+                        key={doc.id}
+                        id={doc.id}
+                        title={doc.data().name}
+                        type={doc.data().type}
+                      />
+                    )
+                  })}
+                </Masonry>
+              </ResponsiveMasonry>}
+              {placeCollectionLoading && <LoadingAnimation/>}
+            </div>
+          </StaticGrid>
+
+          {/* Bottom Area */}
           <Button onClick={()=>{scroll.scrollToTop()}}>上へ戻る</Button>
           <End/>
         </StaticGrid>

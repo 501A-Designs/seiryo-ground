@@ -12,6 +12,10 @@ body {
   margin: 0;
 }
 
+canvas{
+  border-radius: 15px;
+}
+
 * {
   font-family: 'Shippori Antique', sans-serif;
   font-weight: normal;
@@ -20,7 +24,7 @@ body {
 }
 
 h1{
-  font-size:3.5em;
+  font-size:3em;
 }
 h2{
   font-size:2em;
@@ -34,7 +38,7 @@ a {
 iframe{
   border: 1px solid var(--sgGray);
   /* filter: grayscale(1); */
-  border-radius: 5px;
+  border-radius: 10px;
 }
 
 table {
