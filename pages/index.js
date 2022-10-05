@@ -19,9 +19,6 @@ import { doc, addDoc, collection, query, where, getDocs,getDoc } from "firebase/
 import LoadingBar from 'react-top-loading-bar';
 
 import StaticGrid from '../lib/StaticGrid'
-import TypeButton from '../lib/TypeButton'
-
-
 
 import * as Scroll from 'react-scroll';
 import CreatePlaceForm from '../lib/CreatePlaceForm'
@@ -39,13 +36,17 @@ import FetchSinglePlace from '../lib/FetchSinglePlace'
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import {buttonSound, selectSound, tapSound} from '../lib/sound/audio'
+import {buttonSound, notificationSound, selectSound, tapSound} from '../lib/sound/audio'
 import { signOut } from 'firebase/auth'
 import SidePannel from '../lib/SidePannel'
 import Select from 'react-select'
 import { prefectureData } from '../prefectureData'
 import LoadingAnimation from '../lib/LoadingAnimation'
 import ThisMonthPlace from '../lib/ThisMonthPlace'
+import SolidButton from '../lib/SolidButton'
+import GettingStartedModalContent from '../lib/landing-page/GettingStartedModalContent'
+import RightPannel from '../lib/landing-page/RightPannel'
+import LeftPannel from '../lib/landing-page/LeftPannel'
 
 export default function Home() {
   const router = useRouter();
@@ -78,7 +79,8 @@ export default function Home() {
   const [userLikesArray] = useDocument(doc(db, `users/${user && user.uid}`));
 
   useEffect(() => {
-    if (user && user.metadata.creationTime == user.metadata.lastSignInTime) {
+    if (user && user.metadata.creationTime == user.metadata.lastSignInTime && userLikesArray !== undefined) {
+      // console.log(user.metadata.creationTime,user.metadata.lastSignInTime)
       setGettingStartedModalIsOpen(true)
     }
   }, [user])
@@ -125,7 +127,12 @@ export default function Home() {
   
   
   return (
-    <div className={'pagePadding'}>
+    <div
+      className={'pagePadding'}
+      style={{
+        backgroundColor:'white',
+      }}
+    >
       <LoadingBar
         color='black'
         progress={progress}
@@ -137,7 +144,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {user && 
+      {user &&
         <>
           <Modal
             ref={parent}
@@ -159,8 +166,6 @@ export default function Home() {
                 color: 'white',
                 border:'1px solid black',
                 zIndex:2,
-                // boxShadow: '0px 0px 15px #f0f0f0',                
-                // animation: 'popOutFromRight 0.4s'
               },
               overlay: {
                 background: 'linear-gradient(to bottom,rgba(255,255,255,0) 0%,white 100%)',
@@ -170,203 +175,88 @@ export default function Home() {
                 transition: '0.2s'
               }
             }}
-            onRequestClose={()=>setGettingStartedModalIsOpen(false)}
           >
-            <AlignItems justifyContent={'center'}>
-                <h2>初めまして</h2>
-            </AlignItems>
-            <StaticGrid
-              grid={'1fr'}
-              gap={'0'}
-            >
-              <p>
-                <strong>SEIRYO GROUNDへようこそ。</strong>
-                <br/>
-                本サイトにログインしてくださりありがとうございます。
-                <br/>
-                <br/>
-                清涼広場は、清涼感を味える場所・自然や文化と一体化できる場所等をご紹介するサイトです。場所はそれぞれ「緑」「青」「赤」「紫」という4つのカテゴリーに振り分けられており、誰もがログインして投稿できる形となっています。
-              </p>
-              <ul>
-                <li><a>清涼広場について</a></li>
-                <li><a>Eminentについて</a></li>
-                <li><a>清涼ニュース</a></li>
-                <li><a>SEIRYO Photographer</a></li>
-              </ul>
-              <p>※外をクリックすると消えます。</p>
-            </StaticGrid>
+            <GettingStartedModalContent
+              user={user}
+              closeModal={()=>{
+                buttonSound();
+                setGettingStartedModalIsOpen(false);
+                notificationSound();
+              }}
+            />
           </Modal>
-          {/* <SidePannel>
-            <StaticGrid
-              grid={'1fr'}
-              gap={'0'}
-            >
-              {
-                userLikesArray &&
-                userLikesArray.data() && 
-                userLikesArray.data().likes.map((likes)=>{
-                  return(
-                    <FetchSinglePlace
-                      key={likes}
-                      documentId={likes}
-                    />
-                  )
-              })}
-            </StaticGrid>
-          </SidePannel> */}
         </>
       }
 
-      <div className={'stickySide'}>
-        {isBrowser &&         
-          <section
-            style={{
-              maxWidth:'300px',
-              minWidth:'200px',
-              position: 'sticky',
-              top: '0px',
-              display: 'flex',
-              height: '100vh',
-              flexDirection: 'column',
-              justifyContent:'space-between',
-              background: 'linear-gradient(to left, var(--sgLightGray) 0%,white 100%)',
-              borderRadius: '0 30px 30px 0',
-              zIndex:1
-            }}
-          >
-            <div
-              style={{
-                minWidth:'max-content',
-                margin:0,
-                marginTop: '1em',
-                padding:0,
-                writingMode:'vertical-lr',
-                textOrientation:'mixed'
-              }}
-            >
-              <p style={{margin:0}}>Designed & Produced by 501A.<br/>Managed By Eminent, a Design Nerd Duo.</p>
-              <h2 style={{marginLeft:0}}>
-                SEIRYO GROUND
-                <br/>
-                清涼広場
-              </h2>
-            </div>
-            <Footer>
-              <StaticGrid>
-                {!user &&
-                  <Button
-                    iconPosition={'left'}
-                    icon={<VscSignIn/>}
-                    onClick={()=>{
-                      buttonSound();
-                      signInWithGoogle();
-                    }}
-                  >
-                    Googleでログイン
-                  </Button>
-                }
-                <Button
-                  iconPosition={'left'}
-                  icon={<VscComment/>}
-                  onClick={()=>{
-                    buttonSound();
-                    router.push('/news');
-                  }}
-                >
-                  ニュース
-                </Button>
-                <Button
-                  iconPosition={'left'}
-                  icon={<VscBook/>}
-                  onClick={()=>{
-                    buttonSound();
-                    router.push('/about');
-                  }}
-                >
-                  清涼広場について
-                </Button>
-                <Button
-                  iconPosition={'left'}
-                  icon={<VscGithubAlt/>}
-                  onClick={()=>{
-                    buttonSound();
-                    router.push('https://github.com/501A-Designs/seiryo-ground');
-                  }}
-                >
-                  GitHubを開く
-                </Button>
-                {user && 
-                <>                
-                  <Button
-                    iconPosition={'left'}
-                    icon={<VscSignOut/>}
-                    onClick={()=>{
-                      buttonSound();
-                      signOut(auth)
-                    }}
-                  >
-                    ログアウト
-                  </Button>
-                  <div
-                    style={{
-                      backgroundColor:'black',
-                      boxShadow:'0 0 10px var(--sgLightGray)',
-                      border: '1px solid var(--sgGray)',
-                      marginRight:'1em',
-                      marginTop:'1em',
-                      borderRadius: '15px',
-                      padding: '1em',
-                      display: 'flex',
-                      justifyContent: 'left'
-                    }}
-                  >
-                    <AlignItems gap={'1em'}>
-                      <img
-                        src={user.photoURL}
-                        width="25"
-                        height="25"
-                        style={{
-                          borderRadius: '50px',
-                          border: '1px solid var(--sgGray)',
-                        }}
-                      />
-                      <h4 style={{color:'var(--sgLightGray)',minWidth:'min-content', margin:0}}>{user.displayName.split(' ')[0]}</h4>
-                    </AlignItems>
-                  </div>
-                </>
-                }
-              </StaticGrid>
-            </Footer>
-          </section>
-        }
-
-
-        <StaticGrid gap={'3em'}>
-          <StaticGrid gap={'2.5vh'}>
-            <div
-              style={{
-                minHeight: '15vh',
-                textAlign:'right',
-                display: 'flex',
-                justifyContent: 'right'
-              }}
-            >
-              <div
-                style={{
-                  alignSelf: 'flex-end'
+        <div className="stickySide">
+          <LeftPannel user={user}>
+            {!user &&
+              <Button
+                iconPosition={'left'}
+                onClick={()=>{
+                  buttonSound();
+                  signInWithGoogle();
                 }}
               >
+                Googleでログイン
+              </Button>
+            }
+            <Button
+              iconPosition={'left'}
+              onClick={()=>{
+                buttonSound();
+                router.push('/news');
+              }}
+            >
+              ニュース
+            </Button>
+            <Button
+              iconPosition={'left'}
+              onClick={()=>{
+                buttonSound();
+                router.push('/about');
+              }}
+            >
+              清涼広場について
+            </Button>
+            <Button
+              iconPosition={'left'}
+              onClick={()=>{
+                buttonSound();
+                router.push('https://github.com/501A-Designs/seiryo-ground');
+              }}
+            >
+              GitHubを開く
+            </Button>
+            {user &&
+              <Button
+                iconPosition={'left'}
+                onClick={()=>{
+                  buttonSound();
+                  signOut(auth)
+                }}
+              >
+                ログアウト
+              </Button>
+            }
+          </LeftPannel>
+
+        <StaticGrid gap={'3em'}>
+          <StaticGrid>
+            <div
+              style={{
+                textAlign:'right',
+                display: 'flex',
+                justifyContent: 'right',
+                margin: '1em 0'
+              }}
+            >
+              <div style={{alignSelf: 'flex-end'}}>
                 <p>Photo By <Link href="https://twitter.com/EyesObsolete"><a>@EyesObsolete</a></Link></p>
                 <h3 style={{ margin:0}}>
                   清涼広場へようこそ
                 </h3>
-                <p
-                  style={{
-                    margin:0,
-                    // WebkitTextStroke: '1px black',
-                    // color: 'transparent'
-                  }}
-                >
+                <p style={{margin:0}}>
                   DMS Lat: 35° 39 10.1952N DMS Long: 139° 50 22.1208E
                 </p>
               </div>
@@ -380,7 +270,7 @@ export default function Home() {
                 '/sg-mountain2.png',
               ]}
               displacmentImage={'https://raw.githubusercontent.com/robin-dela/hover-effect/master/images/heightMap.png'}
-              speed={5}
+              speed={0.8}
             />
           </StaticGrid>
 
@@ -433,13 +323,11 @@ export default function Home() {
             </div>
           }
 
-          <StaticGrid gap={'0.7em'}>
-            <AlignItems spaceBetween>
-              <h2 style={{margin:'0 0.2em 0 0'}}>Monthly Special</h2>
-              {/* {filteredPlaces && filteredPlaces.docs.length > 0 && <h3 style={{margin:0}}>合計{filteredPlaces.docs.length}カ所</h3>} */}
-            </AlignItems>
-            <ResponsiveMasonry columnsCountBreakPoints={{350: 1, 750: 2,}}>
-              <Masonry gutter={'0.25em'}>
+          <StaticGrid gap={'1em'}>
+            <h2 style={{margin:'0 0.2em 0 0'}}>Explore</h2>
+            <StaticGrid gap={'1.5em'}>
+              <StaticGrid gap={'0.5em'}>              
+                <h3 style={{margin:'0 0.2em 0 0'}}>Most Popular</h3>
                 <ThisMonthPlace
                   prefecture={'東京都'}
                   name={"OPEN NAKAMEGURO"}
@@ -449,8 +337,16 @@ export default function Home() {
                     tapSound();
                   }}
                 />
+              </StaticGrid>
+              <StaticGrid>
+                <h3 style={{margin:'0 0.2em 0 0'}}>Top Contributors</h3>
+                
+              </StaticGrid>
+            </StaticGrid>
+            {/* <ResponsiveMasonry columnsCountBreakPoints={{350: 1, 750: 2,}}>
+              <Masonry gutter={'0.25em'}>
               </Masonry>
-            </ResponsiveMasonry>
+            </ResponsiveMasonry> */}
           </StaticGrid>
 
 
@@ -581,6 +477,7 @@ export default function Home() {
           <End/>
         </StaticGrid>
       </div>
-    </div>
+      </div>
+
   )
 }

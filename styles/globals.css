@@ -3,6 +3,7 @@
 
 :root{
   --sgLightGray:rgb(244, 244, 244);
+  --sgMediumGray:rgb(238, 238, 238);
   --sgGray:rgb(230, 230, 230);
 }
 
@@ -75,11 +76,13 @@ a:hover{
 .grid-2fr-1fr{
   display: grid;  
   gap: 1em;
+  height: fit-content;
 }
 
 .grid-1fr-2fr{
   display: grid;  
   gap: 2em;
+  height: fit-content;
 }
 
 @media screen and (max-width: 900px) and (min-width: 0px) {
@@ -185,8 +188,9 @@ input[type="range"]::-webkit-slider-thumb:active {
 }
 
 
-@keyframes popOutFromRight {
-  0%   { transform: scale(0) translateX(-100%) translateY(-00%)}
-  70% { transform: scale(1.05); }
+@keyframes popOut {
+  /* translateX(-100%) translateY(-00%) */
+  0%   { transform: translateX(25px - 50%)}
+  70% { transform: translateX(25px - 50%) translateY(10%); }
 }
 
