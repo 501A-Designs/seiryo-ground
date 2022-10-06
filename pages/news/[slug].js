@@ -2,8 +2,8 @@ import React from 'react'
 import { createClient } from 'contentful'
 import { useRouter } from 'next/router'
 import Button from '../../lib/Button'
-import AlignItems from '../../lib/AlignItems'
-import { buttonSound } from '../../lib/sound/audio'
+import AlignItems from '../../lib/alignment/AlignItems'
+import { buttonSound } from '../../lib/ux/audio'
 
 const client = createClient({
   space:process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,

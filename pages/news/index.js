@@ -2,12 +2,11 @@ import React from 'react'
 import { createClient } from 'contentful'
 import UpdatePostThumbNail from '../../lib/UpdatePostThumbNail'
 import Button from '../../lib/Button'
-import { VscChevronLeft } from 'react-icons/vsc'
 import { useRouter } from 'next/router'
 import { isBrowser } from 'react-device-detect';
-import StaticGrid from '../../lib/StaticGrid'
-import { buttonSound } from '../../lib/sound/audio'
-import AlignItems from '../../lib/AlignItems'
+import StaticGrid from '../../lib/alignment/StaticGrid'
+import { buttonSound } from '../../lib/ux/audio'
+import AlignItems from '../../lib/alignment/AlignItems'
 
 export async function getStaticProps(){
   const client = createClient({

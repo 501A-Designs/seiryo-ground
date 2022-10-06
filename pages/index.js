@@ -1,7 +1,7 @@
 import React, {useState,useEffect,useRef} from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
-import AlignItems from '../lib/AlignItems'
+import AlignItems from '../lib/alignment/AlignItems'
 import Button from '../lib/Button'
 import Footer from '../lib/Footer'
 import styles from '../styles/Home.module.css'
@@ -18,11 +18,10 @@ import { doc, addDoc, collection, query, where, getDocs,getDoc } from "firebase/
 
 import LoadingBar from 'react-top-loading-bar';
 
-import StaticGrid from '../lib/StaticGrid'
+import StaticGrid from '../lib/alignment/StaticGrid'
 
-import * as Scroll from 'react-scroll';
-import CreatePlaceForm from '../lib/CreatePlaceForm'
-import DistortionCarousel from '../lib/DistortionCarousel'
+import CreatePlaceForm from '../lib/landing-page/CreatePlaceForm'
+import DistortionCarousel from '../lib/landing-page/DistortionCarousel'
 import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 
 import { isBrowser } from 'react-device-detect';
@@ -36,7 +35,7 @@ import FetchSinglePlace from '../lib/FetchSinglePlace'
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import {buttonSound, notificationSound, selectSound, tapSound} from '../lib/sound/audio'
+import {buttonSound, notificationSound, selectSound, tapSound} from '../lib/ux/audio'
 import { signOut } from 'firebase/auth'
 import SidePannel from '../lib/SidePannel'
 import Select from 'react-select'
@@ -47,26 +46,18 @@ import SolidButton from '../lib/SolidButton'
 import GettingStartedModalContent from '../lib/landing-page/GettingStartedModalContent'
 import RightPannel from '../lib/landing-page/RightPannel'
 import LeftPannel from '../lib/landing-page/LeftPannel'
+import WelcomeHeader from '../lib/landing-page/WelcomeHeader'
+import CreatePlaceFormContainer from '../lib/landing-page/CreatePlaceFormContainer'
+import { scroll } from '../lib/ux/scroll'
 
 export default function Home() {
   const router = useRouter();
 
-  // Animations
-  let scroll = Scroll.animateScroll;
-  let scroller = Scroll.scroller;
-  let scrollAnimation = {
-    duration: 500,
-    delay: 100,
-    smooth: true,
-    offset: -100,
-  }
   const [parent] = useAutoAnimate();
   const [progress, setProgress] = useState(0);  
   
   // Modal / Popup State
-  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [gettingStartedModalIsOpen, setGettingStartedModalIsOpen] = useState(false);
-  const [createNew, setCreateNew] = useState(false);
   const createNewRef = useRef();
   const [menuDisplay, setMenuDisplay] = useState(false);
 
@@ -188,79 +179,61 @@ export default function Home() {
         </>
       }
 
-        <div className="stickySide">
-          <LeftPannel user={user}>
-            {!user &&
-              <Button
-                iconPosition={'left'}
-                onClick={()=>{
-                  buttonSound();
-                  signInWithGoogle();
-                }}
-              >
-                Googleでログイン
-              </Button>
-            }
+      <div className="stickySide">
+        <LeftPannel user={user}>
+          {!user &&
             <Button
               iconPosition={'left'}
               onClick={()=>{
                 buttonSound();
-                router.push('/news');
+                signInWithGoogle();
               }}
             >
-              ニュース
+              Googleでログイン
             </Button>
+          }
+          <Button
+            iconPosition={'left'}
+            onClick={()=>{
+              buttonSound();
+              router.push('/news');
+            }}
+          >
+            ニュース
+          </Button>
+          <Button
+            iconPosition={'left'}
+            onClick={()=>{
+              buttonSound();
+              router.push('/about');
+            }}
+          >
+            清涼広場について
+          </Button>
+          <Button
+            iconPosition={'left'}
+            onClick={()=>{
+              buttonSound();
+              router.push('https://github.com/501A-Designs/seiryo-ground');
+            }}
+          >
+            GitHubを開く
+          </Button>
+          {user &&
             <Button
               iconPosition={'left'}
               onClick={()=>{
                 buttonSound();
-                router.push('/about');
+                signOut(auth)
               }}
             >
-              清涼広場について
+              ログアウト
             </Button>
-            <Button
-              iconPosition={'left'}
-              onClick={()=>{
-                buttonSound();
-                router.push('https://github.com/501A-Designs/seiryo-ground');
-              }}
-            >
-              GitHubを開く
-            </Button>
-            {user &&
-              <Button
-                iconPosition={'left'}
-                onClick={()=>{
-                  buttonSound();
-                  signOut(auth)
-                }}
-              >
-                ログアウト
-              </Button>
-            }
-          </LeftPannel>
-
+          }
+        </LeftPannel>
         <StaticGrid gap={'3em'}>
           <StaticGrid>
-            <div
-              style={{
-                textAlign:'right',
-                display: 'flex',
-                justifyContent: 'right',
-                margin: '1em 0'
-              }}
-            >
-              <div style={{alignSelf: 'flex-end'}}>
-                <p>Photo By <Link href="https://twitter.com/EyesObsolete"><a>@EyesObsolete</a></Link></p>
-                <h3 style={{ margin:0}}>
-                  清涼広場へようこそ
-                </h3>
-                <p style={{margin:0}}>
-                  DMS Lat: 35° 39 10.1952N DMS Long: 139° 50 22.1208E
-                </p>
-              </div>
-            </div>
+            <WelcomeHeader/>
             <DistortionCarousel
               images={[
                 '/blue-sky.jpg',
@@ -275,52 +248,9 @@ export default function Home() {
           </StaticGrid>
 
           {user &&
-            <AlignItems justifyContent={'center'}>
-              {
-                createNew ?
-                <Button
-                  iconPosition={'left'}
-                  icon={<VscClose/>}
-                  onClick={()=>{
-                    buttonSound();
-                    setCreateNew(false);
-                  }}
-                >
-                  閉じる
-                </Button>:
-                <Button
-                  iconPosition={'left'}
-                  icon={<VscAdd/>}
-                  onClick={()=>{
-                    buttonSound();
-                    setCreateNew(true);
-                    scroller.scrollTo('createPlaceForm',scrollAnimation)
-                  }}
-                >
-                  場所を追加
-                </Button>
-              }
-              {/* <Button
-                iconPosition={'left'}
-                icon={<VscHeart/>}
-                onClick={()=>{
-                  buttonSound();
-                  setModalIsOpen(true)
-                }}
-              >
-                好きな場所
-              </Button> */}
-            </AlignItems>
-          }
-          {user && 
-            <div ref={parent} name={'createPlaceForm'}>
-              {createNew && 
-                <CreatePlaceForm
-                  user={user}
-                  ref={createNewRef}
-                />
-              }
-            </div>
+            <CreatePlaceFormContainer>
+              <CreatePlaceForm user={user}/>
+            </CreatePlaceFormContainer>
           }
 
           <StaticGrid gap={'1em'}>
@@ -472,12 +402,12 @@ export default function Home() {
             </div>
           </StaticGrid>
 
-          {/* Bottom Area */}
-          <Button onClick={()=>{scroll.scrollToTop()}}>上へ戻る</Button>
+          <Button onClick={()=>{scroll.scrollToTop();}}>
+            上へ戻る
+          </Button>
           <End/>
         </StaticGrid>
       </div>
-      </div>
-
+    </div>
   )
 }

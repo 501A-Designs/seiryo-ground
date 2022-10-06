@@ -24,6 +24,15 @@ canvas{
   box-sizing: border-box;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  user-select: none;
+}
+
 h1{
   font-size:3em;
 }
@@ -193,4 +202,3 @@ input[type="range"]::-webkit-slider-thumb:active {
   0%   { transform: translateX(25px - 50%)}
   70% { transform: translateX(25px - 50%) translateY(10%); }
 }
-

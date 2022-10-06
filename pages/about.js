@@ -2,9 +2,9 @@ import Image from 'next/image';
 import { useRouter } from 'next/router'
 import React from 'react'
 import { VscChevronLeft,VscChevronRight, VscLinkExternal } from 'react-icons/vsc';
-import AlignItems from '../lib/AlignItems';
+import AlignItems from '../lib/alignment/AlignItems';
 import Button from '../lib/Button'
-import { buttonSound } from '../lib/sound/audio';
+import { buttonSound } from '../lib/ux/audio';
 import sgCenteredLogo from '../public/sg-centered-logo.png'
 
 export default function About() {
