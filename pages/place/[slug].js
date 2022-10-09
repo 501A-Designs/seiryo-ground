@@ -2,11 +2,10 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { useState,useEffect } from 'react'
 import AlignItems from '../../lib/alignment/AlignItems'
-import Button from '../../lib/Button'
 import TypeBadge from '../../lib/TypeBadge'
 
 import { db,auth } from '../../firebase'
-import { addDoc, arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, query, setDoc, updateDoc } from "firebase/firestore";
+import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Rating from '../../lib/Rating'
 import StaticGrid from '../../lib/alignment/StaticGrid'
@@ -15,23 +14,28 @@ import LoadingBar from 'react-top-loading-bar';
 import Review from '../../lib/Review'
 import Input from '../../lib/Input'
 import TextArea from '../../lib/TextArea'
-import { VscAccount, VscAdd, VscClose, VscEdit, VscHeart, VscRedo,VscSave } from 'react-icons/vsc'
 import End from '../../lib/End'
 import NoReviews from '../../lib/NoReviews'
-import TypeButton from '../../lib/TypeButton'
 
+import Button from '../../lib/button/Button'
+import TypeButton from '../../lib/button/TypeButton'
 
 import moment from 'moment';
 import 'moment/locale/ja'
 import DisplayRatingInput from '../../lib/DisplayRatingInput'
 import { isBrowser } from 'react-device-detect'
 
-import {buttonSound, celebrationSound, notificationSound, selectSound, sliderSound, typeSound} from '../../lib/ux/audio'
+import {celebrationSound, notificationSound, selectSound, sliderSound, typeSound} from '../../lib/ux/audio'
 import Head from 'next/head'
 
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import Modal from 'react-modal'
+import Modal from '../../lib/component/Modal'
+import { FiArrowLeft, FiEdit, FiHeart, FiPlus, FiRefreshCw, FiSave, FiUser, FiX } from 'react-icons/fi'
 import { popOut } from '../../lib/ux/keyframes'
+import { useDocument } from 'react-firebase-hooks/firestore'
+import { ClipLoader, PuffLoader } from 'react-spinners'
+import Container from '../../lib/component/Container'
+import MainBody from '../../lib/component/MainBody'
 
 export default function PlaceName() {
   const router = useRouter();
@@ -51,7 +55,11 @@ export default function PlaceName() {
   const [hasReviewed, setHasReviewed] = useState(false);
 
   const [user] = useAuthState(auth);
-  const [placeData, setPlaceData] = useState();
+  // const [placeData, setPlaceData] = useState();
+  const [rawPlaceData, loadingRawPlaceData] = useDocument(doc(db, `places/${placeId && placeId}`));
+  let placeData = rawPlaceData && rawPlaceData.data();
+  
+
   const [reviewData, setReviewData] = useState();
 
   const [averageOfDateRating, setAverageOfDateRating] = useState(0);
@@ -62,10 +70,8 @@ export default function PlaceName() {
   const getDocument = async () =>{
     setProgress(0);
     if (placeId) {
-      const placeDocRef = doc(db, `places/${placeId}`);
-      const docSnap = await getDoc(placeDocRef);
+      const docSnap = await getDoc(doc(db, `places/${placeId}`));
       if (docSnap.exists()) {
-        setPlaceData(docSnap.data());
         docSnap.data().likes.map((uid) => {
           if (user && user.uid == uid) {
             setLiked(true);
@@ -76,7 +82,39 @@ export default function PlaceName() {
       } else {
         alert("ページは見つかりませんでした");
       }
+      getReviews();
+      setProgress(100);
     }
+  }
+
+
+  const [placeInput, setPlaceInput] = useState('');
+  const [locationInput, setLocationInput] = useState('');
+  const [prefectureInput, setPrefectureInput] = useState();
+  const [descriptionInput, setDescriptionInput] = useState('');
+  const [typeInput, setTypeInput] = useState('');
+  const [officialSiteInput, setOfficialSiteInput] = useState('');
+
+  // const [published, setPublished] = useState(false);
+  // const [newPlace, setNewPlace] = useState();
+
+  const editThisPlace = async() => {
+    await updateDoc(collection(db, "places"), {
+      name: placeInput,
+      location: locationInput,
+      prefecture: prefectureInput,
+      description: descriptionInput,
+      editedBy:[{editedBy:user.uid}],
+      type: typeInput,
+      officialSite:officialSiteInput,
+    });
+    setPlaceInput('');
+    setLocationInput('');
+    setDescriptionInput('');
+    setTypeInput('');
+    // setPublished(true);
+    // setNewPlace(docRef);
+    notificationSound();
   }
 
   const reviewsCollectionRef = collection(db, `places/${placeId}/reviews`);
@@ -88,8 +126,8 @@ export default function PlaceName() {
       reviewsArray.push(doc);
       if (user && user.uid === doc.id) {
         setHasReviewed(true);
-        setTitleInput(doc.data().title);
-        setDescriptionInput(doc.data().description);
+        setTitleRatingInput(doc.data().title);
+        setDescriptionRatingInput(doc.data().description);
         setDateRatingInput(doc.data().dateRating);
         setAccessRatingInput(doc.data().accessRating);
         setManagementRatingInput(doc.data().managementRating);
@@ -114,19 +152,19 @@ export default function PlaceName() {
     setAverageOfManagementRating(arrayOfManagementRating.reduce((sum, element) => sum + element, 0)/arrayOfManagementRating.length);
   }
 
-  const [titleInput, setTitleInput] = useState('');
+  const [titleRatingInput, setTitleRatingInput] = useState('');
   const [dateRatingInput, setDateRatingInput] = useState(0);
   const [accessRatingInput, setAccessRatingInput] = useState(0);
   const [managementRatingInput, setManagementRatingInput] = useState(0);
-  const [descriptionInput, setDescriptionInput] = useState('');
+  const [descriptionRatingInput, setDescriptionRatingInput] = useState('');
 
   let timeNow = moment().format('MMMM Do YYYY, h:mm a');
   const typeButtonArray = ["green","blue","red","purple",]
 
   const publishReview = async() =>{
     await setDoc(doc(collection(db, `places/${placeId}/reviews/`), `${user && user.uid}`), {
-      title: titleInput,
-      description: descriptionInput,
+      title: titleRatingInput,
+      description: descriptionRatingInput,
       dateRating: dateRatingInput,
       accessRating: accessRatingInput,
       managementRating: managementRatingInput,
@@ -137,8 +175,8 @@ export default function PlaceName() {
 
   const updateReview = async() =>{    
     await updateDoc(doc(db, `places/${placeId}/reviews/${user && user.uid}`), {
-      title: titleInput,
-      description: descriptionInput,
+      title: titleRatingInput,
+      description: descriptionRatingInput,
       dateRating: dateRatingInput,
       accessRating: accessRatingInput,
       managementRating: managementRatingInput,
@@ -196,36 +234,8 @@ export default function PlaceName() {
         onLoaderFinished={() => setProgress(0)}
       />
       <Modal
-        isOpen={modalIsOpen}
-        style={{
-          content: {
-            top: '50%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            marginRight: '-50%',
-            transform: 'translate(-50%, -50%)',
-            padding: '2em',
-            width:'60%',
-            height:'fit-content',
-            overflowY:'scroll',
-            borderRadius: '20px',
-            backgroundColor:'white',
-            color: 'black',
-            border:'1px solid var(--sgGray)',
-            zIndex:2,
-            boxShadow: '0px 0px 15px var(--sgLightGray)',
-            animation: 'popOut 0.4s'
-          },
-          overlay: {
-            background: 'linear-gradient(to bottom,rgba(255,255,255,0) 0%,white 100%)',
-            backdropFilter:'blur(10px)',
-            zIndex:20,
-            cursor:'pointer',
-            transition: '0.2s'
-          }
-        }}
-        onRequestClose={()=>setModalIsOpen(false)}
+        modalState={modalIsOpen}
+        onClickBackdrop={() => setModalIsOpen(false)}
       >
         <AlignItems justifyContent={'center'}>
           <h3>編集</h3>
@@ -290,46 +300,43 @@ export default function PlaceName() {
           </StaticGrid>
         </StaticGrid>
         <AlignItems justifyContent={'center'}>
-          <Button>変更を保存</Button>
+          <Button icon={<FiSave/>} iconPosition={'left'}>変更を保存</Button>
         </AlignItems>
       </Modal>
+
+      {loadingRawPlaceData && 
+        <AlignItems justifyContent={'center'} height={'100vh'}>
+          <ClipLoader color="black"/>
+        </AlignItems>
+      }
+
       {placeData &&
-        <div
-          className="pagePadding"
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap:'1em'
-          }}
-        >
+        <MainBody>
           <AlignItems spaceBetween={true} margin={'0.5em 0 0 0'}>
             <Button
-              onClick={()=> {
-                buttonSound();
-                router.push('/');
-              }}
+              onClick={()=> {router.push('/');}}
+              iconPosition={'left'}
+              icon={<FiArrowLeft/>}
             >
               戻る
             </Button>
             {user &&
               <AlignItems>
-                <Button
-                  onClick={()=> {
-                    buttonSound();
-                    setModalIsOpen(true)
-                  }}
+                {/* <Button
+                  onClick={()=> setModalIsOpen(true)}
                   iconPosition={'left'}
-                  icon={<VscEdit/>}
+                  icon={<FiEdit/>}
                 >
                   ページを編集
-                </Button>
+                </Button> */}
+
                 <Button
                   onClick={()=> {
                     !liked && celebrationSound();
                     liked ? removeLike():addLike()
                   }}
                   iconPosition={'left'}
-                  icon={<VscHeart/>}
+                  icon={<FiHeart/>}
                 >
                   {liked ? 'いいねを外す':'いいね'}
                 </Button>
@@ -389,55 +396,37 @@ export default function PlaceName() {
             <div style={{height:'fit-content'}}>
               <StaticGrid gap={'1em'}>
                 <StaticGrid gap={'0.5em'}>
+
+
                   {user ? 
                     <AlignItems justifyContent={'center'}>
                       <Button
+                        fill
                         iconPosition={'left'}
-                        icon={openCreateReview ? <VscClose/>:<>{hasReviewed ? <VscRedo/>:<VscAdd/>}</>}
+                        icon={openCreateReview ? <FiX/>:<>{hasReviewed ? <FiRefreshCw/>:<FiPlus/>}</>}
                         onClick={()=> {
-                          buttonSound();
                           openCreateReview ? setOpenCreateReview(false):setOpenCreateReview(true)
                         }}
                       >
                         {openCreateReview ? '閉じる':<>{hasReviewed ? '書いたレビューを編集':'レビューを書く'}</>}
                       </Button>
                     </AlignItems>:
-                    <div
-                      style={{
-                        border: '1px solid var(--sgGray)',
-                        boxShadow: '0px 0px 15px white',
-                        padding: '1em',
-                        borderRadius: '10px',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <div
-                        style={{
-                          fontSize: '1.5em',
-                          padding: '0.5em 1em',
-                        }}
-                      >
-                        <VscAccount/>
-                      </div>
+                    <Container>
                       <h4>ログインされておりません。</h4>
                       <p>ログインしてアカウントを作成すると、レビューや場所を清涼広場上に投稿する事ができます！</p>
                       {isBrowser ? 
                         <Button
-                          onClick={()=>{
-                            buttonSound();
-                            router.push('/');
-                          }}
+                          fill
+                          onClick={()=>router.push('/')}
                         >
                           メインページから会員登録
                         </Button>:
                         <p>※モバイルからのログインは出来ないです。パソコンからアクセスして頂くとログインが可能となります。</p>
                       }
-                    </div>
+                    </Container>
                   }
-                  <div>
+
+                  <div ref={parent}>
                     {openCreateReview && 
                       <div
                         style={{
@@ -446,16 +435,15 @@ export default function PlaceName() {
                           boxShadow: '0px 0px 15px #f0f0f0',
                           borderRadius: '10px',
                           marginTop: '0.5em',
-                          animation:`${popOut} 0.5s`
                         }}
                       >
                         <StaticGrid gap={'0.25em'}>
                           <h3>{hasReviewed ? '内容を更新':'新規レビュー'}</h3>
                           <Input
-                            value={titleInput}
+                            value={titleRatingInput}
                             onChange={(e)=> {
                               typeSound();
-                              setTitleInput(e.target.value)
+                              setTitleRatingInput(e.target.value)
                             }}
                             placeholder={'レビュータイトル'}
                           />
@@ -492,21 +480,20 @@ export default function PlaceName() {
                             />
                           </StaticGrid>
                           <TextArea
-                            value={descriptionInput}
+                            value={descriptionRatingInput}
                             onChange={(e)=> {
                               typeSound();
-                              setDescriptionInput(e.target.value)
+                              setDescriptionRatingInput(e.target.value)
                             }}
                             placeholder={'行って感じた事、評価項目に写らない場所の良さ等。'}
                           />
-                          {titleInput && descriptionInput &&
+                          {titleRatingInput && descriptionRatingInput &&
                             <AlignItems justifyContent={'center'}>
                               {hasReviewed ?
                                 <Button
                                   iconPosition={'right'}
-                                  icon={<VscSave/>}
+                                  icon={<FiSave/>}
                                   onClick={()=>{
-                                    buttonSound();
                                     updateReview();
                                     setOpenCreateReview(false);
                                     getReviews();
@@ -516,9 +503,8 @@ export default function PlaceName() {
                                 </Button>:
                                 <Button
                                   iconPosition={'right'}
-                                  icon={<VscSave/>}
+                                  icon={<FiSave/>}
                                   onClick={()=>{
-                                    buttonSound();
                                     publishReview();
                                     setOpenCreateReview(false);
                                     getReviews();
@@ -533,6 +519,8 @@ export default function PlaceName() {
                       </div>
                     }
                   </div>
+
+
                   {reviewData && reviewData.length > 0 && reviewData.map((review) =>{
                     return (
                       <Review
@@ -553,7 +541,7 @@ export default function PlaceName() {
               </StaticGrid>
             </div>
           </div>
-        </div>
+        </MainBody>
       }
     </>
   )

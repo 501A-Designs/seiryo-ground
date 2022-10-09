@@ -1,12 +1,13 @@
 import React from 'react'
 import { createClient } from 'contentful'
 import UpdatePostThumbNail from '../../lib/UpdatePostThumbNail'
-import Button from '../../lib/Button'
+import Button from '../../lib/button/Button'
 import { useRouter } from 'next/router'
 import { isBrowser } from 'react-device-detect';
 import StaticGrid from '../../lib/alignment/StaticGrid'
-import { buttonSound } from '../../lib/ux/audio'
 import AlignItems from '../../lib/alignment/AlignItems'
+import { FiArrowLeft } from 'react-icons/fi'
+import MainBody from '../../lib/component/MainBody'
 
 export async function getStaticProps(){
   const client = createClient({
@@ -27,9 +28,7 @@ export default function News({sgPosts}) {
   const router = useRouter();
 
   return (
-    <div
-      className={'pagePadding'}
-    >
+    <MainBody>
       <div className={'stickySide'}>
         <div
           style={{
@@ -45,7 +44,13 @@ export default function News({sgPosts}) {
           }}
         >
           <AlignItems spaceBetween={true} margin={'0.5em 0 0 0'}>
-            <Button onClick={()=> {buttonSound(); router.push('/')}}>メインに戻る</Button>
+            <Button
+              iconPosition={'left'}
+              icon={<FiArrowLeft/>}
+              onClick={()=> {router.push('/')}}
+            >
+              メインに戻る
+            </Button>
           </AlignItems>
           <h2
             style={{margin:'1em 0 0 0'}}
@@ -69,6 +74,6 @@ export default function News({sgPosts}) {
           })}
         </StaticGrid>
       </div>
-    </div>
+    </MainBody>
   )
 }
