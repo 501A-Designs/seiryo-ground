@@ -119,40 +119,40 @@ main{
   .landingPagePadding{
     padding: 0% 2.5%;
   }
-  .pagePadding{
+  /* .pagePadding{
     padding: 0% 2.5%;
-	}
-  .stickySide{
+	} */
+  /* .stickySide{
     display: grid;
     grid-template-columns:1fr;
     gap:0;
-  }
+  } */
 }
 @media screen and (max-width: 900px) and (min-width: 501px) {
   .landingPagePadding{
     padding: 0% 2%;
   }
-  .pagePadding{
+  /* .pagePadding{
     padding: 0% 10%;
-  }
-  .stickySide{
+  } */
+  /* .stickySide{
     display: flex;
     align-items: flex-start;
     gap:1em;
-  }
+  } */
 }
 @media screen and (max-width: 2000px) and (min-width: 901px) {
   .landingPagePadding{
     padding: 0% 5%;
   }
-  .pagePadding{
+  /* .pagePadding{
     padding: 0% 15%;
-  }
-  .stickySide{
+  } */
+  /* .stickySide{
     display: flex;
     align-items: flex-start;
     gap:1.5em;
-  }
+  } */
 }
 
 p{
