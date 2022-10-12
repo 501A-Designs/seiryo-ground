@@ -22,8 +22,6 @@ import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 
 import End from '../lib/End'
 
-import FetchSinglePlace from '../lib/FetchSinglePlace'
-
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
 import { useAutoAnimate } from '@formkit/auto-animate/react'
@@ -44,10 +42,12 @@ import { ClipLoader } from 'react-spinners'
 import { popOut } from '../lib/ux/keyframes'
 import MainBody from '../lib/component/MainBody'
 import GettingStartedModal from '../lib/landing-page/GettingStartedModal'
-import StickyAlign from '../lib/alignment/StickyAlign'
 import RightPannel from '../lib/landing-page/RightPannel'
+import MainAlign from '../lib/alignment/MainAlign'
+import { styled } from '../stitches.config'
 
 export default function Home() {
+  let masonaryGrid = {350: 1, 750: 2, 900: 3, 1200:4}
   const router = useRouter();
 
   const [parent] = useAutoAnimate();
@@ -101,7 +101,6 @@ export default function Home() {
       "&:hover": {
         backgroundColor: 'var(--sgLightGray)',
         cursor: 'pointer',
-        // borderColor: "var(--sgLightGray)"
       }
     }),
     singleValue: (provided, state) => {
@@ -110,7 +109,16 @@ export default function Home() {
       return { ...provided, opacity, transition };
     }
   }
-  
+
+  const Heading = styled('h1',{
+    margin:'0 0 0.2em 0',
+    width:'fit-content',
+    fontFamily:'$sgFont1',
+    fontWeight: '700'
+  })
+  const PaddingContainer = styled('section',{
+    padding:'1em'
+  })
 
 
   return (
@@ -135,20 +143,22 @@ export default function Home() {
         }}
       />
 
-      <StickyAlign>
+      <MainAlign>
         <LeftPannel user={user}>
           {!user &&
             <Button
+              color='transparent'
               iconPosition={'left'}
               icon={<FiLogIn/>}
               onClick={()=>{
                 signInWithGoogle();
               }}
             >
-              Googleでログイン
+              ログイン
             </Button>
           }
           <Button
+            color='transparent'
             iconPosition={'left'}
             icon={<FiCheckCircle/>}
             onClick={()=>{
@@ -158,15 +168,17 @@ export default function Home() {
             ニュース
           </Button>
           <Button
+            color='transparent'
             iconPosition={'left'}
             icon={<FiInfo/>}
             onClick={()=>{
               router.push('/about');
             }}
           >
-            清涼広場について
+            清涼広場とは
           </Button>
           <Button
+            color='transparent'
             iconPosition={'left'}
             icon={<FiGithub/>}
             onClick={()=>{
@@ -177,6 +189,7 @@ export default function Home() {
           </Button>
           {user &&
             <Button
+              color='transparent'
               iconPosition={'left'}
               icon={<FiLogOut/>}
               onClick={()=>{
@@ -194,11 +207,11 @@ export default function Home() {
               <WelcomeHeader/>
               <DistortionCarousel
                 images={[
-                  '/blue-sky.jpg',
                   '/mountain-green.jpg',
+                  '/sg-mountain2.png',
+                  '/blue-sky.jpg',
                   '/sg-mountain.png',
                   '/open-nakameguro.jpg',
-                  '/sg-mountain2.png',
                 ]}
                 displacmentImage={'https://raw.githubusercontent.com/robin-dela/hover-effect/master/images/heightMap.png'}
                 speed={0.8}
@@ -211,15 +224,13 @@ export default function Home() {
               </CreatePlaceFormContainer>
             }
 
-            <StaticGrid gap={'0.7em'}>
-              <AlignItems spaceBetween>
-                <h2 style={{margin:'0', width:'fit-content'}}>
-                  More than 0 likes
-                </h2>
-              </AlignItems>
-              <div ref={parent}>
+            <PaddingContainer ref={parent}>
+              <StaticGrid gap={'0.7em'}>
+                <AlignItems spaceBetween>
+                  <Heading>More than 0 likes</Heading>
+                </AlignItems>
                 {placesCollection && <ResponsiveMasonry
-                  columnsCountBreakPoints={{350: 1, 750: 2, 900: 3, 1200:4,1500:6}}
+                  columnsCountBreakPoints={masonaryGrid}
                 >
                   <Masonry gutter={'0.25em'}>
                     {placesCollection.docs.map(doc => {
@@ -237,74 +248,65 @@ export default function Home() {
                   </Masonry>
                 </ResponsiveMasonry>}
                 {placeCollectionLoading && <Container><ClipLoader color="black"/></Container>}
-              </div>
-            </StaticGrid>
+              </StaticGrid>
+            </PaddingContainer>
 
-            {/* <h3 style={{margin:'0 0.2em 0 0'}}>他の場所</h3> */}
             {/* Filter Section */}
-            <StaticGrid gap={'0.7em'}>
-              <AlignItems spaceBetween>
-                <AlignItems gap={'0.5em'}>
-                  <h2 style={{margin:'0 0.2em 0 0'}}>Filter: </h2>
-                  <Select
-                    styles={selectStyle}
-                    options={prefectureData}
-                    components={{ DropdownIndicator:() => null, IndicatorSeparator:() => null }}
-                    onChange={(e)=>{
-                      selectSound();
-                      setPrefectureInput(e.value);
-                    }}
-                    placeholder={prefectureInput ? prefectureInput:'都道府県を選択'}
-                  />
+            <PaddingContainer>
+              <StaticGrid gap={'0.7em'}>
+                <AlignItems spaceBetween>
+                  <AlignItems gap={'0.5em'}>
+                    <Heading>Filter: </Heading>
+                    <Select
+                      styles={selectStyle}
+                      options={prefectureData}
+                      components={{ DropdownIndicator:() => null, IndicatorSeparator:() => null }}
+                      onChange={(e)=>{
+                        selectSound();
+                        setPrefectureInput(e.value);
+                      }}
+                      placeholder={prefectureInput ? prefectureInput:'都道府県を選択'}
+                    />
+                  </AlignItems>
+                  {filteredPlaces && filteredPlaces.docs.length > 0 && <Heading>合計{filteredPlaces.docs.length}カ所</Heading>}
                 </AlignItems>
-                {filteredPlaces && filteredPlaces.docs.length > 0 && <h3 style={{margin:0}}>合計{filteredPlaces.docs.length}カ所</h3>}
-              </AlignItems>
-              <div ref={parent}>
-                {filteredPlaces && filteredPlaces.docs.length > 0 ?
-                  <ResponsiveMasonry columnsCountBreakPoints={{350: 1, 750: 2, 900: 3, 1200:4,1500:6}}>
-                    <Masonry gutter={'0.25em'}>
-                      {filteredPlaces.docs.map(doc => {
-                        return (
-                          <PostThumbNail
-                            key={doc.id}
-                            id={doc.id}
-                            title={doc.data().name}
-                            type={doc.data().type}
-                          />
-                        )
-                      })}
-                    </Masonry>
-                  </ResponsiveMasonry>:
-                  <>
-                    {!filteredPlacesLoading &&
-                      <Container>
-                        <p>{prefectureInput}にある場所は現在何も見つかりません。</p>
-                      </Container>
-                    }
-                  </>
-                }
-                {filteredPlacesLoading && <Container><ClipLoader color="black"/></Container>}
-              </div>
-            </StaticGrid>
+                <div ref={parent}>
+                  {filteredPlaces && filteredPlaces.docs.length > 0 ?
+                    <ResponsiveMasonry columnsCountBreakPoints={masonaryGrid}>
+                      <Masonry gutter={'0.25em'}>
+                        {filteredPlaces.docs.map(doc => {
+                          return (
+                            <PostThumbNail
+                              key={doc.id}
+                              id={doc.id}
+                              title={doc.data().name}
+                              type={doc.data().type}
+                            />
+                          )
+                        })}
+                      </Masonry>
+                    </ResponsiveMasonry>:
+                    <>
+                      {!filteredPlacesLoading &&
+                        <Container>
+                          <p>{prefectureInput}にある場所は現在何も見つかりません。</p>
+                        </Container>
+                      }
+                    </>
+                  }
+                  {filteredPlacesLoading && <Container><ClipLoader color="black"/></Container>}
+                </div>
+              </StaticGrid>
+            </PaddingContainer>
 
             {/* All Locations */}
-            <StaticGrid gap={'0.7em'}>
-              <AlignItems spaceBetween>
-                <h2 style={{margin:'0', width:'fit-content'}}>
-                  All Locations
-                </h2>
-                {/* <Button
-                  onClick={()=> {
-                    buttonSound();
-                    router.push('/fullmap')
-                  }}
-                >
-                  地図で探す
-                </Button> */}
-              </AlignItems>
-              <div ref={parent}>
+            <PaddingContainer>
+              <StaticGrid gap={'0.7em'}>
+                <AlignItems spaceBetween>
+                  <Heading>All Locations</Heading>
+                </AlignItems>
                 {placesCollection && <ResponsiveMasonry
-                  columnsCountBreakPoints={{350: 1, 750: 2, 900: 3, 1200:4,1500:6}}
+                  columnsCountBreakPoints={masonaryGrid}
                 >
                   <Masonry
                     gutter={'0.25em'}
@@ -323,22 +325,28 @@ export default function Home() {
                   </Masonry>
                 </ResponsiveMasonry>}
                 {placeCollectionLoading && <Container><ClipLoader color="black"/></Container>}
-              </div>
-            </StaticGrid>
+              </StaticGrid>
+            </PaddingContainer>
 
-            <Button
-              iconPosition={'left'}
-              icon={<FiCornerLeftUp/>}
-              onClick={()=>{scroll.scrollToTop();}}
-            >
-              上へ戻る
-            </Button>
-            <End/>
+            
+            <AlignItems justifyContent={'center'}>
+              <Button
+                color="white"
+                iconPosition={'left'}
+                icon={<FiCornerLeftUp/>}
+                onClick={()=>{scroll.scrollToTop();}}
+              >
+                上へ戻る
+              </Button>
+            </AlignItems>
+            <End>
+              おわり。
+              <br/>
+              The End.
+            </End>
           </StaticGrid>
         </RightPannel>
-      </StickyAlign>
-
-
+      </MainAlign>
     </MainBody>
   )
 }

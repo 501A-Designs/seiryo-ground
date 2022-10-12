@@ -1,11 +1,20 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Shippori+Antique&family=Shippori+Antique+B1&display=swap'); */
-/* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Antique+B1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Murecho&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap');
+
+
+
 
 :root{
-  --sgLightGray:rgb(244, 244, 244);
-  --sgMediumGray:rgb(238, 238, 238);
-  --sgGray:rgb(230, 230, 230);
+  --sgGray1:rgb(248, 248, 248);
+  --sgGray2:rgb(238, 238, 238);
+  --sgGray3:rgb(230, 230, 230);
 }
+
+/* p{
+  font-size:0.8em;
+} */
 
 html,
 body {
@@ -15,14 +24,15 @@ body {
 
 canvas{
   border-radius: 15px;
+  width: auto;
 }
 
-* {
-  font-family: 'Shippori Antique', sans-serif;
+/* * {
+  font-family:
   font-weight: normal;
   letter-spacing:-0.03em;
   box-sizing: border-box;
-}
+} */
 
 h1,
 h2,
@@ -33,12 +43,12 @@ h6 {
   user-select: none;
 }
 
-h1{
+/* h1{
   font-size:3em;
 }
 h2{
   font-size:2em;
-}
+} */
 
 a {
   color: inherit;
@@ -51,28 +61,6 @@ iframe{
   border-radius: 10px;
 }
 
-table {
-  border-collapse: collapse;
-  border-color: black;
-  border: none;
-  overflow-x: scroll;
-  color:black;
-}
-
-th,td {
-  padding: 0.5em 1em;
-}
-
-th {
-  background-color:  white;
-  font-weight: bold;
-  border:1px solid black;
-}
-
-td {
-  border:1px solid black;
-}
-
 a{
   font-size: 0.9em;
   text-decoration: underline;
@@ -82,6 +70,8 @@ a:hover{
   text-decoration-style: none;
 }
 
+
+/* GRID */
 .grid-2fr-1fr{
   display: grid;  
   gap: 1em;
@@ -111,58 +101,21 @@ a:hover{
 	}
 }
 
-main{
-  padding:5%;
-}
 
 @media screen and (max-width: 500px) and (min-width: 0px) {
   .landingPagePadding{
     padding: 0% 2.5%;
   }
-  /* .pagePadding{
-    padding: 0% 2.5%;
-	} */
-  /* .stickySide{
-    display: grid;
-    grid-template-columns:1fr;
-    gap:0;
-  } */
 }
 @media screen and (max-width: 900px) and (min-width: 501px) {
   .landingPagePadding{
     padding: 0% 2%;
   }
-  /* .pagePadding{
-    padding: 0% 10%;
-  } */
-  /* .stickySide{
-    display: flex;
-    align-items: flex-start;
-    gap:1em;
-  } */
 }
 @media screen and (max-width: 2000px) and (min-width: 901px) {
   .landingPagePadding{
     padding: 0% 5%;
   }
-  /* .pagePadding{
-    padding: 0% 15%;
-  } */
-  /* .stickySide{
-    display: flex;
-    align-items: flex-start;
-    gap:1.5em;
-  } */
-}
-
-p{
-  font-size:0.8em;
-}
-
-input[type="text"] {
-  padding:1em;
-  border-radius: 5px;
-  outline: none;
 }
 
 input[type="range"] {

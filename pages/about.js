@@ -12,7 +12,7 @@ export default function About() {
   return (
     <MainBody>
       <div style={{display:'flex',justifyContent: 'center',flexDirection: 'column',alignItems: 'center',marginTop: '5%'}}>
-        <Image src={sgCenteredLogo} width={200} height={160}/>
+        <Image src={sgCenteredLogo} width={200} height={200}/>
         <div style={{marginBottom:'1.5em'}}>
           <p style={{textAlign: 'center', maxWidth:'500px'}}>ご興味を持ってくださりありがとうございます。</p>
           <p style={{textAlign: 'left', maxWidth:'500px'}}>
@@ -22,16 +22,12 @@ export default function About() {
             清涼広場にログインしたユーザー様は具体的に、新しい場所の投稿そして既に投稿されている場所それぞれにレビューを一つ残すことが出来ます。現段階では日本にある場所のみの投稿をお願いしております。また、SEIRYO Photographerとして応募すれば本サイトのレビューページにて写真が展示されます。是非、写真を撮るのが好きな方は応募してみてください。
             <br/>
             <br/>
-            また、清涼広場は現在Eminentデザイングループより管理されており、501Aにより開発・プロデュースされているサイトであります。
-            <br/>
-            <br/>
-            Managed By Eminent, a Design Nerd Duo.
-            <br/>
             Designed & Produced by 501A.
           </p>
         </div>
         <AlignItems>
           <Button
+            color="transparent"
             iconPosition={'left'}
             icon={<FiArrowLeft/>}
             onClick={()=> {
@@ -41,6 +37,7 @@ export default function About() {
             戻る
           </Button>
           <Button
+            color="transparent"
             iconPosition={'right'}
             icon={<FiExternalLink/>}
             onClick={()=> {

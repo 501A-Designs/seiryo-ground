@@ -11,11 +11,10 @@ import Rating from '../../lib/Rating'
 import StaticGrid from '../../lib/alignment/StaticGrid'
 
 import LoadingBar from 'react-top-loading-bar';
-import Review from '../../lib/Review'
+import Review from '../../lib/place-page/Review'
 import Input from '../../lib/Input'
 import TextArea from '../../lib/TextArea'
 import End from '../../lib/End'
-import NoReviews from '../../lib/NoReviews'
 
 import Button from '../../lib/button/Button'
 import TypeButton from '../../lib/button/TypeButton'
@@ -314,9 +313,10 @@ export default function PlaceName() {
         <MainBody>
           <AlignItems spaceBetween={true} margin={'0.5em 0 0 0'}>
             <Button
-              onClick={()=> {router.push('/');}}
+              color='transparent'
               iconPosition={'left'}
               icon={<FiArrowLeft/>}
+              onClick={()=> {router.push('/');}}
             >
               戻る
             </Button>
@@ -329,14 +329,14 @@ export default function PlaceName() {
                 >
                   ページを編集
                 </Button> */}
-
                 <Button
+                  color='transparent'
+                  iconPosition={'left'}
+                  icon={<FiHeart/>}
                   onClick={()=> {
                     !liked && celebrationSound();
                     liked ? removeLike():addLike()
                   }}
-                  iconPosition={'left'}
-                  icon={<FiHeart/>}
                 >
                   {liked ? 'いいねを外す':'いいね'}
                 </Button>
@@ -344,9 +344,12 @@ export default function PlaceName() {
             }
           </AlignItems>
           <StaticGrid>
-            <h2 style={{marginBottom:'0.5em'}}>{placeData.name}</h2>
+            <h1 style={{marginBottom:'0.5em'}}>{placeData.name}</h1>
             <AlignItems spaceBetween={true}>
-              <TypeBadge type={placeData.type}/>
+              <TypeBadge
+                width={'long'}
+                type={placeData.type}
+              />
               {placeData.officialSite && 
                 <a
                   href={placeData.officialSite}
@@ -401,7 +404,7 @@ export default function PlaceName() {
                   {user ? 
                     <AlignItems justifyContent={'center'}>
                       <Button
-                        fill
+                        color='black'
                         iconPosition={'left'}
                         icon={openCreateReview ? <FiX/>:<>{hasReviewed ? <FiRefreshCw/>:<FiPlus/>}</>}
                         onClick={()=> {
@@ -416,7 +419,7 @@ export default function PlaceName() {
                       <p>ログインしてアカウントを作成すると、レビューや場所を清涼広場上に投稿する事ができます！</p>
                       {isBrowser ? 
                         <Button
-                          fill
+                          color='black'
                           onClick={()=>router.push('/')}
                         >
                           メインページから会員登録
@@ -430,7 +433,7 @@ export default function PlaceName() {
                     {openCreateReview && 
                       <div
                         style={{
-                          border: '1px solid var(--sgGray)',
+                          border: '1px solid $sgGray1',
                           padding: '1em',
                           boxShadow: '0px 0px 15px #f0f0f0',
                           borderRadius: '10px',
@@ -491,6 +494,7 @@ export default function PlaceName() {
                             <AlignItems justifyContent={'center'}>
                               {hasReviewed ?
                                 <Button
+                                  color='black'
                                   iconPosition={'right'}
                                   icon={<FiSave/>}
                                   onClick={()=>{
@@ -502,6 +506,7 @@ export default function PlaceName() {
                                   レビューの内容を更新
                                 </Button>:
                                 <Button
+                                  color='black'
                                   iconPosition={'right'}
                                   icon={<FiSave/>}
                                   onClick={()=>{
@@ -534,8 +539,16 @@ export default function PlaceName() {
                     )
                   })}
                   {reviewData && reviewData.length > 0 ? 
-                    <End/>:
-                    <NoReviews/>
+                    <End>
+                      おわり。
+                      <br/>
+                      The End.
+                    </End>:
+                    <End>
+                      レビューはありません。
+                      <br/>
+                      No reviews were written.
+                    </End>
                   }
                 </StaticGrid>
               </StaticGrid>
