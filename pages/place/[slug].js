@@ -35,6 +35,7 @@ import { useDocument } from 'react-firebase-hooks/firestore'
 import { ClipLoader, PuffLoader } from 'react-spinners'
 import Container from '../../lib/component/Container'
 import MainBody from '../../lib/component/MainBody'
+import CreateContainer from '../../lib/component/CreateContainer'
 
 export default function PlaceName() {
   const router = useRouter();
@@ -384,7 +385,7 @@ export default function PlaceName() {
                   <Rating
                     borderRadius={'5px 5px 10px 5px'}
                     rating={placeData.likes ? placeData.likes.length:0}
-                    description={'清涼広場上でのいいね数'}
+                    description={'いいね数'}
                     hideMax={true}
                   />
                 </StaticGrid>
@@ -399,8 +400,6 @@ export default function PlaceName() {
             <div style={{height:'fit-content'}}>
               <StaticGrid gap={'1em'}>
                 <StaticGrid gap={'0.5em'}>
-
-
                   {user ? 
                     <AlignItems justifyContent={'center'}>
                       <Button
@@ -431,15 +430,7 @@ export default function PlaceName() {
 
                   <div ref={parent}>
                     {openCreateReview && 
-                      <div
-                        style={{
-                          border: '1px solid $sgGray1',
-                          padding: '1em',
-                          boxShadow: '0px 0px 15px #f0f0f0',
-                          borderRadius: '10px',
-                          marginTop: '0.5em',
-                        }}
-                      >
+                      <CreateContainer>
                         <StaticGrid gap={'0.25em'}>
                           <h3>{hasReviewed ? '内容を更新':'新規レビュー'}</h3>
                           <Input
@@ -491,7 +482,10 @@ export default function PlaceName() {
                             placeholder={'行って感じた事、評価項目に写らない場所の良さ等。'}
                           />
                           {titleRatingInput && descriptionRatingInput &&
-                            <AlignItems justifyContent={'center'}>
+                            <AlignItems
+                              justifyContent={'center'}
+                              margin={'1em 0 0 0'}
+                            >
                               {hasReviewed ?
                                 <Button
                                   color='black'
@@ -521,7 +515,7 @@ export default function PlaceName() {
                             </AlignItems>
                           }
                         </StaticGrid>
-                      </div>
+                      </CreateContainer>
                     }
                   </div>
 

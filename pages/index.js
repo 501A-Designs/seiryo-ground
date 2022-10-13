@@ -79,6 +79,7 @@ export default function Home() {
       backgroundColor: state.isSelected ? 'black' : 'white',
       color: state.isSelected ? 'white' : 'black',
       padding: '0.5em 1em',
+      width: '100%',
       "&:hover": {
         cursor: 'pointer',
         background: "var(--sgLightGray)",
@@ -93,11 +94,11 @@ export default function Home() {
       border:'none',
       borderBottom: '1px solid var(--sgGray)',
       padding:'0em',
-      fontSize: '1.6em',
+      fontSize: '1.2em',
       outline: 'none',
       color: 'black',
       boxShadow: 'none',
-      width:'fit-content',
+      width:'100px',
       "&:hover": {
         backgroundColor: 'var(--sgLightGray)',
         cursor: 'pointer',
@@ -113,8 +114,6 @@ export default function Home() {
   const Heading = styled('h1',{
     margin:'0 0 0.2em 0',
     width:'fit-content',
-    fontFamily:'$sgFont1',
-    fontWeight: '700'
   })
   const PaddingContainer = styled('section',{
     padding:'1em'
@@ -247,7 +246,11 @@ export default function Home() {
                     })}
                   </Masonry>
                 </ResponsiveMasonry>}
-                {placeCollectionLoading && <Container><ClipLoader color="black"/></Container>}
+                {placeCollectionLoading && 
+                  <Container>
+                    <ClipLoader color="black"/>
+                  </Container>
+                }
               </StaticGrid>
             </PaddingContainer>
 
@@ -256,7 +259,7 @@ export default function Home() {
               <StaticGrid gap={'0.7em'}>
                 <AlignItems spaceBetween>
                   <AlignItems gap={'0.5em'}>
-                    <Heading>Filter: </Heading>
+                    <Heading>Filter:</Heading>
                     <Select
                       styles={selectStyle}
                       options={prefectureData}
