@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { useState,useEffect } from 'react'
 import AlignItems from '../../lib/alignment/AlignItems'
@@ -30,9 +29,8 @@ import Head from 'next/head'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import Modal from '../../lib/component/Modal'
 import { FiArrowLeft, FiEdit, FiHeart, FiPlus, FiRefreshCw, FiSave, FiUser, FiX } from 'react-icons/fi'
-import { popOut } from '../../lib/ux/keyframes'
 import { useDocument } from 'react-firebase-hooks/firestore'
-import { ClipLoader, PuffLoader } from 'react-spinners'
+import { ClipLoader } from 'react-spinners'
 import Container from '../../lib/component/Container'
 import MainBody from '../../lib/component/MainBody'
 import CreateContainer from '../../lib/component/CreateContainer'
@@ -345,7 +343,15 @@ export default function PlaceName() {
             }
           </AlignItems>
           <StaticGrid>
-            <h1 style={{marginBottom:'0.5em'}}>{placeData.name}</h1>
+            <h1
+              style={{
+                marginBottom:'0.5em',
+                fontWeight: '500',
+                letterSpacing: '-1.5px'
+              }}
+            >
+              {placeData.name}
+            </h1>
             <AlignItems spaceBetween={true}>
               <TypeBadge
                 width={'long'}
@@ -413,7 +419,10 @@ export default function PlaceName() {
                         {openCreateReview ? '閉じる':<>{hasReviewed ? '書いたレビューを編集':'レビューを書く'}</>}
                       </Button>
                     </AlignItems>:
-                    <Container>
+                    <Container
+                      type='standard'
+                      alignment='center'
+                    >
                       <h4>ログインされておりません。</h4>
                       <p>ログインしてアカウントを作成すると、レビューや場所を清涼広場上に投稿する事ができます！</p>
                       {isBrowser ? 

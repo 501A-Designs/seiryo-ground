@@ -1,8 +1,6 @@
 import React, {useState,useEffect} from 'react'
 import Head from 'next/head'
 import AlignItems from '../lib/alignment/AlignItems'
-import styles from '../styles/Home.module.css'
-import logo from '../public/sg-banner-logo.png'
 import PostThumbNail from '../lib/PostThumbNail'
 import Button from '../lib/button/Button'
 
@@ -21,7 +19,6 @@ import DistortionCarousel from '../lib/landing-page/DistortionCarousel'
 import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 
 import End from '../lib/End'
-
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
 import { useAutoAnimate } from '@formkit/auto-animate/react'
@@ -29,22 +26,17 @@ import {notificationSound, selectSound, tapSound} from '../lib/ux/audio'
 import { signOut } from 'firebase/auth'
 import Select from 'react-select'
 import { prefectureData } from '../prefectureData'
-import ThisMonthPlace from '../lib/ThisMonthPlace'
 
 import LeftPannel from '../lib/landing-page/LeftPannel'
 import WelcomeHeader from '../lib/landing-page/WelcomeHeader'
 import CreatePlaceFormContainer from '../lib/landing-page/CreatePlaceFormContainer'
-import { scroll } from '../lib/ux/scroll'
 import { FiCheckCircle, FiCornerLeftUp, FiGithub, FiInfo, FiLogIn, FiLogOut } from 'react-icons/fi'
-import NoneFound from '../lib/component/Container'
 import Container from '../lib/component/Container'
 import { ClipLoader } from 'react-spinners'
-import { popOut } from '../lib/ux/keyframes'
 import MainBody from '../lib/component/MainBody'
 import GettingStartedModal from '../lib/landing-page/GettingStartedModal'
 import RightPannel from '../lib/landing-page/RightPannel'
 import MainAlign from '../lib/alignment/MainAlign'
-import { styled } from '../stitches.config'
 
 export default function Home() {
   let masonaryGrid = {350: 1, 750: 2, 900: 3, 1200:4}
@@ -79,7 +71,6 @@ export default function Home() {
       backgroundColor: state.isSelected ? 'black' : 'white',
       color: state.isSelected ? 'white' : 'black',
       padding: '0.5em 1em',
-      width: '100%',
       "&:hover": {
         cursor: 'pointer',
         background: "var(--sgLightGray)",
@@ -89,18 +80,20 @@ export default function Home() {
     control: base => ({
       ...base,
       // none of react-select's styles are passed to <Control />
-      width: '100%',
-      borderRadius:'5px 5px 0px 0px',
+      margin: '0',
+      borderRadius:'5px',
       border:'none',
       borderBottom: '1px solid var(--sgGray)',
       padding:'0em',
       fontSize: '1.2em',
       outline: 'none',
       color: 'black',
-      boxShadow: 'none',
       width:'100px',
+      boxShadow: 'none',
+      fontWeight: 'bold',
+      transform: 'translateY(-1.5px)',
+      // backgroundColor: 'rgb(248, 248, 248)',
       "&:hover": {
-        backgroundColor: 'var(--sgLightGray)',
         cursor: 'pointer',
       }
     }),
@@ -110,15 +103,6 @@ export default function Home() {
       return { ...provided, opacity, transition };
     }
   }
-
-  const Heading = styled('h1',{
-    margin:'0 0 0.2em 0',
-    width:'fit-content',
-  })
-  const PaddingContainer = styled('section',{
-    padding:'1em'
-  })
-
 
   return (
     <MainBody>
@@ -223,10 +207,10 @@ export default function Home() {
               </CreatePlaceFormContainer>
             }
 
-            <PaddingContainer ref={parent}>
+            <Container ref={parent}>
               <StaticGrid gap={'0.7em'}>
                 <AlignItems spaceBetween>
-                  <Heading>More than 0 likes</Heading>
+                  <h2>More than 0 likes</h2>
                 </AlignItems>
                 {placesCollection && <ResponsiveMasonry
                   columnsCountBreakPoints={masonaryGrid}
@@ -247,19 +231,22 @@ export default function Home() {
                   </Masonry>
                 </ResponsiveMasonry>}
                 {placeCollectionLoading && 
-                  <Container>
+                  <Container
+                    type='standard'
+                    alignment='center'
+                  >
                     <ClipLoader color="black"/>
                   </Container>
                 }
               </StaticGrid>
-            </PaddingContainer>
+            </Container>
 
             {/* Filter Section */}
-            <PaddingContainer>
+            <Container>
               <StaticGrid gap={'0.7em'}>
                 <AlignItems spaceBetween>
-                  <AlignItems gap={'0.5em'}>
-                    <Heading>Filter:</Heading>
+                  <AlignItems gap={'0em'}>
+                    <h2>Filter:</h2>
                     <Select
                       styles={selectStyle}
                       options={prefectureData}
@@ -271,7 +258,7 @@ export default function Home() {
                       placeholder={prefectureInput ? prefectureInput:'都道府県を選択'}
                     />
                   </AlignItems>
-                  {filteredPlaces && filteredPlaces.docs.length > 0 && <Heading>合計{filteredPlaces.docs.length}カ所</Heading>}
+                  {filteredPlaces && filteredPlaces.docs.length > 0 && <h3>合計{filteredPlaces.docs.length}カ所</h3>}
                 </AlignItems>
                 <div ref={parent}>
                   {filteredPlaces && filteredPlaces.docs.length > 0 ?
@@ -291,22 +278,32 @@ export default function Home() {
                     </ResponsiveMasonry>:
                     <>
                       {!filteredPlacesLoading &&
-                        <Container>
+                        <Container
+                          type='standard'
+                          alignment='center'
+                        >
                           <p>{prefectureInput}にある場所は現在何も見つかりません。</p>
                         </Container>
                       }
                     </>
                   }
-                  {filteredPlacesLoading && <Container><ClipLoader color="black"/></Container>}
+                  {filteredPlacesLoading &&
+                    <Container
+                      type='standard'
+                      alignment='center'
+                    >
+                      <ClipLoader color="black"/>
+                    </Container>
+                  }
                 </div>
               </StaticGrid>
-            </PaddingContainer>
+            </Container>
 
             {/* All Locations */}
-            <PaddingContainer>
+            <Container>
               <StaticGrid gap={'0.7em'}>
                 <AlignItems spaceBetween>
-                  <Heading>All Locations</Heading>
+                  <h2>All Locations</h2>
                 </AlignItems>
                 {placesCollection && <ResponsiveMasonry
                   columnsCountBreakPoints={masonaryGrid}
@@ -327,26 +324,16 @@ export default function Home() {
                     })}
                   </Masonry>
                 </ResponsiveMasonry>}
-                {placeCollectionLoading && <Container><ClipLoader color="black"/></Container>}
+                {placeCollectionLoading && 
+                  <Container
+                    type='standard'
+                    alignment='center'
+                  >
+                    <ClipLoader color="black"/>
+                  </Container>
+                }
               </StaticGrid>
-            </PaddingContainer>
-
-            
-            <AlignItems justifyContent={'center'}>
-              <Button
-                color="white"
-                iconPosition={'left'}
-                icon={<FiCornerLeftUp/>}
-                onClick={()=>{scroll.scrollToTop();}}
-              >
-                上へ戻る
-              </Button>
-            </AlignItems>
-            <End>
-              おわり。
-              <br/>
-              The End.
-            </End>
+            </Container>
           </StaticGrid>
         </RightPannel>
       </MainAlign>

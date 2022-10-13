@@ -15,7 +15,7 @@ export const {styled,getCssText} = createStitches({
     },
     fonts: {
       sgFont1: 'Noto Sans JP, Helvetica, sans-serif',
-      sgFont2: 'Shippori Antique B1',
+      sgFont2: 'Shippori Antique',
     },
     fontSizes: {
       1: '3em',
@@ -45,7 +45,7 @@ export const {styled,getCssText} = createStitches({
     },
   },
   media: {
-    mobile: '(min-width: 0px) and (max-width: 500px)',
-    desktop: '(min-width: 501px)',
+    mobile: '(min-width: 0px) and (max-width: 1000px)',
+    desktop: '(min-width: 1001px)',
   },
 });
