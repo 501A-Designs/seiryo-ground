@@ -4,6 +4,9 @@ import { useRouter } from 'next/router'
 import Button from '../../lib/button/Button'
 import AlignItems from '../../lib/alignment/AlignItems'
 import MainBody from '../../lib/component/MainBody'
+import { FiArrowLeft } from 'react-icons/fi'
+import StaticGrid from '../../lib/alignment/StaticGrid'
+import Grid from '../../lib/alignment/Grid'
 
 const client = createClient({
   space:process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,
@@ -46,13 +49,22 @@ export default function IndivisualNewsArticle({newsDetails}) {
   return (
     <MainBody>
       <AlignItems spaceBetween={true} margin={'0.5em 0 0 0'}>
-        <Button onClick={()=> {router.push('/news/')}}>ニュースページに戻る</Button>
+        <Button
+          color={'transparent'}
+          iconPosition={'left'}
+          icon={<FiArrowLeft/>}
+          onClick={()=> {router.push('/news/')}}
+        >
+          ニュースページに戻る
+        </Button>
       </AlignItems>
-      <h1>{newsDetailsData.title}</h1>
-      <time>{newsDetailsData.date}</time>
-      <p>
-        {newsDetailsData.description}
-      </p>
+      <StaticGrid>
+        <h1>{newsDetailsData.title}</h1>
+        <time>{newsDetailsData.date}</time>
+        <p>
+          {newsDetailsData.description}
+        </p>
+      </StaticGrid>
     </MainBody>
   )
 }

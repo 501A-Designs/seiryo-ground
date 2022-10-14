@@ -34,6 +34,7 @@ import { ClipLoader } from 'react-spinners'
 import Container from '../../lib/component/Container'
 import MainBody from '../../lib/component/MainBody'
 import CreateContainer from '../../lib/component/CreateContainer'
+import Grid from '../../lib/alignment/Grid'
 
 export default function PlaceName() {
   const router = useRouter();
@@ -231,77 +232,6 @@ export default function PlaceName() {
         progress={progress}
         onLoaderFinished={() => setProgress(0)}
       />
-      <Modal
-        modalState={modalIsOpen}
-        onClickBackdrop={() => setModalIsOpen(false)}
-      >
-        <AlignItems justifyContent={'center'}>
-          <h3>編集</h3>
-        </AlignItems>
-        <StaticGrid grid={'1fr 2fr'} gap={'0.5em'}>
-          <StaticGrid>
-            <StaticGrid gap={'0.25em'}>
-              <Input
-                placeholder={"場所の名前"}
-                // value={placeInput}
-                onChange={(e)=>{
-                  typeSound();
-                  // setPlaceInput(e.target.value)
-                }}
-              />
-              <TextArea
-                resize={'none'}
-                placeholder={"概要"}
-                // value={descriptionInput}
-                onChange={(e)=>{
-                  typeSound();
-                  // setDescriptionInput(e.target.value)
-                }}
-              />
-              <Input
-                placeholder={"公式サイト（無い場合は空欄）"}
-                // value={officialSiteInput}
-                onChange={(e)=>{
-                  typeSound();
-                  // setOfficialSiteInput(e.target.value)
-                }}
-              />
-            </StaticGrid>
-            <StaticGrid>
-              {typeButtonArray.map(color =>{
-                return <TypeButton
-                  key={color}
-                  type={color}
-                  onClick={()=>{
-                    selectSound();
-                    // setTypeInput(color);
-                  }}
-                  // selectedInput={typeInput}
-                />
-              })}
-            </StaticGrid>
-          </StaticGrid>
-          <StaticGrid gap={'0.25em'}>
-            <Input
-              placeholder={"場所（スペース無し英語表記｜例：koishikawa-korakuen）"}
-              // value={locationInput}
-              onChange={(e)=>{
-                typeSound();
-                // setLocationInput(e.target.value)
-              }}
-            />
-            <iframe
-              // src={`https://www.google.com/maps?output=embed&q=${locationInput}`}
-              width="100%"
-              height="250px"
-            />
-          </StaticGrid>
-        </StaticGrid>
-        <AlignItems justifyContent={'center'}>
-          <Button icon={<FiSave/>} iconPosition={'left'}>変更を保存</Button>
-        </AlignItems>
-      </Modal>
-
       {loadingRawPlaceData && 
         <AlignItems justifyContent={'center'} height={'100vh'}>
           <ClipLoader color="black"/>
@@ -310,6 +240,81 @@ export default function PlaceName() {
 
       {placeData &&
         <MainBody>
+          <Modal
+            modalState={modalIsOpen}
+            onClickBackdrop={() => setModalIsOpen(false)}
+          >
+            <AlignItems justifyContent={'center'}>
+              <h3>編集</h3>
+            </AlignItems>
+            <Grid grid={'oneTwo'} gap={'medium'}>
+              <Grid gap={'small'}>
+                <Grid gap={'extraSmall'}>
+                  <Input
+                    placeholder={"場所の名前"}
+                    // value={placeInput}
+                    onChange={(e)=>{
+                      typeSound();
+                      // setPlaceInput(e.target.value)
+                    }}
+                  />
+                  <TextArea
+                    placeholder={"概要"}
+                    // value={descriptionInput}
+                    onChange={(e)=>{
+                      typeSound();
+                      // setDescriptionInput(e.target.value)
+                    }}
+                  />
+                  <Input
+                    placeholder={"公式サイト（無い場合は空欄）"}
+                    // value={officialSiteInput}
+                    onChange={(e)=>{
+                      typeSound();
+                      // setOfficialSiteInput(e.target.value)
+                    }}
+                  />
+                </Grid>
+                <Grid gap={'extraSmall'}>
+                  {typeButtonArray.map(color =>{
+                    return <TypeButton
+                      key={color}
+                      type={color}
+                      onClick={()=>{
+                        selectSound();
+                        // setTypeInput(color);
+                      }}
+                      // selectedInput={typeInput}
+                    />
+                  })}
+                </Grid>
+              </Grid>
+              <Grid gap={'extraSmall'}>
+                <Input
+                  placeholder={"場所（スペース無し英語表記｜例：koishikawa-korakuen）"}
+                  // value={locationInput}
+                  onChange={(e)=>{
+                    typeSound();
+                    // setLocationInput(e.target.value)
+                  }}
+                />
+                <iframe
+                  // src={`https://www.google.com/maps?output=embed&q=${locationInput}`}
+                  width="100%"
+                  height="250px"
+                />
+              </Grid>
+            </Grid>
+            <AlignItems justifyContent={'center'}>
+              <Button
+                color={'black'}
+                iconPosition={'left'}
+                icon={<FiSave/>}
+              >
+                変更を保存
+              </Button>
+            </AlignItems>
+          </Modal>
           <AlignItems spaceBetween={true} margin={'0.5em 0 0 0'}>
             <Button
               color='transparent'
@@ -321,13 +326,14 @@ export default function PlaceName() {
             </Button>
             {user &&
               <AlignItems>
-                {/* <Button
+                <Button
+                  color="transparent"
                   onClick={()=> setModalIsOpen(true)}
                   iconPosition={'left'}
                   icon={<FiEdit/>}
                 >
                   ページを編集
-                </Button> */}
+                </Button>
                 <Button
                   color='transparent'
                   iconPosition={'left'}
@@ -342,7 +348,7 @@ export default function PlaceName() {
               </AlignItems>
             }
           </AlignItems>
-          <StaticGrid>
+          <Grid>
             <h1
               style={{
                 marginBottom:'0.5em',
@@ -367,34 +373,34 @@ export default function PlaceName() {
                 </a>
               }
             </AlignItems>
-          </StaticGrid>
-          <div className="grid-1fr-2fr">
-            <div>
+          </Grid>
+          <Grid grid={'oneTwo'} gap={'large'}>
+            <Grid>
               <p>{placeData.description}</p>
               {reviewData && reviewData.length > 0 &&
-                <StaticGrid grid={'1fr 1fr'}  gap={'0.25em'}>
+                <Grid grid={'duo'} gap={'extraSmall'}>
                   <Rating
-                    borderRadius={'10px 5px 5px 5px'}
+                    borderRadius={'topLeft'}
                     rating={round(averageOfDateRating)}
                     description={'デートスポット適正'}
                   />
                   <Rating
-                    borderRadius={'5px 10px 5px 5px'}
+                    borderRadius={'topRight'}
                     rating={round(averageOfAccessRating)}
                     description={'最寄駅からのアクセス'}
                   />
                   <Rating
-                    borderRadius={'5px 5px 5px 10px'}
+                    borderRadius={'bottomLeft'}
                     rating={round(averageOfManagementRating)}
                     description={'設備管理の状況'}
                   />
                   <Rating
-                    borderRadius={'5px 5px 10px 5px'}
+                    borderRadius={'bottomRight'}
                     rating={placeData.likes ? placeData.likes.length:0}
                     description={'いいね数'}
                     hideMax={true}
                   />
-                </StaticGrid>
+                </Grid>
               }
               <iframe
                 src={`https://www.google.com/maps?output=embed&q=${placeData.location}`}
@@ -402,161 +408,157 @@ export default function PlaceName() {
                 height="250px"
                 style={{marginTop:'0.5em'}}
               />
-            </div>
-            <div style={{height:'fit-content'}}>
-              <StaticGrid gap={'1em'}>
-                <StaticGrid gap={'0.5em'}>
-                  {user ? 
-                    <AlignItems justifyContent={'center'}>
-                      <Button
-                        color='black'
-                        iconPosition={'left'}
-                        icon={openCreateReview ? <FiX/>:<>{hasReviewed ? <FiRefreshCw/>:<FiPlus/>}</>}
-                        onClick={()=> {
-                          openCreateReview ? setOpenCreateReview(false):setOpenCreateReview(true)
-                        }}
-                      >
-                        {openCreateReview ? '閉じる':<>{hasReviewed ? '書いたレビューを編集':'レビューを書く'}</>}
-                      </Button>
-                    </AlignItems>:
-                    <Container
-                      type='standard'
-                      alignment='center'
+            </Grid>
+            <Grid gap={'small'}>
+              {user ? 
+                <AlignItems justifyContent={'center'}>
+                  <Button
+                    color='black'
+                    iconPosition={'left'}
+                    icon={openCreateReview ? <FiX/>:<>{hasReviewed ? <FiRefreshCw/>:<FiPlus/>}</>}
+                    onClick={()=> {
+                      openCreateReview ? setOpenCreateReview(false):setOpenCreateReview(true)
+                    }}
+                  >
+                    {openCreateReview ? '閉じる':<>{hasReviewed ? '書いたレビューを編集':'レビューを書く'}</>}
+                  </Button>
+                </AlignItems>:
+                <Container
+                  type='standard'
+                  alignment='center'
+                >
+                  <h4>ログインされておりません。</h4>
+                  <p>ログインしてアカウントを作成すると、レビューや場所を清涼広場上に投稿する事ができます！</p>
+                  {isBrowser ? 
+                    <Button
+                      color='black'
+                      onClick={()=>router.push('/')}
                     >
-                      <h4>ログインされておりません。</h4>
-                      <p>ログインしてアカウントを作成すると、レビューや場所を清涼広場上に投稿する事ができます！</p>
-                      {isBrowser ? 
-                        <Button
-                          color='black'
-                          onClick={()=>router.push('/')}
-                        >
-                          メインページから会員登録
-                        </Button>:
-                        <p>※モバイルからのログインは出来ないです。パソコンからアクセスして頂くとログインが可能となります。</p>
-                      }
-                    </Container>
+                      メインページから会員登録
+                    </Button>:
+                    <p>※モバイルからのログインは出来ないです。パソコンからアクセスして頂くとログインが可能となります。</p>
                   }
+                </Container>
+              }
 
-                  <div ref={parent}>
-                    {openCreateReview && 
-                      <CreateContainer>
-                        <StaticGrid gap={'0.25em'}>
-                          <h3>{hasReviewed ? '内容を更新':'新規レビュー'}</h3>
-                          <Input
-                            value={titleRatingInput}
-                            onChange={(e)=> {
-                              typeSound();
-                              setTitleRatingInput(e.target.value)
-                            }}
-                            placeholder={'レビュータイトル'}
-                          />
-                          <StaticGrid grid={'1fr 1fr 1fr'} gap={'0.25em'}>
-                            <DisplayRatingInput
-                              value={dateRatingInput}
-                              onChange={(e)=> {
-                                sliderSound();
-                                setDateRatingInput(e.target.value)
-                              }}
-                              maxValue={10}
-                              minValue={0}
-                              placeholder={'デートスポット適正'}
-                            />
-                            <DisplayRatingInput
-                              value={accessRatingInput}
-                              onChange={(e)=> {
-                                sliderSound();
-                                setAccessRatingInput(e.target.value)
-                              }}
-                              maxValue={10}
-                              minValue={0}
-                              placeholder={'最寄駅からのアクセス'}
-                            />
-                            <DisplayRatingInput
-                              value={managementRatingInput}
-                              onChange={(e)=> {
-                                sliderSound();
-                                setManagementRatingInput(e.target.value)
-                              }}
-                              maxValue={10}
-                              minValue={0}
-                              placeholder={'設備管理の状況'}
-                            />
-                          </StaticGrid>
-                          <TextArea
-                            value={descriptionRatingInput}
-                            onChange={(e)=> {
-                              typeSound();
-                              setDescriptionRatingInput(e.target.value)
-                            }}
-                            placeholder={'行って感じた事、評価項目に写らない場所の良さ等。'}
-                          />
-                          {titleRatingInput && descriptionRatingInput &&
-                            <AlignItems
-                              justifyContent={'center'}
-                              margin={'1em 0 0 0'}
-                            >
-                              {hasReviewed ?
-                                <Button
-                                  color='black'
-                                  iconPosition={'right'}
-                                  icon={<FiSave/>}
-                                  onClick={()=>{
-                                    updateReview();
-                                    setOpenCreateReview(false);
-                                    getReviews();
-                                  }}
-                                >
-                                  レビューの内容を更新
-                                </Button>:
-                                <Button
-                                  color='black'
-                                  iconPosition={'right'}
-                                  icon={<FiSave/>}
-                                  onClick={()=>{
-                                    publishReview();
-                                    setOpenCreateReview(false);
-                                    getReviews();
-                                  }}
-                                >
-                                  レビューを公開
-                                </Button>
-                              }
-                            </AlignItems>
-                          }
-                        </StaticGrid>
-                      </CreateContainer>
-                    }
-                  </div>
-
-
-                  {reviewData && reviewData.length > 0 && reviewData.map((review) =>{
-                    return (
-                      <Review
-                        key={review.id}
-                        title={review.data().title}
-                        dateRating={review.data().dateRating}
-                        accessRating={review.data().accessRating}
-                        managementRating={review.data().managementRating}
-                        description={review.data().description && review.data().description}
+              <div ref={parent}>
+                {openCreateReview && 
+                  <CreateContainer>
+                    <StaticGrid gap={'0.25em'}>
+                      <h3>{hasReviewed ? '内容を更新':'新規レビュー'}</h3>
+                      <Input
+                        value={titleRatingInput}
+                        onChange={(e)=> {
+                          typeSound();
+                          setTitleRatingInput(e.target.value)
+                        }}
+                        placeholder={'レビュータイトル'}
                       />
-                    )
-                  })}
-                  {reviewData && reviewData.length > 0 ? 
-                    <End>
-                      おわり。
-                      <br/>
-                      The End.
-                    </End>:
-                    <End>
-                      レビューはありません。
-                      <br/>
-                      No reviews were written.
-                    </End>
-                  }
-                </StaticGrid>
-              </StaticGrid>
-            </div>
-          </div>
+                      <StaticGrid grid={'1fr 1fr 1fr'} gap={'0.25em'}>
+                        <DisplayRatingInput
+                          value={dateRatingInput}
+                          onChange={(e)=> {
+                            sliderSound();
+                            setDateRatingInput(e.target.value)
+                          }}
+                          maxValue={10}
+                          minValue={0}
+                          placeholder={'デートスポット適正'}
+                        />
+                        <DisplayRatingInput
+                          value={accessRatingInput}
+                          onChange={(e)=> {
+                            sliderSound();
+                            setAccessRatingInput(e.target.value)
+                          }}
+                          maxValue={10}
+                          minValue={0}
+                          placeholder={'最寄駅からのアクセス'}
+                        />
+                        <DisplayRatingInput
+                          value={managementRatingInput}
+                          onChange={(e)=> {
+                            sliderSound();
+                            setManagementRatingInput(e.target.value)
+                          }}
+                          maxValue={10}
+                          minValue={0}
+                          placeholder={'設備管理の状況'}
+                        />
+                      </StaticGrid>
+                      <TextArea
+                        value={descriptionRatingInput}
+                        onChange={(e)=> {
+                          typeSound();
+                          setDescriptionRatingInput(e.target.value)
+                        }}
+                        placeholder={'行って感じた事、評価項目に写らない場所の良さ等。'}
+                      />
+                      {titleRatingInput && descriptionRatingInput &&
+                        <AlignItems
+                          justifyContent={'center'}
+                          margin={'1em 0 0 0'}
+                        >
+                          {hasReviewed ?
+                            <Button
+                              color='black'
+                              iconPosition={'right'}
+                              icon={<FiSave/>}
+                              onClick={()=>{
+                                updateReview();
+                                setOpenCreateReview(false);
+                                getReviews();
+                              }}
+                            >
+                              レビューの内容を更新
+                            </Button>:
+                            <Button
+                              color='black'
+                              iconPosition={'right'}
+                              icon={<FiSave/>}
+                              onClick={()=>{
+                                publishReview();
+                                setOpenCreateReview(false);
+                                getReviews();
+                              }}
+                            >
+                              レビューを公開
+                            </Button>
+                          }
+                        </AlignItems>
+                      }
+                    </StaticGrid>
+                  </CreateContainer>
+                }
+              </div>
+
+
+              {reviewData && reviewData.length > 0 && reviewData.map((review) =>{
+                return (
+                  <Review
+                    key={review.id}
+                    title={review.data().title}
+                    dateRating={review.data().dateRating}
+                    accessRating={review.data().accessRating}
+                    managementRating={review.data().managementRating}
+                    description={review.data().description && review.data().description}
+                  />
+                )
+              })}
+              {reviewData && reviewData.length > 0 ? 
+                <End>
+                  おわり。
+                  <br/>
+                  The End.
+                </End>:
+                <End>
+                  レビューはありません。
+                  <br/>
+                  No reviews were written.
+                </End>
+              }
+            </Grid>
+          </Grid>
         </MainBody>
       }
     </>

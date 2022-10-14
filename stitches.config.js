@@ -43,6 +43,13 @@ export const {styled,getCssText} = createStitches({
       speed3:'1s',
       speed4:'1.5s',
     },
+    space:{
+      extraSmall:'0.25em',
+      small:'0.5em',
+      medium:'1.0em',
+      large:'1.5em',
+      extraLarge:'2em',
+    }
   },
   media: {
     mobile: '(min-width: 0px) and (max-width: 1000px)',

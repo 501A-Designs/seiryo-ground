@@ -1,7 +1,7 @@
 import React, {useState,useEffect} from 'react'
 import Head from 'next/head'
 import AlignItems from '../lib/alignment/AlignItems'
-import PostThumbNail from '../lib/PostThumbNail'
+import PostThumbNail from '../lib/component/PostThumbNail'
 import Button from '../lib/button/Button'
 
 import { useRouter } from 'next/router'
@@ -37,6 +37,8 @@ import MainBody from '../lib/component/MainBody'
 import GettingStartedModal from '../lib/landing-page/GettingStartedModal'
 import RightPannel from '../lib/landing-page/RightPannel'
 import MainAlign from '../lib/alignment/MainAlign'
+import Rating from '../lib/Rating'
+import Grid from '../lib/alignment/Grid'
 
 export default function Home() {
   let masonaryGrid = {350: 1, 750: 2, 900: 3, 1200:4}
@@ -207,8 +209,35 @@ export default function Home() {
               </CreatePlaceFormContainer>
             }
 
+
+            <Container>
+              <Grid gap={'small'}>
+                <h2>Highlights</h2>
+                <Grid grid={'quad'} gap={'extraSmall'}>
+                  <Rating
+                    borderRadius={'left'}
+                    rating={'10'}
+                    description={'最寄駅からのアクセス'}
+                  />
+                  <Rating
+                    rating={'5'}
+                    description={'最寄駅からのアクセス'}
+                  />
+                  <Rating
+                    rating={'8'}
+                    description={'最寄駅からのアクセス'}
+                  />
+                  <Rating
+                    borderRadius={'right'}
+                    rating={'9'}
+                    description={'最寄駅からのアクセス'}
+                  />
+                </Grid>
+              </Grid>
+            </Container>
+
             <Container ref={parent}>
-              <StaticGrid gap={'0.7em'}>
+              <Grid gap={'small'}>
                 <AlignItems spaceBetween>
                   <h2>More than 0 likes</h2>
                 </AlignItems>
@@ -238,12 +267,12 @@ export default function Home() {
                     <ClipLoader color="black"/>
                   </Container>
                 }
-              </StaticGrid>
+              </Grid>
             </Container>
 
             {/* Filter Section */}
             <Container>
-              <StaticGrid gap={'0.7em'}>
+              <Grid gap={'small'}>
                 <AlignItems spaceBetween>
                   <AlignItems gap={'0em'}>
                     <h2>Filter:</h2>
@@ -296,7 +325,7 @@ export default function Home() {
                     </Container>
                   }
                 </div>
-              </StaticGrid>
+              </Grid>
             </Container>
 
             {/* All Locations */}

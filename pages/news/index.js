@@ -1,13 +1,13 @@
 import React from 'react'
 import { createClient } from 'contentful'
-import UpdatePostThumbNail from '../../lib/UpdatePostThumbNail'
+import NewsThumbnail from '../../lib/component/NewsThumbNail'
 import Button from '../../lib/button/Button'
 import { useRouter } from 'next/router'
-import { isBrowser } from 'react-device-detect';
 import StaticGrid from '../../lib/alignment/StaticGrid'
 import AlignItems from '../../lib/alignment/AlignItems'
 import { FiArrowLeft } from 'react-icons/fi'
 import MainBody from '../../lib/component/MainBody'
+import Grid from '../../lib/alignment/Grid'
 
 export async function getStaticProps(){
   const client = createClient({
@@ -29,42 +29,27 @@ export default function News({sgPosts}) {
 
   return (
     <MainBody>
-      <div className={'stickySide'}>
-        <div
-          style={{
-            maxWidth:`${isBrowser ? '300px':'400px'}`,
-            position: 'sticky',
-            top: '0px',
-            height: 'fit-content',
-            flexDirection: 'column',
-            justifyContent:'space-between',
-            backdropFilter: 'blur(16px)',
-            background: 'radial-gradient(86.36% 107.55% at 6.49% 12.32%,white 0%,rgba(255, 255, 255, 0.5) 100%)',
-            zIndex:10
-          }}
+      <AlignItems spaceBetween={true} margin={'0.5em 0 0 0'}>
+        <Button
+          color={'transparent'}
+          iconPosition={'left'}
+          icon={<FiArrowLeft/>}
+          onClick={()=> {router.push('/')}}
         >
-          <AlignItems spaceBetween={true} margin={'0.5em 0 0 0'}>
-            <Button
-              iconPosition={'left'}
-              icon={<FiArrowLeft/>}
-              onClick={()=> {router.push('/')}}
-            >
-              メインに戻る
-            </Button>
-          </AlignItems>
-          <h2
-            style={{margin:'1em 0 0 0'}}
-            className={'seiryoGroundFont'}
-          >
-            SG News
-          </h2>
-          <h4 style={{margin:0}}>SEIRYO GROUND NEWS</h4>
+          メインに戻る
+        </Button>
+      </AlignItems>
+      <Grid
+        grid={'oneTwo'}
+      >
+        <StaticGrid>
+          <h1>清涼 NEWS</h1>
           <p>清涼広場に関する新情報を徹底的に更新していきたいと思います。作成者は501Aです。</p>
-        </div>
+        </StaticGrid>
         <StaticGrid>
           {sgPosts.map(data =>{
             return(
-              <UpdatePostThumbNail
+              <NewsThumbnail
                 key={data.sys.id}
                 slug={data.fields.slug}
                 title={data.fields.title}
@@ -73,7 +58,7 @@ export default function News({sgPosts}) {
             )
           })}
         </StaticGrid>
-      </div>
+      </Grid>
     </MainBody>
   )
 }

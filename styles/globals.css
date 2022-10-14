@@ -5,34 +5,3 @@ body {
   padding: 0;
   margin: 0;
 }
-
-
-/* GRID */
-.grid-2fr-1fr{
-  display: grid;  
-  gap: 1em;
-  height: fit-content;
-}
-
-.grid-1fr-2fr{
-  display: grid;  
-  gap: 2em;
-  height: fit-content;
-}
-
-@media screen and (max-width: 900px) and (min-width: 0px) {
-  .grid-2fr-1fr{
-    grid-template-columns: 1fr;
-	}
-  .grid-1fr-2fr{
-    grid-template-columns: 1fr;
-	}
-}
-@media screen and (min-width: 901px) {
-  .grid-2fr-1fr{
-    grid-template-columns: 2fr 1fr;
-	}
-  .grid-1fr-2fr{
-    grid-template-columns: 1fr 2fr;
-	}
-}
