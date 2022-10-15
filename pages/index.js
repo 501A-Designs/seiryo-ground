@@ -274,7 +274,7 @@ export default function Home() {
               <Grid gap={'small'}>
                 <AlignItems spaceBetween>
                   <AlignItems gap={'0em'}>
-                    <h2>Filter:</h2>
+                    <h3>Filter:</h3>
                     <Select
                       styles={selectStyle}
                       options={prefectureData}

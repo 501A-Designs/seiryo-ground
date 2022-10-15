@@ -35,6 +35,10 @@ import Container from '../../lib/component/Container'
 import MainBody from '../../lib/component/MainBody'
 import CreateContainer from '../../lib/component/CreateContainer'
 import Grid from '../../lib/alignment/Grid'
+import SizeSelectContainer from '../../lib/button/SizeSelectContainer'
+import SizeSelect from '../../lib/button/SizeSelect'
+import BinaryToggle from '../../lib/button/BinaryToggle'
+import BinaryToggleContainer from '../../lib/button/BinaryToggleContainer'
 
 export default function PlaceName() {
   const router = useRouter();
@@ -158,6 +162,10 @@ export default function PlaceName() {
   const [descriptionRatingInput, setDescriptionRatingInput] = useState('');
 
   let timeNow = moment().format('MMMM Do YYYY, h:mm a');
+
+  const [sizeSelect, setSizeSelect] = useState('medium');
+  const [binaryToggle, setBinaryToggle] = useState(false)
+  const sizeButtonArray = ["small","medium","large",]
   const typeButtonArray = ["green","blue","red","purple",]
 
   const publishReview = async() =>{
@@ -244,52 +252,99 @@ export default function PlaceName() {
             modalState={modalIsOpen}
             onClickBackdrop={() => setModalIsOpen(false)}
           >
-            <AlignItems justifyContent={'center'}>
-              <h3>編集</h3>
+            <AlignItems justifyContent={'space-between'}>
+              <h3>この場所を編集</h3>
+              <Button
+                color={'black'}
+                iconPosition={'left'}
+                icon={<FiSave/>}
+              >
+                変更を保存
+              </Button>
             </AlignItems>
-            <Grid grid={'oneTwo'} gap={'medium'}>
-              <Grid gap={'small'}>
-                <Grid gap={'extraSmall'}>
-                  <Input
-                    placeholder={"場所の名前"}
-                    // value={placeInput}
-                    onChange={(e)=>{
-                      typeSound();
-                      // setPlaceInput(e.target.value)
-                    }}
-                  />
-                  <TextArea
-                    placeholder={"概要"}
-                    // value={descriptionInput}
-                    onChange={(e)=>{
-                      typeSound();
-                      // setDescriptionInput(e.target.value)
-                    }}
-                  />
-                  <Input
-                    placeholder={"公式サイト（無い場合は空欄）"}
-                    // value={officialSiteInput}
-                    onChange={(e)=>{
-                      typeSound();
-                      // setOfficialSiteInput(e.target.value)
-                    }}
-                  />
+            <Grid grid={'oneTwo'} gap={'small'}>
+              <Container type="white" height="fitContent">
+                <Grid gap={'small'}>
+                  <SizeSelectContainer
+                    hide
+                    currentState={sizeSelect}
+                  >
+                    {sizeButtonArray.map(size=>{
+                      return <SizeSelect
+                        name={size}
+                        currentState={sizeSelect}
+                        onClick={()=> {
+                          selectSound();
+                          setSizeSelect(size);
+                        }}
+                      />
+                    })}
+                  </SizeSelectContainer>
+                  <Container type="standard">
+                    <BinaryToggleContainer>
+                      <BinaryToggle
+                        currentState={binaryToggle}
+                        selected={binaryToggle === true}
+                        onClick={()=>{
+                          selectSound();
+                          setBinaryToggle(true)
+                        }}
+                      >
+                        有
+                      </BinaryToggle>
+                      <BinaryToggle
+                        currentState={binaryToggle}
+                        selected={binaryToggle === false}
+                        onClick={()=>{
+                          selectSound();
+                          setBinaryToggle(false)
+                        }}
+                      >
+                        無
+                      </BinaryToggle>
+                    </BinaryToggleContainer>
+                  </Container>
+                  <Grid>
+                    {typeButtonArray.map(color =>{
+                      return <TypeButton
+                        key={color}
+                        type={color}
+                        onClick={()=>{
+                          selectSound();
+                          // setTypeInput(color);
+                        }}
+                        // selectedInput={typeInput}
+                      />
+                    })}
+                  </Grid>
                 </Grid>
-                <Grid gap={'extraSmall'}>
-                  {typeButtonArray.map(color =>{
-                    return <TypeButton
-                      key={color}
-                      type={color}
-                      onClick={()=>{
-                        selectSound();
-                        // setTypeInput(color);
-                      }}
-                      // selectedInput={typeInput}
-                    />
-                  })}
-                </Grid>
-              </Grid>
+              </Container>
+
               <Grid gap={'extraSmall'}>
+                <Input
+                  placeholder={"場所の名前"}
+                  // value={placeInput}
+                  onChange={(e)=>{
+                    typeSound();
+                    // setPlaceInput(e.target.value)
+                  }}
+                />
+                <TextArea
+                  placeholder={"概要"}
+                  // value={descriptionInput}
+                  onChange={(e)=>{
+                    typeSound();
+                    // setDescriptionInput(e.target.value)
+                  }}
+                />
+                <Input
+                  placeholder={"公式サイト（無い場合は空欄）"}
+                  // value={officialSiteInput}
+                  onChange={(e)=>{
+                    typeSound();
+                    // setOfficialSiteInput(e.target.value)
+                  }}
+                />
                 <Input
                   placeholder={"場所（スペース無し英語表記｜例：koishikawa-korakuen）"}
                   // value={locationInput}
@@ -305,16 +360,8 @@ export default function PlaceName() {
                 />
               </Grid>
             </Grid>
-            <AlignItems justifyContent={'center'}>
-              <Button
-                color={'black'}
-                iconPosition={'left'}
-                icon={<FiSave/>}
-              >
-                変更を保存
-              </Button>
-            </AlignItems>
           </Modal>
+
           <AlignItems spaceBetween={true} margin={'0.5em 0 0 0'}>
             <Button
               color='transparent'
