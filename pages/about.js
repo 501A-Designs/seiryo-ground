@@ -11,7 +11,11 @@ export default function About() {
   const router = useRouter();
   return (
     <MainBody>
-      <div style={{display:'flex',justifyContent: 'center',flexDirection: 'column',alignItems: 'center',marginTop: '5%'}}>
+      <AlignItems
+        justifyContent={'center'}
+        flexDirection={'column'}
+        margin={'2em 0 0 0'}
+      >
         <Image src={sgCenteredLogo} width={200} height={200}/>
         <div style={{marginBottom:'1.5em'}}>
           <p style={{textAlign: 'center', maxWidth:'500px'}}>ご興味を持ってくださりありがとうございます。</p>
@@ -47,7 +51,7 @@ export default function About() {
             作者のウェブサイト
           </Button>
         </AlignItems>
-      </div>
+      </AlignItems>
     </MainBody>
   )
 }

@@ -28,7 +28,7 @@ import Head from 'next/head'
 
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import Modal from '../../lib/component/Modal'
-import { FiArrowLeft, FiEdit, FiHeart, FiPlus, FiRefreshCw, FiSave, FiUser, FiX } from 'react-icons/fi'
+import { FiArrowLeft, FiEdit, FiHeart, FiPlus, FiRefreshCw, FiSave, FiX } from 'react-icons/fi'
 import { useDocument } from 'react-firebase-hooks/firestore'
 import { ClipLoader } from 'react-spinners'
 import Container from '../../lib/component/Container'

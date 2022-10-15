@@ -18,7 +18,6 @@ import CreatePlaceForm from '../lib/landing-page/CreatePlaceForm'
 import DistortionCarousel from '../lib/landing-page/DistortionCarousel'
 import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 
-import End from '../lib/End'
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
 import { useAutoAnimate } from '@formkit/auto-animate/react'
