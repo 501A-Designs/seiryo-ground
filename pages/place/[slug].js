@@ -263,8 +263,12 @@ export default function PlaceName() {
               </Button>
             </AlignItems>
             <Grid grid={'oneTwo'} gap={'large'}>
-              <Container type="white" height="fitContent">
-                <Grid gap={'small'}>
+              <Grid gap={'small'}>
+                <Container
+                  type="white"
+                  height="fitContent"
+                  padding={'small'}
+                >
                   <SizeSelectContainer
                     hide
                     currentState={sizeSelect}
@@ -280,45 +284,45 @@ export default function PlaceName() {
                       />
                     })}
                   </SizeSelectContainer>
-                  <Container type="standard">
-                    <BinaryToggleContainer>
-                      <BinaryToggle
-                        currentState={binaryToggle}
-                        selected={binaryToggle === true}
-                        onClick={()=>{
-                          selectSound();
-                          setBinaryToggle(true)
-                        }}
-                      >
-                        有
-                      </BinaryToggle>
-                      <BinaryToggle
-                        currentState={binaryToggle}
-                        selected={binaryToggle === false}
-                        onClick={()=>{
-                          selectSound();
-                          setBinaryToggle(false)
-                        }}
-                      >
-                        無
-                      </BinaryToggle>
-                    </BinaryToggleContainer>
-                  </Container>
-                  <Grid>
-                    {typeButtonArray.map(color =>{
-                      return <TypeButton
-                        key={color}
-                        type={color}
-                        onClick={()=>{
-                          selectSound();
-                          // setTypeInput(color);
-                        }}
-                        // selectedInput={typeInput}
-                      />
-                    })}
-                  </Grid>
+                </Container>
+                <Container type="standard">
+                  <BinaryToggleContainer>
+                    <BinaryToggle
+                      currentState={binaryToggle}
+                      selected={binaryToggle === true}
+                      onClick={()=>{
+                        selectSound();
+                        setBinaryToggle(true)
+                      }}
+                    >
+                      有
+                    </BinaryToggle>
+                    <BinaryToggle
+                      currentState={binaryToggle}
+                      selected={binaryToggle === false}
+                      onClick={()=>{
+                        selectSound();
+                        setBinaryToggle(false)
+                      }}
+                    >
+                      無
+                    </BinaryToggle>
+                  </BinaryToggleContainer>
+                </Container>
+                <Grid>
+                  {typeButtonArray.map(color =>{
+                    return <TypeButton
+                      key={color}
+                      type={color}
+                      onClick={()=>{
+                        selectSound();
+                        // setTypeInput(color);
+                      }}
+                      // selectedInput={typeInput}
+                    />
+                  })}
                 </Grid>
-              </Container>
+              </Grid>
 
               <Grid gap={'extraSmall'}>
                 <Input

@@ -14,7 +14,7 @@ import CenterAll from '../lib/component/CenterAll';
 import Container from '../lib/component/Container';
 import MainBody from '../lib/component/MainBody'
 import { loadSound } from '../lib/ux/audio';
-import { popOut, rotateAndZoom, rotateIn, spin } from '../lib/ux/keyframes';
+import { popOut, rotateAndZoom, rotateInBottonLeft, spin } from '../lib/ux/keyframes';
 import { styled } from '../stitches.config';
 
 const Perspective = styled('div',{
@@ -56,7 +56,7 @@ const ProfileCard = styled('div',{
   border:'1px solid white',
   fontFamily: '$sgFont2',
   transition: '$speed1',
-  animation: `${rotateIn} 1s`,
+  animation: `${rotateInBottonLeft} 1s`,
   'img':{
     borderRadius: '$round',
     border: '1px solid $sgGray3',
