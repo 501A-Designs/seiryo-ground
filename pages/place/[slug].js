@@ -39,6 +39,8 @@ import SizeSelectContainer from '../../lib/button/SizeSelectContainer'
 import SizeSelect from '../../lib/button/SizeSelect'
 import BinaryToggle from '../../lib/button/BinaryToggle'
 import BinaryToggleContainer from '../../lib/button/BinaryToggleContainer'
+import { costButtonArray, sizeButtonArray, typeButtonArray } from '../../lib/button/buttonData'
+import CheckBox from '../../lib/button/CheckBox'
 
 export default function PlaceName() {
   const router = useRouter();
@@ -90,14 +92,30 @@ export default function PlaceName() {
     }
   }
 
+  console.log()
 
   const [placeInput, setPlaceInput] = useState('');
   const [locationInput, setLocationInput] = useState('');
-  const [prefectureInput, setPrefectureInput] = useState();
   const [descriptionInput, setDescriptionInput] = useState('');
-  const [typeInput, setTypeInput] = useState('');
   const [officialSiteInput, setOfficialSiteInput] = useState('');
 
+  const [sizeSelect, setSizeSelect] = useState('medium');
+  const [binaryToggle, setBinaryToggle] = useState(false)
+  const [typeInput, setTypeInput] = useState('');
+  const [costCheckBox, setCostCheckBox] = useState(['free']);
+
+  useEffect(() => {
+    if (placeData) {      
+      setPlaceInput(placeData.name);
+      setLocationInput(placeData.location);
+      setDescriptionInput(placeData.description);
+      setOfficialSiteInput(placeData.officialSite);
+      setSizeSelect(placeData.size);
+      setBinaryToggle(placeData.toilet);
+      setTypeInput(placeData.type);
+      setCostCheckBox(placeData.cost);
+    }
+  },[modalIsOpen])
   // const [published, setPublished] = useState(false);
   // const [newPlace, setNewPlace] = useState();
 
@@ -105,7 +123,6 @@ export default function PlaceName() {
     await updateDoc(collection(db, "places"), {
       name: placeInput,
       location: locationInput,
-      prefecture: prefectureInput,
       description: descriptionInput,
       editedBy:[{editedBy:user.uid}],
       type: typeInput,
@@ -162,11 +179,6 @@ export default function PlaceName() {
   const [descriptionRatingInput, setDescriptionRatingInput] = useState('');
 
   let timeNow = moment().format('MMMM Do YYYY, h:mm a');
-
-  const [sizeSelect, setSizeSelect] = useState('medium');
-  const [binaryToggle, setBinaryToggle] = useState(false)
-  const sizeButtonArray = ["small","medium","large",]
-  const typeButtonArray = ["green","blue","red","purple",]
 
   const publishReview = async() =>{
     await setDoc(doc(collection(db, `places/${placeId}/reviews/`), `${user && user.uid}`), {
@@ -309,56 +321,86 @@ export default function PlaceName() {
                     </BinaryToggle>
                   </BinaryToggleContainer>
                 </Container>
-                <Grid>
-                  {typeButtonArray.map(color =>{
-                    return <TypeButton
-                      key={color}
-                      type={color}
-                      onClick={()=>{
-                        selectSound();
-                        // setTypeInput(color);
-                      }}
-                      // selectedInput={typeInput}
-                    />
-                  })}
-                </Grid>
+                <Container
+                  type="white"
+                  height="fitContent"
+                >
+                  <Grid gap={'extraSmall'}>
+                    {typeButtonArray.map(color =>{
+                      return <TypeButton
+                        key={color}
+                        type={color}
+                        onClick={()=>{
+                          selectSound();
+                          setTypeInput(color);
+                        }}
+                        selectedInput={typeInput}
+                      />
+                    })}
+                  </Grid>
+                </Container>
+                <Container
+                  type="white"
+                  height="fitContent"
+                >
+                  <Grid gap={'extraSmall'}>
+                    {costButtonArray.map(name =>{
+                      return(
+                        <CheckBox
+                          checked={costCheckBox.some(element => element === name)}
+                          name={name}
+                          onClick={()=>
+                            {
+                              selectSound();
+                              costCheckBox.some(element => element === name) ?
+                              setCostCheckBox(prev => prev.filter(element => element !== name )):
+                              setCostCheckBox([...costCheckBox, name]);
+                            }
+                          }
+                        >
+                          {name}
+                        </CheckBox>
+                      )
+                    })}
+                  </Grid>
+                </Container>
               </Grid>
 
               <Grid gap={'extraSmall'}>
                 <Input
                   placeholder={"場所の名前"}
-                  // value={placeInput}
+                  value={placeInput}
                   onChange={(e)=>{
                     typeSound();
-                    // setPlaceInput(e.target.value)
+                    setPlaceInput(e.target.value)
                   }}
                 />
                 <TextArea
                   placeholder={"概要"}
-                  // value={descriptionInput}
+                  value={descriptionInput}
                   onChange={(e)=>{
                     typeSound();
-                    // setDescriptionInput(e.target.value)
+                    setDescriptionInput(e.target.value)
                   }}
                 />
                 <Input
                   placeholder={"公式サイト（無い場合は空欄）"}
-                  // value={officialSiteInput}
+                  value={officialSiteInput}
                   onChange={(e)=>{
                     typeSound();
-                    // setOfficialSiteInput(e.target.value)
+                    setOfficialSiteInput(e.target.value)
                   }}
                 />
                 <Input
                   placeholder={"場所（スペース無し英語表記｜例：koishikawa-korakuen）"}
-                  // value={locationInput}
+                  value={locationInput}
                   onChange={(e)=>{
                     typeSound();
-                    // setLocationInput(e.target.value)
+                    setLocationInput(e.target.value)
                   }}
                 />
                 <iframe
-                  // src={`https://www.google.com/maps?output=embed&q=${locationInput}`}
+                  src={`https://www.google.com/maps?output=embed&q=${locationInput}`}
                   width="100%"
                   height="250px"
                 />
