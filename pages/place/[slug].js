@@ -262,7 +262,7 @@ export default function PlaceName() {
                 変更を保存
               </Button>
             </AlignItems>
-            <Grid grid={'oneTwo'} gap={'small'}>
+            <Grid grid={'oneTwo'} gap={'large'}>
               <Container type="white" height="fitContent">
                 <Grid gap={'small'}>
                   <SizeSelectContainer

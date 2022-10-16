@@ -4,7 +4,7 @@ import React from 'react'
 import { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useDocument } from 'react-firebase-hooks/firestore';
-import { FiArrowLeft, FiSmile, FiX } from 'react-icons/fi';
+import { FiArrowLeft, FiInfo, FiSmile, FiX } from 'react-icons/fi';
 import { ClipLoader } from 'react-spinners';
 import { auth, db } from '../firebase'
 import AlignItems from '../lib/alignment/AlignItems';
@@ -250,6 +250,14 @@ export default function Profile() {
                 onClick={()=>{showNewContent ? reFlip():flip()}}
               >
                 {showNewContent ? '閉じる':'詳細を開く'}
+              </Button>
+              <Button
+                color="white"
+                iconPosition={'left'}
+                icon={<FiInfo/>}
+                onClick={()=>router.push('/levels')}
+              >
+                カードについて
               </Button>
             </AlignItems>
           </>
