@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { FiArrowLeft, FiCheck } from 'react-icons/fi'
@@ -26,7 +27,7 @@ export default function Levels() {
       <h1>SEIRYO CARD</h1>
       <h3>カードのレベルについて</h3>
       <p>
-        本サイト、「SEIRYO GROUND | 清涼広場」にログインしたユーザー様はみんなデフォルトでSEIRYO GROUND メンバーシップカードをもらいます。ログインしているユーザー様は<a href="/profile">こちら</a>からアクセスできます。カードにはそれぞれ5段階のレベルがあり清涼広場に貢献する頻度と量によってカードのレベルが上がります。
+        本サイト、「SEIRYO GROUND | 清涼広場」にログインしたユーザー様はみんなデフォルトでSEIRYO GROUND メンバーシップカードをもらいます。ログインしているユーザー様は<Link href="/profile"><a>こちら</a></Link>からアクセスできます。カードにはそれぞれ5段階のレベルがあり清涼広場に貢献する頻度と量によってカードのレベルが上がります。
       </p>
       <h3>マイルストーン</h3>
       <p>カードがアップグレードされるときのマイルストーン：</p>

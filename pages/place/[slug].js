@@ -288,6 +288,7 @@ export default function PlaceName() {
                     {sizeButtonArray.map(size=>{
                       return <SizeSelect
                         name={size}
+                        key={size}
                         currentState={sizeSelect}
                         onClick={()=> {
                           selectSound();
@@ -347,6 +348,7 @@ export default function PlaceName() {
                     {costButtonArray.map(name =>{
                       return(
                         <CheckBox
+                          key={name}
                           checked={costCheckBox.some(element => element === name)}
                           name={name}
                           onClick={()=>
