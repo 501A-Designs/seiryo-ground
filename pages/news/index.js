@@ -3,7 +3,6 @@ import { createClient } from 'contentful'
 import NewsThumbnail from '../../lib/component/NewsThumbNail'
 import Button from '../../lib/button/Button'
 import { useRouter } from 'next/router'
-import StaticGrid from '../../lib/alignment/StaticGrid'
 import AlignItems from '../../lib/alignment/AlignItems'
 import { FiArrowLeft } from 'react-icons/fi'
 import MainBody from '../../lib/component/MainBody'
@@ -42,11 +41,11 @@ export default function News({sgPosts}) {
       <Grid
         grid={'oneTwo'}
       >
-        <StaticGrid>
+        <Grid>
           <h1>清涼 NEWS</h1>
           <p>清涼広場に関する新情報を徹底的に更新していきたいと思います。作成者は501Aです。</p>
-        </StaticGrid>
-        <StaticGrid>
+        </Grid>
+        <Grid>
           {sgPosts.map(data =>{
             return(
               <NewsThumbnail
@@ -57,7 +56,7 @@ export default function News({sgPosts}) {
               />
             )
           })}
-        </StaticGrid>
+        </Grid>
       </Grid>
     </MainBody>
   )

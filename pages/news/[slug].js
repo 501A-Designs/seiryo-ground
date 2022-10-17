@@ -5,7 +5,6 @@ import Button from '../../lib/button/Button'
 import AlignItems from '../../lib/alignment/AlignItems'
 import MainBody from '../../lib/component/MainBody'
 import { FiArrowLeft } from 'react-icons/fi'
-import StaticGrid from '../../lib/alignment/StaticGrid'
 import Grid from '../../lib/alignment/Grid'
 
 const client = createClient({
@@ -58,13 +57,13 @@ export default function IndivisualNewsArticle({newsDetails}) {
           ニュースページに戻る
         </Button>
       </AlignItems>
-      <StaticGrid>
+      <Grid>
         <h1>{newsDetailsData.title}</h1>
         <time>{newsDetailsData.date}</time>
         <p>
           {newsDetailsData.description}
         </p>
-      </StaticGrid>
+      </Grid>
     </MainBody>
   )
 }
