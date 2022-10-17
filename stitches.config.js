@@ -60,7 +60,8 @@ export const {styled,getCssText} = createStitches({
     }
   },
   media: {
-    mobile: '(min-width: 0px) and (max-width: 1000px)',
-    desktop: '(min-width: 1001px)',
+    mobile: '(min-width: 0px) and (max-width: 500px)',
+    tablet: '(min-width: 501px) and (max-width: 1200px)',
+    desktop: '(min-width: 1201px)',
   },
 });

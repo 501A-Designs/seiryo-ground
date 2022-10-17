@@ -4,7 +4,7 @@ import React from 'react'
 import { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useDocument } from 'react-firebase-hooks/firestore';
-import { FiArrowLeft, FiInfo, FiSmile, FiX } from 'react-icons/fi';
+import { FiArrowLeft, FiDownloadCloud, FiInfo, FiSmile, FiX } from 'react-icons/fi';
 import { ClipLoader } from 'react-spinners';
 import { auth, db } from '../firebase'
 import AlignItems from '../lib/alignment/AlignItems';
@@ -206,6 +206,8 @@ export default function Profile() {
                           <Button
                             color='black'
                             onClick={()=>alert('Level Contributor')}
+                            iconPosition={'left'}
+                            icon={<FiDownloadCloud/>}
                           >
                             アップグレード
                           </Button>

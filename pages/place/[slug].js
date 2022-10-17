@@ -28,7 +28,7 @@ import Head from 'next/head'
 
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import Modal from '../../lib/component/Modal'
-import { FiArrowLeft, FiEdit, FiHeart, FiPlus, FiRefreshCw, FiSave, FiX } from 'react-icons/fi'
+import { FiArrowLeft, FiCheck, FiCreditCard, FiDollarSign, FiEdit, FiExternalLink, FiHeart, FiMaximize2, FiPlus, FiRefreshCw, FiSave, FiSmartphone, FiUserCheck, FiUserX, FiX } from 'react-icons/fi'
 import { useDocument } from 'react-firebase-hooks/firestore'
 import { ClipLoader } from 'react-spinners'
 import Container from '../../lib/component/Container'
@@ -453,24 +453,13 @@ export default function PlaceName() {
             >
               {placeData.name}
             </h1>
-            <AlignItems spaceBetween={true}>
-              <TypeBadge
-                width={'long'}
-                type={placeData.type}
-              />
-              {placeData.officialSite && 
-                <a
-                  href={placeData.officialSite}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  公式サイト
-                </a>
-              }
-            </AlignItems>
+            <TypeBadge
+              width={'long'}
+              type={placeData.type}
+            />
           </Grid>
           <Grid grid={'oneTwo'} gap={'large'}>
-            <Grid>
+            <Grid gap={'small'}>
               <p>{placeData.description}</p>
               {reviewData && reviewData.length > 0 &&
                 <Grid grid={'duo'} gap={'extraSmall'}>
@@ -497,11 +486,87 @@ export default function PlaceName() {
                   />
                 </Grid>
               }
+
+              <Container type="white">
+                <Grid grid={'duo'} gap={'medium'}>
+                  <h5>基本情報</h5>
+                  <Grid gap={'small'}>
+                    {placeData.officialSite && 
+                      <AlignItems gap={'0.5em'}>
+                        <FiExternalLink/>
+                        <h5>
+                          <a
+                            href={placeData.officialSite}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            公式サイト
+                          </a>
+                        </h5>
+                      </AlignItems>
+                    }
+                    <AlignItems gap={'0.5em'}>
+                      {placeData.toilet ?
+                        <>
+                          <FiUserCheck/>
+                          <h5>トイレ有</h5>
+                        </>:
+                        <>
+                          <FiUserX/>
+                          <h5>トイレ無</h5>
+                        </>
+                      }
+                    </AlignItems>
+                    <AlignItems gap={'0.5em'}>
+                      <FiMaximize2/>
+                      {placeData.size == 'small' && <h5>小さい</h5>}
+                      {placeData.size == 'medium' && <h5>普通</h5>}
+                      {placeData.size == 'large' && <h5>大きい</h5>}
+                    </AlignItems>
+                  </Grid>
+                  <h5>料金</h5>
+                  <Grid gap={'small'}>
+                    {placeData.cost.map(name =>{
+                      return <AlignItems gap={'0.5em'}
+                        key={name}
+                      >
+                        {name === 'free' && 
+                          <>
+                            <FiCheck/>
+                            <h5>無料</h5>
+                          </>
+                        }
+                        {name === 'cash' &&
+                          <>
+                            <FiDollarSign/>
+                            <h5>現金</h5>
+                          </>
+                        }
+                        {name === 'credit' &&
+                          <>
+                            <FiCreditCard/>
+                            <h5>クレジットカード</h5>
+                          </>
+                        }
+                        {name === 'digitalMoney' &&
+                          <>
+                            <FiSmartphone/>
+                            <h5>電子マネー</h5>
+                          </>
+                        }
+                      </AlignItems>
+                    })
+                    }
+                  </Grid>
+                </Grid>
+              </Container>
+              {/* <Grid gap={'extraSmall'}>
+              </Grid> */}
+
               <iframe
                 src={`https://www.google.com/maps?output=embed&q=${placeData.location}`}
                 width="100%"
                 height="250px"
-                style={{marginTop:'0.5em'}}
               />
             </Grid>
             <Grid gap={'small'}>
