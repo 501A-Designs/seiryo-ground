@@ -12,8 +12,6 @@ import { doc, collection, query, where } from "firebase/firestore";
 
 import LoadingBar from 'react-top-loading-bar';
 
-import StaticGrid from '../lib/alignment/StaticGrid'
-
 import CreatePlaceForm from '../lib/landing-page/CreatePlaceForm'
 import DistortionCarousel from '../lib/landing-page/DistortionCarousel'
 import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
@@ -186,8 +184,8 @@ export default function Home() {
         </LeftPannel>
 
         <RightPannel>
-          <StaticGrid gap={'3em'}>
-            <StaticGrid>
+          <Grid gap={'extraExtraLarge'}>
+            <Grid>
               <WelcomeHeader/>
               <DistortionCarousel
                 images={[
@@ -200,7 +198,7 @@ export default function Home() {
                 displacmentImage={'https://raw.githubusercontent.com/robin-dela/hover-effect/master/images/heightMap.png'}
                 speed={0.8}
               />
-            </StaticGrid>
+            </Grid>
 
             {user &&
               <CreatePlaceFormContainer>
@@ -329,7 +327,7 @@ export default function Home() {
 
             {/* All Locations */}
             <Container>
-              <StaticGrid gap={'0.7em'}>
+              <Grid gap={'medium'}>
                 <AlignItems spaceBetween>
                   <h2>All Locations</h2>
                 </AlignItems>
@@ -360,9 +358,9 @@ export default function Home() {
                     <ClipLoader color="black"/>
                   </Container>
                 }
-              </StaticGrid>
+              </Grid>
             </Container>
-          </StaticGrid>
+          </Grid>
         </RightPannel>
       </MainAlign>
     </MainBody>

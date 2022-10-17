@@ -57,11 +57,12 @@ export const {styled,getCssText} = createStitches({
       medium:'1.0em',
       large:'1.5em',
       extraLarge:'2em',
+      extraExtraLarge:'3em',
     }
   },
   media: {
-    mobile: '(min-width: 0px) and (max-width: 500px)',
-    tablet: '(min-width: 501px) and (max-width: 1200px)',
+    mobile: '(min-width: 0px) and (max-width: 900px)',
+    tablet: '(min-width: 901px) and (max-width: 1200px)',
     desktop: '(min-width: 1201px)',
   },
 });

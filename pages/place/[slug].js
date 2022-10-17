@@ -7,7 +7,6 @@ import { db,auth } from '../../firebase'
 import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Rating from '../../lib/Rating'
-import StaticGrid from '../../lib/alignment/StaticGrid'
 
 import LoadingBar from 'react-top-loading-bar';
 import Review from '../../lib/place-page/Review'
@@ -604,7 +603,7 @@ export default function PlaceName() {
               <div ref={parent}>
                 {openCreateReview && 
                   <CreateContainer>
-                    <StaticGrid gap={'0.25em'}>
+                    <Grid gap={'extraSmall'}>
                       <h3>{hasReviewed ? '内容を更新':'新規レビュー'}</h3>
                       <Input
                         value={titleRatingInput}
@@ -614,7 +613,7 @@ export default function PlaceName() {
                         }}
                         placeholder={'レビュータイトル'}
                       />
-                      <StaticGrid grid={'1fr 1fr 1fr'} gap={'0.25em'}>
+                      <Grid grid={'tri'} gap={'extraSmall'}>
                         <DisplayRatingInput
                           value={dateRatingInput}
                           onChange={(e)=> {
@@ -645,7 +644,7 @@ export default function PlaceName() {
                           minValue={0}
                           placeholder={'設備管理の状況'}
                         />
-                      </StaticGrid>
+                      </Grid>
                       <TextArea
                         value={descriptionRatingInput}
                         onChange={(e)=> {
@@ -687,7 +686,7 @@ export default function PlaceName() {
                           }
                         </AlignItems>
                       }
-                    </StaticGrid>
+                    </Grid>
                   </CreateContainer>
                 }
               </div>
