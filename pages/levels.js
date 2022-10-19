@@ -67,6 +67,30 @@ export default function Levels() {
         <tr>
           <td>公式サイトを編集</td>
           <td></td>
+          <td><FiCheck/></td>
+          <td><FiCheck/></td>
+          <td><FiCheck/></td>
+          <td><FiCheck/></td>
+        </tr>
+        <tr>
+          <td>トイレ有無を編集</td>
+          <td></td>
+          <td><FiCheck/></td>
+          <td><FiCheck/></td>
+          <td><FiCheck/></td>
+          <td><FiCheck/></td>
+        </tr>
+        <tr>
+          <td>場所の大きさ</td>
+          <td></td>
+          <td></td>
+          <td><FiCheck/></td>
+          <td><FiCheck/></td>
+          <td><FiCheck/></td>
+        </tr>
+        <tr>
+          <td>支払い方法を編集</td>
+          <td></td>
           <td></td>
           <td><FiCheck/></td>
           <td><FiCheck/></td>
@@ -76,15 +100,7 @@ export default function Levels() {
           <td>カテゴリーを編集</td>
           <td></td>
           <td></td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
-        </tr>
-        <tr>
-          <td>トイレ有無を編集</td>
           <td></td>
-          <td></td>
-          <td><FiCheck/></td>
           <td><FiCheck/></td>
           <td><FiCheck/></td>
         </tr>
@@ -92,7 +108,7 @@ export default function Levels() {
           <td>地図を編集</td>
           <td></td>
           <td></td>
-          <td><FiCheck/></td>
+          <td></td>
           <td><FiCheck/></td>
           <td><FiCheck/></td>
         </tr>
@@ -102,14 +118,6 @@ export default function Levels() {
           <td></td>
           <td></td>
           <td><FiCheck/></td>
-          <td><FiCheck/></td>
-        </tr>
-        <tr>
-          <td>タイトルを編集</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
           <td><FiCheck/></td>
         </tr>
         <tr>

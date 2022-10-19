@@ -36,6 +36,8 @@ import RightPannel from '../lib/landing-page/RightPannel'
 import MainAlign from '../lib/alignment/MainAlign'
 import Rating from '../lib/Rating'
 import Grid from '../lib/alignment/Grid'
+import PopularPlace from '../lib/landing-page/PopularPlace'
+import ThisMonthPlace from '../lib/ThisMonthPlace'
 
 export default function Home() {
   let masonaryGrid = {350: 1, 750: 2, 900: 3, 1200:4}
@@ -207,33 +209,20 @@ export default function Home() {
             }
 
 
-            <Container>
+            {/* <Container>
               <Grid gap={'small'}>
-                <h2>Highlights</h2>
-                <Grid grid={'quad'} gap={'extraSmall'}>
-                  <Rating
-                    borderRadius={'left'}
-                    rating={'10'}
-                    description={'最寄駅からのアクセス'}
-                  />
-                  <Rating
-                    rating={'5'}
-                    description={'最寄駅からのアクセス'}
-                  />
-                  <Rating
-                    rating={'8'}
-                    description={'最寄駅からのアクセス'}
-                  />
-                  <Rating
-                    borderRadius={'right'}
-                    rating={'9'}
-                    description={'最寄駅からのアクセス'}
-                  />
-                </Grid>
+                <AlignItems spaceBetween>
+                  <Grid>
+                    <h2>Explore</h2>
+                    <p>清涼広場で一番人気な場所です</p>
+                  </Grid>
+                </AlignItems>
+                <PopularPlace placeId={'0vfygL14nXcv0iSNgrt9'}/>
+                <ThisMonthPlace placeId={'0vfygL14nXcv0iSNgrt9'}/>
               </Grid>
-            </Container>
+            </Container> */}
 
-            <Container ref={parent}>
+            {/* <Container ref={parent}>
               <Grid gap={'small'}>
                 <AlignItems spaceBetween>
                   <h2>More than 0 likes</h2>
@@ -265,7 +254,7 @@ export default function Home() {
                   </Container>
                 }
               </Grid>
-            </Container>
+            </Container> */}
 
             {/* Filter Section */}
             <Container>

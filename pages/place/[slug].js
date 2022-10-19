@@ -22,12 +22,12 @@ import 'moment/locale/ja'
 import DisplayRatingInput from '../../lib/DisplayRatingInput'
 import { isBrowser } from 'react-device-detect'
 
-import {celebrationSound, notificationSound, selectSound, sliderSound, typeSound} from '../../lib/ux/audio'
+import {buttonSound, celebrationSound, loadSound, notificationSound, selectSound, sliderSound, typeSound} from '../../lib/ux/audio'
 import Head from 'next/head'
 
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import Modal from '../../lib/component/Modal'
-import { FiArrowLeft, FiCheck, FiCreditCard, FiDollarSign, FiEdit, FiExternalLink, FiHeart, FiMaximize2, FiPlus, FiRefreshCw, FiSave, FiSmartphone, FiUserCheck, FiUserX, FiX } from 'react-icons/fi'
+import { FiArrowLeft, FiCheck, FiCreditCard, FiDollarSign, FiEdit, FiExternalLink, FiHeart, FiLock, FiMaximize2, FiPlus, FiRefreshCw, FiSave, FiSmartphone, FiUserCheck, FiUserX, FiX } from 'react-icons/fi'
 import { useDocument } from 'react-firebase-hooks/firestore'
 import { ClipLoader } from 'react-spinners'
 import Container from '../../lib/component/Container'
@@ -62,8 +62,10 @@ export default function PlaceName() {
   // const [placeData, setPlaceData] = useState();
   const [rawPlaceData, loadingRawPlaceData] = useDocument(doc(db, `places/${placeId && placeId}`));
   let placeData = rawPlaceData && rawPlaceData.data();
-  
 
+  // const [currentUserLevel, setCurrentUserLevel] = useState('0')
+  const [userData] = useDocument(doc(db, `users/${user && user.uid}`));
+  
   const [reviewData, setReviewData] = useState();
 
   const [averageOfDateRating, setAverageOfDateRating] = useState(0);
@@ -119,12 +121,15 @@ export default function PlaceName() {
   // const [newPlace, setNewPlace] = useState();
 
   const editThisPlace = async() => {
-    await updateDoc(collection(db, "places"), {
+    setModalIsOpen(false);
+    await updateDoc(doc(db, `places/${placeId}`), {
       name: placeInput,
       location: locationInput,
       description: descriptionInput,
-      editedBy:[{editedBy:user.uid}],
+      toilet: binaryToggle,
       type: typeInput,
+      cost: costCheckBox,
+      size: sizeSelect,
       officialSite:officialSiteInput,
     });
     setPlaceInput('');
@@ -180,6 +185,7 @@ export default function PlaceName() {
   let timeNow = moment().format('MMMM Do YYYY, h:mm a');
 
   const publishReview = async() =>{
+    loadSound();
     await setDoc(doc(collection(db, `places/${placeId}/reviews/`), `${user && user.uid}`), {
       title: titleRatingInput,
       description: descriptionRatingInput,
@@ -191,7 +197,8 @@ export default function PlaceName() {
     notificationSound();
   }
 
-  const updateReview = async() =>{    
+  const updateReview = async() =>{
+    loadSound();
     await updateDoc(doc(db, `places/${placeId}/reviews/${user && user.uid}`), {
       title: titleRatingInput,
       description: descriptionRatingInput,
@@ -231,7 +238,7 @@ export default function PlaceName() {
     });
     setLiked(false);
   }
-
+  
   useEffect(() => {
     getDocument();
   }, [user,placeId])
@@ -257,11 +264,14 @@ export default function PlaceName() {
         </AlignItems>
       }
 
-      {placeData &&
+      {placeData && 
         <MainBody>
           <Modal
             modalState={modalIsOpen}
-            onClickBackdrop={() => setModalIsOpen(false)}
+            onClickBackdrop={() => {
+              buttonSound();
+              setModalIsOpen(false)
+            }}
           >
             <AlignItems justifyContent={'space-between'}>
               <h3>この場所を編集</h3>
@@ -269,12 +279,16 @@ export default function PlaceName() {
                 color={'black'}
                 iconPosition={'left'}
                 icon={<FiSave/>}
+                onClick={()=> editThisPlace()}
               >
                 変更を保存
               </Button>
             </AlignItems>
             <Grid grid={'oneTwo'} gap={'large'}>
+
               <Grid gap={'small'}>
+                {/* SIZE */}
+                {userData.data().level > 2 &&   
                 <Container
                   type="white"
                   height="fitContent"
@@ -297,6 +311,10 @@ export default function PlaceName() {
                     })}
                   </SizeSelectContainer>
                 </Container>
+                }
+
+                {/* TOILET */}
+                {userData.data().level > 1 &&
                 <Container type="standard">
                   <BinaryToggleContainer>
                     <BinaryToggle
@@ -321,6 +339,10 @@ export default function PlaceName() {
                     </BinaryToggle>
                   </BinaryToggleContainer>
                 </Container>
+                }
+
+                {/* TYPE */}
+                {userData.data().level > 3 &&
                 <Container
                   type="white"
                   height="fitContent"
@@ -339,6 +361,10 @@ export default function PlaceName() {
                     })}
                   </Grid>
                 </Container>
+                }
+
+                {/* COST */}
+                {userData.data().level > 2 &&
                 <Container
                   type="white"
                   height="fitContent"
@@ -365,9 +391,12 @@ export default function PlaceName() {
                     })}
                   </Grid>
                 </Container>
+                }
               </Grid>
 
               <Grid gap={'extraSmall'}>
+                {/* PLACE NAME */}
+                {userData.data().level > 4 &&
                 <Input
                   placeholder={"場所の名前"}
                   value={placeInput}
@@ -376,6 +405,10 @@ export default function PlaceName() {
                     setPlaceInput(e.target.value)
                   }}
                 />
+                }
+
+                {/* PLACE DESCRIPTION */}
+                {userData.data().level > 3 &&
                 <TextArea
                   placeholder={"概要"}
                   value={descriptionInput}
@@ -384,27 +417,48 @@ export default function PlaceName() {
                     setDescriptionInput(e.target.value)
                   }}
                 />
-                <Input
-                  placeholder={"公式サイト（無い場合は空欄）"}
-                  value={officialSiteInput}
-                  onChange={(e)=>{
-                    typeSound();
-                    setOfficialSiteInput(e.target.value)
-                  }}
-                />
-                <Input
-                  placeholder={"場所（スペース無し英語表記｜例：koishikawa-korakuen）"}
-                  value={locationInput}
-                  onChange={(e)=>{
-                    typeSound();
-                    setLocationInput(e.target.value)
-                  }}
-                />
-                <iframe
-                  src={`https://www.google.com/maps?output=embed&q=${locationInput}`}
-                  width="100%"
-                  height="250px"
-                />
+                }
+
+                {/* SITE */}
+                {userData.data().level > 1 &&
+                  <Input
+                    placeholder={"公式サイト（無い場合は空欄）"}
+                    value={officialSiteInput}
+                    onChange={(e)=>{
+                      typeSound();
+                      setOfficialSiteInput(e.target.value)
+                    }}
+                  />
+                }
+
+                {/* PLACE DESCRIPTION */}
+                {userData.data().level > 3 &&
+                <>
+                  <Input
+                    placeholder={"場所（スペース無し英語表記｜例：koishikawa-korakuen）"}
+                    value={locationInput}
+                    onChange={(e)=>{
+                      typeSound();
+                      setLocationInput(e.target.value)
+                    }}
+                  />
+                  <iframe
+                    src={`https://www.google.com/maps?output=embed&q=${locationInput}`}
+                    width="100%"
+                    height="250px"
+                  />
+                </>
+                }
+
+                {userData.data().level < 5 &&
+                 <Container type="standard" alignment="center">
+                  <AlignItems>
+                    <FiLock/>
+                    <h5>報告</h5>
+                  </AlignItems>
+                  <p>全ての編集機能をアクセスするにはカードをアップグレードする必要があります。</p>
+                 </Container>
+                }
               </Grid>
             </Grid>
           </Modal>
@@ -420,14 +474,19 @@ export default function PlaceName() {
             </Button>
             {user &&
               <AlignItems>
-                <Button
-                  color="transparent"
-                  onClick={()=> setModalIsOpen(true)}
-                  iconPosition={'left'}
-                  icon={<FiEdit/>}
-                >
-                  ページを編集
-                </Button>
+                {userData.data().level > 1 &&
+                  <Button
+                    color="transparent"
+                    onClick={()=> {
+                      buttonSound();
+                      setModalIsOpen(true);
+                    }}
+                    iconPosition={'left'}
+                    icon={<FiEdit/>}
+                  >
+                    ページを編集
+                  </Button>
+                }
                 <Button
                   color='transparent'
                   iconPosition={'left'}
