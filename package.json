@@ -34,7 +34,8 @@
     "react-ztext": "^1.0.3",
     "rss-parser": "^3.12.0",
     "snd-lib": "^1.1.1",
-    "tslib": "^2.4.0"
+    "tslib": "^2.4.0",
+    "use-sound": "^4.0.1"
   },
   "devDependencies": {
     "eslint": "8.17.0",

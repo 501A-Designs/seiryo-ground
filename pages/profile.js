@@ -6,6 +6,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { useDocument } from 'react-firebase-hooks/firestore';
 import { FiArrowLeft, FiDownloadCloud, FiInfo, FiSmile, FiX } from 'react-icons/fi';
 import { ClipLoader } from 'react-spinners';
+import useSound from 'use-sound';
 import { auth, db } from '../firebase'
 import AlignItems from '../lib/alignment/AlignItems';
 import Grid from '../lib/alignment/Grid';
@@ -13,7 +14,6 @@ import Button from '../lib/button/Button';
 import CenterAll from '../lib/component/CenterAll';
 import Container from '../lib/component/Container';
 import MainBody from '../lib/component/MainBody'
-import { loadSound } from '../lib/ux/audio';
 import { popOut, rotateAndZoom, rotateInBottonLeft, spin } from '../lib/ux/keyframes';
 import { styled } from '../stitches.config';
 
@@ -145,17 +145,20 @@ export default function Profile() {
   const [openDetails, setOpenDetails] = useState(false)
   const [showNewContent, setShowNewContent] = useState(false)
 
+  const [celebrate2] = useSound('/sound/celebrate-2-sg.mp3')
+  const [tap2] = useSound('/sound/tap-2-sg.mp3',{playbackRate:1.3})
   
   async function flip(){
     setOpenDetails(true);
     await new Promise(resolve => setTimeout(resolve, 500));
+    celebrate2();
     setShowNewContent(true);
-    loadSound();
   }
 
   async function reFlip(){
     setOpenDetails(false);
     setShowNewContent(false);
+    tap2();
   }
 
 

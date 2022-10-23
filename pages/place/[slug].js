@@ -22,7 +22,6 @@ import 'moment/locale/ja'
 import DisplayRatingInput from '../../lib/DisplayRatingInput'
 import { isBrowser } from 'react-device-detect'
 
-import {buttonSound, celebrationSound, loadSound, notificationSound, selectSound, sliderSound, typeSound} from '../../lib/ux/audio'
 import Head from 'next/head'
 
 import { useAutoAnimate } from '@formkit/auto-animate/react'
@@ -40,6 +39,7 @@ import BinaryToggle from '../../lib/button/BinaryToggle'
 import BinaryToggleContainer from '../../lib/button/BinaryToggleContainer'
 import { costButtonArray, sizeButtonArray, typeButtonArray } from '../../lib/button/buttonData'
 import CheckBox from '../../lib/button/CheckBox'
+import useSound from 'use-sound'
 
 export default function PlaceName() {
   const router = useRouter();
@@ -47,11 +47,16 @@ export default function PlaceName() {
   const [parent] = useAutoAnimate();
   const [progress, setProgress] = useState(0);
 
-  let Parser = require('rss-parser');
-  const parser = new Parser();
-  // console.log(parser.parseURL("https://dev.to/feed/inezabonte").items);
-  // let nitterParseUrl = 'https://cors-anywhere.herokuapp.com/https://nitter.it/eminent_gallery/rss';
-  let nitterParseUrl = 'https://dev.to/feed/inezabonte';
+  // Sound
+  const [tap1] = useSound('/sound/tap-1-sg.mp3');
+  const [tap2] = useSound('/sound/tap-2-sg.mp3');
+  const [tap3] = useSound('/sound/tap-3-sg.mp3');
+  const [select1] = useSound('/sound/select-1-sg.mp3');
+  const [select2] = useSound('/sound/select-2-sg.mp3');
+  const [action1] = useSound('/sound/action-1-sg.mp3');
+  const [load1] = useSound('/sound/load-1-sg.mp3');
+  const [celebrate1] = useSound('/sound/celebrate-1-sg.mp3');
+  const [celebrate2] = useSound('/sound/celebrate-2-sg.mp3');
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -122,6 +127,7 @@ export default function PlaceName() {
 
   const editThisPlace = async() => {
     setModalIsOpen(false);
+    load1();
     await updateDoc(doc(db, `places/${placeId}`), {
       name: placeInput,
       location: locationInput,
@@ -136,9 +142,7 @@ export default function PlaceName() {
     setLocationInput('');
     setDescriptionInput('');
     setTypeInput('');
-    // setPublished(true);
-    // setNewPlace(docRef);
-    notificationSound();
+    celebrate1();
   }
 
   const reviewsCollectionRef = collection(db, `places/${placeId}/reviews`);
@@ -185,7 +189,7 @@ export default function PlaceName() {
   let timeNow = moment().format('MMMM Do YYYY, h:mm a');
 
   const publishReview = async() =>{
-    loadSound();
+    load1();
     await setDoc(doc(collection(db, `places/${placeId}/reviews/`), `${user && user.uid}`), {
       title: titleRatingInput,
       description: descriptionRatingInput,
@@ -194,11 +198,11 @@ export default function PlaceName() {
       managementRating: managementRatingInput,
       lastUpdated:timeNow
     });
-    notificationSound();
+    celebrate1();
   }
 
   const updateReview = async() =>{
-    loadSound();
+    load1();
     await updateDoc(doc(db, `places/${placeId}/reviews/${user && user.uid}`), {
       title: titleRatingInput,
       description: descriptionRatingInput,
@@ -207,7 +211,7 @@ export default function PlaceName() {
       managementRating: managementRatingInput,
       lastUpdated:timeNow
     });
-    notificationSound();
+    celebrate1();
   }
 
   const round = (number) =>{
@@ -243,6 +247,16 @@ export default function PlaceName() {
     getDocument();
   }, [user,placeId])
 
+  const closeCreateReviewContainer = () =>{
+    setOpenCreateReview(false);
+    tap1();
+  }
+
+  const openCreateReviewContainer = () =>{
+    setOpenCreateReview(true);
+    action1();
+  }
+
   return (
     <>
       <Head>
@@ -266,202 +280,205 @@ export default function PlaceName() {
 
       {placeData && 
         <MainBody>
-          <Modal
-            modalState={modalIsOpen}
-            onClickBackdrop={() => {
-              buttonSound();
-              setModalIsOpen(false)
-            }}
-          >
-            <AlignItems justifyContent={'space-between'}>
-              <h3>この場所を編集</h3>
-              <Button
-                color={'black'}
-                iconPosition={'left'}
-                icon={<FiSave/>}
-                onClick={()=> editThisPlace()}
-              >
-                変更を保存
-              </Button>
-            </AlignItems>
-            <Grid grid={'oneTwo'} gap={'large'}>
 
-              <Grid gap={'small'}>
-                {/* SIZE */}
-                {userData.data().level > 2 &&   
-                <Container
-                  type="white"
-                  height="fitContent"
-                  padding={'small'}
+          {userData && userData.data() &&          
+            <Modal
+              modalState={modalIsOpen}
+              onClickBackdrop={() => {
+                tap2();
+                setModalIsOpen(false)
+              }}
+            >
+              <AlignItems justifyContent={'space-between'}>
+                <h3>この場所を編集</h3>
+                <Button
+                  color={'black'}
+                  iconPosition={'left'}
+                  icon={<FiSave/>}
+                  onClick={()=> editThisPlace()}
                 >
-                  <SizeSelectContainer
-                    hide
-                    currentState={sizeSelect}
+                  変更を保存
+                </Button>
+              </AlignItems>
+              <Grid grid={'oneTwo'} gap={'large'}>
+
+                <Grid gap={'small'}>
+                  {/* SIZE */}
+                  {userData.data().level > 2 &&   
+                  <Container
+                    type="white"
+                    height="fitContent"
+                    padding={'small'}
                   >
-                    {sizeButtonArray.map(size=>{
-                      return <SizeSelect
-                        name={size}
-                        key={size}
-                        currentState={sizeSelect}
-                        onClick={()=> {
-                          selectSound();
-                          setSizeSelect(size);
-                        }}
-                      />
-                    })}
-                  </SizeSelectContainer>
-                </Container>
-                }
-
-                {/* TOILET */}
-                {userData.data().level > 1 &&
-                <Container type="standard">
-                  <BinaryToggleContainer>
-                    <BinaryToggle
-                      currentState={binaryToggle}
-                      selected={binaryToggle === true}
-                      onClick={()=>{
-                        selectSound();
-                        setBinaryToggle(true)
-                      }}
+                    <SizeSelectContainer
+                      hide
+                      currentState={sizeSelect}
                     >
-                      有
-                    </BinaryToggle>
-                    <BinaryToggle
-                      currentState={binaryToggle}
-                      selected={binaryToggle === false}
-                      onClick={()=>{
-                        selectSound();
-                        setBinaryToggle(false)
-                      }}
-                    >
-                      無
-                    </BinaryToggle>
-                  </BinaryToggleContainer>
-                </Container>
-                }
+                      {sizeButtonArray.map(size=>{
+                        return <SizeSelect
+                          name={size}
+                          key={size}
+                          currentState={sizeSelect}
+                          onClick={()=> {
+                            select1();
+                            setSizeSelect(size);
+                          }}
+                        />
+                      })}
+                    </SizeSelectContainer>
+                  </Container>
+                  }
 
-                {/* TYPE */}
-                {userData.data().level > 3 &&
-                <Container
-                  type="white"
-                  height="fitContent"
-                >
-                  <Grid gap={'extraSmall'}>
-                    {typeButtonArray.map(color =>{
-                      return <TypeButton
-                        key={color}
-                        type={color}
+                  {/* TOILET */}
+                  {userData.data().level > 1 &&
+                  <Container type="standard">
+                    <BinaryToggleContainer>
+                      <BinaryToggle
+                        currentState={binaryToggle}
+                        selected={binaryToggle === true}
                         onClick={()=>{
-                          selectSound();
-                          setTypeInput(color);
+                          select1();
+                          setBinaryToggle(true)
                         }}
-                        selectedInput={typeInput}
-                      />
-                    })}
-                  </Grid>
-                </Container>
-                }
+                      >
+                        有
+                      </BinaryToggle>
+                      <BinaryToggle
+                        currentState={binaryToggle}
+                        selected={binaryToggle === false}
+                        onClick={()=>{
+                          select2();
+                          setBinaryToggle(false)
+                        }}
+                      >
+                        無
+                      </BinaryToggle>
+                    </BinaryToggleContainer>
+                  </Container>
+                  }
 
-                {/* COST */}
-                {userData.data().level > 2 &&
-                <Container
-                  type="white"
-                  height="fitContent"
-                >
-                  <Grid gap={'extraSmall'}>
-                    {costButtonArray.map(name =>{
-                      return(
-                        <CheckBox
-                          key={name}
-                          checked={costCheckBox.some(element => element === name)}
-                          name={name}
-                          onClick={()=>
-                            {
-                              selectSound();
-                              costCheckBox.some(element => element === name) ?
-                              setCostCheckBox(prev => prev.filter(element => element !== name )):
-                              setCostCheckBox([...costCheckBox, name]);
+                  {/* TYPE */}
+                  {userData.data().level > 3 &&
+                  <Container
+                    type="white"
+                    height="fitContent"
+                  >
+                    <Grid gap={'extraSmall'}>
+                      {typeButtonArray.map(color =>{
+                        return <TypeButton
+                          key={color}
+                          type={color}
+                          onClick={()=>{
+                            select1();
+                            setTypeInput(color);
+                          }}
+                          selectedInput={typeInput}
+                        />
+                      })}
+                    </Grid>
+                  </Container>
+                  }
+
+                  {/* COST */}
+                  {userData.data().level > 2 &&
+                  <Container
+                    type="white"
+                    height="fitContent"
+                  >
+                    <Grid gap={'extraSmall'}>
+                      {costButtonArray.map(name =>{
+                        return(
+                          <CheckBox
+                            key={name}
+                            checked={costCheckBox.some(element => element === name)}
+                            name={name}
+                            onClick={()=>
+                              {
+                                tap1();
+                                costCheckBox.some(element => element === name) ?
+                                setCostCheckBox(prev => prev.filter(element => element !== name )):
+                                setCostCheckBox([...costCheckBox, name]);
+                              }
                             }
-                          }
-                        >
-                          {name}
-                        </CheckBox>
-                      )
-                    })}
-                  </Grid>
-                </Container>
-                }
-              </Grid>
+                          >
+                            {name}
+                          </CheckBox>
+                        )
+                      })}
+                    </Grid>
+                  </Container>
+                  }
+                </Grid>
 
-              <Grid gap={'extraSmall'}>
-                {/* PLACE NAME */}
-                {userData.data().level > 4 &&
-                <Input
-                  placeholder={"場所の名前"}
-                  value={placeInput}
-                  onChange={(e)=>{
-                    typeSound();
-                    setPlaceInput(e.target.value)
-                  }}
-                />
-                }
-
-                {/* PLACE DESCRIPTION */}
-                {userData.data().level > 3 &&
-                <TextArea
-                  placeholder={"概要"}
-                  value={descriptionInput}
-                  onChange={(e)=>{
-                    typeSound();
-                    setDescriptionInput(e.target.value)
-                  }}
-                />
-                }
-
-                {/* SITE */}
-                {userData.data().level > 1 &&
+                <Grid gap={'extraSmall'}>
+                  {/* PLACE NAME */}
+                  {userData.data().level > 4 &&
                   <Input
-                    placeholder={"公式サイト（無い場合は空欄）"}
-                    value={officialSiteInput}
+                    placeholder={"場所の名前"}
+                    value={placeInput}
                     onChange={(e)=>{
-                      typeSound();
-                      setOfficialSiteInput(e.target.value)
+                      tap3();
+                      setPlaceInput(e.target.value)
                     }}
                   />
-                }
+                  }
 
-                {/* PLACE DESCRIPTION */}
-                {userData.data().level > 3 &&
-                <>
-                  <Input
-                    placeholder={"場所（スペース無し英語表記｜例：koishikawa-korakuen）"}
-                    value={locationInput}
+                  {/* PLACE DESCRIPTION */}
+                  {userData.data().level > 3 &&
+                  <TextArea
+                    placeholder={"概要"}
+                    value={descriptionInput}
                     onChange={(e)=>{
-                      typeSound();
-                      setLocationInput(e.target.value)
+                      tap3();
+                      setDescriptionInput(e.target.value)
                     }}
                   />
-                  <iframe
-                    src={`https://www.google.com/maps?output=embed&q=${locationInput}`}
-                    width="100%"
-                    height="250px"
-                  />
-                </>
-                }
+                  }
 
-                {userData.data().level < 5 &&
-                 <Container type="standard" alignment="center">
-                  <AlignItems>
-                    <FiLock/>
-                    <h5>報告</h5>
-                  </AlignItems>
-                  <p>全ての編集機能をアクセスするにはカードをアップグレードする必要があります。</p>
-                 </Container>
-                }
+                  {/* SITE */}
+                  {userData.data().level > 1 &&
+                    <Input
+                      placeholder={"公式サイト（無い場合は空欄）"}
+                      value={officialSiteInput}
+                      onChange={(e)=>{
+                        tap3();
+                        setOfficialSiteInput(e.target.value)
+                      }}
+                    />
+                  }
+
+                  {/* PLACE DESCRIPTION */}
+                  {userData.data().level > 3 &&
+                  <>
+                    <Input
+                      placeholder={"場所（スペース無し英語表記｜例：koishikawa-korakuen）"}
+                      value={locationInput}
+                      onChange={(e)=>{
+                        tap3();
+                        setLocationInput(e.target.value)
+                      }}
+                    />
+                    <iframe
+                      src={`https://www.google.com/maps?output=embed&q=${locationInput}`}
+                      width="100%"
+                      height="250px"
+                    />
+                  </>
+                  }
+
+                  {userData.data().level < 5 &&
+                  <Container type="standard" alignment="center">
+                    <AlignItems>
+                      <FiLock/>
+                      <h5>報告</h5>
+                    </AlignItems>
+                    <p>全ての編集機能をアクセスするにはカードをアップグレードする必要があります。</p>
+                  </Container>
+                  }
+                </Grid>
               </Grid>
-            </Grid>
-          </Modal>
+            </Modal>
+          }
 
           <AlignItems spaceBetween={true} margin={'0.5em 0 0 0'}>
             <Button
@@ -478,7 +495,7 @@ export default function PlaceName() {
                   <Button
                     color="transparent"
                     onClick={()=> {
-                      buttonSound();
+                      action1();
                       setModalIsOpen(true);
                     }}
                     iconPosition={'left'}
@@ -492,7 +509,7 @@ export default function PlaceName() {
                   iconPosition={'left'}
                   icon={<FiHeart/>}
                   onClick={()=> {
-                    !liked && celebrationSound();
+                    !liked && celebrate2();
                     liked ? removeLike():addLike()
                   }}
                 >
@@ -634,8 +651,9 @@ export default function PlaceName() {
                     color='black'
                     iconPosition={'left'}
                     icon={openCreateReview ? <FiX/>:<>{hasReviewed ? <FiRefreshCw/>:<FiPlus/>}</>}
-                    onClick={()=> {
-                      openCreateReview ? setOpenCreateReview(false):setOpenCreateReview(true)
+                    onClick={()=>{openCreateReview ? 
+                      closeCreateReviewContainer():
+                      openCreateReviewContainer()
                     }}
                   >
                     {openCreateReview ? '閉じる':<>{hasReviewed ? '書いたレビューを編集':'レビューを書く'}</>}
@@ -667,7 +685,7 @@ export default function PlaceName() {
                       <Input
                         value={titleRatingInput}
                         onChange={(e)=> {
-                          typeSound();
+                          tap3();
                           setTitleRatingInput(e.target.value)
                         }}
                         placeholder={'レビュータイトル'}
@@ -676,7 +694,7 @@ export default function PlaceName() {
                         <DisplayRatingInput
                           value={dateRatingInput}
                           onChange={(e)=> {
-                            sliderSound();
+                            tap3();
                             setDateRatingInput(e.target.value)
                           }}
                           maxValue={10}
@@ -686,7 +704,7 @@ export default function PlaceName() {
                         <DisplayRatingInput
                           value={accessRatingInput}
                           onChange={(e)=> {
-                            sliderSound();
+                            tap3();
                             setAccessRatingInput(e.target.value)
                           }}
                           maxValue={10}
@@ -696,7 +714,7 @@ export default function PlaceName() {
                         <DisplayRatingInput
                           value={managementRatingInput}
                           onChange={(e)=> {
-                            sliderSound();
+                            tap3();
                             setManagementRatingInput(e.target.value)
                           }}
                           maxValue={10}
@@ -707,7 +725,7 @@ export default function PlaceName() {
                       <TextArea
                         value={descriptionRatingInput}
                         onChange={(e)=> {
-                          typeSound();
+                          tap3();
                           setDescriptionRatingInput(e.target.value)
                         }}
                         placeholder={'行って感じた事、評価項目に写らない場所の良さ等。'}

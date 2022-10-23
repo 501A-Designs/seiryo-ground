@@ -19,7 +19,6 @@ import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import {notificationSound, selectSound, tapSound} from '../lib/ux/audio'
 import { signOut } from 'firebase/auth'
 import Select from 'react-select'
 import { prefectureData } from '../prefectureData'
@@ -27,7 +26,7 @@ import { prefectureData } from '../prefectureData'
 import LeftPannel from '../lib/landing-page/LeftPannel'
 import WelcomeHeader from '../lib/landing-page/WelcomeHeader'
 import CreatePlaceFormContainer from '../lib/landing-page/CreatePlaceFormContainer'
-import { FiCheckCircle, FiCornerLeftUp, FiGithub, FiInfo, FiLogIn, FiLogOut } from 'react-icons/fi'
+import { FiCheckCircle, FiGithub, FiInfo, FiLogIn, FiLogOut } from 'react-icons/fi'
 import Container from '../lib/component/Container'
 import { ClipLoader } from 'react-spinners'
 import MainBody from '../lib/component/MainBody'
@@ -38,6 +37,7 @@ import Rating from '../lib/Rating'
 import Grid from '../lib/alignment/Grid'
 import PopularPlace from '../lib/landing-page/PopularPlace'
 import ThisMonthPlace from '../lib/ThisMonthPlace'
+import useSound from 'use-sound'
 
 export default function Home() {
   let masonaryGrid = {350: 1, 750: 2, 900: 3, 1200:4}
@@ -45,6 +45,10 @@ export default function Home() {
 
   const [parent] = useAutoAnimate();
   const [progress, setProgress] = useState(0);  
+
+  // Sound
+  const [select1] = useSound('/sound/select-1-sg.mp3');
+  const [alert1] = useSound('/sound/alert-1-sg.mp3');
   
   // Modal / Popup State
   const [gettingStartedModalIsOpen, setGettingStartedModalIsOpen] = useState(false);
@@ -123,7 +127,7 @@ export default function Home() {
         user={user}
         closeModal={()=>{
           setGettingStartedModalIsOpen(false);
-          notificationSound();
+          alert1();
         }}
       />
 
@@ -267,7 +271,7 @@ export default function Home() {
                       options={prefectureData}
                       components={{ DropdownIndicator:() => null, IndicatorSeparator:() => null }}
                       onChange={(e)=>{
-                        selectSound();
+                        select1();
                         setPrefectureInput(e.value);
                       }}
                       placeholder={prefectureInput ? prefectureInput:'都道府県を選択'}
