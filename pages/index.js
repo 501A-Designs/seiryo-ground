@@ -38,6 +38,7 @@ import Grid from '../lib/alignment/Grid'
 import PopularPlace from '../lib/landing-page/PopularPlace'
 import ThisMonthPlace from '../lib/ThisMonthPlace'
 import useSound from 'use-sound'
+import Footer from '../lib/component/Footer'
 
 export default function Home() {
   let masonaryGrid = {350: 1, 750: 2, 900: 3, 1200:4}
@@ -354,6 +355,7 @@ export default function Home() {
               </Grid>
             </Container>
           </Grid>
+          <Footer type={'blur'}/>
         </RightPannel>
       </MainAlign>
     </MainBody>

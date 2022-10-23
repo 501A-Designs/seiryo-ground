@@ -26,7 +26,7 @@ import Head from 'next/head'
 
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import Modal from '../../lib/component/Modal'
-import { FiArrowLeft, FiCheck, FiCreditCard, FiDollarSign, FiEdit, FiExternalLink, FiHeart, FiLock, FiMaximize2, FiPlus, FiRefreshCw, FiSave, FiSmartphone, FiUserCheck, FiUserX, FiX } from 'react-icons/fi'
+import { FiArrowLeft, FiCheck, FiCreditCard, FiDollarSign, FiEdit, FiExternalLink, FiHeart, FiHome, FiLock, FiMaximize2, FiPlus, FiRefreshCw, FiSave, FiSmartphone, FiUserCheck, FiUserX, FiX } from 'react-icons/fi'
 import { useDocument } from 'react-firebase-hooks/firestore'
 import { ClipLoader } from 'react-spinners'
 import Container from '../../lib/component/Container'
@@ -40,6 +40,7 @@ import BinaryToggleContainer from '../../lib/button/BinaryToggleContainer'
 import { costButtonArray, sizeButtonArray, typeButtonArray } from '../../lib/button/buttonData'
 import CheckBox from '../../lib/button/CheckBox'
 import useSound from 'use-sound'
+import Footer from '../../lib/component/Footer'
 
 export default function PlaceName() {
   const router = useRouter();
@@ -280,7 +281,6 @@ export default function PlaceName() {
 
       {placeData && 
         <MainBody>
-
           {userData && userData.data() &&          
             <Modal
               modalState={modalIsOpen}
@@ -669,6 +669,8 @@ export default function PlaceName() {
                     <Button
                       color='black'
                       onClick={()=>router.push('/')}
+                      iconPosition={'left'}
+                      icon={<FiHome/>}
                     >
                       メインページから会員登録
                     </Button>:
@@ -795,6 +797,7 @@ export default function PlaceName() {
               }
             </Grid>
           </Grid>
+          <Footer type={'blur'}/>
         </MainBody>
       }
     </>
