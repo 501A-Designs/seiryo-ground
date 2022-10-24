@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useDocument } from 'react-firebase-hooks/firestore';
-import { FiArrowLeft, FiDownloadCloud, FiInfo, FiSmile, FiX } from 'react-icons/fi';
+import { FiArrowLeft, FiDownloadCloud, FiInfo, FiX } from 'react-icons/fi';
 import { ClipLoader } from 'react-spinners';
 import useSound from 'use-sound';
 import { auth, db } from '../firebase'

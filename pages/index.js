@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 
 import {app,analytics,auth,db} from '../firebase'
 import { useAuthState, useSignInWithGoogle } from 'react-firebase-hooks/auth';
-import { doc, collection, query, where } from "firebase/firestore";
+import { doc, collection, query, where, getDoc } from "firebase/firestore";
 
 import LoadingBar from 'react-top-loading-bar';
 
@@ -60,12 +60,17 @@ export default function Home() {
   const [placesCollection, placeCollectionLoading] = useCollection(collection(db, `places`))
 
   const [prefectureInput, setPrefectureInput] = useState('東京都');
-  const [userLikesArray] = useDocument(doc(db, `users/${user && user.uid}`));
+  const userData = getDoc(doc(db, `users/${user && user.uid}`));
 
   useEffect(() => {
-    if (user && user.metadata.creationTime == user.metadata.lastSignInTime && userLikesArray !== undefined) {
-      // console.log(user.metadata.creationTime,user.metadata.lastSignInTime)
+    if (
+      user &&
+      user.metadata.creationTime == user.metadata.lastSignInTime
+    ){
       setGettingStartedModalIsOpen(true)
+      if (localStorage.getItem('getStartedComplete')) {
+        setGettingStartedModalIsOpen(false)
+      }
     }
   }, [user])
 
@@ -130,8 +135,7 @@ export default function Home() {
           setGettingStartedModalIsOpen(false);
           alert1();
         }}
-      />
-
+    />
       <MainAlign>
         <LeftPannel user={user}>
           {!user &&
