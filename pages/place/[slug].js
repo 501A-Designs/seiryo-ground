@@ -4,7 +4,7 @@ import AlignItems from '../../lib/alignment/AlignItems'
 import TypeBadge from '../../lib/TypeBadge'
 
 import { db,auth } from '../../firebase'
-import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore";
+import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, increment, setDoc, updateDoc } from "firebase/firestore";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Rating from '../../lib/Rating'
 
@@ -191,14 +191,19 @@ export default function PlaceName() {
 
   const publishReview = async() =>{
     load1();
-    await setDoc(doc(collection(db, `places/${placeId}/reviews/`), `${user && user.uid}`), {
-      title: titleRatingInput,
-      description: descriptionRatingInput,
-      dateRating: dateRatingInput,
-      accessRating: accessRatingInput,
-      managementRating: managementRatingInput,
-      lastUpdated:timeNow
-    });
+    if (user) {      
+      await setDoc(doc(collection(db, `places/${placeId}/reviews/`), `${user.uid}`), {
+        title: titleRatingInput,
+        description: descriptionRatingInput,
+        dateRating: dateRatingInput,
+        accessRating: accessRatingInput,
+        managementRating: managementRatingInput,
+        lastUpdated:timeNow
+      });
+      await updateDoc(doc(db,`users/${user.uid}`), {
+        reviewCount: increment(1)
+      });
+    }
     celebrate1();
   }
 

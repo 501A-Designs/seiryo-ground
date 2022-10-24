@@ -1,6 +1,6 @@
-import { doc } from 'firebase/firestore';
+import { doc, setDoc, updateDoc } from 'firebase/firestore';
 import { useRouter } from 'next/router';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useDocument } from 'react-firebase-hooks/firestore';
@@ -14,6 +14,7 @@ import Button from '../lib/button/Button';
 import CenterAll from '../lib/component/CenterAll';
 import Container from '../lib/component/Container';
 import MainBody from '../lib/component/MainBody'
+import { checkLevel } from '../lib/function/checkLevel';
 import { popOut, rotateAndZoom, rotateInBottonLeft, spin } from '../lib/ux/keyframes';
 import { styled } from '../stitches.config';
 
@@ -28,7 +29,7 @@ const Notification = styled('div',{
   padding: '1em 2.5em',
   borderRadius: '$round',
   width: 'fit-content',
-  animation:`${popOut} 0.5s`,
+  animation:`${popOut} 1s`,
   'h5':{
     margin: '0',
     color: 'white',
@@ -141,10 +142,12 @@ export default function Profile() {
 
   const [userData,loadingUserData] = useDocument(doc(db, `users/${user && user.uid}`));
 
-  const [openNotification, setOpenNotification] = useState(false);
   const [openDetails, setOpenDetails] = useState(false)
   const [showNewContent, setShowNewContent] = useState(false)
+  const [loading, setLoading] = useState(false)
 
+  const [load1] = useSound('/sound/load-1-sg.mp3')
+  const [celebrate1] = useSound('/sound/celebrate-1-sg.mp3')
   const [celebrate2] = useSound('/sound/celebrate-2-sg.mp3')
   const [tap2] = useSound('/sound/tap-2-sg.mp3',{playbackRate:1.3})
   
@@ -161,6 +164,28 @@ export default function Profile() {
     tap2();
   }
 
+  const [upgradableLevel, setUpgradableLevel] = useState(0);
+  const upgrade = async() =>{
+    setLoading(true);
+    load1();
+    await updateDoc(doc(db, `users/${user && user.uid}/`), {
+      level:upgradableLevel,
+    });
+    reFlip();
+    celebrate1();
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    if (user && userData) {
+      let postCount = userData.data().postCount;
+      let reviewCount = userData.data().reviewCount;
+      if (checkLevel(postCount,reviewCount) !== userData.data().level) {
+        flip();
+        setUpgradableLevel(checkLevel(postCount,reviewCount))
+      }
+    }
+  },[userData])
 
   return (
     <MainBody>
@@ -170,101 +195,115 @@ export default function Profile() {
           {userData &&  
           <>
             <AlignItems justifyContent={'center'}>
-              {openNotification &&
+              {openDetails &&
                 <Notification>
-                  <h5>カードをアップグレードできます。</h5>
-                  <p>アカウント設定からアップグレード可能です。</p>
+                  {loading ?
+                    <ClipLoader color="white"/>:
+                    <>
+                      <h5>カードをアップグレードできます。</h5>
+                      <p>清涼広場の機能をより活用しよう！</p>
+                    </>
+                  }
                 </Notification>
               }
             </AlignItems>
-            <Perspective>
-              <ProfileCard
-                level={userData.data().level}
-                rotateAndZoom={openDetails}
-              >
-                {showNewContent ?
-                  <Grid gap={'medium'}>
-                    <AlignItems>
-                      <img
-                        width='20'
-                        height= '20'
-                        src={user.photoURL}
-                      />
-                      <h3>{user.displayName}</h3>
-                    </AlignItems>
-                    <Container type="white">
-                      <Grid gap={'large'}>
-                        <Grid gap={'small'}>
-                          <p>Current Status：</p>
-                          <h2>Level {userData.data().level} Contributor</h2>
-                        </Grid>
-                        <p>
-                          {user.displayName}おめでとうございます。
-                          <br/>
-                          いつもSEIRYO GROUNDへの貢献大変ありがとうございます。
-                          <br/>
-                          以下のボタンを押すとカードのアップグレードができます。
-                        </p>
-                        <AlignItems justifyContent={'center'}>
-                          <Button
-                            color='black'
-                            onClick={()=>alert('Level Contributor')}
-                            iconPosition={'left'}
-                            icon={<FiDownloadCloud/>}
-                          >
-                            アップグレード
-                          </Button>
+            {!loading &&
+              <>              
+                <Perspective>
+                  <ProfileCard
+                    level={userData.data().level}
+                    rotateAndZoom={openDetails}
+                  >
+                    {showNewContent ?
+                      <Grid gap={'medium'}>
+                        <AlignItems>
+                          <img
+                            width='20'
+                            height= '20'
+                            src={user.photoURL}
+                          />
+                          <h3>{user.displayName}</h3>
                         </AlignItems>
-                      </Grid>
-                    </Container>
-                  </Grid>:
-                  <AlignItems justifyContent={'space-between'}>
-                    <Grid gap={'medium'}>
-                      <img
-                        width='100'
-                        height= '100'
-                        src={user.photoURL}
-                      />
-                      <Grid>
-                        <h2>{user.displayName}</h2>
-                        <p>{user.email}</p>
-                      </Grid>
-                      <h5>SEIRYO GROUND | 清涼広場</h5>
-                    </Grid>
-                    <VerticalText>
-                      <p>Level {userData.data().level} Membership Card</p>
-                      <p>{user.uid}</p>
-                    </VerticalText>
-                  </AlignItems>
-                }
-              </ProfileCard>
-            </Perspective>
-            <AlignItems justifyContent={'center'}>
-              <Button
-                color="white"
-                iconPosition="left"
-                icon={<FiArrowLeft/>}
-                onClick={() =>router.push('/')}
-              >
-                戻る
-              </Button>
-              <Button
-                color="white"
-                iconPosition="left"
-                icon={showNewContent ? <FiX/>:<FiSmile/>}
-                onClick={()=>{showNewContent ? reFlip():flip()}}
-              >
-                {showNewContent ? '閉じる':'詳細を開く'}
-              </Button>
-              <Button
-                color="white"
-                iconPosition={'left'}
-                icon={<FiInfo/>}
-                onClick={()=>router.push('/levels')}
-              >
-                カードについて
-              </Button>
-            </AlignItems>
+                        <Container type="white">
+                          <Grid gap={'large'}>
+                            <Grid gap={'small'}>
+                              <p>Level {userData.data().level}から</p>
+                              <AlignItems>
+                                <h2>Level {upgradableLevel}</h2>
+                                <p>にアップグレード</p>
+                              </AlignItems>
+                            </Grid>
+                            <p>
+                              {user.displayName}おめでとうございます。
+                              <br/>
+                              いつもSEIRYO GROUNDへの貢献大変ありがとうございます。
+                              <br/>
+                              以下のボタンを押すとカードのアップグレードができます。
+                            </p>
+                            <AlignItems justifyContent={'center'}>
+                              <Button
+                                color='black'
+                                onClick={()=>upgrade()}
+                                iconPosition={'left'}
+                                icon={<FiDownloadCloud/>}
+                              >
+                                アップグレード
+                              </Button>
+                            </AlignItems>
+                          </Grid>
+                        </Container>
+                      </Grid>:
+                      <AlignItems justifyContent={'space-between'}>
+                        <Grid gap={'medium'}>
+                          <img
+                            width='70'
+                            height= '70'
+                            src={user.photoURL}
+                          />
+                          <Grid>
+                            <h2>{user.displayName}</h2>
+                            <p>{user.email}</p>
+                          </Grid>
+                          <h5>SEIRYO GROUND | 清涼広場</h5>
+                        </Grid>
+                        <VerticalText>
+                          <p>Level {userData.data().level} Membership Card</p>
+                          <p>{user.uid}</p>
+                        </VerticalText>
+                      </AlignItems>
+                    }
+                  </ProfileCard>
+                </Perspective>
+                <AlignItems justifyContent={'center'}>
+                  <Button
+                    color="white"
+                    iconPosition="left"
+                    icon={<FiArrowLeft/>}
+                    onClick={() =>router.push('/')}
+                  >
+                    戻る
+                  </Button>
+                  {showNewContent &&              
+                    <Button
+                      color="white"
+                      iconPosition="left"
+                      icon={<FiX/>}
+                      onClick={()=>reFlip()}
+                    >
+                      閉じる
+                    </Button>
+                  }
+                  <Button
+                    color="white"
+                    iconPosition={'left'}
+                    icon={<FiInfo/>}
+                    onClick={()=>router.push('/levels')}
+                  >
+                    カードについて
+                  </Button>
+                </AlignItems>
+              </>
+            }
           </>
           }
           {loadingUserData &&
