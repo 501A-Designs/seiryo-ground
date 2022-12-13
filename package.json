@@ -10,19 +10,23 @@
   },
   "dependencies": {
     "@formkit/auto-animate": "^1.0.0-beta.3",
+    "@radix-ui/colors": "^0.1.8",
+    "@radix-ui/react-accordion": "^1.0.1",
+    "@radix-ui/react-dialog": "^1.0.2",
     "@react-google-maps/api": "^2.12.2",
     "@stitches/react": "^1.2.8",
     "@twistezo/react-text-scramble": "^1.0.6",
+    "cmdk": "^0.1.20",
     "contentful": "^9.1.32",
     "distortion-effect-carousel": "^1.1.0",
     "firebase": "^9.8.4",
     "mapbox-gl": "npm:empty-npm-package@^1.0.0",
     "maplibre-gl": "^2.3.0",
     "moment": "^2.29.3",
-    "next": "12.1.6",
-    "react": "18.1.0",
+    "next": "^13.0.6",
+    "react": "^18.2.0",
     "react-device-detect": "^2.2.2",
-    "react-dom": "18.1.0",
+    "react-dom": "^18.2.0",
     "react-firebase-hooks": "^5.0.3",
     "react-icons": "^4.4.0",
     "react-map-gl": "^7.0.19",
@@ -38,8 +42,11 @@
     "use-sound": "^4.0.1"
   },
   "devDependencies": {
+    "@types/node": "^18.11.14",
+    "@types/react": "^18.0.26",
     "eslint": "8.17.0",
-    "eslint-config-next": "12.1.6",
-    "react-app-rewired": "^2.2.1"
+    "eslint-config-next": "^13.0.6",
+    "react-app-rewired": "^2.2.1",
+    "typescript": "^4.9.4"
   }
 }

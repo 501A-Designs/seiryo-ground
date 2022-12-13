@@ -29,6 +29,6 @@ const FooterStyled = styled('footer', {
 
 export default function Footer(props) {
   return (
-    <FooterStyled type={props.type}></FooterStyled>
+    <FooterStyled type={props.type}/>
   )
 }

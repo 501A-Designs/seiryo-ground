@@ -1,4 +1,5 @@
 import { doc, setDoc, updateDoc } from 'firebase/firestore';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react'
 import { useState } from 'react';
@@ -217,10 +218,11 @@ export default function Profile() {
                     {showNewContent ?
                       <Grid gap={'medium'}>
                         <AlignItems>
-                          <img
+                          <Image
                             width='20'
                             height= '20'
                             src={user.photoURL}
+                            alt={'profileImage'}
                           />
                           <h3>{user.displayName}</h3>
                         </AlignItems>

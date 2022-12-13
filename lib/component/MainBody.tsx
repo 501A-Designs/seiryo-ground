@@ -27,9 +27,9 @@ const MainBodyStyled = styled('div',{
     borderRadius: '$r2',
     // filter: 'grayscale(1)',
   },
-  '@mobile':{padding:'0% 5%'},
-  '@tablet':{padding:'0% 8%'},
-  '@desktop':{padding:'0% 15%'},
+  // '@mobile':{padding:'0% 5%'},
+  // '@tablet':{padding:'0% 8%'},
+  // '@desktop':{padding:'0% 15%'},
   'h1':{
     fontWeight: '500'
   },

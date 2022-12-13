@@ -16,7 +16,12 @@ export default function About() {
         flexDirection={'column'}
         margin={'2em 0 0 0'}
       >
-        <Image src={sgCenteredLogo} width={200} height={200}/>
+        <Image
+          alt={'SG-logo'}
+          src={sgCenteredLogo}
+          width={200}
+          height={200}
+        />
         <div style={{marginBottom:'1.5em'}}>
           <p style={{textAlign: 'center', maxWidth:'500px'}}>ご興味を持ってくださりありがとうございます。</p>
           <p style={{textAlign: 'left', maxWidth:'500px'}}>
