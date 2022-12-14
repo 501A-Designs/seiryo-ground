@@ -6,7 +6,7 @@ import { popOut } from '../ux/keyframes'
 const ButtonStyled = styled('button',{
   outlineColor:'$gray6',
   fontFamily: '$sgFont1',
-  fontSize:'$7',
+  fontSize:'15px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -16,9 +16,8 @@ const ButtonStyled = styled('button',{
   height:'fit-content',
   // minHeight:'35px',
   userSelect:'none',
-  cursor:'pointer',
   borderRadius:'50px',
-  animation: `${popOut} 0.7s`,
+  animation: `${popOut} 0.4s`,
   transition:'$speed1',
   variants:{
     size:{
@@ -48,28 +47,42 @@ const ButtonStyled = styled('button',{
         color:'gray',
         '&:hover':{
           backgroundColor:'$grayA3',
-          color: 'black',
+          color: '$gray12',
           // border:'1px solid $sgGray2',
           // boxShadow:'0px 0px 15px $sgGray1',
         }
       },
-      black:{
-        backgroundColor: 'black',
-        border:'1px solid black',
+      gray:{
+        backgroundColor: '$gray10',
+        border:'1px solid $gray10',
         color:'$gray9',
         '&:hover':{
+          color: 'white',
+        }
+      },
+      black:{
+        backgroundColor: '$gray12',
+        border:'1px solid $gray12',
+        color:'$gray6',
+        '&:hover':{
+          transform:'scale(1.02)',
+          opacity:'0.8',
           color: 'white',
         }
       }
     }
   },
   'span': {
-    '@tablet':{
-      display: 'none',
-    }
+    whiteSpace:'nowrap', 
+    fontSize:'11px',
+    fontWeight:'bold',
+    // '@tablet':{
+    //   display: 'none',
+    // }
   },
   defaultVariants:{
-    styleType:'standard'
+    styleType:'standard',
+    size:'medium'
   }
 })
 
@@ -77,6 +90,7 @@ export default function Button(props) {
 
   return (
     <ButtonStyled
+      // ref={props.ref}
       size={props.size}
       styleType={props.styleType}
       // onMouseEnter={()=> tap()}

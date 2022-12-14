@@ -6,12 +6,11 @@ import Grid from '../alignment/Grid';
 const ReviewStyled = styled('div', {
   padding: '1em',
   borderRadius: '$r2',
-  backgroundColor: '$sgGray1',
-  border:'1px solid $sgGray2',
+  backgroundColor: '$gray2',
+  border:'1px solid $gray5',
   cursor: 'pointer',
   userSelect: 'none',
-  fontFamily: '$sgFont1',
-  transition: '$speed1',
+  transition: '$speed2',
   'h3':{
     marginBottom: '0'
   },
@@ -19,9 +18,12 @@ const ReviewStyled = styled('div', {
     marginBottom: '0',
     fontSize: '$8'
   },
-  '&:hover':{
-    transform: 'scale(1.02)',
-  }
+  // '&:hover':{
+  //   borderRadius: '$r3',
+  //   transform: 'scale(1.02)',
+  //   boxShadow:'$shadow1',
+  //   backgroundColor:'$gray1'
+  // }
 })
 
 const ReviewNumberStyled = styled('span',{
@@ -49,10 +51,7 @@ function ReviewValue(props) {
 
 export default function Review(props) {
   return (
-    <ReviewStyled
-      type="standard"
-      key={props.key}
-    >
+    <ReviewStyled key={props.key}>
       <Grid grid={'twoOne'} gap={'medium'}>
         <Grid>
           <h3>{props.title}</h3>

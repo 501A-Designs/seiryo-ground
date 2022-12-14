@@ -1,10 +1,10 @@
 import React from 'react'
-import { styled } from '../stitches.config'
+import { styled } from '../../stitches.config'
 
 const DisplayRatingInputStyled = styled('div',{
   display: 'grid',
   gridTemplateColumns:'1fr',
-  backgroundColor:'$sgGray1',
+  backgroundColor:'$gray3',
   padding: '1em 1em 0.5em 1em',
   gap:'1em',
   borderRadius: '10px',
@@ -15,7 +15,7 @@ const DisplayRatingInputStyled = styled('div',{
   'input': {
     WebkitAppearance: 'none',
     appearance: 'none',
-    backgroundColor: '$sgGray3',
+    backgroundColor: '$gray5',
     height: '2px',
     cursor:'pointer',
     '&:focus': {
@@ -26,18 +26,18 @@ const DisplayRatingInputStyled = styled('div',{
     },
     '&::-webkit-slider-thumb': {
       WebkitAppearance: 'none',
-      background: '$sgWhiteBackground',
-      border:'1px solid $sgGray3',
+      background: '$gray1',
+      border:'1px solid $gray6',
       borderRadius: '$round',
       width: '30px',
       height: '30px',
-      boxShadow: '0px 3px 10px 0px rgba(0, 0, 0, 0.15)',
+      boxShadow: '$shadow1',
       color:'#a2a2a2',
       transition: '$speed2',
       '&:hover': {
-        background: '$sgBlackBackground',
         transform: 'scale(0.9)',
-        boxShadow: '0px 0px 30px $sgGray1',
+        background: '$gray12',
+        boxShadow:'none'
       },
       '&:active': {
         transform: 'translateY(-2px)',

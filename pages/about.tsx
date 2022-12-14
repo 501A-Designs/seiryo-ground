@@ -4,7 +4,7 @@ import React from 'react'
 import { FiArrowLeft, FiExternalLink } from 'react-icons/fi';
 import AlignItems from '../lib/alignment/AlignItems';
 import Button from '../lib/button/Button'
-import MainBody from '../lib/component/MainBody';
+import MainBody from '../lib/alignment/Margin';
 import sgCenteredLogo from '../public/sg-centered-logo.png'
 
 export default function About() {

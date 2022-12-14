@@ -5,7 +5,7 @@ import { FiArrowLeft, FiCheck } from 'react-icons/fi'
 import AlignItems from '../lib/alignment/AlignItems'
 import Button from '../lib/button/Button'
 import Footer from '../lib/component/Footer'
-import MainBody from '../lib/component/MainBody'
+import MainBody from '../lib/alignment/Margin'
 import End from '../lib/End'
 
 export default function Levels() {

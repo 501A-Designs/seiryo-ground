@@ -30,7 +30,7 @@ const ContainerStyled = styled('div', {
       },
       white: {
         backgroundColor: 'white',
-        border: '1px solid $gray3',
+        border: '1px solid $gray5',
       },
     },
     height: {

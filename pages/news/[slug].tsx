@@ -3,7 +3,7 @@ import { createClient } from 'contentful'
 import { useRouter } from 'next/router'
 import Button from '../../lib/button/Button'
 import AlignItems from '../../lib/alignment/AlignItems'
-import MainBody from '../../lib/component/MainBody'
+import MainBody from '../../lib/alignment/Margin'
 import { FiArrowLeft } from 'react-icons/fi'
 import Grid from '../../lib/alignment/Grid'
 

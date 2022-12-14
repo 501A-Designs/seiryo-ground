@@ -3,7 +3,7 @@ import { keyframes, styled } from '@stitches/react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import Button from '../button/Button';
 import { FiX } from 'react-icons/fi';
-import { fadeIn } from '../ux/keyframes';
+import { topSlideIn } from '../ux/keyframes';
 import AlignItems from '../alignment/AlignItems';
 
 
@@ -21,7 +21,7 @@ const StyledOverlay = styled(DialogPrimitive.Overlay, {
   position: 'fixed',
   inset: 0,
   '@media (prefers-reduced-motion: no-preference)': {
-    animation: `${fadeIn} 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
+    animation: `${topSlideIn} 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
   },
 });
 

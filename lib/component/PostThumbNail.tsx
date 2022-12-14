@@ -12,24 +12,26 @@ import useSound from 'use-sound';
 
 const PostThumbNailStyled = styled('div', {
   cursor:'pointer',
-  background:'linear-gradient(217deg, $gray3, $gray1)',
-  border: '1px solid $gray3',
+  background:'linear-gradient(217deg, $gray4, $gray2)',
+  border: '1px solid $gray4',
   color:'black',
   height:'max-content',
   padding:'1em',
   borderRadius: '$r2',
   transition: '$speed1',
   '&:hover':{
-    background:'linear-gradient(217deg, #404040, black)',
-    borderRadius:'$r3',
     zIndex: '100',
-    color:'white',
-    transform:'scale(1.05) perspective(200px) rotateX(2deg) rotateY(0deg)',
-    boxShadow: '0px 10px 10px $sgGray2',
+    borderRadius:'$r3',
+    // color:'white',
+    // background:'linear-gradient(217deg, #404040, black)',
+    // transform:'scale(1.05) perspective(200px) rotateX(2deg) rotateY(0deg)',
+    boxShadow: '0px 10px 10px $gray2',
   },
   'h3':{
+    fontFamily:'$sgFont2',
     fontSize:'$5',
-    marginTop: '0.5em'
+    marginTop: '0.5em',
+    fontWeight: '500'
   },
   'span':{
     fontSize:'$7',
@@ -39,15 +41,12 @@ const PostThumbNailStyled = styled('div', {
 export default function PostThumbNail(props) {
   const router = useRouter();
   const [reviewsCollection] = useCollection(collection(db, `places/${props.id}/reviews/`));
-  const [hovered, setHovered] = useState(false);
 
-  // Sount
+  // Sound
   const [action1] = useSound('/sound/action-1-sg.mp3',{playbackRate:1.1});
 
   return (
     <PostThumbNailStyled
-      onMouseEnter={()=>{setHovered(true)}}
-      onMouseLeave={()=> setHovered(false)}
       onClick={()=> {
         action1();
         router.push(`/place/${props.id}/`);
@@ -59,11 +58,13 @@ export default function PostThumbNail(props) {
         </AlignItems>
         <AlignItems justifyContent={'space-between'}>
           <TypeBadge
-            width={hovered ? 'short':'mini'}
+            width={'mini'}
             type={props.type}
           />
           {reviewsCollection && reviewsCollection.docs.length > 0 && 
-            <span style={{margin: 0}}>{reviewsCollection.docs.length}件</span>
+            <span style={{margin: 0}}>
+              {reviewsCollection.docs.length}件
+            </span>
           }
         </AlignItems>
       </Grid>

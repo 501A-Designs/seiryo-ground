@@ -5,7 +5,7 @@ import NewsThumbnail from '../../lib/component/NewsThumbNail'
 import Button from '../../lib/button/Button'
 import AlignItems from '../../lib/alignment/AlignItems'
 import { FiArrowLeft } from 'react-icons/fi'
-import MainBody from '../../lib/component/MainBody'
+import MainBody from '../../lib/alignment/Margin'
 import Grid from '../../lib/alignment/Grid'
 
 export async function getStaticProps(){

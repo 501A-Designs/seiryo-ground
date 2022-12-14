@@ -23,8 +23,8 @@ const SectionButtonStyled = styled('button',{
 
   transition:'$speed1',
   '&:hover':{
-    backgroundColor:'$gray2',
-    transform:'translateX(2px)',
+    backgroundColor:'$gray3',
+    transform:'scale(1.01)',
     color:'$gray12',
   },
 })

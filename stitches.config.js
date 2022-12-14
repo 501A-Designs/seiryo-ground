@@ -19,8 +19,8 @@ export const {styled,getCssText} = createStitches({
       // sgBlackBackground: 'linear-gradient(217deg, #383838, black)',
       // sgWhiteBackground: 'linear-gradient(217deg, rgb(248, 248, 248), white)',
 
-      mix: `linear-gradient(45deg,${gray.gray10} 0%,${gray.gray12} 50%,${gray.gray10} 100%)`,
-      // black: 'linear-gradient(0deg, black 0%, white 100%)',
+      mix: `linear-gradient(45deg,${'white'} 0%,${gray.gray6} 50%,${'white'} 100%)`,
+      sgBlack: 'linear-gradient(0deg, black 0%, white 100%)',
       sgBlue: 'linear-gradient(90deg, #00FFD1 0%, #5FC3FB 100%)',
       sgGreen: 'linear-gradient(90deg, #C3F304 0%, #50F403 100%)',
       sgRed: 'linear-gradient(90deg, #FFB422 0%, #FB7B5F 100%)',
@@ -57,7 +57,8 @@ export const {styled,getCssText} = createStitches({
     shadows: {
       shadow1:`0px 0px 20px ${grayA.grayA5}`,
       // shadow1:'0px 0px 20px #f0f0f0',
-      shadow2:`0px 0px 35px ${grayA.grayA5}`
+      shadow2:`0px 0px 35px ${grayA.grayA5}`,
+      shadow3:`0px 0px 35px ${grayA.grayA6}`,
     },
     transitions: {
       speed1:'0.2s',

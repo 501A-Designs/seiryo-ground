@@ -19,7 +19,7 @@ import TypeButton from '../../lib/button/TypeButton'
 
 import moment from 'moment';
 import 'moment/locale/ja'
-import DisplayRatingInput from '../../lib/DisplayRatingInput'
+import DisplayRatingInput from '../../lib/place-page/DisplayRatingInput'
 import { isBrowser } from 'react-device-detect'
 
 import Head from 'next/head'
@@ -30,7 +30,7 @@ import { FiArrowLeft, FiCheck, FiCreditCard, FiDollarSign, FiEdit, FiExternalLin
 import { useDocument } from 'react-firebase-hooks/firestore'
 import { ClipLoader } from 'react-spinners'
 import Container from '../../lib/component/Container'
-import MainBody from '../../lib/component/MainBody'
+import MainBody from '../../lib/alignment/Margin'
 import CreateContainer from '../../lib/component/CreateContainer'
 import Grid from '../../lib/alignment/Grid'
 import SizeSelectContainer, { SizeSelect } from '../../lib/button/SizeSelectContainer'
@@ -42,6 +42,7 @@ import Footer from '../../lib/component/Footer'
 import Dialog from '../../lib/component/Dialog'
 import AccordionContainer, { AccordionItem } from '../../lib/component/AccordionContainer'
 import Link from 'next/link'
+import UniversalNav from '../../lib/component/UniversalNav'
 
 export default function PlaceName() {
   const router = useRouter();
@@ -286,236 +287,8 @@ export default function PlaceName() {
       }
 
       {placeData && 
+        <>
         <MainBody>
-          <AlignItems spaceBetween={true} margin={'0.5em 0 0 0'}>
-            <Button
-              color='transparent'
-              iconPosition={'left'}
-              icon={<FiArrowLeft/>}
-              onClick={()=> {router.push('/');}}
-            >
-              戻る
-            </Button>
-            {user &&
-              <AlignItems>
-                {userData.data().level > 1 &&
-                  <Dialog
-                    title={'この場所を編集'}
-                    size={'large'}
-                    trigger={
-                      <Button
-                        color="transparent"
-                        onClick={()=> {
-                          action1();
-                          setModalIsOpen(true);
-                        }}
-                        iconPosition={'left'}
-                        icon={<FiEdit/>}
-                      >
-                        ページを編集
-                      </Button>
-                    }
-                  >
-                        {/* <AlignItems justifyContent={'center'}>
-                          <Button
-                            color={'black'}
-                            iconPosition={'left'}
-                            icon={<FiSave/>}
-                            onClick={()=> editThisPlace()}
-                          >
-                            変更を保存
-                          </Button>
-                        </AlignItems> */}
-                    {userData && userData.data() &&
-                      <Grid gap={'small'}>
-                        {userData.data().level < 5 &&
-                          <Container
-                            type="standard"
-                            alignment="center"
-                          >
-                            <AlignItems>
-                              <FiLock/>
-                              <h5>報告</h5>
-                            </AlignItems>
-                            <p>全ての編集機能をアクセスするにはカードをアップグレードする必要があります。</p>
-                          </Container>
-                        }
-                        {/* PLACE NAME */}
-                        {userData.data().level > 4 &&
-                          <Input
-                            placeholder={"場所の名前"}
-                            value={placeInput}
-                            onChange={(e)=>{
-                              tap3();
-                              setPlaceInput(e.target.value)
-                            }}
-                          />
-                        }
-
-                        {/* PLACE DESCRIPTION */}
-                        {userData.data().level > 3 &&
-                        <TextArea
-                          placeholder={"概要"}
-                          value={descriptionInput}
-                          onChange={(e)=>{
-                            tap3();
-                            setDescriptionInput(e.target.value)
-                          }}
-                        />
-                        }
-
-                        {/* SITE */}
-                        {userData.data().level > 1 &&
-                          <Input
-                            placeholder={"公式サイト（無い場合は空欄）"}
-                            value={officialSiteInput}
-                            onChange={(e)=>{
-                              tap3();
-                              setOfficialSiteInput(e.target.value)
-                            }}
-                          />
-                        }
-
-                        {/* PLACE DESCRIPTION */}
-                        {userData.data().level > 3 &&
-                        <>
-                          <Input
-                            placeholder={"場所（スペース無し英語表記｜例：koishikawa-korakuen）"}
-                            value={locationInput}
-                            onChange={(e)=>{
-                              tap3();
-                              setLocationInput(e.target.value)
-                            }}
-                          />
-                          <iframe
-                            src={`https://www.google.com/maps?output=embed&q=${locationInput}`}
-                            width="100%"
-                            height="250px"
-                          />
-                        </>
-                        }
-                        <AccordionContainer>
-                          {userData.data().level > 1 &&
-                            <AccordionItem
-                              number={'1'}
-                              name={'トイレの有無'}
-                            >
-                              <Container type="standard">
-                                <BinaryToggleContainer>
-                                  <BinaryToggle
-                                    currentState={binaryToggle}
-                                    selected={binaryToggle === true}
-                                    onClick={()=>{
-                                      select1();
-                                      setBinaryToggle(true)
-                                    }}
-                                  >
-                                    有
-                                  </BinaryToggle>
-                                  <BinaryToggle
-                                    currentState={binaryToggle}
-                                    selected={binaryToggle === false}
-                                    onClick={()=>{
-                                      select2();
-                                      setBinaryToggle(false)
-                                    }}
-                                  >
-                                    無
-                                  </BinaryToggle>
-                                </BinaryToggleContainer>
-                              </Container>
-                            </AccordionItem>                          
-                          }
-                          <AccordionItem
-                            number={'2'}
-                            name={'種類'}
-                          >
-                            {userData.data().level > 3 &&
-                              <Grid gap={'extraSmall'}>
-                                {typeButtonArray.map(color =>{
-                                  return <TypeButton
-                                    key={color}
-                                    type={color}
-                                    onClick={()=>{
-                                      select1();
-                                      setTypeInput(color);
-                                    }}
-                                    selectedInput={typeInput}
-                                  />
-                                })}
-                              </Grid>
-                            }
-                          </AccordionItem>
-                          {userData.data().level > 2 &&
-                            <>
-                              <AccordionItem
-                                number={'3'}
-                                name={'値段'}
-                              >
-                                <Grid gap={'extraSmall'}>
-                                  {costButtonArray.map(name =>{
-                                    return(
-                                      <CheckBox
-                                        key={name}
-                                        checked={costCheckBox.some(element => element === name)}
-                                        name={name}
-                                        onClick={()=>
-                                          {
-                                            tap1();
-                                            costCheckBox.some(element => element === name) ?
-                                            setCostCheckBox(prev => prev.filter(element => element !== name )):
-                                            setCostCheckBox([...costCheckBox, name]);
-                                          }
-                                        }
-                                      >
-                                        {name}
-                                      </CheckBox>
-                                    )
-                                  })}
-                                </Grid>
-                              </AccordionItem>
-                              <AccordionItem
-                                number={'4'}
-                                name={'大きさ'}
-                              >   
-                                <SizeSelectContainer
-                                  hide
-                                  currentState={sizeSelect}
-                                >
-                                  {sizeButtonArray.map(size=>{
-                                    return <SizeSelect
-                                      name={size}
-                                      key={size}
-                                      currentState={sizeSelect}
-                                      onClick={()=> {
-                                        select1();
-                                        setSizeSelect(size);
-                                      }}
-                                    />
-                                  })}
-                                </SizeSelectContainer>
-                              </AccordionItem>
-                            </>
-                          }
-                        </AccordionContainer>
-                      </Grid>
-                    }
-                  </Dialog>
-                }
-                <Button
-                  color='transparent'
-                  iconPosition={'left'}
-                  icon={<FiHeart/>}
-                  onClick={()=> {
-                    !liked && celebrate2();
-                    liked ? removeLike():addLike()
-                  }}
-                >
-                  {liked ? 'いいねを外す':'いいね'}
-                </Button>
-              </AlignItems>
-            }
-          </AlignItems>
           <Grid>
             <h1
               style={{
@@ -633,8 +406,6 @@ export default function PlaceName() {
                   </Grid>
                 </Grid>
               </Container>
-              {/* <Grid gap={'extraSmall'}>
-              </Grid> */}
 
               <iframe
                 src={`https://www.google.com/maps?output=embed&q=${placeData.location}`}
@@ -646,8 +417,7 @@ export default function PlaceName() {
               {user ? 
                 <AlignItems justifyContent={'center'}>
                   <Button
-                    color='black'
-                    iconPosition={'left'}
+                    styleType={'black'}
                     icon={openCreateReview ? <FiX/>:<>{hasReviewed ? <FiRefreshCw/>:<FiPlus/>}</>}
                     onClick={()=>{openCreateReview ? 
                       closeCreateReviewContainer():
@@ -737,8 +507,7 @@ export default function PlaceName() {
                         >
                           {hasReviewed ?
                             <Button
-                              color='black'
-                              iconPosition={'right'}
+                              styleType={'black'}
                               icon={<FiSave/>}
                               onClick={()=>{
                                 updateReview();
@@ -749,8 +518,7 @@ export default function PlaceName() {
                               レビューの内容を更新
                             </Button>:
                             <Button
-                              color='black'
-                              iconPosition={'right'}
+                              styleType={'black'}
                               icon={<FiSave/>}
                               onClick={()=>{
                                 publishReview();
@@ -797,6 +565,238 @@ export default function PlaceName() {
           </Grid>
           <Footer type={'blur'}/>
         </MainBody>
+        <UniversalNav
+          size={user ? 'xl':'l'}
+          hideInitially={false}
+          dynamicButton={
+            <>
+              <Button
+                size={'small'}
+                styleType={'transparent'}
+                icon={<FiArrowLeft/>}
+                onClick={()=> {router.push('/')}}
+              />
+              {user &&
+                <>
+                  {userData.data().level > 1 &&
+                    <Dialog
+                      title={'この場所を編集'}
+                      size={'large'}
+                      trigger={
+                        <Button
+                          size={'small'}
+                          styleType={'transparent'}
+                          onClick={()=> {
+                            action1();
+                            setModalIsOpen(true);
+                          }}
+                          iconPosition={'left'}
+                          icon={<FiEdit/>}
+                        />
+                      }
+                    >
+                      <AlignItems justifyContent={'center'}>
+                        <Button
+                          color={'black'}
+                          iconPosition={'left'}
+                          icon={<FiSave/>}
+                          onClick={()=> editThisPlace()}
+                        >
+                          変更を保存
+                        </Button>
+                      </AlignItems>
+                      {userData && userData.data() &&
+                        <Grid gap={'small'}>
+                          {userData.data().level < 5 &&
+                            <Container
+                              type="standard"
+                              alignment="center"
+                            >
+                              <AlignItems>
+                                <FiLock/>
+                                <h5>報告</h5>
+                              </AlignItems>
+                              <p>全ての編集機能をアクセスするにはカードをアップグレードする必要があります。</p>
+                            </Container>
+                          }
+                          {/* PLACE NAME */}
+                          {userData.data().level > 4 &&
+                            <Input
+                              placeholder={"場所の名前"}
+                              value={placeInput}
+                              onChange={(e)=>{
+                                tap3();
+                                setPlaceInput(e.target.value)
+                              }}
+                            />
+                          }
+
+                          {/* PLACE DESCRIPTION */}
+                          {userData.data().level > 3 &&
+                          <TextArea
+                            placeholder={"概要"}
+                            value={descriptionInput}
+                            onChange={(e)=>{
+                              tap3();
+                              setDescriptionInput(e.target.value)
+                            }}
+                          />
+                          }
+
+                          {/* SITE */}
+                          {userData.data().level > 1 &&
+                            <Input
+                              placeholder={"公式サイト（無い場合は空欄）"}
+                              value={officialSiteInput}
+                              onChange={(e)=>{
+                                tap3();
+                                setOfficialSiteInput(e.target.value)
+                              }}
+                            />
+                          }
+
+                          {/* PLACE DESCRIPTION */}
+                          {userData.data().level > 3 &&
+                          <>
+                            <Input
+                              placeholder={"場所（スペース無し英語表記｜例：koishikawa-korakuen）"}
+                              value={locationInput}
+                              onChange={(e)=>{
+                                tap3();
+                                setLocationInput(e.target.value)
+                              }}
+                            />
+                            <iframe
+                              src={`https://www.google.com/maps?output=embed&q=${locationInput}`}
+                              width="100%"
+                              height="250px"
+                            />
+                          </>
+                          }
+                          <AccordionContainer>
+                            {userData.data().level > 1 &&
+                              <AccordionItem
+                                number={'1'}
+                                name={'トイレの有無'}
+                              >
+                                <Container type="standard">
+                                  <BinaryToggleContainer>
+                                    <BinaryToggle
+                                      currentState={binaryToggle}
+                                      selected={binaryToggle === true}
+                                      onClick={()=>{
+                                        select1();
+                                        setBinaryToggle(true)
+                                      }}
+                                    >
+                                      有
+                                    </BinaryToggle>
+                                    <BinaryToggle
+                                      currentState={binaryToggle}
+                                      selected={binaryToggle === false}
+                                      onClick={()=>{
+                                        select2();
+                                        setBinaryToggle(false)
+                                      }}
+                                    >
+                                      無
+                                    </BinaryToggle>
+                                  </BinaryToggleContainer>
+                                </Container>
+                              </AccordionItem>                          
+                            }
+                            <AccordionItem
+                              number={'2'}
+                              name={'種類'}
+                            >
+                              {userData.data().level > 3 &&
+                                <Grid gap={'extraSmall'}>
+                                  {typeButtonArray.map(color =>{
+                                    return <TypeButton
+                                      key={color}
+                                      type={color}
+                                      onClick={()=>{
+                                        select1();
+                                        setTypeInput(color);
+                                      }}
+                                      selectedInput={typeInput}
+                                    />
+                                  })}
+                                </Grid>
+                              }
+                            </AccordionItem>
+                            {userData.data().level > 2 &&
+                              <>
+                                <AccordionItem
+                                  number={'3'}
+                                  name={'値段'}
+                                >
+                                  <Grid gap={'extraSmall'}>
+                                    {costButtonArray.map(name =>{
+                                      return(
+                                        <CheckBox
+                                          key={name}
+                                          checked={costCheckBox.some(element => element === name)}
+                                          name={name}
+                                          onClick={()=>
+                                            {
+                                              tap1();
+                                              costCheckBox.some(element => element === name) ?
+                                              setCostCheckBox(prev => prev.filter(element => element !== name )):
+                                              setCostCheckBox([...costCheckBox, name]);
+                                            }
+                                          }
+                                        >
+                                          {name}
+                                        </CheckBox>
+                                      )
+                                    })}
+                                  </Grid>
+                                </AccordionItem>
+                                <AccordionItem
+                                  number={'4'}
+                                  name={'大きさ'}
+                                >   
+                                  <SizeSelectContainer
+                                    hide
+                                    currentState={sizeSelect}
+                                  >
+                                    {sizeButtonArray.map(size=>{
+                                      return <SizeSelect
+                                        name={size}
+                                        key={size}
+                                        currentState={sizeSelect}
+                                        onClick={()=> {
+                                          select1();
+                                          setSizeSelect(size);
+                                        }}
+                                      />
+                                    })}
+                                  </SizeSelectContainer>
+                                </AccordionItem>
+                              </>
+                            }
+                          </AccordionContainer>
+                        </Grid>
+                      }
+                    </Dialog>
+                  }
+                  <Button
+                    size={'small'}
+                    styleType={'transparent'}
+                    icon={<FiHeart/>}
+                    onClick={()=> {
+                      !liked && celebrate2();
+                      liked ? removeLike():addLike()
+                    }}
+                  />
+                </>
+              }
+            </>
+          }
+        >
+        </UniversalNav>
+        </>
       }
     </>
   )

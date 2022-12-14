@@ -26,9 +26,9 @@ const popOut = keyframes({
     transform: 'scale(0.5)',
     opacity: 0
   },
-  '50%':{
-    transform: 'scale(1.03)'
-  }
+  // '50%':{
+  //   transform: 'scale(1.03)'
+  // }
 });
 
 const rotateIn = keyframes({

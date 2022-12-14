@@ -11,10 +11,10 @@ import useSound from 'use-sound';
 import { auth, db } from '../firebase'
 import AlignItems from '../lib/alignment/AlignItems';
 import Grid from '../lib/alignment/Grid';
+import Margin from '../lib/alignment/Margin';
 import Button from '../lib/button/Button';
 import CenterAll from '../lib/component/CenterAll';
 import Container from '../lib/component/Container';
-import MainBody from '../lib/component/MainBody'
 import { checkLevel } from '../lib/function/checkLevel';
 import { popOut, rotateAndZoom, rotateInBottonLeft, spin } from '../lib/ux/keyframes';
 import { styled } from '../stitches.config';
@@ -189,7 +189,7 @@ export default function Profile() {
   },[userData])
 
   return (
-    <MainBody>
+    <Margin>
       <CenterAll>
       {user ?
         <Grid gap={'medium'}>
@@ -317,6 +317,6 @@ export default function Profile() {
         <h4>ログインする必要がございます</h4>
       }
       </CenterAll>
-    </MainBody>
+    </Margin>
   )
 }
