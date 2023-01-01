@@ -18,6 +18,7 @@ import Container from '../lib/component/Container';
 import { checkLevel } from '../lib/function/checkLevel';
 import { popOut, rotateAndZoom, rotateInBottonLeft, spin } from '../lib/ux/keyframes';
 import { styled } from '../stitches.config';
+import UniversalNav from '../lib/component/UniversalNav';
 
 const Perspective = styled('div',{
   perspective: '200px',
@@ -73,7 +74,8 @@ const ProfileCard = styled('div',{
   },
   'h5':{
     margin:0,
-    fontWeight: 'normal'
+    fontWeight: 'normal',
+    fontFamily:'$sgFont2'
   },
 
   // Levels
@@ -87,31 +89,31 @@ const ProfileCard = styled('div',{
         }
       },
       2:{
-        color: '#254557',
-        background: '$levelTwo',
+        color: '$blue1',
+        background: 'linear-gradient(45deg, $blue11 0%, $blue8 100%)',
         [`& ${VerticalText}`]:{
-          color: '#4c7891',
+          color: '$blue6',
         }
       },
       3:{
-        color: '#1a380b',
-        background: '$levelThree',
+        color: '$green1',
+        background: 'linear-gradient(45deg, $green11 0%, $green8 100%)',
         [`& ${VerticalText}`]:{
-          color: '#408c1c',
+          color: '$green6',
         }
       },
       4:{
-        color: '#473410',
-        background: '$levelFour',
+        color: '$orange1',
+        background: 'linear-gradient(45deg, $orange11 0%, $orange8 100%)',
         [`& ${VerticalText}`]:{
-          color: '#6e5019',
+          color: '$orange6',
         }
       },
       5:{
-        color: 'white',
-        background: '$levelFive',
+        color: '$gray1',
+        background: 'linear-gradient(45deg, $gray12 0%, $gray11 100%)',
         [`& ${VerticalText}`]:{
-          color: '$sgGray3',
+          color: '$gray6',
         }
       },
     },
@@ -191,25 +193,24 @@ export default function Profile() {
   return (
     <Margin>
       <CenterAll>
-      {user ?
-        <Grid gap={'medium'}>
-          {userData &&  
-          <>
-            <AlignItems justifyContent={'center'}>
-              {openDetails &&
-                <Notification>
-                  {loading ?
-                    <ClipLoader color="white"/>:
-                    <>
-                      <h5>カードをアップグレードできます。</h5>
-                      <p>清涼広場の機能をより活用しよう！</p>
-                    </>
-                  }
-                </Notification>
-              }
-            </AlignItems>
-            {!loading &&
-              <>              
+        {user ?
+          <Grid gap={'medium'}>
+            {userData &&  
+            <>
+              <AlignItems justifyContent={'center'}>
+                {openDetails &&
+                  <Notification>
+                    {loading ?
+                      <ClipLoader color="white"/>:
+                      <>
+                        <h5>カードをアップグレードできます。</h5>
+                        <p>清涼広場の機能をより活用しよう！</p>
+                      </>
+                    }
+                  </Notification>
+                }
+              </AlignItems>
+              {!loading &&           
                 <Perspective>
                   <ProfileCard
                     level={userData.data().level}
@@ -217,15 +218,7 @@ export default function Profile() {
                   >
                     {showNewContent ?
                       <Grid gap={'medium'}>
-                        <AlignItems>
-                          <Image
-                            width='20'
-                            height= '20'
-                            src={user.photoURL}
-                            alt={'profileImage'}
-                          />
-                          <h3>{user.displayName}</h3>
-                        </AlignItems>
+                        <h3>{user.displayName}</h3>
                         <Container type="white">
                           <Grid gap={'large'}>
                             <Grid gap={'small'}>
@@ -255,18 +248,16 @@ export default function Profile() {
                           </Grid>
                         </Container>
                       </Grid>:
-                      <AlignItems justifyContent={'space-between'}>
+                      <AlignItems
+                        justifyContent={'space-between'}
+                        alignItems={'top'}
+                      >
                         <Grid gap={'medium'}>
-                          <img
-                            width='70'
-                            height= '70'
-                            src={user.photoURL}
-                          />
+                          <h5>SEIRYO GROUND | 清涼広場</h5>
                           <Grid>
                             <h2>{user.displayName}</h2>
                             <p>{user.email}</p>
                           </Grid>
-                          <h5>SEIRYO GROUND | 清涼広場</h5>
                         </Grid>
                         <VerticalText>
                           <p>Level {userData.data().level} Membership Card</p>
@@ -276,47 +267,50 @@ export default function Profile() {
                     }
                   </ProfileCard>
                 </Perspective>
-                <AlignItems justifyContent={'center'}>
-                  <Button
-                    color="white"
-                    iconPosition="left"
-                    icon={<FiArrowLeft/>}
-                    onClick={() =>router.push('/')}
-                  >
-                    戻る
-                  </Button>
-                  {showNewContent &&              
-                    <Button
-                      color="white"
-                      iconPosition="left"
-                      icon={<FiX/>}
-                      onClick={()=>reFlip()}
-                    >
-                      閉じる
-                    </Button>
-                  }
-                  <Button
-                    color="white"
-                    iconPosition={'left'}
-                    icon={<FiInfo/>}
-                    onClick={()=>router.push('/levels')}
-                  >
-                    カードについて
-                  </Button>
-                </AlignItems>
-              </>
+              }
+            </>
             }
-          </>
-          }
-          {loadingUserData &&
-            <AlignItems justifyContent={'center'}>
-              <ClipLoader color="black"/>
-            </AlignItems>
-          }
-        </Grid>:
-        <h4>ログインする必要がございます</h4>
-      }
+            {loadingUserData &&
+              <AlignItems justifyContent={'center'}>
+                <ClipLoader color="black"/>
+              </AlignItems>
+            }
+          </Grid>:
+          <h4>ログインする必要がございます</h4>
+        }
       </CenterAll>
+      {!loading &&
+        <UniversalNav
+          showInitially={true}
+          minSize={'m'}
+          maxSize={showNewContent ? 'xl':'m'}
+          dynamicButton={
+            <>
+              <Button
+                size={'small'}
+                styleType={'transparent'}
+                icon={<FiArrowLeft/>}
+                onClick={() =>router.push('/')}
+              />
+              {showNewContent &&              
+                <Button
+                  styleType={'transparent'}
+                  icon={<FiX/>}
+                  onClick={()=>reFlip()}
+                >
+                  閉じる
+                </Button>
+              }
+              <Button
+                size={'small'}
+                styleType={'transparent'}
+                icon={<FiInfo/>}
+                onClick={()=>router.push('/levels')}
+              />
+            </>
+          }
+        />
+      }
     </Margin>
   )
 }

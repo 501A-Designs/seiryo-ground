@@ -5,17 +5,16 @@ import AlignItems from '../alignment/AlignItems';
 
 const NewsThumbNailStyled = styled('div',{
   cursor:'pointer',
-  background:'white',
+  background:'$gray1',
   color:'black',
-  borderBottom:'1px solid $sgGray2',
+  borderBottom:'1px solid $gray4',
   padding:'1em',
   display:'flex',
-  justifyContent: 'center',
   flexDirection:'column',
   justifyContent: 'space-between',
   transition: '$speed1',
   '&:hover':{
-    background:'$sgBlackBackground',
+    background:'$gray12',
     color:'white',
     borderRadius: '$r3',
     transform:'scale(0.99)',

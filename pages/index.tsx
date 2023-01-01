@@ -3,19 +3,16 @@ import Head from 'next/head'
 import AlignItems from '../lib/alignment/AlignItems'
 import PostThumbNail from '../lib/component/PostThumbNail'
 import Button from '../lib/button/Button'
-import Zoom from 'react-reveal/Zoom';
 
 import { useRouter } from 'next/router'
 
-import {app,analytics,auth,db} from '../firebase'
-import { useAuthState, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import {auth,db} from '../firebase'
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { doc, collection, query, where, getDoc } from "firebase/firestore";
-
-import LoadingBar from 'react-top-loading-bar';
 
 import CreatePlaceForm from '../lib/landing-page/CreatePlaceForm'
 import DistortionCarousel from '../lib/landing-page/DistortionCarousel'
-import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
+import { useCollection } from 'react-firebase-hooks/firestore';
 
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
@@ -25,12 +22,9 @@ import Select from 'react-select'
 import { prefectureData } from '../prefectureData'
 
 import WelcomeHeader from '../lib/landing-page/WelcomeHeader'
-import { FiCheckCircle, FiCornerLeftUp, FiGithub, FiInfo, FiLogIn, FiLogOut, FiPlus } from 'react-icons/fi'
+import { FiInfo } from 'react-icons/fi'
 import Container from '../lib/component/Container'
 import { ClipLoader } from 'react-spinners'
-import MainBody from '../lib/alignment/Margin'
-import GettingStartedModal from '../lib/landing-page/GettingStartedModal'
-import RightPannel from '../lib/landing-page/RightPannel'
 import MainAlign from '../lib/alignment/MainAlign'
 import Rating from '../lib/Rating'
 import Grid from '../lib/alignment/Grid'
@@ -59,7 +53,6 @@ export default function Home() {
   const [gettingStartedModalIsOpen, setGettingStartedModalIsOpen] = useState(false);
 
   // Auth & Firestore
-  const [signInWithGoogle] = useSignInWithGoogle(auth);
   const [user] = useAuthState(auth);
   const [placesCollection, placeCollectionLoading] = useCollection(collection(db, `places`))
 
@@ -217,7 +210,7 @@ export default function Home() {
                 </AlignItems>
                 {filteredPlaces && filteredPlaces.docs.length > 0 && <h3>合計{filteredPlaces.docs.length}カ所</h3>}
               </AlignItems>
-              <div ref={parent}>
+              <div>
                 {filteredPlaces && filteredPlaces.docs.length > 0 ?
                   <ResponsiveMasonry columnsCountBreakPoints={masonaryGrid}>
                     <Masonry gutter={'0.25em'}>
@@ -302,8 +295,11 @@ export default function Home() {
       </End>
       <Footer type={'blur'}/>
       <UniversalNav
-        hideInitially={true}
-        dynamicButton={user ? <CreatePlaceForm user={user}/>:
+        showInitially={false}
+        minSize={'s'}
+        maxSize={'l'}
+        dynamicButton={user ? 
+          <CreatePlaceForm user={user}/>:
           <Button
             size={'small'}
             styleType={'transparent'}

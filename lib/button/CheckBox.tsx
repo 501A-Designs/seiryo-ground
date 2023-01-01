@@ -14,17 +14,17 @@ const CheckBoxStyled = styled('div',{
   variants:{
     checked: {
       true: {
-        // backgroundColor: 'black',
-        background: '$sgBlackBackground',
-        color: 'white',
+        backgroundColor: '$gray12',
+        color: '$gray1',
       },
       false: {
-        backgroundColor: 'white',
-        color: 'black',
+        backgroundColor: 'transparent',
+        color: '$gray10',
         '&:hover': {
-          backgroundColor: '$sgGray2',
-          border: '1px solid $sgGray3',
-          transform: 'scale(1.04)'
+          backgroundColor:'$gray2',
+          border:'1px solid $gray4',
+          transform: 'scale(1.04)',
+          color: '$gray11',
         }
       }
     }

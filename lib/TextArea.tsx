@@ -1,8 +1,7 @@
 import { styled } from '../stitches.config'
 
 const TextAreaStyled = styled('textarea',{
-  fontFamily: '$sgFont1',
-  padding:'$small $medium',
+  padding:'$medium',
   outline: 'none',
   borderRadius: '$r2',
   backgroundColor: '$gray3',
@@ -11,7 +10,7 @@ const TextAreaStyled = styled('textarea',{
   minHeight:'100px',
   transition: '$speed2',
   '&:focus':{
-    backgroundColor: '$gray2',
+    backgroundColor: '$gray1',
     borderColor: '$gray5',
     // boxShadow: '$shadow1'
   }

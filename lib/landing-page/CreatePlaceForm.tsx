@@ -11,21 +11,20 @@ import { addDoc, collection, doc, increment, updateDoc } from "firebase/firestor
 import { useRouter } from 'next/router'
 import { prefectureData } from '../../prefectureData'
 import { FiArrowRight, FiPlus, FiSearch, FiSend } from 'react-icons/fi'
-import CreateContainer from '../component/CreateContainer'
 import Grid from '../alignment/Grid'
-import SizeSelectContainer, { SizeSelect } from '../button/SizeSelectContainer'
 import Container from '../component/Container'
-import BinaryToggleContainer, { BinaryToggle } from '../button/BinaryToggleContainer'
+
 import CheckBox from '../button/CheckBox'
 import { costButtonArray, sizeButtonArray, typeButtonArray } from '../button/buttonData'
 import FlipThrough from '../component/FlipThrough'
 import Link from 'next/link';
 
 import useSound from 'use-sound';
-import { ClipLoader } from 'react-spinners'
 import Dialog from '../component/Dialog'
 import { styled } from '../../stitches.config'
-import { fillClipPath } from '../ux/keyframes'
+import Map from '../component/Map'
+import BinaryToggle from '../button/BinaryToggle'
+import SizeSelect from '../button/SizeSelect'
 
 const selectStyle = {
   option: (provided, state) => ({
@@ -85,9 +84,8 @@ export default function CreatePlaceForm(props) {
   const [officialSiteInput, setOfficialSiteInput] = useState('');
 
   const [published, setPublished] = useState(false);
-  const [newPlace, setNewPlace] = useState();
-  const [section, setSection] = useState(1)
-
+  const [newPlace, setNewPlace] = useState(null);
+  const [section, setSection] = useState(1);
 
   const createNewPlace = async() => {
     setSection(0);
@@ -114,7 +112,7 @@ export default function CreatePlaceForm(props) {
       setPlaceInput('');
       setLocationInput('');
       setDescriptionInput('');
-      setPrefectureInput();
+      setPrefectureInput(null);
       setOfficialSiteInput('');
       setSizeSelect('medium');
       setBinaryToggle(true);
@@ -136,18 +134,20 @@ export default function CreatePlaceForm(props) {
       <ProgressBarStyled css={props.css}></ProgressBarStyled>
     )
   }
-  
 
+  // <Container type="standard">
+  //   <p>※よく内容を確認した上で公開してください。一度公開すると<Link href="/levels">Level 3 Contributor</Link>になるまでは編集することできないのでご了承ください。また、記入された内容は清涼広場の利用規約に反していないものであるようお願い致します。</p>
+  // </Container>
 
   return (
     <Dialog
       title={
-        section == 1 && '新しく追加' || 
-        section == 2 && '場所' || 
-        section == 3 && '場所の大きさ' || 
-        section == 4 && 'トイレの有無' ||
+        section == 1 && '新規追加' ||
+        section == 2 && '場所' ||
+        section == 3 && '大きさ' ||
+        section == 4 && 'トイレ有無' ||
         section == 5 && '種類' ||
-        section == 6 && '入場時の支払い方法'
+        section == 6 && '現地での支払い'
       }
       trigger={
         <Button
@@ -179,7 +179,7 @@ export default function CreatePlaceForm(props) {
                 icon={<FiSearch/>}
                 onClick={()=> {
                   tap1();
-                  router.push(`/place/${newPlace.id}/`);
+                  router.push(`/place/${newPlace?.id}/`);
                 }}
               >
                 追加した場所のページを閲覧
@@ -198,29 +198,6 @@ export default function CreatePlaceForm(props) {
             </AlignItems>
           </>:
           <>
-            {section == 0 ?
-              <AlignItems
-                justifyContent={'center'}
-                flexDirection="column"
-              >
-                <h3>少々お待ちください</h3>
-              </AlignItems>:
-              <>
-                <AlignItems
-                  gap={'0'}
-                  justifyContent={'center'}
-                  margin={'1em 0'}
-                  flexDirection="column"
-                >
-                  <strong>{section}/6</strong>
-                </AlignItems>
-                <ProgressBar
-                  css={{
-                    width:`${section/6*100}%`
-                  }}
-                />
-              </>
-            }
             {section == 1 && 
               <>
                 <Grid gap={'extraSmall'}>
@@ -267,99 +244,96 @@ export default function CreatePlaceForm(props) {
               </>
             }
             {section == 2 &&
-              <Grid gap={'extraSmall'}>                
-                <Select
-                  styles={selectStyle}
-                  options={prefectureData}
-                  components={{ DropdownIndicator:() => null, IndicatorSeparator:() => null }}
-                  onChange={(e)=>{
-                    select1();
-                    setPrefectureInput(e.value);
-                  }}
-                  placeholder={'都道府県を選択'}
-                />
+              <FlipThrough
+                leftClick={()=>{tap2();setSection(1)}}
+                rightClick={()=>{tap1();setSection(3)}}
+                currentSection={section}
+              >
+                <Grid gap={'extraSmall'}>                
+                  <Select
+                    styles={selectStyle}
+                    options={prefectureData}
+                    components={{ DropdownIndicator:() => null, IndicatorSeparator:() => null }}
+                    onChange={(e)=>{
+                      select1();
+                      setPrefectureInput(e.value);
+                    }}
+                    placeholder={'都道府県を選択'}
+                  />
 
-                <Input
-                  placeholder={"場所（スペース無し英語表記｜例：koishikawa-korakuen）"}
-                  value={locationInput}
-                  onChange={(e)=>{
-                    tap3();
-                    setLocationInput(e.target.value)
-                  }}
-                />
-                <iframe
-                  src={`https://www.google.com/maps?output=embed&q=${locationInput}`}
-                  width="100%"
-                  height="250px"
-                />
-                                  {/* prefectureInput && 
-                  locationInput &&  */}
-              </Grid>
+                  <Input
+                    placeholder={"場所（スペース無し英語表記｜例：koishikawa-korakuen）"}
+                    value={locationInput}
+                    onChange={(e)=>{
+                      tap3();
+                      setLocationInput(e.target.value)
+                    }}
+                  />
+                  <Map
+                    location={locationInput}
+                  />
+                </Grid>
+              </FlipThrough>
             }
 
             {section == 3 &&
               <FlipThrough
-                leftClick={()=>{tap2();setSection(1)}}
-                rightClick={()=>{tap1();setSection(3)}}
+                leftClick={()=>{tap2();setSection(2)}}
+                rightClick={()=>{tap1();setSection(4)}}
+                currentSection={section}
               >
-                <Container>
-                  <SizeSelectContainer
-                    currentState={sizeSelect}
-                  >
-                    {sizeButtonArray.map(size=>{
-                      return <SizeSelect
-                        name={size}
-                        key={size}
-                        currentState={sizeSelect}
-                        onClick={()=> {
-                          select1();
-                          setSizeSelect(size);
-                        }}
-                      />
-                    })}
-                  </SizeSelectContainer>
-                </Container>
+                <SizeSelect
+                  currentState={sizeSelect}
+                >
+                  {sizeButtonArray.map(size=>{
+                    return <SizeSelect.Item
+                      name={size}
+                      key={size}
+                      currentState={sizeSelect}
+                      onClick={()=> {
+                        select1();
+                        setSizeSelect(size);
+                      }}
+                    />
+                  })}
+                </SizeSelect>
               </FlipThrough>
             }
 
             {section == 4 &&    
               <FlipThrough
-                leftClick={()=>{tap2();setSection(2)}}
-                rightClick={()=>{tap1();setSection(4)}}
+                leftClick={()=>{tap2();setSection(3)}}
+                rightClick={()=>{tap1();setSection(5)}}
+                currentSection={section}
               >
-                <Container>
-                  <Container type={'standard'}>
-                    <BinaryToggleContainer>
-                      <BinaryToggle
-                        currentState={binaryToggle}
-                        selected={binaryToggle === true}
-                        onClick={()=>{
-                          select1();
-                          setBinaryToggle(true)
-                        }}
-                      >
-                        有
-                      </BinaryToggle>
-                      <BinaryToggle
-                        currentState={binaryToggle}
-                        selected={binaryToggle === false}
-                        onClick={()=>{
-                          select2();
-                          setBinaryToggle(false)
-                        }}
-                      >
-                        無
-                      </BinaryToggle>
-                    </BinaryToggleContainer>
-                  </Container>
-                </Container>
+                <BinaryToggle>
+                  <BinaryToggle.Item
+                    currentState={binaryToggle}
+                    selected={binaryToggle === true}
+                    onClick={()=>{
+                      select1();
+                      setBinaryToggle(true)
+                    }}
+                    name={'有'}
+                  />
+                  <BinaryToggle.Item
+                    currentState={binaryToggle}
+                    selected={binaryToggle === false}
+                    onClick={()=>{
+                      select2();
+                      setBinaryToggle(false)
+                    }}
+                    name={'無'}
+                  />
+                </BinaryToggle>
               </FlipThrough>
             }
 
             {section == 5 &&
               <FlipThrough
-                leftClick={()=>{tap2();setSection(3)}}
-                rightClick={()=>{tap1();setSection(5)}}
+                leftClick={()=>{tap2();setSection(4)}}
+                rightClick={()=>{tap1();setSection(6)}}
+                currentSection={section}
               >
                 <AlignItems justifyContent={'center'}>
                   <Grid gap={'extraSmall'}>
@@ -381,8 +355,7 @@ export default function CreatePlaceForm(props) {
 
             {section == 6 &&
               <FlipThrough
-                leftClick={()=>{tap2();setSection(4)}}
-                rightClick={()=>{tap1();setSection(5)}}
+                leftClick={()=>{tap2();setSection(5)}}
                 publish={
                   <Button
                     color='black'
@@ -395,11 +368,6 @@ export default function CreatePlaceForm(props) {
                   >
                     公開
                   </Button>
-                }
-                bottomBanner={
-                  <Container type="standard">
-                    <p>※よく内容を確認した上で公開してください。一度公開すると<Link href="/levels">Level 3 Contributor</Link>になるまでは編集することできないのでご了承ください。また、記入された内容は清涼広場の利用規約に反していないものであるようお願い致します。</p>
-                  </Container>
                 }
               >
                 <AlignItems justifyContent={'center'}>                  

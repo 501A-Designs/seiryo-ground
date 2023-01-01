@@ -2,20 +2,20 @@ import React from 'react'
 import { styled } from '../../stitches.config'
 import { spin } from '../ux/keyframes'
 
-const BinaryToggleStyled = styled('div',{
+const BinaryToggleItemStyled = styled('div',{
   backgroundColor: 'black',
   borderRadius: '$round',
   display:'flex',
   alignItems: 'center',
   justifyContent: 'center',
   cursor: 'pointer',
-  border: '1px solid $gray4',
+  border: '1px solid $gray5',
   transition:'ease $speed1',
   variants:{
     selected:{
       true:{
         color: '$gray1',
-        background:'linear-gradient($gray12,black)',
+        backgroundColor:'$gray12',
         boxShadow: '$shadow1',
         width: '95px',
         height: '95px',
@@ -37,18 +37,7 @@ const BinaryToggleStyled = styled('div',{
   }
 })
 
-export function BinaryToggle(props) {
-  return (
-    <BinaryToggleStyled
-      selected={props.selected}
-      onClick={props.onClick}
-    >
-      {props.children}
-    </BinaryToggleStyled>
-  )
-}
-
-const BinaryToggleContainerStyled = styled('div',{
+const BinaryToggleStyled = styled('div',{
   borderRadius: '$r2',
   padding: '$small',
   display:'flex',
@@ -60,10 +49,22 @@ const BinaryToggleContainerStyled = styled('div',{
   minHeight: '103px'
 })
 
-export default function BinaryToggleContainer(props) {
+const BinaryToggleItem = (props:any)=> {
   return (
-    <BinaryToggleContainerStyled>
+    <BinaryToggleItemStyled
+      selected={props.selected}
+      onClick={props.onClick}
+    >
+      {props.name}
+    </BinaryToggleItemStyled>
+  )
+}
+
+BinaryToggle.Item = BinaryToggleItem;
+export default function BinaryToggle(props) {
+  return (
+    <BinaryToggleStyled>
       {props.children}
-    </BinaryToggleContainerStyled>
+    </BinaryToggleStyled>
   )
 }

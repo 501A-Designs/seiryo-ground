@@ -10,12 +10,13 @@ const WelcomeHeaderStyled = styled('section', {
   margin: '0',
   right:'0',
   animation: `${topSlideIn} 0.5s`,
-  filter: 'invert(100%)',
-  mixBlendMode: 'exclusion',
+  // filter: 'invert(100%)',
+  // mixBlendMode: 'exclusion',
+  color:'white',
   writingMode:'vertical-rl',
   textOrientation:'mixed',
   'h1':{
-    fontSize:'2em',
+    fontSize:'2.5em',
     margin: '0',
     textShadow:'$shadow1'
   },

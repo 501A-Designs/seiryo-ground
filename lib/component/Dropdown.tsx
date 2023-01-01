@@ -4,14 +4,14 @@ import { styled } from '../../stitches.config';
 import { FiChevronDown } from 'react-icons/fi';
 import { keyframes } from '@stitches/react';
 
-const AccordionRootStyled = styled(Accordion.Root, {
+const DropdownRootStyled = styled(Accordion.Root, {
   borderRadius: '$r3',
 });
 
-const AccordionItemStyled = styled(Accordion.Item, {
+const DropdownItemStyled = styled(Accordion.Item, {
   overflow: 'hidden',
   marginTop: 1,
-  border:'1px solid $gray3',
+  border:'1px solid $gray4',
 
   '&:first-child': {
     marginTop: 0,
@@ -39,7 +39,6 @@ const AccordionTriggerStyled = styled(Accordion.Trigger, {
   cursor:'pointer',
   all: 'unset',
   fontFamily: 'inherit',
-  backgroundColor: 'transparent',
   padding: '0 20px',
   height: 45,
   flex: 1,
@@ -62,11 +61,11 @@ const ChevronStyled = styled(FiChevronDown, {
   '[data-state=open] &': { transform: 'rotate(180deg)' },
 });
 
-const AccordionTriggerComponent = React.forwardRef(
-  ({ children, ...props }, forwardedRef) => (
+const DropdownTrigger = React.forwardRef(
+  ({ children, ...props }:any, forwardedRef:any) => (
   <AccordionHeaderStyled>
     <AccordionTriggerStyled
-      // {...props}
+      {...props}
       ref={forwardedRef}
     >
       {children}
@@ -104,33 +103,34 @@ const AccordionContentTextStyled = styled('div', {
   padding: '$medium',
 });
 
-const AccordionContentComponent = React.forwardRef(({ children, ...props }, forwardedRef) => (
+const DropdownContent = React.forwardRef(({ children, ...props }:any, forwardedRef) => (
   <AccordionContentStyled {...props} ref={forwardedRef}>
     <AccordionContentTextStyled>{children}</AccordionContentTextStyled>
   </AccordionContentStyled>
 ));
 
-export function AccordionItem(props) {
+export function DropdownItem(props) {
   return(
-    <AccordionItemStyled value={`item-${props.number}`}>
-      <AccordionTriggerComponent>
+    <DropdownItemStyled value={`item-${props.number}`}>
+      <DropdownTrigger>
         {props.name}
-      </AccordionTriggerComponent>
-      <AccordionContentComponent>
+      </DropdownTrigger>
+      <DropdownContent>
         {props.children}
-      </AccordionContentComponent>
-    </AccordionItemStyled>
+      </DropdownContent>
+    </DropdownItemStyled>
   )
 }
 
-export default function AccordionContainer(props){
+Dropdown.Item = DropdownItem;
+export default function Dropdown(props){
   return(
-    <AccordionRootStyled
+    <DropdownRootStyled
       type="single"
       defaultValue="item-1"
       collapsible
     >
       {props.children}
-    </AccordionRootStyled>
+    </DropdownRootStyled>
   )
 };

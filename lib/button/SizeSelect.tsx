@@ -3,7 +3,7 @@ import { styled } from '../../stitches.config'
 import Grid from '../alignment/Grid'
 import Container from '../component/Container'
 
-const SizeSelectStyled = styled('div',{
+const SizeSelectItemStyled = styled('div',{
   cursor: 'pointer',
   display: 'flex',
   flexDirection: 'row',
@@ -12,8 +12,8 @@ const SizeSelectStyled = styled('div',{
   height: 'fit-content',
   border: '1px solid transparent',
   borderRadius: '$r2',
-  padding: '$medium',
-  fontSize: '$7',
+  padding: '$small',
+  fontSize: '$8',
   transition: '$speed1',
   variants: {
     selected: {
@@ -38,10 +38,9 @@ const SizeSelectStyled = styled('div',{
   },
 })
 
-export function SizeSelect(props) {
+const SizeSelectItem = (props)=> {
   return (
-    <SizeSelectStyled
-      name={props.name}
+    <SizeSelectItemStyled
       key={props.key}
       selected={props.name === props.currentState}
       onClick={props.onClick}
@@ -49,21 +48,22 @@ export function SizeSelect(props) {
       {props.name === 'small' && '小'}
       {props.name === 'medium' && '中'}
       {props.name === 'large' && '大'}
-    </SizeSelectStyled>
+    </SizeSelectItemStyled>
   )
 }
 
-const SizeSelectContainerStyled = styled('section',{
+const SizeSelectStyled = styled('section',{
   display: 'flex',
   gap:'$extraSmall',
 })
 
-export default function SizeSelectContainer(props) {
+SizeSelect.Item = SizeSelectItem;
+export default function SizeSelect(props) {
   return (
     <Grid gap={'extraSmall'}>
-      <SizeSelectContainerStyled>
+      <SizeSelectStyled>
         {props.children}
-      </SizeSelectContainerStyled>
+      </SizeSelectStyled>
       {!props.hide &&
         <Grid>
           <Container type="standard" height={'fullHeight'}>

@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { FiLogIn } from 'react-icons/fi'
@@ -6,15 +5,19 @@ import { styled } from '../../stitches.config'
 import AlignItems from '../alignment/AlignItems'
 import Grid from '../alignment/Grid'
 import Button from '../button/Button'
-import { spin } from '../ux/keyframes'
 import ProfileImage from './ProfileImage'
+import { useSignInWithGoogle } from 'react-firebase-hooks/auth'
+import { auth } from '../../firebase'
+import { gradient } from '../ux/keyframes'
 
 const ProfileCardStyled = styled('div',{
+  cursor:'pointer',
   borderRadius:'$r3',
-  backgroundColor:'$gray3',
+  background: 'linear-gradient(45deg,white 0%,$gray4 50%,white 100%)',
+  backgroundSize: '200% 200%',
   border:'1px solid $gray4',
   padding: '$large',
-  marginBottom:'$extraLarge',
+  marginBottom:'$medium',
 
   height: 'auto',
   transition: '$speed1',
@@ -30,15 +33,21 @@ const ProfileCardStyled = styled('div',{
     margin:0,
     fontWeight: 'normal'
   },
-})
 
-// interface ProfileContainer
+  '&:hover':{
+    animation:`${gradient} linear 0.6s infinite`,
+    transform:'scale(0.95)',
+  }
+})
 
 export default function ProfileContainer(props:any) {
   const router = useRouter();
+  const [signInWithGoogle] = useSignInWithGoogle(auth);
 
   return (
-    <ProfileCardStyled>
+    <ProfileCardStyled
+      onClick={()=>router.push('/profile')}
+    >
       {props.user ?
         <AlignItems gap={'1em'}>
           <ProfileImage
@@ -63,6 +72,7 @@ export default function ProfileContainer(props:any) {
             size={'medium'}
             styleType={'black'}
             icon={<FiLogIn/>}
+            onClick={()=>signInWithGoogle()}
           >
             アカウント作成
           </Button> 

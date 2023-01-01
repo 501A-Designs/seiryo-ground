@@ -1,6 +1,6 @@
-
 import { styled } from '../stitches.config'
 import '../styles/globals.css'
+import { useRouter } from 'next/router'
 
 const GlobalStyling = styled('div',{
   '*': {
@@ -42,7 +42,10 @@ const GlobalStyling = styled('div',{
   background:'$gray1',
 })
 
+
 function MyApp({ Component, pageProps }) {
+  const router = useRouter();
+
   return <GlobalStyling>
     <Component {...pageProps}/>
   </GlobalStyling>

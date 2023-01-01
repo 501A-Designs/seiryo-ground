@@ -44,6 +44,14 @@ const GridStyled = styled('div',{
           gridTemplateColumns: '2fr 1fr',
         }
       },
+      oneThree:{
+        '@tablet':{
+          gridTemplateColumns: '1fr 2fr',
+        },
+        '@desktop':{
+          gridTemplateColumns: '1fr 3fr',
+        }
+      },
       duo:{
         '@tablet':{
           gridTemplateColumns: '1fr 1fr',

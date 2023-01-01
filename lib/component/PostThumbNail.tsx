@@ -9,11 +9,14 @@ import { db } from '../../firebase';
 import { styled } from '../../stitches.config';
 import Grid from '../alignment/Grid';
 import useSound from 'use-sound';
+import { gradient } from '../ux/keyframes';
 
 const PostThumbNailStyled = styled('div', {
   cursor:'pointer',
-  background:'linear-gradient(217deg, $gray4, $gray2)',
-  border: '1px solid $gray4',
+  // background:'linear-gradient(217deg, $gray4, $gray2)',
+  border:'1px solid $gray4',
+  background: 'linear-gradient(45deg,white 0%,$gray4 50%,white 100%)',
+  backgroundSize: '200% 200%',
   color:'black',
   height:'max-content',
   padding:'1em',
@@ -21,14 +24,11 @@ const PostThumbNailStyled = styled('div', {
   transition: '$speed1',
   '&:hover':{
     zIndex: '100',
-    borderRadius:'$r3',
-    // color:'white',
-    // background:'linear-gradient(217deg, #404040, black)',
-    // transform:'scale(1.05) perspective(200px) rotateX(2deg) rotateY(0deg)',
-    boxShadow: '0px 10px 10px $gray2',
+    // borderRadius:'$r3',
+    animation:`${gradient} linear 0.6s infinite`,
+    transform:'scale(0.95)',
   },
   'h3':{
-    fontFamily:'$sgFont2',
     fontSize:'$5',
     marginTop: '0.5em',
     fontWeight: '500'

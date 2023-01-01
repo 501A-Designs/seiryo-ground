@@ -33,16 +33,18 @@ import Container from '../../lib/component/Container'
 import MainBody from '../../lib/alignment/Margin'
 import CreateContainer from '../../lib/component/CreateContainer'
 import Grid from '../../lib/alignment/Grid'
-import SizeSelectContainer, { SizeSelect } from '../../lib/button/SizeSelectContainer'
-import BinaryToggleContainer, { BinaryToggle } from '../../lib/button/BinaryToggleContainer'
 import { costButtonArray, sizeButtonArray, typeButtonArray } from '../../lib/button/buttonData'
 import CheckBox from '../../lib/button/CheckBox'
 import useSound from 'use-sound'
 import Footer from '../../lib/component/Footer'
 import Dialog from '../../lib/component/Dialog'
-import AccordionContainer, { AccordionItem } from '../../lib/component/AccordionContainer'
+import AccordionContainer, { AccordionItem } from '../../lib/component/Dropdown'
 import Link from 'next/link'
 import UniversalNav from '../../lib/component/UniversalNav'
+import Map from '../../lib/component/Map'
+import BinaryToggle from '../../lib/button/BinaryToggle'
+import SizeSelect from '../../lib/button/SizeSelect'
+import Dropdown from '../../lib/component/Dropdown'
 
 export default function PlaceName() {
   const router = useRouter();
@@ -223,13 +225,9 @@ export default function PlaceName() {
   }
 
   const round = (number) =>{
-    if (number == 10) {
-      return 10
-    }if (number == 0) {
-      return 0
-    }else{
-      return (Math.round(number * 100) / 100).toFixed(1)
-    }
+    if (number == 10) return 10;
+    if (number == 0) return 0;
+    else return (Math.round(number * 100) / 100).toFixed(1);
   }
 
   const addLike = async() =>{
@@ -288,514 +286,512 @@ export default function PlaceName() {
 
       {placeData && 
         <>
-        <MainBody>
-          <Grid>
-            <h1
-              style={{
-                marginBottom:'0.5em',
-                fontWeight: '500',
-                letterSpacing: '-1.5px'
-              }}
-            >
-              {placeData.name}
-            </h1>
-            <TypeBadge
-              width={'long'}
-              type={placeData.type}
-            />
-          </Grid>
-          <Grid grid={'oneTwo'} gap={'large'}>
-            <Grid gap={'small'}>
-              <p>{placeData.description}</p>
-              {reviewData && reviewData.length > 0 &&
-                <Grid grid={'duo'} gap={'extraSmall'}>
-                  <Rating
-                    borderRadius={'topLeft'}
-                    rating={round(averageOfDateRating)}
-                    description={'デートスポット適正'}
-                  />
-                  <Rating
-                    borderRadius={'topRight'}
-                    rating={round(averageOfAccessRating)}
-                    description={'最寄駅からのアクセス'}
-                  />
-                  <Rating
-                    borderRadius={'bottomLeft'}
-                    rating={round(averageOfManagementRating)}
-                    description={'設備管理の状況'}
-                  />
-                  <Rating
-                    borderRadius={'bottomRight'}
-                    rating={placeData.likes ? placeData.likes.length:0}
-                    description={'いいね数'}
-                    hideMax={true}
-                  />
-                </Grid>
-              }
-
-              <Container type="white">
-                <Grid grid={'duo'} gap={'medium'}>
-                  <h5>基本情報</h5>
-                  <Grid gap={'small'}>
-                    {placeData.officialSite && 
-                      <AlignItems gap={'0.5em'}>
-                        <FiExternalLink/>
-                        <h5>
-                          <Link
-                            href={placeData.officialSite}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            公式サイト
-                          </Link>
-                        </h5>
-                      </AlignItems>
-                    }
-                    <AlignItems gap={'0.5em'}>
-                      {placeData.toilet ?
-                        <>
-                          <FiUserCheck/>
-                          <h5>トイレ有</h5>
-                        </>:
-                        <>
-                          <FiUserX/>
-                          <h5>トイレ無</h5>
-                        </>
-                      }
-                    </AlignItems>
-                    <AlignItems gap={'0.5em'}>
-                      <FiMaximize2/>
-                      {placeData.size == 'small' && <h5>小さい</h5>}
-                      {placeData.size == 'medium' && <h5>普通</h5>}
-                      {placeData.size == 'large' && <h5>大きい</h5>}
-                    </AlignItems>
-                  </Grid>
-                  <h5>料金</h5>
-                  <Grid gap={'small'}>
-                    {placeData.cost.map(name =>{
-                      return <AlignItems gap={'0.5em'}
-                        key={name}
-                      >
-                        {name === 'free' && 
-                          <>
-                            <FiCheck/>
-                            <h5>無料</h5>
-                          </>
-                        }
-                        {name === 'cash' &&
-                          <>
-                            <FiDollarSign/>
-                            <h5>現金</h5>
-                          </>
-                        }
-                        {name === 'credit' &&
-                          <>
-                            <FiCreditCard/>
-                            <h5>クレジットカード</h5>
-                          </>
-                        }
-                        {name === 'digitalMoney' &&
-                          <>
-                            <FiSmartphone/>
-                            <h5>電子マネー</h5>
-                          </>
-                        }
-                      </AlignItems>
-                    })
-                    }
-                  </Grid>
-                </Grid>
-              </Container>
-
-              <iframe
-                src={`https://www.google.com/maps?output=embed&q=${placeData.location}`}
-                width="100%"
-                height="250px"
+          <MainBody>
+            <Grid>
+              <h2
+                style={{
+                  fontSize:'2em',
+                  marginBottom:'0.5em',
+                  fontWeight: '500',
+                  letterSpacing: '-1.5px'
+                }}
+              >
+                {placeData.name}
+              </h2>
+              <TypeBadge
+                width={'long'}
+                type={placeData.type}
               />
             </Grid>
-            <Grid gap={'small'}>
-              {user ? 
-                <AlignItems justifyContent={'center'}>
-                  <Button
-                    styleType={'black'}
-                    icon={openCreateReview ? <FiX/>:<>{hasReviewed ? <FiRefreshCw/>:<FiPlus/>}</>}
-                    onClick={()=>{openCreateReview ? 
-                      closeCreateReviewContainer():
-                      openCreateReviewContainer()
-                    }}
-                  >
-                    {openCreateReview ? '閉じる':<>{hasReviewed ? '書いたレビューを編集':'レビューを書く'}</>}
-                  </Button>
-                </AlignItems>:
-                <Container
-                  type='standard'
-                  alignment='center'
-                >
-                  <h4>ログインされておりません。</h4>
-                  <p>ログインしてアカウントを作成すると、レビューや場所を清涼広場上に投稿する事ができます！</p>
-                  {isBrowser ? 
-                    <Button
-                      color='black'
-                      onClick={()=>router.push('/')}
-                      iconPosition={'left'}
-                      icon={<FiHome/>}
-                    >
-                      メインページから会員登録
-                    </Button>:
-                    <p>※モバイルからのログインは出来ないです。パソコンからアクセスして頂くとログインが可能となります。</p>
-                  }
-                </Container>
-              }
+            <Grid grid={'oneTwo'} gap={'large'}>
+              <Grid gap={'small'}>
+                <p>{placeData.description}</p>
+                {reviewData && reviewData.length > 0 &&
+                  <Grid grid={'duo'} gap={'extraSmall'}>
+                    <Rating
+                      borderRadius={'topLeft'}
+                      rating={round(averageOfDateRating)}
+                      description={'デートスポット適正'}
+                    />
+                    <Rating
+                      borderRadius={'topRight'}
+                      rating={round(averageOfAccessRating)}
+                      description={'最寄駅からのアクセス'}
+                    />
+                    <Rating
+                      borderRadius={'bottomLeft'}
+                      rating={round(averageOfManagementRating)}
+                      description={'設備管理の状況'}
+                    />
+                    <Rating
+                      borderRadius={'bottomRight'}
+                      rating={placeData.likes ? placeData.likes.length:0}
+                      description={'いいね数'}
+                      hideMax={true}
+                    />
+                  </Grid>
+                }
 
-              <div ref={parent}>
-                {openCreateReview && 
-                  <CreateContainer>
-                    <Grid gap={'extraSmall'}>
-                      <h3>{hasReviewed ? '内容を更新':'新規レビュー'}</h3>
-                      <Input
-                        value={titleRatingInput}
-                        onChange={(e)=> {
-                          tap3();
-                          setTitleRatingInput(e.target.value)
-                        }}
-                        placeholder={'レビュータイトル'}
-                      />
-                      <Grid grid={'tri'} gap={'extraSmall'}>
-                        <DisplayRatingInput
-                          value={dateRatingInput}
-                          onChange={(e)=> {
-                            tap3();
-                            setDateRatingInput(e.target.value)
-                          }}
-                          maxValue={10}
-                          minValue={0}
-                          placeholder={'デートスポット適正'}
-                        />
-                        <DisplayRatingInput
-                          value={accessRatingInput}
-                          onChange={(e)=> {
-                            tap3();
-                            setAccessRatingInput(e.target.value)
-                          }}
-                          maxValue={10}
-                          minValue={0}
-                          placeholder={'最寄駅からのアクセス'}
-                        />
-                        <DisplayRatingInput
-                          value={managementRatingInput}
-                          onChange={(e)=> {
-                            tap3();
-                            setManagementRatingInput(e.target.value)
-                          }}
-                          maxValue={10}
-                          minValue={0}
-                          placeholder={'設備管理の状況'}
-                        />
-                      </Grid>
-                      <TextArea
-                        value={descriptionRatingInput}
-                        onChange={(e)=> {
-                          tap3();
-                          setDescriptionRatingInput(e.target.value)
-                        }}
-                        placeholder={'行って感じた事、評価項目に写らない場所の良さ等。'}
-                      />
-                      {titleRatingInput && descriptionRatingInput &&
-                        <AlignItems
-                          justifyContent={'center'}
-                          margin={'1em 0 0 0'}
-                        >
-                          {hasReviewed ?
-                            <Button
-                              styleType={'black'}
-                              icon={<FiSave/>}
-                              onClick={()=>{
-                                updateReview();
-                                setOpenCreateReview(false);
-                                getReviews();
-                              }}
+                <Container type="white">
+                  <Grid grid={'duo'} gap={'medium'}>
+                    <h5>基本情報</h5>
+                    <Grid gap={'small'}>
+                      {placeData.officialSite && 
+                        <AlignItems gap={'0.5em'}>
+                          <FiExternalLink/>
+                          <h5>
+                            <Link
+                              href={placeData.officialSite}
+                              target="_blank"
+                              rel="noreferrer"
                             >
-                              レビューの内容を更新
-                            </Button>:
-                            <Button
-                              styleType={'black'}
-                              icon={<FiSave/>}
-                              onClick={()=>{
-                                publishReview();
-                                setOpenCreateReview(false);
-                                getReviews();
-                              }}
-                            >
-                              レビューを公開
-                            </Button>
-                          }
+                              公式サイト
+                            </Link>
+                          </h5>
                         </AlignItems>
                       }
-                    </Grid>
-                  </CreateContainer>
-                }
-              </div>
-
-
-              {reviewData && reviewData.length > 0 && reviewData.map((review) =>{
-                return (
-                  <Review
-                    key={review.id}
-                    title={review.data().title}
-                    dateRating={review.data().dateRating}
-                    accessRating={review.data().accessRating}
-                    managementRating={review.data().managementRating}
-                    description={review.data().description && review.data().description}
-                  />
-                )
-              })}
-              {reviewData && reviewData.length > 0 ? 
-                <End>
-                  おわり。
-                  <br/>
-                  The End.
-                </End>:
-                <End>
-                  レビューはありません。
-                  <br/>
-                  No reviews were written.
-                </End>
-              }
-            </Grid>
-          </Grid>
-          <Footer type={'blur'}/>
-        </MainBody>
-        <UniversalNav
-          size={user ? 'xl':'l'}
-          hideInitially={false}
-          dynamicButton={
-            <>
-              <Button
-                size={'small'}
-                styleType={'transparent'}
-                icon={<FiArrowLeft/>}
-                onClick={()=> {router.push('/')}}
-              />
-              {user &&
-                <>
-                  {userData.data().level > 1 &&
-                    <Dialog
-                      title={'この場所を編集'}
-                      size={'large'}
-                      trigger={
-                        <Button
-                          size={'small'}
-                          styleType={'transparent'}
-                          onClick={()=> {
-                            action1();
-                            setModalIsOpen(true);
-                          }}
-                          iconPosition={'left'}
-                          icon={<FiEdit/>}
-                        />
-                      }
-                    >
-                      <AlignItems justifyContent={'center'}>
-                        <Button
-                          color={'black'}
-                          iconPosition={'left'}
-                          icon={<FiSave/>}
-                          onClick={()=> editThisPlace()}
-                        >
-                          変更を保存
-                        </Button>
-                      </AlignItems>
-                      {userData && userData.data() &&
-                        <Grid gap={'small'}>
-                          {userData.data().level < 5 &&
-                            <Container
-                              type="standard"
-                              alignment="center"
-                            >
-                              <AlignItems>
-                                <FiLock/>
-                                <h5>報告</h5>
-                              </AlignItems>
-                              <p>全ての編集機能をアクセスするにはカードをアップグレードする必要があります。</p>
-                            </Container>
-                          }
-                          {/* PLACE NAME */}
-                          {userData.data().level > 4 &&
-                            <Input
-                              placeholder={"場所の名前"}
-                              value={placeInput}
-                              onChange={(e)=>{
-                                tap3();
-                                setPlaceInput(e.target.value)
-                              }}
-                            />
-                          }
-
-                          {/* PLACE DESCRIPTION */}
-                          {userData.data().level > 3 &&
-                          <TextArea
-                            placeholder={"概要"}
-                            value={descriptionInput}
-                            onChange={(e)=>{
-                              tap3();
-                              setDescriptionInput(e.target.value)
-                            }}
-                          />
-                          }
-
-                          {/* SITE */}
-                          {userData.data().level > 1 &&
-                            <Input
-                              placeholder={"公式サイト（無い場合は空欄）"}
-                              value={officialSiteInput}
-                              onChange={(e)=>{
-                                tap3();
-                                setOfficialSiteInput(e.target.value)
-                              }}
-                            />
-                          }
-
-                          {/* PLACE DESCRIPTION */}
-                          {userData.data().level > 3 &&
+                      <AlignItems gap={'0.5em'}>
+                        {placeData.toilet ?
                           <>
-                            <Input
-                              placeholder={"場所（スペース無し英語表記｜例：koishikawa-korakuen）"}
-                              value={locationInput}
-                              onChange={(e)=>{
-                                tap3();
-                                setLocationInput(e.target.value)
-                              }}
-                            />
-                            <iframe
-                              src={`https://www.google.com/maps?output=embed&q=${locationInput}`}
-                              width="100%"
-                              height="250px"
-                            />
+                            <FiUserCheck/>
+                            <h5>トイレ有</h5>
+                          </>:
+                          <>
+                            <FiUserX/>
+                            <h5>トイレ無</h5>
                           </>
+                        }
+                      </AlignItems>
+                      <AlignItems gap={'0.5em'}>
+                        <FiMaximize2/>
+                        {placeData.size == 'small' && <h5>小さい</h5>}
+                        {placeData.size == 'medium' && <h5>普通</h5>}
+                        {placeData.size == 'large' && <h5>大きい</h5>}
+                      </AlignItems>
+                    </Grid>
+                    <h5>料金</h5>
+                    <Grid gap={'small'}>
+                      {placeData.cost.map(name =>{
+                        return <AlignItems gap={'0.5em'}
+                          key={name}
+                        >
+                          {name === 'free' && 
+                            <>
+                              <FiCheck/>
+                              <h5>無料</h5>
+                            </>
                           }
-                          <AccordionContainer>
-                            {userData.data().level > 1 &&
-                              <AccordionItem
-                                number={'1'}
-                                name={'トイレの有無'}
-                              >
-                                <Container type="standard">
-                                  <BinaryToggleContainer>
-                                    <BinaryToggle
-                                      currentState={binaryToggle}
-                                      selected={binaryToggle === true}
-                                      onClick={()=>{
-                                        select1();
-                                        setBinaryToggle(true)
-                                      }}
-                                    >
-                                      有
-                                    </BinaryToggle>
-                                    <BinaryToggle
-                                      currentState={binaryToggle}
-                                      selected={binaryToggle === false}
-                                      onClick={()=>{
-                                        select2();
-                                        setBinaryToggle(false)
-                                      }}
-                                    >
-                                      無
-                                    </BinaryToggle>
-                                  </BinaryToggleContainer>
-                                </Container>
-                              </AccordionItem>                          
-                            }
-                            <AccordionItem
-                              number={'2'}
-                              name={'種類'}
-                            >
-                              {userData.data().level > 3 &&
-                                <Grid gap={'extraSmall'}>
-                                  {typeButtonArray.map(color =>{
-                                    return <TypeButton
-                                      key={color}
-                                      type={color}
-                                      onClick={()=>{
-                                        select1();
-                                        setTypeInput(color);
-                                      }}
-                                      selectedInput={typeInput}
-                                    />
-                                  })}
-                                </Grid>
-                              }
-                            </AccordionItem>
-                            {userData.data().level > 2 &&
-                              <>
-                                <AccordionItem
-                                  number={'3'}
-                                  name={'値段'}
-                                >
-                                  <Grid gap={'extraSmall'}>
-                                    {costButtonArray.map(name =>{
-                                      return(
-                                        <CheckBox
-                                          key={name}
-                                          checked={costCheckBox.some(element => element === name)}
-                                          name={name}
-                                          onClick={()=>
-                                            {
-                                              tap1();
-                                              costCheckBox.some(element => element === name) ?
-                                              setCostCheckBox(prev => prev.filter(element => element !== name )):
-                                              setCostCheckBox([...costCheckBox, name]);
-                                            }
-                                          }
-                                        >
-                                          {name}
-                                        </CheckBox>
-                                      )
-                                    })}
-                                  </Grid>
-                                </AccordionItem>
-                                <AccordionItem
-                                  number={'4'}
-                                  name={'大きさ'}
-                                >   
-                                  <SizeSelectContainer
-                                    hide
-                                    currentState={sizeSelect}
-                                  >
-                                    {sizeButtonArray.map(size=>{
-                                      return <SizeSelect
-                                        name={size}
-                                        key={size}
-                                        currentState={sizeSelect}
-                                        onClick={()=> {
-                                          select1();
-                                          setSizeSelect(size);
-                                        }}
-                                      />
-                                    })}
-                                  </SizeSelectContainer>
-                                </AccordionItem>
-                              </>
-                            }
-                          </AccordionContainer>
-                        </Grid>
+                          {name === 'cash' &&
+                            <>
+                              <FiDollarSign/>
+                              <h5>現金</h5>
+                            </>
+                          }
+                          {name === 'credit' &&
+                            <>
+                              <FiCreditCard/>
+                              <h5>クレジットカード</h5>
+                            </>
+                          }
+                          {name === 'digitalMoney' &&
+                            <>
+                              <FiSmartphone/>
+                              <h5>電子マネー</h5>
+                            </>
+                          }
+                        </AlignItems>
+                      })
                       }
-                    </Dialog>
+                    </Grid>
+                  </Grid>
+                </Container>
+
+                <Map location={placeData.location}/>
+              </Grid>
+              <Grid gap={'small'}>
+                {user ? 
+                  <AlignItems justifyContent={'center'}>
+                    <Button
+                      styleType={'black'}
+                      icon={openCreateReview ? <FiX/>:<>{hasReviewed ? <FiRefreshCw/>:<FiPlus/>}</>}
+                      onClick={()=>{openCreateReview ? 
+                        closeCreateReviewContainer():
+                        openCreateReviewContainer()
+                      }}
+                    >
+                      {openCreateReview ? '閉じる':<>{hasReviewed ? '書いたレビューを編集':'レビューを書く'}</>}
+                    </Button>
+                  </AlignItems>:
+                  <Container
+                    type='standard'
+                    alignment='center'
+                  >
+                    <h4>ログインされておりません。</h4>
+                    <p>ログインしてアカウントを作成すると、レビューや場所を清涼広場上に投稿する事ができます！</p>
+                    {isBrowser ? 
+                      <Button
+                        color='black'
+                        onClick={()=>router.push('/')}
+                        iconPosition={'left'}
+                        icon={<FiHome/>}
+                      >
+                        メインページから会員登録
+                      </Button>:
+                      <p>※モバイルからのログインは出来ないです。パソコンからアクセスして頂くとログインが可能となります。</p>
+                    }
+                  </Container>
+                }
+
+                <div ref={parent}>
+                  {openCreateReview && 
+                    <CreateContainer>
+                      <Grid gap={'extraSmall'}>
+                        <h3>{hasReviewed ? '内容を更新':'新規レビュー'}</h3>
+                        <Input
+                          value={titleRatingInput}
+                          onChange={(e)=> {
+                            tap3();
+                            setTitleRatingInput(e.target.value)
+                          }}
+                          placeholder={'レビュータイトル'}
+                        />
+                        <Grid grid={'tri'} gap={'extraSmall'}>
+                          <DisplayRatingInput
+                            value={dateRatingInput}
+                            onChange={(e)=> {
+                              tap3();
+                              setDateRatingInput(e.target.value)
+                            }}
+                            maxValue={10}
+                            minValue={0}
+                            placeholder={'デートスポット適正'}
+                          />
+                          <DisplayRatingInput
+                            value={accessRatingInput}
+                            onChange={(e)=> {
+                              tap3();
+                              setAccessRatingInput(e.target.value)
+                            }}
+                            maxValue={10}
+                            minValue={0}
+                            placeholder={'最寄駅からのアクセス'}
+                          />
+                          <DisplayRatingInput
+                            value={managementRatingInput}
+                            onChange={(e)=> {
+                              tap3();
+                              setManagementRatingInput(e.target.value)
+                            }}
+                            maxValue={10}
+                            minValue={0}
+                            placeholder={'設備管理の状況'}
+                          />
+                        </Grid>
+                        <TextArea
+                          value={descriptionRatingInput}
+                          onChange={(e)=> {
+                            tap3();
+                            setDescriptionRatingInput(e.target.value)
+                          }}
+                          placeholder={'行って感じた事、評価項目に写らない場所の良さ等。'}
+                        />
+                        {titleRatingInput && descriptionRatingInput &&
+                          <AlignItems
+                            justifyContent={'center'}
+                            margin={'1em 0 0 0'}
+                          >
+                            {hasReviewed ?
+                              <Button
+                                styleType={'black'}
+                                icon={<FiSave/>}
+                                onClick={()=>{
+                                  updateReview();
+                                  setOpenCreateReview(false);
+                                  getReviews();
+                                }}
+                              >
+                                レビューの内容を更新
+                              </Button>:
+                              <Button
+                                styleType={'black'}
+                                icon={<FiSave/>}
+                                onClick={()=>{
+                                  publishReview();
+                                  setOpenCreateReview(false);
+                                  getReviews();
+                                }}
+                              >
+                                レビューを公開
+                              </Button>
+                            }
+                          </AlignItems>
+                        }
+                      </Grid>
+                    </CreateContainer>
                   }
-                  <Button
-                    size={'small'}
-                    styleType={'transparent'}
-                    icon={<FiHeart/>}
-                    onClick={()=> {
-                      !liked && celebrate2();
-                      liked ? removeLike():addLike()
-                    }}
-                  />
-                </>
-              }
-            </>
-          }
-        >
-        </UniversalNav>
+                </div>
+
+
+                {reviewData?.length > 0 && reviewData.map((review) =>{
+                  return (
+                    <Review
+                      key={review.id}
+                      title={review.data().title}
+                      dateRating={review.data().dateRating}
+                      accessRating={review.data().accessRating}
+                      managementRating={review.data().managementRating}
+                      description={review.data().description && review.data().description}
+                    />
+                  )
+                })}
+                {reviewData?.length > 0 ? 
+                  <End>
+                    おわり。
+                    <br/>
+                    The End.
+                  </End>:
+                  <End>
+                    レビューはありません。
+                    <br/>
+                    No reviews were written.
+                  </End>
+                }
+              </Grid>
+            </Grid>
+            <Footer type={'blur'}/>
+          </MainBody>
+          <UniversalNav
+            animate={'scaleUp'}
+            showInitially={true}
+            minSize={user ? 'l':'s'}
+            maxSize={user ? 'l':'m'}
+            dynamicButton={
+              <>
+                <Button
+                  size={'small'}
+                  styleType={'transparent'}
+                  icon={<FiArrowLeft/>}
+                  onClick={()=> {router.push('/')}}
+                />
+                {user &&
+                  <>
+                    {userData.data().level > 1 &&
+                      <Dialog
+                        title={'場所情報を編集'}
+                        size={'large'}
+                        trigger={
+                          <Button
+                            size={'small'}
+                            styleType={'transparent'}
+                            onClick={()=> {
+                              action1();
+                              setModalIsOpen(true);
+                            }}
+                            icon={<FiEdit/>}
+                          />
+                        }
+                      >
+                        <AlignItems justifyContent={'center'}>
+                          <Button
+                            color={'black'}
+                            iconPosition={'left'}
+                            icon={<FiSave/>}
+                            onClick={()=> editThisPlace()}
+                          >
+                            変更を保存
+                          </Button>
+                        </AlignItems>
+                        {userData && userData.data() &&
+                          <Grid
+                            gap={'large'}
+                            grid={'oneThree'}
+                          >
+                            <Grid gap={'small'}>
+                              <Dropdown>
+                                {userData.data().level > 1 &&
+                                  <Dropdown.Item
+                                    number={'1'}
+                                    name={'トイレの有無'}
+                                  >
+                                    <BinaryToggle>
+                                      <BinaryToggle.Item
+                                        currentState={binaryToggle}
+                                        selected={binaryToggle === true}
+                                        onClick={()=>{
+                                          select1();
+                                          setBinaryToggle(true)
+                                        }}
+                                        name={'有'}
+                                      />
+                                      <BinaryToggle.Item
+                                        currentState={binaryToggle}
+                                        selected={binaryToggle === false}
+                                        onClick={()=>{
+                                          select2();
+                                          setBinaryToggle(false)
+                                        }}
+                                        name={'有'}
+                                      />
+                                    </BinaryToggle>
+                                  </Dropdown.Item>                          
+                                }
+                                <Dropdown.Item
+                                  number={'2'}
+                                  name={'種類'}
+                                >
+                                  {userData.data().level > 3 &&
+                                    <Grid gap={'extraSmall'}>
+                                      {typeButtonArray.map(color =>{
+                                        return <TypeButton
+                                          key={color}
+                                          type={color}
+                                          onClick={()=>{
+                                            select1();
+                                            setTypeInput(color);
+                                          }}
+                                          selectedInput={typeInput}
+                                        />
+                                      })}
+                                    </Grid>
+                                  }
+                                </Dropdown.Item>
+                                {userData.data().level > 2 &&
+                                  <>
+                                    <Dropdown.Item
+                                      number={'3'}
+                                      name={'値段'}
+                                    >
+                                      <Grid gap={'extraSmall'}>
+                                        {costButtonArray.map(name =>{
+                                          return(
+                                            <CheckBox
+                                              key={name}
+                                              checked={costCheckBox.some(element => element === name)}
+                                              name={name}
+                                              onClick={()=>
+                                                {
+                                                  tap1();
+                                                  costCheckBox.some(element => element === name) ?
+                                                  setCostCheckBox(prev => prev.filter(element => element !== name )):
+                                                  setCostCheckBox([...costCheckBox, name]);
+                                                }
+                                              }
+                                            >
+                                              {name}
+                                            </CheckBox>
+                                          )
+                                        })}
+                                      </Grid>
+                                    </Dropdown.Item>
+                                    <Dropdown.Item
+                                      number={'4'}
+                                      name={'大きさ'}
+                                    >   
+                                      <SizeSelect
+                                        hide
+                                        currentState={sizeSelect}
+                                      >
+                                        {sizeButtonArray.map(size=>{
+                                          return <SizeSelect.Item
+                                            name={size}
+                                            key={size}
+                                            currentState={sizeSelect}
+                                            onClick={()=> {
+                                              select1();
+                                              setSizeSelect(size);
+                                            }}
+                                          />
+                                        })}
+                                      </SizeSelect>
+                                    </Dropdown.Item>
+                                  </>
+                                }
+                              </Dropdown>
+                            </Grid>
+                            <Grid gap={'small'}>
+                              {userData.data().level < 5 &&
+                                <Container
+                                  type="standard"
+                                  alignment="center"
+                                >
+                                  <AlignItems justifyContent={'center'}>
+                                    <FiLock/>
+                                    <h5>報告</h5>
+                                  </AlignItems>
+                                  <p>全ての編集機能をアクセスするにはカードをアップグレードする必要があります。</p>
+                                </Container>
+                              }
+                              {/* PLACE NAME */}
+                              {userData.data().level > 4 &&
+                                <Input
+                                  placeholder={"場所の名前"}
+                                  value={placeInput}
+                                  onChange={(e)=>{
+                                    tap3();
+                                    setPlaceInput(e.target.value)
+                                  }}
+                                />
+                              }
+
+                              {/* PLACE DESCRIPTION */}
+                              {userData.data().level > 3 &&
+                              <TextArea
+                                placeholder={"概要"}
+                                value={descriptionInput}
+                                onChange={(e)=>{
+                                  tap3();
+                                  setDescriptionInput(e.target.value)
+                                }}
+                              />
+                              }
+
+                              {/* SITE */}
+                              {userData.data().level > 1 &&
+                                <Input
+                                  placeholder={"公式サイト（無い場合は空欄）"}
+                                  value={officialSiteInput}
+                                  onChange={(e)=>{
+                                    tap3();
+                                    setOfficialSiteInput(e.target.value)
+                                  }}
+                                />
+                              }
+
+                              {/* PLACE DESCRIPTION */}
+                              {userData.data().level > 3 &&
+                              <>
+                                <Input
+                                  placeholder={"場所（スペース無し英語表記｜例：koishikawa-korakuen）"}
+                                  value={locationInput}
+                                  onChange={(e)=>{
+                                    tap3();
+                                    setLocationInput(e.target.value)
+                                  }}
+                                />
+                                <Map
+                                  location={locationInput}
+                                />
+                              </>
+                              }
+                            </Grid>
+                          </Grid>
+                        }
+                      </Dialog>
+                    }
+                    <Button
+                      size={'small'}
+                      styleType={liked ? 'red':'transparent'}
+                      icon={<FiHeart/>}
+                      onClick={()=> {
+                        !liked && celebrate2();
+                        liked ? removeLike():addLike()
+                      }}
+                    />
+                  </>
+                }
+              </>
+            }
+          />
         </>
       }
     </>

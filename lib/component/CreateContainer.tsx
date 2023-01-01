@@ -1,7 +1,7 @@
 import { styled } from "../../stitches.config"
 
 const CreateContainerStyled = styled('div', {
-  border: '1px solid $sgGray2',
+  border: '1px solid $gray2',
   boxShadow: '$shadow1',
   borderRadius: '$r4',
   padding: '$large',

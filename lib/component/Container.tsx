@@ -26,7 +26,7 @@ const ContainerStyled = styled('div', {
     type: {
       standard: {
         backgroundColor: '$gray2',
-        border: '1px solid $gray3',
+        border: '1px solid $gray4',
       },
       white: {
         backgroundColor: 'white',
@@ -54,7 +54,9 @@ const ContainerStyled = styled('div', {
     }
   },
   'p':{
-    fontWeight: 'normal'
+    margin:'0',
+    fontWeight: 'normal',
+    fontSize:'$8'
   }
 })
 

@@ -25,7 +25,8 @@ const TypeButtonStyled = styled('div', {
         '&:hover':{
           backgroundColor:'$gray2',
           border:'1px solid $gray4',
-          transform: 'scale(1.04)'
+          transform: 'scale(1.04)',
+          color: '$gray11',
         }
       }
     }

@@ -20,6 +20,7 @@ const StyledOverlay = styled(DialogPrimitive.Overlay, {
   backdropFilter: `blur(3px)`,
   position: 'fixed',
   inset: 0,
+  zIndex:'100',
   '@media (prefers-reduced-motion: no-preference)': {
     animation: `${topSlideIn} 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
   },
@@ -29,7 +30,6 @@ const StyledContent = styled(DialogPrimitive.Content, {
   fontFamily:'$sgFont1',
   border: '1px solid $gray3',
   backgroundColor: 'white',
-  // backgroudFilter:'blur(5px)',
   borderRadius: '$r4',
   position: 'fixed',
   top: '50%',
@@ -40,6 +40,7 @@ const StyledContent = styled(DialogPrimitive.Content, {
   overflowY:'scroll',
   padding: '$medium',
   boxShadow:'$shadow1',
+  zIndex:'200',
   '@media (prefers-reduced-motion: no-preference)': {
     animation: `${popOutDialog} 300ms cubic-bezier(0.16, 1, 0.3, 1)`,
   },
@@ -69,10 +70,15 @@ function Content({ children, ...props }) {
 }
 
 const StyledTitle = styled(DialogPrimitive.Title, {
-  color: '$gray12',
-  margin: '0 0 0 $small',
-  fontWeight: 500,
-  fontSize: 17,
+  // color: '$gray12',
+  // margin: '0 0 0 $small',
+  // fontWeight: 500,
+  fontSize: 13,
+  userSelect:'none',
+  textTransform:'uppercase',
+  // transform:'scaleY(0.9)',
+  color:'$gray11',
+  margin:'5px 5px 10px 5px'
 });
 
 const StyledDescription = styled(DialogPrimitive.Description, {

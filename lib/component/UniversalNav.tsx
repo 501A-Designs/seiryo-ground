@@ -1,24 +1,16 @@
-import { doc } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useDocument } from 'react-firebase-hooks/firestore';
-import { FiBook, FiCommand, FiCornerLeftUp, FiCreditCard, FiHome, FiInfo, FiLogIn, FiMoreHorizontal, FiRefreshCw } from 'react-icons/fi';
-import { ClipLoader } from 'react-spinners';
-import useSound from 'use-sound';
-import { auth, db } from '../../firebase';
-import AlignItems from '../alignment/AlignItems';
+import { FiBook, FiCommand, FiCornerLeftUp, FiCreditCard, FiHome, FiInfo } from 'react-icons/fi';
+import { auth } from '../../firebase';
 import Button from '../button/Button';
-import { checkLevel } from '../function/checkLevel';
-import Input from '../Input';
 import Dialog from './Dialog';
 import SectionButton from './SectionButton';
 
 import { styled } from '../../stitches.config';
-import { gradient, spin } from '../ux/keyframes';
+import { gradient } from '../ux/keyframes';
 import { keyframes } from "@stitches/react";
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { scroll } from '../ux/scroll';
-import Profile from '../../pages/profile';
 import ProfileContainer from '../profile-page/ProfileContainer';
 
 const expandAni = keyframes({
@@ -46,13 +38,19 @@ const jiggleAni = keyframes({
   }
 });
 const hideAni = keyframes({
+  '40%':{
+    transform: 'translate3d(0, -15px, 0) scale(1.01)',
+  },
   '100%':{
-    transform: 'translate3d(0, 80px, 0)',
+    transform: 'translate3d(0, 80px, 0) scale(0.5)',
   },
 });
 const showAni = keyframes({
   '0%':{
-    transform: 'translate3d(0, 80px, 0)',
+    transform: 'translate3d(0, 80px, 0) scale(0.5)',
+  },
+  '40%':{
+    transform: 'translate3d(0, -15px, 0) scale(1.01)',
   },
   '100%':{
     transform: 'translate3d(0, 0px, 0)',
@@ -76,10 +74,10 @@ const NavContainerStyled = styled('nav', {
   variants:{
     hide:{
       true:{
-        animation:`${hideAni} 0.2s`,
+        animation:`${hideAni} 0.5s`,
       },
       false:{
-        animation:`${showAni} 0.2s`,
+        animation:`${showAni} 0.5s`,
       }
     },
   }
@@ -92,12 +90,13 @@ const NavStyled = styled('section',{
   gap:'$small',
 
   maxHeight: '45px',
+  maxWidth:'300px',
   padding:'calc($small*0.5)',
   borderRadius:'$round',
-  backdropFilter: 'blur(10px)',
+  // backdropFilter: 'blur(10px)',
   border: '1px solid $grayA4',
 
-  backgroundColor:'white',
+  backgroundColor:'$gray1',
   boxShadow:'$shadow3',
   transition:'$speed1',
 
@@ -115,9 +114,6 @@ const NavStyled = styled('section',{
       s:{
         width: '100px',
       },
-      auto:{
-        width:'fit-content'
-      }
     },
     animate:{
       expand:{
@@ -127,7 +123,7 @@ const NavStyled = styled('section',{
         animation:`${jiggleAni} 0.8s linear infinite`
       },
       shine:{
-        background: '$mix',
+        background: 'linear-gradient(45deg,$gray2 0%,white 50%,$gray2 100%)',
         backgroundSize: '200% 200%',
         animation: `${gradient} 1s linear infinite`,
       },
@@ -138,106 +134,50 @@ const NavStyled = styled('section',{
   }
 })
 
-const ProfileCard = styled('footer', {
-  padding: '$large',
-  perspective:'200px',
-  '@mobile':{
-    display: 'none',  
-  },
-  '@tablet':{
-    display: 'grid',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',  
-  },
-  '@desktop':{
-    display: 'grid',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',  
-  },
-});
-
-const ProfileImageStyled = styled('img', {
-  borderRadius: '$round',
-  // border:'none',
-  border: '1px solid $grayA1',
-  animation: `${spin} linear infinite 10s`,
-  '&:hover':{
-    transform: 'scale(1.07)',
-  },
+const NavContentStyled = styled('div',{
+  display: 'flex',
+  justifyContent:'space-between',
+  alignItems:'center',
+  gap:'$small',
+  backdropFilter:'blur(20px)',
+  width:'100%',
+  borderRadius:'$round',
+  border:'1px solid $grayA1'
 })
 
-const CardUpdateStyled = styled('section', {
-  fontFamily: '$sgFont1',
-  boxShadow:'0 0 10px $sgGray1',
-  border: '1px solid $sgGray1',
-  borderRadius: '$r3',
-  marginTop: '1.5em',
-  cursor: 'pointer',
-  transition:'$speed1',
-  padding: '$extraSmall',
-  width: '130px',
-  background: '$mix',
-  backgroundSize: '200% 200%',
-  animation: `${gradient} 1s infinite`,
-  'p':{
-    margin:0
-  },
-  '&:hover':{
-    transform: 'scale(1.07)',
-  },
-  'div':{
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    color: '$sgGray1',
-    gap:'$small',
-    backdropFilter: 'blur(30px)',
-    borderRadius: '$r2',
-    padding: '$medium',
-  },
+interface UniversalNavProps{
+  showInitially:boolean,
+  animate?:any,
+  minSize?:"s" | "xl" | "l" | "m",
+  maxSize?:"s" | "xl" | "l" | "m",
+  dynamicButton?:JSX.Element | JSX.Element[]
+}
 
-  '@mobile':{
-    width: 'fit-content',
-    'p':{
-      display: 'none'
-    }
-  },
-  '@tablet':{
-    width: 'fit-content',
-    'p':{
-      display: 'none'
-    }
-  },
-})
-
-export default function UniversalNav(props) {
+export default function UniversalNav(props:UniversalNavProps) {
   const router = useRouter();
   const [user] = useAuthState(auth);
   // const [userData,loadingUserData] = useDocument(doc(db, `users/${user && user.uid}`))
 
-  const [hide, setHide] = useState(props.hideInitially ? true:false);
-  const [hideDelay, setHideDelay] = useState(props.hideInitially ? true:false)
-  const [hideScrollUp, setHideScrollUp] = useState(props.hideInitially ? true:false);
+  const [hide, setHide] = useState(props.showInitially ? false:true);
+  const [hideDelay, setHideDelay] = useState(props.showInitially ? false:true)
+  const [hideScrollUp, setHideScrollUp] = useState(props.showInitially ? true:false);
+  const [dynamicSize, setDynamicSize] = useState(props.minSize);
+
   useEffect(() => {
-    if (props.hideInitially) {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      if (!props.showInitially) {
         currentScrollY < 100 ? setHide(true):setHide(false);
-        currentScrollY < 1000 ? setHideScrollUp(true):setHideScrollUp(false);
       }
-      window.addEventListener("scroll", handleScroll, { passive: true });
-      return () => window.removeEventListener("scroll", handleScroll);
+      currentScrollY < 1500 ? setHideScrollUp(true):setHideScrollUp(false);
+      currentScrollY < 1500 ? setDynamicSize(props.minSize):setDynamicSize(props.maxSize)
     };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [hide]);
+
   useEffect(()=>{
-    if (hide) {
-      setTimeout(()=>setHideDelay(true),200);
-    }else{
-      setTimeout(()=>setHideDelay(false),200);
-    }
+    hide ? setTimeout(()=>setHideDelay(true),500):setTimeout(()=>setHideDelay(false),500);
   })
 
   useEffect(() => {
@@ -253,75 +193,76 @@ export default function UniversalNav(props) {
     return () => document.removeEventListener('keydown', down)
   }, [])
 
-
   return (
     <>
       {!hideDelay &&
         <NavContainerStyled  
           hide={hide}
         >
-          <NavStyled          
+          <NavStyled 
             animate={props.animate}
-            size={props.size ? props.size:!hideScrollUp ? 'l':'s'}
+            size={dynamicSize}
           >
-            {props.dynamicButton}
-            {!hideScrollUp &&
-              <Button
-                size={'small'}
-                styleType={'transparent'}
-                icon={<FiCornerLeftUp/>}
-                onClick={()=>{scroll.scrollToTop();}}
-              >
-                上へ戻る
-              </Button>
-            }
-
-            <Dialog
-              title={'Menu'}
-              trigger={
+            <NavContentStyled>
+              {props.dynamicButton}
+              {!hideScrollUp &&
                 <Button
                   size={'small'}
                   styleType={'transparent'}
-                  icon={<FiCommand/>}
-                />
+                  icon={<FiCornerLeftUp/>}
+                  onClick={()=>{scroll.scrollToTop();}}
+                >
+                  上へ戻る
+                </Button>
               }
-            >
-              <>
-                <ProfileContainer
-                  size={'l'}
-                  user={user}
-                />
-                <SectionButton
-                  icon={<FiHome/>}
-                >
-                  ホーム
-                </SectionButton>
-                <SectionButton
-                  slug={'news'}
-                  icon={<FiBook/>}
-                >
-                  SEIRYO NEWS
-                </SectionButton>
-                <SectionButton
-                  slug={'about'}
-                  icon={<FiInfo/>}
-                >
-                  SEIRYO GROUNDとは？
-                </SectionButton>
-                <SectionButton
-                  slug={'levels'}
-                  icon={<FiCreditCard/>}
-                >
-                  SEIRYO Cardについて
-                </SectionButton>
-                <SectionButton
-                  slug={'tos'}
-                  icon={<FiInfo/>}
-                >
-                  利用規約
-                </SectionButton>
-              </>
-            </Dialog>
+
+              <Dialog
+                title={'メニュー'}
+                trigger={
+                  <Button
+                    size={'small'}
+                    styleType={'transparent'}
+                    icon={<FiCommand/>}
+                  />
+                }
+              >
+                <>
+                  <ProfileContainer
+                    size={'l'}
+                    user={user}
+                  />
+                  <SectionButton
+                    icon={<FiHome/>}
+                  >
+                    ホーム
+                  </SectionButton>
+                  <SectionButton
+                    slug={'news'}
+                    icon={<FiBook/>}
+                  >
+                    SEIRYO NEWS
+                  </SectionButton>
+                  <SectionButton
+                    slug={'about'}
+                    icon={<FiInfo/>}
+                  >
+                    SEIRYO GROUNDとは？
+                  </SectionButton>
+                  <SectionButton
+                    slug={'levels'}
+                    icon={<FiCreditCard/>}
+                  >
+                    SEIRYO Cardについて
+                  </SectionButton>
+                  <SectionButton
+                    slug={'tos'}
+                    icon={<FiInfo/>}
+                  >
+                    利用規約
+                  </SectionButton>
+                </>
+              </Dialog>
+            </NavContentStyled>
           </NavStyled>
         </NavContainerStyled>
       }

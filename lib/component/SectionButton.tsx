@@ -5,12 +5,12 @@ import { styled } from '../../stitches.config'
 import AlignItems from '../alignment/AlignItems'
 
 const SectionButtonStyled = styled('button',{
+  cursor:'pointer',
   outlineColor:'$gray6', 
   display:'flex',
   alignItems:'center',
   gap:'$medium',
   width:'100%',
-  cursor:'pointer',
   borderRadius:'$r2',
   padding:'$medium',
   border:'none',
