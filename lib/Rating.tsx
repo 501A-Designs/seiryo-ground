@@ -7,10 +7,12 @@ const RatingStyled = styled('div',{
   color: '$gray1',
   padding: '1em',
   'h2':{
-    margin: '0'
+    margin: '0',
+    fontFamily:'$sgFont2',
   },
   'h4':{
-    margin: '0'
+    margin: '0',
+    fontFamily:'$sgFont2',
   },
   'p':{
     margin: '0'

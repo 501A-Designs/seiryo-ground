@@ -561,9 +561,12 @@ export default function PlaceName() {
             <Footer type={'blur'}/>
           </MainBody>
           <UniversalNav
-            animate={'scaleUp'}
             showInitially={true}
-            minSize={user ? 'l':'s'}
+            scrollPop={true}
+            popOnMount={true}
+            mount={userData?.data()?.level > 1 ? true:false}
+            // animate={'scaleUp'}
+            minSize={user ? userData?.data()?.level > 1 ? 'l':'m':'s'}
             maxSize={user ? 'l':'m'}
             dynamicButton={
               <>

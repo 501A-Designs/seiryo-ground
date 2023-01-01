@@ -37,6 +37,12 @@ import Dialog from '../lib/component/Dialog'
 import BodyMargin from '../lib/alignment/Margin'
 import Margin from '../lib/alignment/Margin'
 import End from '../lib/End'
+import { styled } from '../stitches.config'
+
+
+const Heading = styled('h2',{
+  fontFamily:'$sgFont2'
+})
 
 export default function Home() {
   let masonaryGrid = {350: 1, 750: 2, 900: 3, 1200:4}
@@ -160,7 +166,7 @@ export default function Home() {
           <Container ref={parent}>
             <Grid gap={'small'}>
               <AlignItems spaceBetween>
-                <h2>More than 0 likes</h2>
+                <Heading>Most Liked</Heading>
               </AlignItems>
               {placesCollection && <ResponsiveMasonry
                 columnsCountBreakPoints={masonaryGrid}
@@ -196,7 +202,7 @@ export default function Home() {
             <Grid gap={'small'}>
               <AlignItems spaceBetween>
                 <AlignItems gap={'0em'}>
-                  <h3>Filter:</h3>
+                  <Heading>Filter:</Heading>
                   <Select
                     styles={selectStyle}
                     options={prefectureData}
@@ -208,7 +214,7 @@ export default function Home() {
                     placeholder={prefectureInput ? prefectureInput:'都道府県を選択'}
                   />
                 </AlignItems>
-                {filteredPlaces && filteredPlaces.docs.length > 0 && <h3>合計{filteredPlaces.docs.length}カ所</h3>}
+                {filteredPlaces?.docs.length > 0 && <Heading>{filteredPlaces?.docs.length} Found</Heading>}
               </AlignItems>
               <div>
                 {filteredPlaces && filteredPlaces.docs.length > 0 ?
@@ -252,9 +258,7 @@ export default function Home() {
           {/* All Locations */}
           <Container>
             <Grid gap={'medium'}>
-              <AlignItems spaceBetween>
-                <h2>All Locations</h2>
-              </AlignItems>
+              <Heading>All Locations</Heading>
               {placesCollection && 
                 <ResponsiveMasonry
                   columnsCountBreakPoints={masonaryGrid}
@@ -296,6 +300,8 @@ export default function Home() {
       <Footer type={'blur'}/>
       <UniversalNav
         showInitially={false}
+        scrollPop={true}
+        popOnMount={false}
         minSize={'s'}
         maxSize={'l'}
         dynamicButton={user ? 

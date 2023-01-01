@@ -29,6 +29,7 @@ const ReviewStyled = styled('div', {
 const ReviewNumberStyled = styled('span',{
   fontSize:'$3',
   fontWeight:'bold',
+  fontFamily:'$sgFont2',
 })
 const ReviewNumberTextStyled = styled('span',{
   fontSize:'$8',

@@ -282,8 +282,11 @@ export default function Profile() {
       {!loading &&
         <UniversalNav
           showInitially={true}
+          scrollPop={false}
+          popOnMount={true}
+          mount={showNewContent ? true:false}
           minSize={'m'}
-          maxSize={showNewContent ? 'xl':'m'}
+          maxSize={'xl'}
           dynamicButton={
             <>
               <Button

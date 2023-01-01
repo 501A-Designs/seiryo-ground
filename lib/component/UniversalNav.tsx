@@ -103,7 +103,7 @@ const NavStyled = styled('section',{
   variants:{
     size:{
       xl:{
-        width: '300px',
+        width: '250px',
       },
       l:{
         width: '200px',
@@ -147,6 +147,9 @@ const NavContentStyled = styled('div',{
 
 interface UniversalNavProps{
   showInitially:boolean,
+  scrollPop:boolean,
+  popOnMount:boolean,
+  mount?:any,
   animate?:any,
   minSize?:"s" | "xl" | "l" | "m",
   maxSize?:"s" | "xl" | "l" | "m",
@@ -169,16 +172,25 @@ export default function UniversalNav(props:UniversalNavProps) {
       if (!props.showInitially) {
         currentScrollY < 100 ? setHide(true):setHide(false);
       }
-      currentScrollY < 1500 ? setHideScrollUp(true):setHideScrollUp(false);
-      currentScrollY < 1500 ? setDynamicSize(props.minSize):setDynamicSize(props.maxSize)
+      if (props.scrollPop) {        
+        currentScrollY < 1500 ? setHideScrollUp(true):setHideScrollUp(false);
+        currentScrollY < 1500 ? setDynamicSize(props.minSize):setDynamicSize(props.maxSize)
+      }
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [hide]);
 
-  useEffect(()=>{
-    hide ? setTimeout(()=>setHideDelay(true),500):setTimeout(()=>setHideDelay(false),500);
-  })
+
+useEffect(()=>{
+  hide ? setTimeout(()=>setHideDelay(true),500):setTimeout(()=>setHideDelay(false),500);
+  if (props.popOnMount) {
+    setDynamicSize(props.minSize)
+    if (props.mount) {
+      setDynamicSize(props.maxSize)
+    }
+  }
+})
 
   useEffect(() => {
     const down = (e) => {
