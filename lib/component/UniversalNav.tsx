@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { FiBook, FiCommand, FiCornerLeftUp, FiCreditCard, FiHome, FiInfo } from 'react-icons/fi';
-import { auth } from '../../firebase';
+import { FiBell, FiBook, FiCommand, FiCornerLeftUp, FiCreditCard, FiHome, FiInfo } from 'react-icons/fi';
+import { auth, db } from '../../firebase';
 import Button from '../button/Button';
 import Dialog from './Dialog';
 import SectionButton from './SectionButton';
@@ -12,6 +12,9 @@ import { keyframes } from "@stitches/react";
 import { useEffect, useState } from 'react';
 import { scroll } from '../ux/scroll';
 import ProfileContainer from '../profile-page/ProfileContainer';
+import { checkLevel } from '../function/checkLevel';
+import { useDocument } from 'react-firebase-hooks/firestore';
+import { doc } from 'firebase/firestore';
 
 const expandAni = keyframes({
   '10%':{
@@ -123,7 +126,7 @@ const NavStyled = styled('section',{
         animation:`${jiggleAni} 0.8s linear infinite`
       },
       shine:{
-        background: 'linear-gradient(45deg,$gray2 0%,white 50%,$gray2 100%)',
+        background: 'linear-gradient(45deg,$gray7 0%,white 50%,$gray7 100%)',
         backgroundSize: '200% 200%',
         animation: `${gradient} 1s linear infinite`,
       },
@@ -139,10 +142,12 @@ const NavContentStyled = styled('div',{
   justifyContent:'space-between',
   alignItems:'center',
   gap:'$small',
-  backdropFilter:'blur(20px)',
+  // backdropFilter:'blur(20px)',
+  background:	'linear-gradient(white,$gray1)',
+
   width:'100%',
   borderRadius:'$round',
-  border:'1px solid $grayA1'
+  // border:'1px solid $grayA1'
 })
 
 interface UniversalNavProps{
@@ -205,14 +210,26 @@ useEffect(()=>{
     return () => document.removeEventListener('keydown', down)
   }, [])
 
+  const [userData,loadingUserData] = useDocument(doc(db, `users/${user && user.uid}`));
+  const [upgradable, setUpgradable] = useState(null)
+  useEffect(() => {
+    if (user && userData) {
+      let postCount = userData.data().postCount;
+      let reviewCount = userData.data().reviewCount;
+      if (checkLevel(postCount,reviewCount) !== userData.data().level) {
+        setUpgradable(checkLevel(postCount,reviewCount))
+      }
+    }
+  },[userData])
+
   return (
     <>
       {!hideDelay &&
         <NavContainerStyled  
           hide={hide}
         >
-          <NavStyled 
-            animate={props.animate}
+          <NavStyled
+            animate={upgradable ? router.asPath !== '/profile' && 'shine':props.animate}
             size={dynamicSize}
           >
             <NavContentStyled>
@@ -227,7 +244,6 @@ useEffect(()=>{
                   上へ戻る
                 </Button>
               }
-
               <Dialog
                 title={'メニュー'}
                 trigger={
@@ -242,6 +258,7 @@ useEffect(()=>{
                   <ProfileContainer
                     size={'l'}
                     user={user}
+                    upgradable={upgradable ? true:false}
                   />
                   <SectionButton
                     icon={<FiHome/>}

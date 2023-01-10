@@ -5,7 +5,7 @@ const TextAreaStyled = styled('textarea',{
   outline: 'none',
   borderRadius: '$r2',
   backgroundColor: '$gray3',
-  border: '1px solid $gray3',
+  border: '1px solid $gray4',
   resize: 'vertical',
   minHeight:'100px',
   transition: '$speed2',

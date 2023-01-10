@@ -565,7 +565,6 @@ export default function PlaceName() {
             scrollPop={true}
             popOnMount={true}
             mount={userData?.data()?.level > 1 ? true:false}
-            // animate={'scaleUp'}
             minSize={user ? userData?.data()?.level > 1 ? 'l':'m':'s'}
             maxSize={user ? 'l':'m'}
             dynamicButton={
@@ -574,13 +573,13 @@ export default function PlaceName() {
                   size={'small'}
                   styleType={'transparent'}
                   icon={<FiArrowLeft/>}
-                  onClick={()=> {router.push('/')}}
+                  onClick={()=> {router.back()}}
                 />
                 {user &&
                   <>
                     {userData.data().level > 1 &&
                       <Dialog
-                        title={'場所情報を編集'}
+                        title={'編集'}
                         size={'large'}
                         trigger={
                           <Button
@@ -593,23 +592,29 @@ export default function PlaceName() {
                             icon={<FiEdit/>}
                           />
                         }
-                      >
-                        <AlignItems justifyContent={'center'}>
+                        banner={
+                          userData.data().level < 5 &&
+                          <AlignItems justifyContent={'center'}>
+                            <FiLock/>
+                            <p>全ての編集機能をアクセスするにはカードをアップグレードする必要があります。</p>
+                          </AlignItems>
+                        }
+                        topCenterComponent={
                           <Button
-                            color={'black'}
-                            iconPosition={'left'}
+                            styleType={'black'}
                             icon={<FiSave/>}
                             onClick={()=> editThisPlace()}
                           >
                             変更を保存
                           </Button>
-                        </AlignItems>
+                        }
+                      >
                         {userData && userData.data() &&
                           <Grid
-                            gap={'large'}
-                            grid={'oneThree'}
+                            gap={'small'}
+                            grid={'oneTwo'}
                           >
-                            <Grid gap={'small'}>
+                            <Grid gap={'extraSmall'}>
                               <Dropdown>
                                 {userData.data().level > 1 &&
                                   <Dropdown.Item
@@ -633,16 +638,16 @@ export default function PlaceName() {
                                           select2();
                                           setBinaryToggle(false)
                                         }}
-                                        name={'有'}
+                                        name={'無'}
                                       />
                                     </BinaryToggle>
                                   </Dropdown.Item>                          
                                 }
-                                <Dropdown.Item
-                                  number={'2'}
-                                  name={'種類'}
-                                >
-                                  {userData.data().level > 3 &&
+                                {userData.data().level > 3 &&
+                                  <Dropdown.Item
+                                    number={'2'}
+                                    name={'種類'}
+                                  >
                                     <Grid gap={'extraSmall'}>
                                       {typeButtonArray.map(color =>{
                                         return <TypeButton
@@ -656,8 +661,8 @@ export default function PlaceName() {
                                         />
                                       })}
                                     </Grid>
-                                  }
-                                </Dropdown.Item>
+                                  </Dropdown.Item>
+                                }
                                 {userData.data().level > 2 &&
                                   <>
                                     <Dropdown.Item
@@ -711,19 +716,7 @@ export default function PlaceName() {
                                 }
                               </Dropdown>
                             </Grid>
-                            <Grid gap={'small'}>
-                              {userData.data().level < 5 &&
-                                <Container
-                                  type="standard"
-                                  alignment="center"
-                                >
-                                  <AlignItems justifyContent={'center'}>
-                                    <FiLock/>
-                                    <h5>報告</h5>
-                                  </AlignItems>
-                                  <p>全ての編集機能をアクセスするにはカードをアップグレードする必要があります。</p>
-                                </Container>
-                              }
+                            <Grid gap={'extraSmall'}>
                               {/* PLACE NAME */}
                               {userData.data().level > 4 &&
                                 <Input

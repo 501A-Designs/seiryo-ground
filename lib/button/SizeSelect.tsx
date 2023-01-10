@@ -29,9 +29,9 @@ const SizeSelectItemStyled = styled('div',{
         color: '$gray10',
         width: '33%',
         '&:hover':{
-          border: '1px solid $gray4',
           color: '$gray11',
-          backgroundColor: '$gray4',
+          backgroundColor:'$gray4',
+          border:'1px solid $gray5',
         }
       },
     },

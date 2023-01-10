@@ -1,6 +1,6 @@
 import React from 'react';
+import * as Dialog from '@radix-ui/react-dialog';
 import { keyframes, styled } from '@stitches/react';
-import * as DialogPrimitive from '@radix-ui/react-dialog';
 import Button from '../button/Button';
 import { FiX } from 'react-icons/fi';
 import { topSlideIn } from '../ux/keyframes';
@@ -14,8 +14,8 @@ const popOutDialog = keyframes({
   }
 });
 
-const StyledOverlay = styled(DialogPrimitive.Overlay, {
-  background: `radial-gradient(86.36% 107.55% at 6.49% 12.32%,$grayA1 0%, $grayA2 100%)`,
+const StyledOverlay = styled(Dialog.Overlay, {
+  background: `linear-gradient($grayA2, $gray1)`,
   cursor: 'pointer',
   backdropFilter: `blur(3px)`,
   position: 'fixed',
@@ -26,9 +26,23 @@ const StyledOverlay = styled(DialogPrimitive.Overlay, {
   },
 });
 
-const StyledContent = styled(DialogPrimitive.Content, {
+const DialogBannerStyled = styled('div',{
+  background:'linear-gradient(45deg,$gray2,$gray4)',
+  border:'1px solid $gray4',
+  color:'$gray12',
+  padding:'1em',
+  marginBottom:'0.5em',
+  borderRadius:'$r2',
+  fontSize:'$8',
+  'p':{
+    margin:0,
+    fontSize:'$7',
+  }
+})
+
+const StyledContent = styled(Dialog.Content, {
   fontFamily:'$sgFont1',
-  border: '1px solid $gray3',
+  border: '1px solid $gray4',
   backgroundColor: 'white',
   borderRadius: '$r4',
   position: 'fixed',
@@ -48,7 +62,7 @@ const StyledContent = styled(DialogPrimitive.Content, {
   variants:{
     size:{
       large:{
-        maxWidth: '1200px',
+        maxWidth: '800px',
       },
       standard:{
         maxWidth: '450px',
@@ -62,38 +76,34 @@ const StyledContent = styled(DialogPrimitive.Content, {
 
 function Content({ children, ...props }) {
   return (
-    <DialogPrimitive.Portal>
+    <Dialog.Portal>
       <StyledOverlay />
       <StyledContent {...props}>{children}</StyledContent>
-    </DialogPrimitive.Portal>
+    </Dialog.Portal>
   );
 }
 
-const StyledTitle = styled(DialogPrimitive.Title, {
-  // color: '$gray12',
-  // margin: '0 0 0 $small',
-  // fontWeight: 500,
+const StyledTitle = styled(Dialog.Title, {
   fontSize: 13,
   userSelect:'none',
   textTransform:'uppercase',
-  // transform:'scaleY(0.9)',
   color:'$gray11',
   margin:'5px 5px 10px 5px'
 });
 
-const StyledDescription = styled(DialogPrimitive.Description, {
+const StyledDescription = styled(Dialog.Description, {
   margin: '10px 0 20px',
   color: '$gray12',
   fontSize: 15,
   lineHeight: 1.5,
 });
 
-export default function Dialog(props){
+export default function (props){
   return (
-    <DialogPrimitive.Root>
-      <DialogPrimitive.Trigger asChild>
+    <Dialog.Root>
+      <Dialog.Trigger asChild>
         {props.trigger}
-      </DialogPrimitive.Trigger>
+      </Dialog.Trigger>
       <Content
         size={props.size}
       >
@@ -107,14 +117,20 @@ export default function Dialog(props){
             </StyledTitle>:
             props.topLeftComponent
           }
-          <DialogPrimitive.Close asChild>
+          {props.topCenterComponent}
+          <Dialog.Close asChild>
             <Button
               size={'small'}
               aria-label="Close"
               icon={<FiX/>}
             />
-          </DialogPrimitive.Close>
+          </Dialog.Close>
         </AlignItems>
+        {props.banner &&
+          <DialogBannerStyled>
+            {props.banner}
+          </DialogBannerStyled>
+        }
         {props.description &&
           <StyledDescription>
             {props.description}
@@ -122,6 +138,6 @@ export default function Dialog(props){
         }
         {props.children}
       </Content>
-    </DialogPrimitive.Root>
+    </Dialog.Root>
   )
 };

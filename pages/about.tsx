@@ -27,7 +27,8 @@ export default function About() {
           <p
             style={{
               textAlign: 'center',
-              maxWidth:'500px'
+              maxWidth:'500px',
+              marginBottom:'1em'
             }}
           >
             ご興味を持ってくださりありがとうございます。
@@ -42,9 +43,6 @@ export default function About() {
             <br/>
             <br/>
             清涼広場にログインしたユーザー様は具体的に、新しい場所の投稿そして既に投稿されている場所それぞれにレビューを一つ残すことが出来ます。現段階では日本にある場所のみの投稿をお願いしております。また、SEIRYO Photographerとして応募すれば本サイトのレビューページにて写真が展示されます。是非、写真を撮るのが好きな方は応募してみてください。
-            <br/>
-            <br/>
-            Designed & Produced by 501A.
           </p>
         </Container>
         <AlignItems justifyContent={'center'}>

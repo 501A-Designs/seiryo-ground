@@ -9,7 +9,7 @@ const BinaryToggleItemStyled = styled('div',{
   alignItems: 'center',
   justifyContent: 'center',
   cursor: 'pointer',
-  border: '1px solid $gray5',
+  border: '1px solid transparent',
   transition:'ease $speed1',
   variants:{
     selected:{
@@ -24,13 +24,14 @@ const BinaryToggleItemStyled = styled('div',{
       },
       false:{
         color: '$gray10',
-        background:'$gray3',
+        // background:'$gray3',
+        backgroundColor:'transparent',
         width: '50px',
         height: '50px',
         '&:hover':{
-          transform: 'scale(1.09)',
           color: '$gray11',
           backgroundColor: '$gray4',
+          borderColor:'$gray5',
         }
       }
     }

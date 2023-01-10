@@ -19,7 +19,7 @@ export default function Levels() {
           color="white"
           iconPosition="left"
           icon={<FiArrowLeft/>}
-          onClick={() =>router.push('/')}
+          onClick={() =>router.back()}
         >
           戻る
         </Button>

@@ -5,23 +5,24 @@ import { FiChevronDown } from 'react-icons/fi';
 import { keyframes } from '@stitches/react';
 
 const DropdownRootStyled = styled(Accordion.Root, {
-  borderRadius: '$r3',
+  borderRadius: '$r2',
 });
 
 const DropdownItemStyled = styled(Accordion.Item, {
+  cursor:'pointer',
   overflow: 'hidden',
-  marginTop: 1,
+  marginTop: 2,
   border:'1px solid $gray4',
 
   '&:first-child': {
     marginTop: 0,
-    borderTopLeftRadius: '$r3',
-    borderTopRightRadius: '$r3',
+    borderTopLeftRadius: '$r2',
+    borderTopRightRadius: '$r2',
   },
 
   '&:last-child': {
-    borderBottomLeftRadius: '$r3',
-    borderBottomRightRadius: '$r3',
+    borderBottomLeftRadius: '$r2',
+    borderBottomRightRadius: '$r2',
   },
 
   '&:focus-within': {
@@ -45,20 +46,16 @@ const AccordionTriggerStyled = styled(Accordion.Trigger, {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  fontSize: 15,
+  fontSize: '$8',
   lineHeight: 1,
-  color: '$gray12',
+  color: '$gray11',
+
   // boxShadow: `$shadow1`,
   backgroundColor:'$gray3',
-  // '&:hover': {
-  //   backgroundColor: '$gray12'
-  // },
-});
-
-const ChevronStyled = styled(FiChevronDown, {
-  color: '$gray11',
-  transition: 'transform 300ms cubic-bezier(0.87, 0, 0.13, 1)',
-  '[data-state=open] &': { transform: 'rotate(180deg)' },
+  transition:'$speed1',
+  '&:hover': {
+    backgroundColor: '$gray4'
+  },
 });
 
 const DropdownTrigger = React.forwardRef(
@@ -69,7 +66,6 @@ const DropdownTrigger = React.forwardRef(
       ref={forwardedRef}
     >
       {children}
-      <ChevronStyled aria-hidden />
     </AccordionTriggerStyled>
   </AccordionHeaderStyled>
 ));
@@ -104,7 +100,10 @@ const AccordionContentTextStyled = styled('div', {
 });
 
 const DropdownContent = React.forwardRef(({ children, ...props }:any, forwardedRef) => (
-  <AccordionContentStyled {...props} ref={forwardedRef}>
+  <AccordionContentStyled
+    {...props}
+    ref={forwardedRef}
+  >
     <AccordionContentTextStyled>{children}</AccordionContentTextStyled>
   </AccordionContentStyled>
 ));

@@ -38,7 +38,7 @@ const Notification = styled('div',{
   },
   'p':{
     margin: '0',
-    color: '$sgGray3',
+    color: '$gray1',
   }
 })
 

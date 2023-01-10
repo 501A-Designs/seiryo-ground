@@ -33,9 +33,9 @@ export default function News({sgPosts}) {
           color={'transparent'}
           iconPosition={'left'}
           icon={<FiArrowLeft/>}
-          onClick={()=> {router.push('/')}}
+          onClick={()=> {router.back()}}
         >
-          メインに戻る
+          戻る
         </Button>
       </AlignItems>
       <Grid

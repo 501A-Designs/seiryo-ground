@@ -4,10 +4,12 @@ import { styled } from '../../stitches.config'
 const DisplayRatingInputStyled = styled('div',{
   display: 'grid',
   gridTemplateColumns:'1fr',
-  backgroundColor:'$gray3',
+  backgroundColor: '$gray3',
+  border: '1px solid $gray4',
   padding: '1em 1em 0.5em 1em',
   gap:'1em',
   borderRadius: '10px',
+  transition:'$speed1',
   'h1':{
     margin: '0',
     textAlign: 'center'
@@ -15,7 +17,7 @@ const DisplayRatingInputStyled = styled('div',{
   'input': {
     WebkitAppearance: 'none',
     appearance: 'none',
-    backgroundColor: '$gray5',
+    backgroundColor: '$gray6',
     height: '2px',
     cursor:'pointer',
     '&:focus': {
@@ -46,6 +48,9 @@ const DisplayRatingInputStyled = styled('div',{
   },
   'p':{
     textAlign: 'center'
+  },
+  '&:hover':{
+    backgroundColor:'$gray2',
   }
 })
 

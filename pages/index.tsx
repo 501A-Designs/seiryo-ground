@@ -299,6 +299,7 @@ export default function Home() {
       </End>
       <Footer type={'blur'}/>
       <UniversalNav
+        // animate={'scaleUp'}
         showInitially={false}
         scrollPop={true}
         popOnMount={false}

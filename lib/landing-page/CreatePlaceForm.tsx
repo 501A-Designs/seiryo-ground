@@ -165,7 +165,7 @@ export default function CreatePlaceForm(props) {
               flexDirection="column"
             >
               <h3>
-                SEIRYO GROUNDへの貢献<br/>
+                清涼広場への貢献<br/>
                 ありがとうございます。
               </h3>
               <p>

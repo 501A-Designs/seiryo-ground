@@ -16,11 +16,14 @@ const WelcomeHeaderStyled = styled('section', {
   writingMode:'vertical-rl',
   textOrientation:'mixed',
   'h1':{
+    fontWeight:'normal',
+    fontFamily:'$sgFont2',
     fontSize:'2.5em',
     margin: '0',
     textShadow:'$shadow1'
   },
   'p':{
+    fontFamily:'$sgFont2',
     margin:0,
   }
 })

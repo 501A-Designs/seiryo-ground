@@ -5,6 +5,7 @@ import AlignItems from '../alignment/AlignItems'
 
 const CheckBoxStyled = styled('div',{
   cursor: 'pointer',
+  userSelect:'none',
   backgroundColor: 'black',
   borderRadius: '$r2',
   padding: '$small',
@@ -21,9 +22,8 @@ const CheckBoxStyled = styled('div',{
         backgroundColor: 'transparent',
         color: '$gray10',
         '&:hover': {
-          backgroundColor:'$gray2',
-          border:'1px solid $gray4',
-          transform: 'scale(1.04)',
+          backgroundColor:'$gray4',
+          border:'1px solid $gray5',
           color: '$gray11',
         }
       }

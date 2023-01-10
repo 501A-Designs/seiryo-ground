@@ -13,10 +13,7 @@ import { gradient } from '../ux/keyframes'
 const ProfileCardStyled = styled('div',{
   cursor:'pointer',
   borderRadius:'$r3',
-  background: 'linear-gradient(45deg,white 0%,$gray4 50%,white 100%)',
-  backgroundSize: '200% 200%',
-  border:'1px solid $gray4',
-  padding: '$large',
+  padding:'calc($small/1.5)',
   marginBottom:'$medium',
 
   height: 'auto',
@@ -33,11 +30,32 @@ const ProfileCardStyled = styled('div',{
     margin:0,
     fontWeight: 'normal'
   },
-
   '&:hover':{
-    animation:`${gradient} linear 0.6s infinite`,
-    transform:'scale(0.95)',
+    transform:'scale(0.98)',
+  },
+  variants:{
+    upgradable:{
+      true:{
+        border:'1px solid $gray3',
+        background: 'linear-gradient(45deg,$gray7 0%,white 50%,$gray7 100%)',
+        backgroundSize: '200% 200%',
+        animation:`${gradient} linear 1s infinite`,
+      },
+      false:{
+        border:'1px solid $gray4',
+        backgroundColor:'$gray2',
+      }
+    }
   }
+})
+
+const ProfileCardContentStyled = styled('div',{
+  backdropFilter:'blur(20px)',
+  backgroundColor:'white',
+  // border:'1px solid $gray4',
+  boxShadow:'$shadow1',
+  borderRadius:'$r2',
+  padding: '$large',
 })
 
 export default function ProfileContainer(props:any) {
@@ -47,37 +65,40 @@ export default function ProfileContainer(props:any) {
   return (
     <ProfileCardStyled
       onClick={()=>router.push('/profile')}
+      upgradable={props.upgradable}
     >
-      {props.user ?
-        <AlignItems gap={'1em'}>
-          <ProfileImage
-            width={'35'}
-            height={'35'}
-            alt={'profile image'}
-            src={props.user.photoURL}
-            onClick={()=>{
-              router.push('/profile')
-            }}
-          />
-          <Grid>
-            <h4>
-              {props.user.displayName}
-            </h4>
-            <p>{props.user.uid}</p>
-          </Grid>
-        </AlignItems>:
-        <AlignItems justifyContent={"center"} flexDirection={"column"} gap={'1em'}>
-          <h4>ログインする必要があります</h4>
-          <Button
-            size={'medium'}
-            styleType={'black'}
-            icon={<FiLogIn/>}
-            onClick={()=>signInWithGoogle()}
-          >
-            アカウント作成
-          </Button> 
-        </AlignItems>
-      }
+      <ProfileCardContentStyled>
+        {props.user ?
+          <AlignItems gap={'1em'}>
+            <ProfileImage
+              width={'35'}
+              height={'35'}
+              alt={'profile image'}
+              src={props.user.photoURL}
+              onClick={()=>{
+                router.push('/profile')
+              }}
+            />
+            <Grid>
+              <h4>
+                {props.user.displayName}
+              </h4>
+              <p>{props.user.uid}</p>
+            </Grid>
+          </AlignItems>:
+          <AlignItems justifyContent={"center"} flexDirection={"column"} gap={'1em'}>
+            <h4>ログインする必要があります</h4>
+            <Button
+              size={'medium'}
+              styleType={'black'}
+              icon={<FiLogIn/>}
+              onClick={()=>signInWithGoogle()}
+            >
+              アカウント作成
+            </Button> 
+          </AlignItems>
+        }
+      </ProfileCardContentStyled>
     </ProfileCardStyled>
   )
 }
