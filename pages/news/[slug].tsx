@@ -16,7 +16,7 @@ export async function getStaticPaths(){
   const res = await client.getEntries({
     content_type:'sgPage'
   })
-  const paths = res.items.map(item => {
+  const paths = res.items.map((item:any) => {
     return{
       params: {
         slug: item.fields.slug

@@ -17,7 +17,7 @@ const ButtonStyled = styled('button',{
   // minHeight:'35px',
   userSelect:'none',
   borderRadius:'50px',
-  animation: `${popOut} 0.4s`,
+  animation: `${popOut} 0.5s`,
   transition:'$speed1',
   variants:{
     size:{
@@ -102,12 +102,11 @@ export default function Button(props) {
 
   return (
     <ButtonStyled
-      // ref={props.ref}
       size={props.size}
       styleType={props.styleType}
-      // onMouseEnter={()=> tap()}
       onClick={props.onClick}
       title={props.children}
+      css={props.css}
     >
       {props.icon && props.icon}
       {props.children && <span>{props.children}</span>}

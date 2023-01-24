@@ -3,6 +3,28 @@ import React from 'react'
 import { styled } from '../../stitches.config';
 import AlignItems from '../alignment/AlignItems';
 
+export default function TypeButton(props) {
+  return (
+    <TypeButtonStyled
+      selected={props.selectedInput === props.type}
+      onClick={props.onClick}
+    >
+      <AlignItems gap={'1em'}>
+        <TypeButtonColorStyled
+          selected={props.selectedInput === props.type}
+          type={props.type}
+        />
+        <h5>
+          {props.type === 'blue' && '海。池。川等'}
+          {props.type === 'green' && '森。山。公園等'}
+          {props.type === 'red' && '建物。カフェ等'}
+          {props.type === 'purple' && 'その他'}
+        </h5>
+      </AlignItems>
+    </TypeButtonStyled>
+  )
+}
+
 const TypeButtonStyled = styled('div', {
   fontFamily: '$sgFont1',
   cursor: 'pointer',
@@ -71,25 +93,3 @@ const TypeButtonColorStyled = styled('div',{
     }
   }
 })
-
-export default function TypeButton(props) {
-  return (
-    <TypeButtonStyled
-      selected={props.selectedInput === props.type}
-      onClick={props.onClick}
-    >
-      <AlignItems gap={'1em'}>
-        <TypeButtonColorStyled
-          selected={props.selectedInput === props.type}
-          type={props.type}
-        />
-        <h5>
-          {props.type === 'blue' && '海。池。川等'}
-          {props.type === 'green' && '森。山。公園等'}
-          {props.type === 'red' && '建物。カフェ等'}
-          {props.type === 'purple' && 'その他'}
-        </h5>
-      </AlignItems>
-    </TypeButtonStyled>
-  )
-}

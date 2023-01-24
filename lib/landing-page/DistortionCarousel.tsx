@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDistortionEffectCarousel } from 'distortion-effect-carousel';
-import { bottomSlideIn } from '../ux/keyframes';
+import { topSlideIn } from '../ux/keyframes';
 import useSound from 'use-sound';
 
 export default function DistortionCarousel({
@@ -14,7 +14,6 @@ export default function DistortionCarousel({
     displacmentImage,
     speed
   });
-
   const [tap2] = useSound('/sound/tap-2-sg.mp3');
   
   return (
@@ -23,7 +22,7 @@ export default function DistortionCarousel({
         height: '100vh',
         cursor:'pointer',
         marginBottom:'12vh',
-        animation: `${bottomSlideIn} ease 1s`
+        animation: `${topSlideIn} ease 1s`
       }}
       ref={ref}
       onClick={()=>{

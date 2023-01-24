@@ -13,7 +13,6 @@ import { gradient } from '../ux/keyframes';
 
 const PostThumbNailStyled = styled('div', {
   cursor:'pointer',
-  // background:'linear-gradient(217deg, $gray4, $gray2)',
   border:'1px solid $gray4',
   background: 'linear-gradient(45deg,white 0%,$gray4 50%,white 100%)',
   backgroundSize: '200% 200%',
@@ -24,8 +23,7 @@ const PostThumbNailStyled = styled('div', {
   transition: '$speed1',
   '&:hover':{
     zIndex: '100',
-    // borderRadius:'$r3',
-    animation:`${gradient} linear 0.6s infinite`,
+    animation:`${gradient} linear 0.3s`,
     transform:'scale(0.95)',
   },
   'h3':{

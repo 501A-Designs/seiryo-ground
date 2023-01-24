@@ -4,27 +4,23 @@ import Button from '../button/Button'
 import TypeButton from '../button/TypeButton'
 import TextArea from '../TextArea'
 import Input from '../Input'
-import Select from 'react-select'
 
 import { db } from '../../firebase'
 import { addDoc, collection, doc, increment, updateDoc } from "firebase/firestore";
 import { useRouter } from 'next/router'
-import { prefectureData } from '../../prefectureData'
 import { FiArrowRight, FiPlus, FiSearch, FiSend } from 'react-icons/fi'
 import Grid from '../alignment/Grid'
-import Container from '../component/Container'
-
 import CheckBox from '../button/CheckBox'
 import { costButtonArray, sizeButtonArray, typeButtonArray } from '../button/buttonData'
 import FlipThrough from '../component/FlipThrough'
-import Link from 'next/link';
 
 import useSound from 'use-sound';
-import Dialog from '../component/Dialog'
+import Dialog from '../component/Modal'
 import { styled } from '../../stitches.config'
 import Map from '../component/Map'
 import BinaryToggle from '../button/BinaryToggle'
 import SizeSelect from '../button/SizeSelect'
+import Selector from '../component/Selector'
 
 const selectStyle = {
   option: (provided, state) => ({
@@ -249,26 +245,36 @@ export default function CreatePlaceForm(props) {
                 rightClick={()=>{tap1();setSection(3)}}
                 currentSection={section}
               >
-                <Grid gap={'extraSmall'}>                
-                  <Select
-                    styles={selectStyle}
-                    options={prefectureData}
-                    components={{ DropdownIndicator:() => null, IndicatorSeparator:() => null }}
-                    onChange={(e)=>{
-                      select1();
-                      setPrefectureInput(e.value);
-                    }}
-                    placeholder={'都道府県を選択'}
-                  />
-
-                  <Input
-                    placeholder={"場所（スペース無し英語表記｜例：koishikawa-korakuen）"}
-                    value={locationInput}
-                    onChange={(e)=>{
-                      tap3();
-                      setLocationInput(e.target.value)
-                    }}
-                  />
+                <Grid gap={'extraSmall'}>
+                  <Grid
+                    grid={'twoOne'}
+                    gap={'extraSmall'}
+                  >
+                    <Input
+                      placeholder={"場所（例：koishikawa-korakuen）"}
+                      value={locationInput}
+                      onChange={(e)=>{
+                        tap3();
+                        setLocationInput(e.target.value)
+                      }}
+                    />
+                    <Selector
+                      placeholder={'都道府県を選択'}
+                      value={prefectureInput}
+                      onValueChange={setPrefectureInput}
+                    >
+                      {props.prefecD.map(obj => {
+                        return (
+                          <Selector.Item
+                            key={obj.iso}
+                            value={obj.prefecture_kanji}
+                          >
+                            {obj.prefecture_kanji} / {obj.prefecture_romaji.toUpperCase()}
+                          </Selector.Item>
+                        )
+                      })}
+                    </Selector>
+                  </Grid>
                   <Map
                     location={locationInput}
                   />

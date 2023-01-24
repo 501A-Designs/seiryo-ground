@@ -94,5 +94,4 @@ const fillClipPath = keyframes({
   },
 })
 
-
 export {leftSlideIn,topSlideIn,bottomSlideIn,popOut,rotateIn,rotateInBottonLeft,rotateAndZoom,gradient,spin,fillClipPath}

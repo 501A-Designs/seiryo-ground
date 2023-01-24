@@ -43,8 +43,9 @@ export const globalStyles = globalCss({
     width: '80%',
     borderRadius: '$round'
   },
-  [`& ${Link}`]: {
-    // fontWeight:'normal',
-    textDecoration:'dotted',
+  'a': {
+    fontWeight:'inherit',
+    textDecorationStyle:'dotted',
+    color:'inherit'
   },
 })

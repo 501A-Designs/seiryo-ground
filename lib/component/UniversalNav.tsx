@@ -3,7 +3,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { FiBell, FiBook, FiCommand, FiCornerLeftUp, FiCreditCard, FiHome, FiInfo } from 'react-icons/fi';
 import { auth, db } from '../../firebase';
 import Button from '../button/Button';
-import Dialog from './Dialog';
+import Modal from './Modal';
 import SectionButton from './SectionButton';
 
 import { styled } from '../../stitches.config';
@@ -244,7 +244,7 @@ useEffect(()=>{
                   上へ戻る
                 </Button>
               }
-              <Dialog
+              <Modal
                 title={'メニュー'}
                 trigger={
                   <Button
@@ -290,7 +290,7 @@ useEffect(()=>{
                     利用規約
                   </SectionButton>
                 </>
-              </Dialog>
+              </Modal>
             </NavContentStyled>
           </NavStyled>
         </NavContainerStyled>

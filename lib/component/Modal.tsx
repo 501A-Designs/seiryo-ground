@@ -98,7 +98,7 @@ const StyledDescription = styled(Dialog.Description, {
   lineHeight: 1.5,
 });
 
-export default function (props){
+export default function Modal(props){
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>

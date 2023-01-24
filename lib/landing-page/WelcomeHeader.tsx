@@ -7,7 +7,7 @@ const WelcomeHeaderStyled = styled('section', {
   position:'absolute',
   display: 'flex',
   flexDirection:'column',
-  margin: '0',
+  margin: '1em 1em 0 0',
   right:'0',
   animation: `${topSlideIn} 0.5s`,
   // filter: 'invert(100%)',
@@ -18,7 +18,7 @@ const WelcomeHeaderStyled = styled('section', {
   'h1':{
     fontWeight:'normal',
     fontFamily:'$sgFont2',
-    fontSize:'2.5em',
+    fontSize:'1.2em',
     margin: '0',
     textShadow:'$shadow1'
   },
@@ -31,7 +31,9 @@ const WelcomeHeaderStyled = styled('section', {
 export default function WelcomeHeader() {
   return (
     <WelcomeHeaderStyled>
-      <h1>SEIRYO GROUND | 清涼広場</h1>
+      <h1>
+        SEIRYO GROUND | 清涼広場
+      </h1>
       <p>Find places where you can truly relax.</p>
       <p>Produced By <Link href="https://twitter.com/501A_Designs">@501A_Designs</Link></p>
       <p>Photos By <Link href="https://twitter.com/EyesObsolete">@EyesObsolete</Link></p>

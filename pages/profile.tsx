@@ -210,10 +210,10 @@ export default function Profile() {
                   </Notification>
                 }
               </AlignItems>
-              {!loading &&           
+              {!loading && userData &&    
                 <Perspective>
                   <ProfileCard
-                    level={userData.data().level}
+                    level={userData?.data()?.level}
                     rotateAndZoom={openDetails}
                   >
                     {showNewContent ?

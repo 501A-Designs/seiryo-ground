@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import * as Accordion from '@radix-ui/react-accordion';
 import { styled } from '../../stitches.config';
-import { FiChevronDown } from 'react-icons/fi';
 import { keyframes } from '@stitches/react';
 
 const DropdownRootStyled = styled(Accordion.Root, {
@@ -58,7 +57,7 @@ const AccordionTriggerStyled = styled(Accordion.Trigger, {
   },
 });
 
-const DropdownTrigger = React.forwardRef(
+const DropdownTrigger = forwardRef(
   ({ children, ...props }:any, forwardedRef:any) => (
   <AccordionHeaderStyled>
     <AccordionTriggerStyled
@@ -69,7 +68,7 @@ const DropdownTrigger = React.forwardRef(
     </AccordionTriggerStyled>
   </AccordionHeaderStyled>
 ));
-
+DropdownTrigger.displayName = "DropdownTrigger";
 
 const slideDown = keyframes({
   from: { height: 0 },
@@ -99,7 +98,7 @@ const AccordionContentTextStyled = styled('div', {
   padding: '$medium',
 });
 
-const DropdownContent = React.forwardRef(({ children, ...props }:any, forwardedRef) => (
+const DropdownContent = forwardRef(({ children, ...props }:any, forwardedRef) => (
   <AccordionContentStyled
     {...props}
     ref={forwardedRef}
@@ -107,8 +106,9 @@ const DropdownContent = React.forwardRef(({ children, ...props }:any, forwardedR
     <AccordionContentTextStyled>{children}</AccordionContentTextStyled>
   </AccordionContentStyled>
 ));
+DropdownContent.displayName = "DropdownContent";
 
-export function DropdownItem(props) {
+function DropdownItem(props) {
   return(
     <DropdownItemStyled value={`item-${props.number}`}>
       <DropdownTrigger>

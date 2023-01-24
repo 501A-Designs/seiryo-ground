@@ -29,7 +29,7 @@ const ContainerStyled = styled('div', {
         border: '1px solid $gray4',
       },
       white: {
-        backgroundColor: 'white',
+        background: '$sgWhite',
         border: '1px solid $gray5',
       },
     },

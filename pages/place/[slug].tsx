@@ -24,8 +24,6 @@ import { isBrowser } from 'react-device-detect'
 
 import Head from 'next/head'
 
-import { useAutoAnimate } from '@formkit/auto-animate/react'
-// import Modal from '../../lib/component/Modal'
 import { FiArrowLeft, FiCheck, FiCreditCard, FiDollarSign, FiEdit, FiExternalLink, FiHeart, FiHome, FiLock, FiMaximize2, FiPlus, FiRefreshCw, FiSave, FiSmartphone, FiUserCheck, FiUserX, FiX } from 'react-icons/fi'
 import { useDocument } from 'react-firebase-hooks/firestore'
 import { ClipLoader } from 'react-spinners'
@@ -37,19 +35,18 @@ import { costButtonArray, sizeButtonArray, typeButtonArray } from '../../lib/but
 import CheckBox from '../../lib/button/CheckBox'
 import useSound from 'use-sound'
 import Footer from '../../lib/component/Footer'
-import Dialog from '../../lib/component/Dialog'
-import AccordionContainer, { AccordionItem } from '../../lib/component/Dropdown'
 import Link from 'next/link'
 import UniversalNav from '../../lib/component/UniversalNav'
 import Map from '../../lib/component/Map'
 import BinaryToggle from '../../lib/button/BinaryToggle'
 import SizeSelect from '../../lib/button/SizeSelect'
 import Dropdown from '../../lib/component/Dropdown'
+import { popOut } from '../../lib/ux/keyframes'
+import Modal from '../../lib/component/Modal'
 
 export default function PlaceName() {
   const router = useRouter();
   const placeId = router.query.slug;
-  const [parent] = useAutoAnimate();
   const [progress, setProgress] = useState(0);
 
   // Sound
@@ -76,7 +73,7 @@ export default function PlaceName() {
   // const [currentUserLevel, setCurrentUserLevel] = useState('0')
   const [userData] = useDocument(doc(db, `users/${user && user.uid}`));
   
-  const [reviewData, setReviewData] = useState();
+  const [reviewData, setReviewData] = useState([]);
 
   const [averageOfDateRating, setAverageOfDateRating] = useState(0);
   const [averageOfAccessRating, setAverageOfAccessRating] = useState(0);
@@ -153,10 +150,8 @@ export default function PlaceName() {
   const reviewsCollectionRef = collection(db, `places/${placeId}/reviews`);
   
   const getReviews = async () => {
-    let reviewsArray = [];
     const querySnapshot = await getDocs(reviewsCollectionRef)
     querySnapshot.forEach((doc) => {
-      reviewsArray.push(doc);
       if (user && user.uid === doc.id) {
         setHasReviewed(true);
         setTitleRatingInput(doc.data().title);
@@ -165,8 +160,8 @@ export default function PlaceName() {
         setAccessRatingInput(doc.data().accessRating);
         setManagementRatingInput(doc.data().managementRating);
       }
+      setReviewData([...reviewData,doc]);
     });
-    setReviewData(reviewsArray);
     updateAverageRatings();
   }
 
@@ -231,13 +226,13 @@ export default function PlaceName() {
   }
 
   const addLike = async() =>{
+    setLiked(true);
     await updateDoc(doc(db, `places/${placeId}/`), {
       likes: arrayUnion(user && user.uid)
     });
     await updateDoc(doc(db, `users/${user && user.uid}/`), {
       likes: arrayUnion(placeId)
     });
-    setLiked(true);
   }
   const removeLike = async() =>{
     await updateDoc(doc(db, `places/${placeId}/`), {
@@ -306,8 +301,11 @@ export default function PlaceName() {
             <Grid grid={'oneTwo'} gap={'large'}>
               <Grid gap={'small'}>
                 <p>{placeData.description}</p>
-                {reviewData && reviewData.length > 0 &&
-                  <Grid grid={'duo'} gap={'extraSmall'}>
+                {reviewData && reviewData?.length > 0 &&
+                  <Grid
+                    grid={'duo'}
+                    gap={'extraSmall'}
+                  >
                     <Rating
                       borderRadius={'topLeft'}
                       rating={round(averageOfDateRating)}
@@ -331,9 +329,11 @@ export default function PlaceName() {
                     />
                   </Grid>
                 }
-
                 <Container type="white">
-                  <Grid grid={'duo'} gap={'medium'}>
+                  <Grid
+                    grid={'oneTwo'}
+                    gap={'medium'}
+                  >
                     <h5>基本情報</h5>
                     <Grid gap={'small'}>
                       {placeData.officialSite && 
@@ -442,7 +442,7 @@ export default function PlaceName() {
                   </Container>
                 }
 
-                <div ref={parent}>
+                <div>
                   {openCreateReview && 
                     <CreateContainer>
                       <Grid gap={'extraSmall'}>
@@ -578,7 +578,7 @@ export default function PlaceName() {
                 {user &&
                   <>
                     {userData.data().level > 1 &&
-                      <Dialog
+                      <Modal
                         title={'編集'}
                         size={'large'}
                         trigger={
@@ -772,11 +772,12 @@ export default function PlaceName() {
                             </Grid>
                           </Grid>
                         }
-                      </Dialog>
+                      </Modal>
                     }
                     <Button
                       size={'small'}
                       styleType={liked ? 'red':'transparent'}
+                      css={{animation:liked ? `${popOut} 0.5s`:'none'}}
                       icon={<FiHeart/>}
                       onClick={()=> {
                         !liked && celebrate2();
