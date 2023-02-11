@@ -1,0 +1,1 @@
+export const jsonParse = (dSnap) => JSON.parse(JSON.stringify(dSnap));

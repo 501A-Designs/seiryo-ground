@@ -2,6 +2,7 @@ import React, { forwardRef } from "react";
 import * as Select from "@radix-ui/react-select";
 import { styled } from "../../stitches.config";
 import { FiCheck, FiChevronDown, FiChevronUp } from "react-icons/fi";
+import useSound from "use-sound";
 
 export const Selector = (props) => (
   <Select.Root
@@ -73,10 +74,12 @@ const SelectViewport = styled(Select.Viewport, {
 });
 
 const SelectItem = forwardRef(({ children, ...props }:any, forwardedRef) => {
+  const [select1] = useSound('/sound/tap-3-sg.mp3');
   return (
     <StyledItem
       {...props}
       ref={forwardedRef}
+      onMouseEnter={()=>select1()}
     >
       <Select.ItemText>{children}</Select.ItemText>
       <StyledItemIndicator>
@@ -98,7 +101,7 @@ const StyledItem = styled(Select.Item, {
   padding: "5px 35px 5px 25px",
   position: "relative",
   userSelect: "none",
-  transition:'$speed1',
+  // transition:'$speed1',
 
   "&[data-disabled]": {
     color: "$gray8",

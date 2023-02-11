@@ -4,17 +4,12 @@ import { styled } from '../../stitches.config'
 import { topSlideIn } from '../ux/keyframes'
 
 const WelcomeHeaderStyled = styled('section', {
-  position:'absolute',
-  display: 'flex',
-  flexDirection:'column',
-  margin: '1em 1em 0 0',
   right:'0',
-  animation: `${topSlideIn} 0.5s`,
-  // filter: 'invert(100%)',
-  // mixBlendMode: 'exclusion',
-  color:'white',
-  writingMode:'vertical-rl',
-  textOrientation:'mixed',
+  color:'black',
+  textAlign:'right',
+  marginTop:'2em',
+  // writingMode:'vertical-rl',
+  // textOrientation:'mixed',
   'h1':{
     fontWeight:'normal',
     fontFamily:'$sgFont2',

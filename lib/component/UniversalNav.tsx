@@ -12,7 +12,7 @@ import { keyframes } from "@stitches/react";
 import { useEffect, useState } from 'react';
 import { scroll } from '../ux/scroll';
 import ProfileContainer from '../profile-page/ProfileContainer';
-import { checkLevel } from '../function/checkLevel';
+import { checkLevel } from '../util/checkLevel';
 import { useDocument } from 'react-firebase-hooks/firestore';
 import { doc } from 'firebase/firestore';
 

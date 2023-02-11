@@ -37,31 +37,38 @@ const ReviewNumberTextStyled = styled('span',{
 })
 
 
-function ReviewValue(props) {
+function ReviewValue(reviewValueProps) {
   return (
     <AlignItems>
       <ReviewNumberStyled>
-        {props.children}
+        {reviewValueProps.children}
       </ReviewNumberStyled>
       <ReviewNumberTextStyled>
-        /10：{props.text}
+        /10：{reviewValueProps.text}
       </ReviewNumberTextStyled>
     </AlignItems>
   )
 }
 
 export default function Review(props) {
+  const data = props.data;
   return (
     <ReviewStyled key={props.key}>
       <Grid grid={'twoOne'} gap={'medium'}>
         <Grid>
-          <h3>{props.title}</h3>
-          <p>{props.description}</p>
+          <h3>{data.title}</h3>
+          <p>{data.description}</p>
         </Grid>
         <Grid>
-          <ReviewValue text='デートスポット適性'>{props.dateRating}</ReviewValue>
-          <ReviewValue text='最寄駅からのアクセス'>{props.accessRating}</ReviewValue>
-          <ReviewValue text='設備管理の状況'>{props.managementRating}</ReviewValue>
+          <ReviewValue text='デートスポット適性'>
+            {data.dateRating}
+          </ReviewValue>
+          <ReviewValue text='最寄駅のアクセス'>
+            {data.accessRating}
+          </ReviewValue>
+          <ReviewValue text='設備管理の状況'>
+            {data.managementRating}
+          </ReviewValue>
         </Grid>
       </Grid>
     </ReviewStyled>

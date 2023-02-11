@@ -10,12 +10,13 @@ const EndStyled = styled('section',{
   gap: '1em',
   padding: '5% 0',
   'div':{
-    background:'$sgBlack',
+    background: 'linear-gradient(0deg,transparent 0%,$gray11 50%,transparent 100%)',
     width:'1px',
     height: '100px',
     borderRadius: '$r1'
   },
   'h5':{
+    color:'$gray11',
     fontWeight: 'normal',
     writingMode:'vertical-rl',
     textOrientation:'mixed',

@@ -1,5 +1,4 @@
-import { doc, setDoc, updateDoc } from 'firebase/firestore';
-import Image from 'next/image';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react'
 import { useState } from 'react';
@@ -15,10 +14,11 @@ import Margin from '../lib/alignment/Margin';
 import Button from '../lib/button/Button';
 import CenterAll from '../lib/component/CenterAll';
 import Container from '../lib/component/Container';
-import { checkLevel } from '../lib/function/checkLevel';
+import { checkLevel } from '../lib/util/checkLevel';
 import { popOut, rotateAndZoom, rotateInBottonLeft, spin } from '../lib/ux/keyframes';
 import { styled } from '../stitches.config';
 import UniversalNav from '../lib/component/UniversalNav';
+import { jsonParse } from '../lib/util/jsonParse';
 
 const Perspective = styled('div',{
   perspective: '200px',
@@ -140,20 +140,21 @@ const ProfileCard = styled('div',{
 
 
 export default function Profile() {
-  const [user] = useAuthState(auth);
   const router = useRouter();
-
+  const [user] = useAuthState(auth);
   const [userData,loadingUserData] = useDocument(doc(db, `users/${user && user.uid}`));
 
   const [openDetails, setOpenDetails] = useState(false)
   const [showNewContent, setShowNewContent] = useState(false)
   const [loading, setLoading] = useState(false)
 
+  // SOUND
   const [load1] = useSound('/sound/load-1-sg.mp3')
   const [celebrate1] = useSound('/sound/celebrate-1-sg.mp3')
   const [celebrate2] = useSound('/sound/celebrate-2-sg.mp3')
   const [tap2] = useSound('/sound/tap-2-sg.mp3',{playbackRate:1.3})
   
+
   async function flip(){
     setOpenDetails(true);
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -161,7 +162,7 @@ export default function Profile() {
     setShowNewContent(true);
   }
 
-  async function reFlip(){
+  const reFlip = () =>{
     setOpenDetails(false);
     setShowNewContent(false);
     tap2();
@@ -270,11 +271,6 @@ export default function Profile() {
               }
             </>
             }
-            {loadingUserData &&
-              <AlignItems justifyContent={'center'}>
-                <ClipLoader color="black"/>
-              </AlignItems>
-            }
           </Grid>:
           <h4>ログインする必要がございます</h4>
         }
@@ -317,3 +313,16 @@ export default function Profile() {
     </Margin>
   )
 }
+
+
+// export async function getServerSideProps(){
+//   const userDataSnap = await getDoc(doc(db, `users/${user && user.uid}`));
+//   const userData = jsonParse(userDataSnap.data());
+
+//   return{
+//     props:{
+//       user,
+//       userData
+//     }
+//   }
+// }

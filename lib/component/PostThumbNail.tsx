@@ -1,8 +1,7 @@
 import { useRouter } from 'next/router'
-import React, { useState}from 'react'
+import React from 'react'
 import AlignItems from '../alignment/AlignItems';
 import TypeBadge from '../TypeBadge';
-import { VscHeart } from 'react-icons/vsc';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { collection } from 'firebase/firestore';
 import { db } from '../../firebase';
@@ -16,7 +15,6 @@ const PostThumbNailStyled = styled('div', {
   border:'1px solid $gray4',
   background: 'linear-gradient(45deg,white 0%,$gray4 50%,white 100%)',
   backgroundSize: '200% 200%',
-  color:'black',
   height:'max-content',
   padding:'1em',
   borderRadius: '$r2',
@@ -24,15 +22,16 @@ const PostThumbNailStyled = styled('div', {
   '&:hover':{
     zIndex: '100',
     animation:`${gradient} linear 0.3s`,
-    transform:'scale(0.95)',
+    border:'1px solid $gray6',
   },
-  'h3':{
-    fontSize:'$5',
-    marginTop: '0.5em',
-    fontWeight: '500'
+  'h4':{
+    margin:'0',
+    fontWeight: '500',
+    color:'$gray12',
   },
-  'span':{
-    fontSize:'$7',
+  'p':{
+    color:'$gray11',
+    margin:'0',
   }
 })
 
@@ -46,24 +45,25 @@ export default function PostThumbNail(props) {
   return (
     <PostThumbNailStyled
       onClick={()=> {
-        action1();
         router.push(`/place/${props.id}/`);
+        action1();
       }}
     >
       <Grid gap={'medium'}>
         <AlignItems>
-          <h3>{props.title}</h3>
+          <h4>{props.title}</h4>
         </AlignItems>
         <AlignItems justifyContent={'space-between'}>
           <TypeBadge
             width={'mini'}
             type={props.type}
           />
-          {reviewsCollection && reviewsCollection.docs.length > 0 && 
-            <span style={{margin: 0}}>
-              {reviewsCollection.docs.length}件
-            </span>
-          }
+          <p>
+            {reviewsCollection?.docs.length > 0 ? 
+              <>{reviewsCollection.docs.length}件</>:
+              <>:(</>
+            }
+          </p>
         </AlignItems>
       </Grid>
     </PostThumbNailStyled>
