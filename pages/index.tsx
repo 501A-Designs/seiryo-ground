@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState,useEffect, useContext} from 'react'
 import Head from 'next/head'
 import AlignItems from '../lib/alignment/AlignItems'
 import PostThumbNail from '../lib/component/PostThumbNail'
@@ -6,16 +6,12 @@ import Button from '../lib/button/Button'
 
 import { useRouter } from 'next/router'
 
-import {auth,db} from '../firebase'
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { doc, collection, query, where, getDoc } from "firebase/firestore";
+import {db} from '../firebase'
+import { collection, query, where } from "firebase/firestore";
 
 import CreatePlaceForm from '../lib/landing-page/CreatePlaceForm'
 import { useCollection } from 'react-firebase-hooks/firestore';
-
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
-
-import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 import WelcomeHeader from '../lib/landing-page/WelcomeHeader'
 import { FiInfo } from 'react-icons/fi'
@@ -29,6 +25,7 @@ import Margin from '../lib/alignment/Margin'
 import End from '../lib/End'
 import Selector from '../lib/component/Selector'
 import { Heading } from '../lib/component/Heading'
+import { UserContext } from '../lib/util/UserContext'
 
 export default function Home({prefecD}) {
   let masonaryGrid = {350: 1, 750: 2, 900: 3, 1200:4};
@@ -43,10 +40,11 @@ export default function Home({prefecD}) {
   const [gettingStartedModalIsOpen, setGettingStartedModalIsOpen] = useState(false);
 
   // Auth & Firestore
-  const [user] = useAuthState(auth);
+  const userContextData = useContext(UserContext);
+  const user = userContextData?.user;
+  const userData = userContextData?.userData;
 
   const [prefectureInput, setPrefectureInput] = useState('東京都');
-  const userData = getDoc(doc(db, `users/${user && user.uid}`));
 
   useEffect(() => {
     if (
@@ -185,7 +183,7 @@ export default function Home({prefecD}) {
           </Grid>
 
           {/* All Locations */}
-          <Grid gap={'medium'}>
+          <Grid gap={'small'}>
             <Heading>All Locations</Heading>
             {placesCollection && 
               <ResponsiveMasonry

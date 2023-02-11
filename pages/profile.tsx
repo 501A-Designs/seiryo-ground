@@ -1,6 +1,6 @@
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useDocument } from 'react-firebase-hooks/firestore';
@@ -19,6 +19,7 @@ import { popOut, rotateAndZoom, rotateInBottonLeft, spin } from '../lib/ux/keyfr
 import { styled } from '../stitches.config';
 import UniversalNav from '../lib/component/UniversalNav';
 import { jsonParse } from '../lib/util/jsonParse';
+import { UserContext } from '../lib/util/UserContext';
 
 const Perspective = styled('div',{
   perspective: '200px',
@@ -141,8 +142,9 @@ const ProfileCard = styled('div',{
 
 export default function Profile() {
   const router = useRouter();
-  const [user] = useAuthState(auth);
-  const [userData,loadingUserData] = useDocument(doc(db, `users/${user && user.uid}`));
+  const userContextData = useContext(UserContext);
+  const user = userContextData?.user;
+  const userData = userContextData?.userData;
 
   const [openDetails, setOpenDetails] = useState(false)
   const [showNewContent, setShowNewContent] = useState(false)

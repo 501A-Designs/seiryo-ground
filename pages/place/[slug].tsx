@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { useState,useEffect } from 'react'
+import React, { useState,useEffect, useContext } from 'react'
 import AlignItems from '../../lib/alignment/AlignItems'
 import TypeBadge from '../../lib/TypeBadge'
 
@@ -44,14 +44,18 @@ import Dropdown from '../../lib/component/Dropdown'
 import { popOut } from '../../lib/ux/keyframes'
 import Modal from '../../lib/component/Modal'
 import { jsonParse } from '../../lib/util/jsonParse'
+import { UserContext } from '../../lib/util/UserContext'
 
 export default function PlaceName({
-  locationDataSnap,
-  reviewsDataSnap
+  locationDataSnap
 }) {
   const router = useRouter();
   const placeId = router.query.slug;
   const [progress, setProgress] = useState(0);
+
+  const userContextData = useContext(UserContext);
+  const user = userContextData?.user;
+  const userData = userContextData?.userData;
 
   // Sound
   const [tap1] = useSound('/sound/tap-1-sg.mp3');
@@ -69,12 +73,10 @@ export default function PlaceName({
   const [openCreateReview, setOpenCreateReview] = useState(false);
   const [hasReviewed, setHasReviewed] = useState(false);
 
-  const [user] = useAuthState(auth);
   const [placeData, setPlaceData] = useState(locationDataSnap);
   const [reviewData] = useCollection(collection(db, `places/${placeId}/reviews/`));
 
   // const [currentUserLevel, setCurrentUserLevel] = useState('0')
-  const [userData] = useDocument(doc(db, `users/${user && user.uid}`));
   
   const [averageOfDateRating, setAverageOfDateRating] = useState(0);
   const [averageOfAccessRating, setAverageOfAccessRating] = useState(0);
@@ -524,7 +526,7 @@ export default function PlaceName({
         </Grid>
         <Footer type={'blur'}/>
       </MainBody>
-      {/* <UniversalNav
+      <UniversalNav
         showInitially={true}
         scrollPop={true}
         popOnMount={true}
@@ -541,7 +543,7 @@ export default function PlaceName({
             />
             {user &&
               <>
-                {userData.data().level > 1 &&
+                {userData?.data().level > 1 &&
                   <Modal
                     title={'編集'}
                     size={'large'}
@@ -748,7 +750,7 @@ export default function PlaceName({
             }
           </>
         }
-      /> */}
+      />
     </>
   )
 }
@@ -756,15 +758,14 @@ export default function PlaceName({
 
 export async function getServerSideProps({params}){
   const placeInfoDocSnap = await getDoc(doc(db, `places/${params.slug}`));
-  const reviewsSnap = await getDocs(collection(db, `places/${params.slug}/reviews/`));
+  // const reviewsSnap = await getDocs(collection(db, `places/${params.slug}/reviews/`));
   const locationDataSnap = jsonParse(placeInfoDocSnap.data());
-  const reviewsDataSnap = jsonParse(reviewsSnap);
+  // const reviewsDataSnap = jsonParse(reviewsSnap);
 
 
   return {
     props:{
       locationDataSnap,
-      reviewsDataSnap
     }
   }
 }
