@@ -6,7 +6,7 @@ import { popOut } from '../ux/keyframes'
 const ButtonStyled = styled('button',{
   outlineColor:'$gray6',
   fontFamily: '$sgFont1',
-  fontSize:'15px',
+  // fontSize:'15px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -86,8 +86,9 @@ const ButtonStyled = styled('button',{
   },
   'span': {
     whiteSpace:'nowrap', 
-    fontSize:'11px',
-    fontWeight:'bold',
+    fontSize:'12px',
+    fontWeight:'500',
+    
     // '@tablet':{
     //   display: 'none',
     // }

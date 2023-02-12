@@ -38,10 +38,10 @@ const IconContainer = styled('div',{
 })
 
 const SlugStyled = styled('div',{
-  color:'$gray10',
+  color:'$gray9',
   fontSize:'$6',
-  background:'linear-gradient(45deg, $gray1, $gray6)',
-  border:'1px solid $gray6',
+  // background:'linear-gradient(45deg, $gray1, $gray6)',
+  // border:'1px solid $gray6',
   padding:'$extraSmall $small',
   borderRadius:'$r1',
 })

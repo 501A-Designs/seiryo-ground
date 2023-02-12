@@ -14,7 +14,6 @@ import { useCollection } from 'react-firebase-hooks/firestore';
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
 import WelcomeHeader from '../lib/landing-page/WelcomeHeader'
-import { FiInfo } from 'react-icons/fi'
 import Container from '../lib/component/Container'
 import { ClipLoader } from 'react-spinners'
 import Grid from '../lib/alignment/Grid'
@@ -24,17 +23,15 @@ import UniversalNav from '../lib/component/UniversalNav'
 import Margin from '../lib/alignment/Margin'
 import End from '../lib/End'
 import Selector from '../lib/component/Selector'
-import { Heading } from '../lib/component/Heading'
 import { UserContext } from '../lib/util/UserContext'
+import { InfoCircledIcon } from '@radix-ui/react-icons'
+import { Heading } from '../lib/landing-page/Heading'
 
 export default function Home({prefecD}) {
   let masonaryGrid = {350: 1, 750: 2, 900: 3, 1200:4};
   const router = useRouter();
   
   const [placesCollection,placeCollectionLoading] = useCollection(collection(db, `places`));
-
-  // Sound
-  const [select1] = useSound('/sound/select-1-sg.mp3');
   
   // Modal / Popup State
   const [gettingStartedModalIsOpen, setGettingStartedModalIsOpen] = useState(false);
@@ -125,10 +122,7 @@ export default function Home({prefecD}) {
               <Selector
                 placeholder={'都道府県を選択'}
                 value={prefectureInput}
-                onValueChange={()=>{
-                  setPrefectureInput;
-                  select1();
-                }}
+                onValueChange={setPrefectureInput}
               >
                 {prefecD.map(obj => {
                   return (
@@ -238,7 +232,7 @@ export default function Home({prefecD}) {
           <Button
             size={'small'}
             styleType={'transparent'}
-            icon={<FiInfo/>}
+            icon={<InfoCircledIcon/>}
             onClick={()=>router.push('/about')}
           />
         }

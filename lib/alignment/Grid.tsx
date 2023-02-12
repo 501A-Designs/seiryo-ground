@@ -101,6 +101,7 @@ export default function Grid(props) {
     <GridStyled
       grid={props.grid}
       gap={props.gap}
+      css={props.css}
     >
       {props.children}
     </GridStyled>

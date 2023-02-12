@@ -1,10 +1,10 @@
 import React from 'react'
-import { FiArrowLeft, FiArrowRight } from 'react-icons/fi'
 import { styled } from '../../stitches.config'
 import AlignItems from '../alignment/AlignItems'
 import Grid from '../alignment/Grid'
 import Button from '../button/Button'
 import { popOut } from '../ux/keyframes'
+import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons'
 
 const FlipThroughMainContainer = styled('div', {
   perspective: '200px',
@@ -26,7 +26,7 @@ export default function FlipThrough(props) {
       >
         <Button
           size={'small'}
-          icon={<FiArrowLeft/>}
+          icon={<ArrowLeftIcon/>}
           onClick={props.leftClick}
         >
           戻る
@@ -35,7 +35,7 @@ export default function FlipThrough(props) {
           props.publish:
           <Button
             size={'small'}
-            icon={<FiArrowRight/>}
+            icon={<ArrowRightIcon/>}
             onClick={props.rightClick}
           >
             次へ

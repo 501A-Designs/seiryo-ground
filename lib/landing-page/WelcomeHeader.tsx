@@ -8,18 +8,15 @@ const WelcomeHeaderStyled = styled('section', {
   color:'black',
   textAlign:'right',
   marginTop:'2em',
-  // writingMode:'vertical-rl',
-  // textOrientation:'mixed',
   'h1':{
-    fontWeight:'normal',
-    fontFamily:'$sgFont2',
-    fontSize:'1.2em',
+    fontSize:'1.5em',
     margin: '0',
-    textShadow:'$shadow1'
+    textShadow:'$shadow1',
+    color:'$gray12'
   },
   'p':{
-    fontFamily:'$sgFont2',
     margin:0,
+    color:'$gray11'
   }
 })
 

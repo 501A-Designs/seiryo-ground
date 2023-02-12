@@ -1,40 +1,30 @@
 import React from 'react'
-import { styled } from '../../stitches.config'
 import { popOut } from '../ux/keyframes'
+import { styled } from '../../stitches.config'
 
 const MarginStyled = styled('div',{
-  fontFamily: '$sgFont1',
-  userSelect: 'none',
-  minHeight: '100vh',
-  animation: `${popOut} 0.8s`,
-
-  // 'a':{
-  //   color: 'inherit',
-  //   fontSize: 'inherit',
-  //   textDecoration: 'underline',
-  //   textDecorationStyle: 'dashed',
-  //   cursor: 'pointer',
-  //   '&:hover':{
-  //     textDecorationStyle: 'none',
-  //   }
-  // },
-  'canvas':{
-    borderRadius: '$r3',
-    width: 'auto'
-  },
-  'iframe':{
-    border: '1px solid $sgGray2',
-    borderRadius: '$r2',
-    // filter: 'grayscale(1)',
-  },
+  // animation: `${popOut} 0.8s`,
   '@mobile':{padding:'0% 5%'},
   '@tablet':{padding:'0% 8%'},
   '@desktop':{padding:'0% 15%'},
+  variants:{
+    fullHeight:{
+      true:{
+        minHeight:'100vh'
+      }
+    }
+  },
+  defaultVariants:{
+    fullHeight:true
+  }
 })
 
 export default function Margin(props) {
   return (
-    <MarginStyled>
+    <MarginStyled
+      fullHeight={props.fullHeight}
+      css={props.css}
+    >
       {props.children}
     </MarginStyled>
   )

@@ -5,7 +5,8 @@ const MapStyled = styled('iframe',{
   width:"100%",
   height:"250px",
   borderRadius:'$r2',
-  border:'1px solid $gray5'
+  border:'1px solid $gray5',
+  filter:'grayscale(1)'
 })
 
 export default function Map(props) {

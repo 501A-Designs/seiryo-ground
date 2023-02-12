@@ -4,9 +4,9 @@ import { createClient } from 'contentful'
 import NewsThumbnail from '../../lib/component/NewsThumbNail'
 import Button from '../../lib/button/Button'
 import AlignItems from '../../lib/alignment/AlignItems'
-import { FiArrowLeft } from 'react-icons/fi'
 import MainBody from '../../lib/alignment/Margin'
 import Grid from '../../lib/alignment/Grid'
+import { ArrowLeftIcon } from '@radix-ui/react-icons'
 
 export async function getStaticProps(){
   const client = createClient({
@@ -32,7 +32,7 @@ export default function News({sgPosts}) {
         <Button
           color={'transparent'}
           iconPosition={'left'}
-          icon={<FiArrowLeft/>}
+          icon={<ArrowLeftIcon/>}
           onClick={()=> {router.back()}}
         >
           戻る

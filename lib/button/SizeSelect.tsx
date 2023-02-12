@@ -22,7 +22,7 @@ const SizeSelectItemStyled = styled('div',{
         background: '$gray12',
         borderColor:'$gray12',
         width: '66%',
-        fontWeight:'bold',
+        fontWeight:'500',
         boxShadow:'$shadow1',
       },
       false: {

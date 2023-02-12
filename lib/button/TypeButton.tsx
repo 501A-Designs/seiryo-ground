@@ -9,7 +9,7 @@ export default function TypeButton(props) {
       selected={props.selectedInput === props.type}
       onClick={props.onClick}
     >
-      <AlignItems gap={'1em'}>
+      <AlignItems gap={'0.7em'}>
         <TypeButtonColorStyled
           selected={props.selectedInput === props.type}
           type={props.type}
@@ -40,6 +40,9 @@ const TypeButtonStyled = styled('div', {
       true: {
         backgroundColor: '$gray12',
         color: '$gray1',
+        'h5':{
+          fontWeight: '500',
+        }
       },
       false: {
         backgroundColor:'transparent',
@@ -53,7 +56,8 @@ const TypeButtonStyled = styled('div', {
     }
   },
   'h5':{
-    margin:0
+    margin:0,
+    fontWeight: 'normal',
   }
 })
 
@@ -61,20 +65,19 @@ const TypeButtonColorStyled = styled('div',{
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  fontWeight: 'bold',
   fontStyle: 'italic',
-  height: '7px',
   borderRadius:'$r2',
   transition:'$speed2',
 
   variants:{
     selected:{
       true: {
-        width: '7px',
-        height: '18px',
+        width: '10px',
+        height: '10px',
       },
       false: {
         width: '30px',
+        height: '6px',
       }
     },
     type:{

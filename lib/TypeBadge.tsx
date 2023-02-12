@@ -7,25 +7,18 @@ const TypeBadgeStyled = styled('div',{
   justifyContent: 'center',
   fontStyle: 'italic',
   height: '7px',
-  borderRadius:'$r2',
+  borderRadius:'$round',
   border:'0.5px solid white',
   transition: '$speed2',
   variants:{
     width: {
-      mini:{
-        width:'7px',
-        boxShadow: '0px 1px 5px white',
+      small: {
+        height:'10px',
+        width:'10px',
       },
-      short: {
-        height: '7px',
-        width:'30px',
-        boxShadow: '0px 2px 7px #505050',
-        border:'0.5px solid white',
-      },
-      long: {
-        height: '5px',
-        width:'70px',
-        border:'0.5px solid white',
+      large: {
+        height:'20px',
+        width:'20px',
       },
     },
     type:{

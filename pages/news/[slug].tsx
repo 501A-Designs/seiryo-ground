@@ -4,7 +4,6 @@ import { useRouter } from 'next/router'
 import Button from '../../lib/button/Button'
 import AlignItems from '../../lib/alignment/AlignItems'
 import MainBody from '../../lib/alignment/Margin'
-import { FiArrowLeft } from 'react-icons/fi'
 import Grid from '../../lib/alignment/Grid'
 
 const client = createClient({
@@ -51,7 +50,6 @@ export default function IndivisualNewsArticle({newsDetails}) {
         <Button
           color={'transparent'}
           iconPosition={'left'}
-          icon={<FiArrowLeft/>}
           onClick={()=> {router.push('/news/')}}
         >
           ニュースページに戻る

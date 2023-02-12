@@ -23,13 +23,13 @@ const ContainerStyled = styled('div', {
     margin:0,
   },
   variants: {
-    type: {
+    styleType: {
       standard: {
         backgroundColor: '$gray2',
         border: '1px solid $gray4',
       },
       white: {
-        background: '$sgWhite',
+        background: 'linear-gradient(20deg, $gray2 0%, white 100%)',
         border: '1px solid $gray5',
       },
     },
@@ -63,7 +63,7 @@ const ContainerStyled = styled('div', {
 export default function Container(props) {
   return (
     <ContainerStyled
-      type={props.type}
+      styleType={props.styleType}
       alignment={props.alignment}
       height={props.height}
       padding={props.padding}

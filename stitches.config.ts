@@ -21,22 +21,19 @@ export const {styled,getCssText,globalCss} = createStitches({
       // sgBlackBackground: 'linear-gradient(217deg, #383838, black)',
       // sgWhiteBackground: 'linear-gradient(217deg, rgb(248, 248, 248), white)',
 
-      sgWhite: `linear-gradient(20deg, ${gray.gray2} 0%,white  100%)`,
-      sgBlack: `linear-gradient(20deg, black 0%,#383838  100%)`,
-      sgBlue: 'linear-gradient(90deg, #00FFD1 0%, #5FC3FB 100%)',
+      // sgWhite: `linear-gradient(20deg, ${gray.gray2} 0%,white  100%)`,
+      // sgBlack: `linear-gradient(20deg, black 0%,#383838  100%)`,
+
       sgGreen: 'linear-gradient(90deg, #C3F304 0%, #50F403 100%)',
+      sgBlue: 'linear-gradient(90deg, #00F0FF 0%, #5FC3FB 100%)',
       sgRed: 'linear-gradient(90deg, #FFB422 0%, #FB7B5F 100%)',
-      sgPurple: 'linear-gradient(90deg, #BA49FF 0%, #6E56FF 100%)',
+      sgPurple: 'linear-gradient(90deg, #BA49FF 0%, #7856FF 100%)',
 
       // Card Colors
       levelOne:'linear-gradient(0deg, rgb(248, 248, 248) 0%, white 100%)',
       levelThree:'linear-gradient(0deg, #ccfcb6 0%, white 100%)',
       levelFour:'linear-gradient(0deg, #f5e1bc 0%, white 100%)',
       levelFive:'linear-gradient(0deg, black 0%, #262626 100%)',
-    },
-    fonts: {
-      sgFont1: 'Noto Sans JP, Helvetica, sans-serif',
-      sgFont2: 'Shippori Antique',
     },
     fontSizes: {
       1: '3em',

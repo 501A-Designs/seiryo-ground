@@ -19,7 +19,7 @@ const BinaryToggleItemStyled = styled('div',{
         boxShadow: '$shadow1',
         width: '95px',
         height: '95px',
-        fontWeight: 'bold',
+        fontWeight: '500',
         animation: `${spin} 0.5s`
       },
       false:{

@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { FiArrowLeft, FiCheck } from 'react-icons/fi'
 import AlignItems from '../lib/alignment/AlignItems'
 import Button from '../lib/button/Button'
 import Footer from '../lib/component/Footer'
 import MainBody from '../lib/alignment/Margin'
 import End from '../lib/End'
+import { ArrowLeftIcon, CheckIcon } from '@radix-ui/react-icons'
 
 export default function Levels() {
   const router = useRouter();
@@ -18,7 +18,7 @@ export default function Levels() {
         <Button
           color="white"
           iconPosition="left"
-          icon={<FiArrowLeft/>}
+          icon={<ArrowLeftIcon/>}
           onClick={() =>router.back()}
         >
           戻る
@@ -51,75 +51,75 @@ export default function Levels() {
         </tr>
         <tr>
           <td>場所の追加・レビューを作成</td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
+          <td><CheckIcon/></td>
+          <td><CheckIcon/></td>
+          <td><CheckIcon/></td>
+          <td><CheckIcon/></td>
+          <td><CheckIcon/></td>
         </tr>
         <tr>
           <td>レビューの著者を表示</td>
           <td></td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
+          <td><CheckIcon/></td>
+          <td><CheckIcon/></td>
+          <td><CheckIcon/></td>
+          <td><CheckIcon/></td>
         </tr>
         <tr>
           <td>公式サイトを編集</td>
           <td></td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
+          <td><CheckIcon/></td>
+          <td><CheckIcon/></td>
+          <td><CheckIcon/></td>
+          <td><CheckIcon/></td>
         </tr>
         <tr>
           <td>トイレ有無を編集</td>
           <td></td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
+          <td><CheckIcon/></td>
+          <td><CheckIcon/></td>
+          <td><CheckIcon/></td>
+          <td><CheckIcon/></td>
         </tr>
         <tr>
           <td>場所の大きさ</td>
           <td></td>
           <td></td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
+          <td><CheckIcon/></td>
+          <td><CheckIcon/></td>
+          <td><CheckIcon/></td>
         </tr>
         <tr>
           <td>支払い方法を編集</td>
           <td></td>
           <td></td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
+          <td><CheckIcon/></td>
+          <td><CheckIcon/></td>
+          <td><CheckIcon/></td>
         </tr>
         <tr>
           <td>カテゴリーを編集</td>
           <td></td>
           <td></td>
           <td></td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
+          <td><CheckIcon/></td>
+          <td><CheckIcon/></td>
         </tr>
         <tr>
           <td>地図を編集</td>
           <td></td>
           <td></td>
           <td></td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
+          <td><CheckIcon/></td>
+          <td><CheckIcon/></td>
         </tr>
         <tr>
           <td>概要を編集</td>
           <td></td>
           <td></td>
           <td></td>
-          <td><FiCheck/></td>
-          <td><FiCheck/></td>
+          <td><CheckIcon/></td>
+          <td><CheckIcon/></td>
         </tr>
         <tr>
           <td>タイトルを編集</td>
@@ -127,7 +127,7 @@ export default function Levels() {
           <td></td>
           <td></td>
           <td></td>
-          <td><FiCheck/></td>
+          <td><CheckIcon/></td>
         </tr>
       </table>
       <End>

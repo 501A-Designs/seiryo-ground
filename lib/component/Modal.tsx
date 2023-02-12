@@ -2,9 +2,9 @@ import React from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { keyframes, styled } from '@stitches/react';
 import Button from '../button/Button';
-import { FiX } from 'react-icons/fi';
 import { topSlideIn } from '../ux/keyframes';
 import AlignItems from '../alignment/AlignItems';
+import { Cross1Icon } from '@radix-ui/react-icons';
 
 
 const popOutDialog = keyframes({
@@ -122,7 +122,7 @@ export default function Modal(props){
             <Button
               size={'small'}
               aria-label="Close"
-              icon={<FiX/>}
+              icon={<Cross1Icon/>}
             />
           </Dialog.Close>
         </AlignItems>

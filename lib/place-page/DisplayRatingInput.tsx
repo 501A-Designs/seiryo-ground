@@ -12,7 +12,8 @@ const DisplayRatingInputStyled = styled('div',{
   transition:'$speed1',
   'h1':{
     margin: '0',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontWeight:'500',
   },
   'input': {
     WebkitAppearance: 'none',

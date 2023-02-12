@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router'
 import React from 'react'
-import { FiLogIn } from 'react-icons/fi'
 import { styled } from '../../stitches.config'
 import AlignItems from '../alignment/AlignItems'
 import Grid from '../alignment/Grid'
@@ -9,6 +8,7 @@ import ProfileImage from './ProfileImage'
 import { useSignInWithGoogle } from 'react-firebase-hooks/auth'
 import { auth } from '../../firebase'
 import { gradient } from '../ux/keyframes'
+import { EnterIcon } from '@radix-ui/react-icons'
 
 const ProfileCardStyled = styled('div',{
   cursor:'pointer',
@@ -91,7 +91,7 @@ export default function ProfileContainer(props:any) {
             <Button
               size={'medium'}
               styleType={'black'}
-              icon={<FiLogIn/>}
+              icon={<EnterIcon/>}
               onClick={()=>signInWithGoogle()}
             >
               アカウント作成

@@ -12,22 +12,26 @@ import { gradient } from '../ux/keyframes';
 
 const PostThumbNailStyled = styled('div', {
   cursor:'pointer',
-  border:'1px solid $gray4',
-  background: 'linear-gradient(45deg,white 0%,$gray4 50%,white 100%)',
-  backgroundSize: '200% 200%',
+  // border:'1px solid $gray4',
+  border:'1px solid transparent',
+
   height:'max-content',
   padding:'1em',
   borderRadius: '$r2',
   transition: '$speed1',
   '&:hover':{
+    background: 'linear-gradient(45deg,white 0%,$gray3 50%,white 100%)',
+    backgroundSize: '200% 200%',
+
     zIndex: '100',
     animation:`${gradient} linear 0.3s`,
-    border:'1px solid $gray6',
+    border:'1px solid $gray3',
+    boxShadow:'0 0 10px white'
   },
-  'h4':{
+  'h5':{
     margin:'0',
-    fontWeight: '500',
     color:'$gray12',
+    fontWeight:'500'
   },
   'p':{
     color:'$gray11',
@@ -50,20 +54,21 @@ export default function PostThumbNail(props) {
       }}
     >
       <Grid gap={'medium'}>
-        <AlignItems>
-          <h4>{props.title}</h4>
-        </AlignItems>
         <AlignItems justifyContent={'space-between'}>
-          <TypeBadge
-            width={'mini'}
-            type={props.type}
-          />
-          <p>
+          <AlignItems
+          >
+            <TypeBadge
+              width={'small'}
+              type={props.type}
+            />
+            <h5>{props.title}</h5>
+          </AlignItems>
+          {/* <p>
             {reviewsCollection?.docs.length > 0 ? 
               <>{reviewsCollection.docs.length}件</>:
               <>:(</>
             }
-          </p>
+          </p> */}
         </AlignItems>
       </Grid>
     </PostThumbNailStyled>

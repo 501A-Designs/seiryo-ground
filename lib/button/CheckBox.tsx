@@ -1,7 +1,7 @@
 import React from 'react'
-import { FiCheckSquare, FiSquare } from 'react-icons/fi'
 import { styled } from '../../stitches.config'
 import AlignItems from '../alignment/AlignItems'
+import { CheckCircledIcon, CircleIcon } from '@radix-ui/react-icons'
 
 const CheckBoxStyled = styled('div',{
   cursor: 'pointer',
@@ -17,10 +17,16 @@ const CheckBoxStyled = styled('div',{
       true: {
         backgroundColor: '$gray12',
         color: '$gray1',
+        'h5':{
+          fontWeight:'500'
+        }
       },
       false: {
         backgroundColor: 'transparent',
         color: '$gray10',
+        'h5':{
+          fontWeight:'normal'
+        },
         '&:hover': {
           backgroundColor:'$gray4',
           border:'1px solid $gray5',
@@ -40,7 +46,7 @@ export default function CheckBox(props) {
       onClick={props.onClick}
     >
       <AlignItems>
-        {props.checked ? <FiCheckSquare/>:<FiSquare/>}
+        {props.checked ? <CheckCircledIcon/>:<CircleIcon/>}
         <h5>
           {props.name == "free" && '無料'}
           {props.name == "cash" && '現金'}

@@ -2,12 +2,9 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect } from 'react'
 import { useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { useDocument } from 'react-firebase-hooks/firestore';
-import { FiArrowLeft, FiDownloadCloud, FiInfo, FiX } from 'react-icons/fi';
 import { ClipLoader } from 'react-spinners';
 import useSound from 'use-sound';
-import { auth, db } from '../firebase'
+import { db } from '../firebase'
 import AlignItems from '../lib/alignment/AlignItems';
 import Grid from '../lib/alignment/Grid';
 import Margin from '../lib/alignment/Margin';
@@ -18,8 +15,8 @@ import { checkLevel } from '../lib/util/checkLevel';
 import { popOut, rotateAndZoom, rotateInBottonLeft, spin } from '../lib/ux/keyframes';
 import { styled } from '../stitches.config';
 import UniversalNav from '../lib/component/UniversalNav';
-import { jsonParse } from '../lib/util/jsonParse';
 import { UserContext } from '../lib/util/UserContext';
+import { ArrowLeftIcon, Cross1Icon, DownloadIcon, InfoCircledIcon } from '@radix-ui/react-icons';
 
 const Perspective = styled('div',{
   perspective: '200px',
@@ -222,7 +219,7 @@ export default function Profile() {
                     {showNewContent ?
                       <Grid gap={'medium'}>
                         <h3>{user.displayName}</h3>
-                        <Container type="white">
+                        <Container styleType={'white'}>
                           <Grid gap={'large'}>
                             <Grid gap={'small'}>
                               <p>Level {userData.data().level}から</p>
@@ -240,10 +237,10 @@ export default function Profile() {
                             </p>
                             <AlignItems justifyContent={'center'}>
                               <Button
-                                color='black'
+                                styleType={'black'}
                                 onClick={()=>upgrade()}
                                 iconPosition={'left'}
-                                icon={<FiDownloadCloud/>}
+                                icon={<DownloadIcon/>}
                               >
                                 アップグレード
                               </Button>
@@ -290,13 +287,13 @@ export default function Profile() {
               <Button
                 size={'small'}
                 styleType={'transparent'}
-                icon={<FiArrowLeft/>}
+                icon={<ArrowLeftIcon/>}
                 onClick={() =>router.push('/')}
               />
               {showNewContent &&              
                 <Button
                   styleType={'transparent'}
-                  icon={<FiX/>}
+                  icon={<Cross1Icon/>}
                   onClick={()=>reFlip()}
                 >
                   閉じる
@@ -305,7 +302,7 @@ export default function Profile() {
               <Button
                 size={'small'}
                 styleType={'transparent'}
-                icon={<FiInfo/>}
+                icon={<InfoCircledIcon/>}
                 onClick={()=>router.push('/levels')}
               />
             </>

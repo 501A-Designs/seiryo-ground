@@ -8,7 +8,6 @@ import Input from '../Input'
 import { db } from '../../firebase'
 import { addDoc, collection, doc, increment, updateDoc } from "firebase/firestore";
 import { useRouter } from 'next/router'
-import { FiArrowRight, FiPlus, FiSearch, FiSend } from 'react-icons/fi'
 import Grid from '../alignment/Grid'
 import CheckBox from '../button/CheckBox'
 import { costButtonArray, sizeButtonArray, typeButtonArray } from '../button/buttonData'
@@ -21,6 +20,8 @@ import Map from '../component/Map'
 import BinaryToggle from '../button/BinaryToggle'
 import SizeSelect from '../button/SizeSelect'
 import Selector from '../component/Selector'
+import { ArrowRightIcon, MagnifyingGlassIcon, PaperPlaneIcon, PlusIcon } from '@radix-ui/react-icons'
+import LoadingBar from 'react-top-loading-bar'
 
 const selectStyle = {
   option: (provided, state) => ({
@@ -58,6 +59,8 @@ const selectStyle = {
 
 export default function CreatePlaceForm(props) {
   const router = useRouter();
+  const [progress, setProgress] = useState(0);
+
   let user = props.user;
   const [tap1] = useSound('/sound/tap-1-sg.mp3',{playbackRate:1.1});
   const [tap2] = useSound('/sound/tap-2-sg.mp3',{playbackRate:1.1});
@@ -85,6 +88,8 @@ export default function CreatePlaceForm(props) {
 
   const createNewPlace = async() => {
     setSection(0);
+    setProgress(70);
+  
     if (user) {
       const docRef = await addDoc(collection(db, "places"), {
         name: placeInput,
@@ -99,6 +104,7 @@ export default function CreatePlaceForm(props) {
         officialSite:officialSiteInput,
         likes:[],
       });
+      setProgress(80);
       await updateDoc(doc(db,`users/${user.uid}`), {
         postCount: increment(1)
       });
@@ -116,6 +122,7 @@ export default function CreatePlaceForm(props) {
       setCostCheckBox(['free']);
       setSection(1)
 
+      setProgress(100);
       celebrate1();
     }
   }
@@ -149,10 +156,15 @@ export default function CreatePlaceForm(props) {
         <Button
           size={'small'}
           styleType={'transparent'}
-          icon={<FiPlus/>}
+          icon={<PlusIcon/>}
         />
       }
     >
+      <LoadingBar
+        color={'gray'}
+        progress={progress}
+        onLoaderFinished={() => setProgress(0)}
+      />
       <Grid gap={'medium'}>
         {published ?
           <>
@@ -161,8 +173,7 @@ export default function CreatePlaceForm(props) {
               flexDirection="column"
             >
               <h3>
-                清涼広場への貢献<br/>
-                ありがとうございます。
+                清涼広場への貢献ありがとうございます。
               </h3>
               <p>
                 追加されました場所は以下からアクセスできます
@@ -170,9 +181,9 @@ export default function CreatePlaceForm(props) {
             </AlignItems>
             <AlignItems justifyContent={'center'}>
               <Button
-                color="white"
+                // styleType={'black'}
                 iconPosition={'left'}
-                icon={<FiSearch/>}
+                icon={<MagnifyingGlassIcon/>}
                 onClick={()=> {
                   tap1();
                   router.push(`/place/${newPlace?.id}/`);
@@ -181,9 +192,9 @@ export default function CreatePlaceForm(props) {
                 追加した場所のページを閲覧
               </Button>
               <Button
-                color="white"
+                // styleType={'black'}
                 iconPosition={'left'}
-                icon={<FiPlus/>}
+                icon={<PlusIcon/>}
                 onClick={()=> {
                   action1();
                   setPublished(false);
@@ -227,10 +238,11 @@ export default function CreatePlaceForm(props) {
                   descriptionInput && 
                   <AlignItems justifyContent={'center'}>
                     <Button
-                      icon={<FiArrowRight/>}
+                      icon={<ArrowRightIcon/>}
                       onClick={()=>{
                         tap1();
-                        setSection(2)
+                        setSection(2);
+                        setProgress(10);
                       }}
                     >
                       次へ
@@ -241,8 +253,16 @@ export default function CreatePlaceForm(props) {
             }
             {section == 2 &&
               <FlipThrough
-                leftClick={()=>{tap2();setSection(1)}}
-                rightClick={()=>{tap1();setSection(3)}}
+                leftClick={()=>{
+                  tap2();
+                  setSection(1);
+                  setProgress(1);
+                }}
+                rightClick={()=>{
+                  tap1();
+                  setSection(3);
+                  setProgress(20);
+                }}
                 currentSection={section}
               >
                 <Grid gap={'extraSmall'}>
@@ -269,7 +289,7 @@ export default function CreatePlaceForm(props) {
                             key={obj.iso}
                             value={obj.prefecture_kanji}
                           >
-                            {obj.prefecture_kanji} / {obj.prefecture_romaji.toUpperCase()}
+                            {obj.prefecture_kanji}
                           </Selector.Item>
                         )
                       })}
@@ -284,8 +304,16 @@ export default function CreatePlaceForm(props) {
 
             {section == 3 &&
               <FlipThrough
-                leftClick={()=>{tap2();setSection(2)}}
-                rightClick={()=>{tap1();setSection(4)}}
+                leftClick={()=>{
+                  tap2();
+                  setSection(2);
+                  setProgress(10);
+                }}
+                rightClick={()=>{
+                  tap1();
+                  setSection(4);
+                  setProgress(30);
+                }}
                 currentSection={section}
               >
                 <SizeSelect
@@ -308,8 +336,16 @@ export default function CreatePlaceForm(props) {
 
             {section == 4 &&    
               <FlipThrough
-                leftClick={()=>{tap2();setSection(3)}}
-                rightClick={()=>{tap1();setSection(5)}}
+                leftClick={()=>{
+                  tap2();
+                  setSection(3);
+                  setProgress(20);
+                }}
+                rightClick={()=>{
+                  tap1();
+                  setSection(5);
+                  setProgress(40);
+                }}
                 currentSection={section}
               >
                 <BinaryToggle>
@@ -337,8 +373,16 @@ export default function CreatePlaceForm(props) {
 
             {section == 5 &&
               <FlipThrough
-                leftClick={()=>{tap2();setSection(4)}}
-                rightClick={()=>{tap1();setSection(6)}}
+                leftClick={()=>{
+                  tap2();
+                  setSection(4);
+                  setProgress(30);
+                }}
+                rightClick={()=>{
+                  tap1();
+                  setSection(6);
+                  setProgress(50);
+                }}
                 currentSection={section}
               >
                 <AlignItems justifyContent={'center'}>
@@ -361,12 +405,16 @@ export default function CreatePlaceForm(props) {
 
             {section == 6 &&
               <FlipThrough
-                leftClick={()=>{tap2();setSection(5)}}
+                leftClick={()=>{
+                  tap2();
+                  setSection(5);
+                  setProgress(40);
+                }}
                 publish={
                   <Button
-                    color='black'
+                    styleType={'black'}
                     iconPosition={'right'}
-                    icon={<FiSend/>}
+                    icon={<PaperPlaneIcon/>}
                     onClick={()=>{
                       load1();
                       createNewPlace();

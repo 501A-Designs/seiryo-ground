@@ -3,20 +3,21 @@ import { styled } from '../stitches.config'
 import AlignItems from './alignment/AlignItems'
 
 const RatingStyled = styled('div',{
-  // background: '$gray12',
-  background: "$sgBlack",
-  color: '$gray1',
+  background: "linear-gradient(20deg, $gray4 0%, $gray1 100%)",
+  color: '$gray12',
+  border:'1px solid $gray5',
   padding: '1em',
   'h2':{
     margin: '0',
-    fontFamily:'$sgFont2',
+    fontWeight:'500',
   },
   'h4':{
     margin: '0',
-    fontFamily:'$sgFont2',
+    color:'$gray11'
   },
   'p':{
-    margin: '0'
+    margin: '0',
+    color:'$gray11'
   },
   borderRadius:'$r1',
   variants:{

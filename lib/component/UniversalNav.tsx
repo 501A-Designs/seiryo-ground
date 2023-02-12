@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { FiBell, FiBook, FiCommand, FiCornerLeftUp, FiCreditCard, FiHome, FiInfo } from 'react-icons/fi';
 import { auth, db } from '../../firebase';
 import Button from '../button/Button';
 import Modal from './Modal';
@@ -15,6 +14,7 @@ import ProfileContainer from '../profile-page/ProfileContainer';
 import { checkLevel } from '../util/checkLevel';
 import { useDocument } from 'react-firebase-hooks/firestore';
 import { doc } from 'firebase/firestore';
+import { ArrowLeftIcon, BookmarkIcon, FileTextIcon, HamburgerMenuIcon, HomeIcon, IdCardIcon, InfoCircledIcon } from '@radix-ui/react-icons';
 
 const expandAni = keyframes({
   '10%':{
@@ -238,7 +238,7 @@ useEffect(()=>{
                 <Button
                   size={'small'}
                   styleType={'transparent'}
-                  icon={<FiCornerLeftUp/>}
+                  icon={<ArrowLeftIcon/>}
                   onClick={()=>{scroll.scrollToTop();}}
                 >
                   上へ戻る
@@ -250,7 +250,7 @@ useEffect(()=>{
                   <Button
                     size={'small'}
                     styleType={'transparent'}
-                    icon={<FiCommand/>}
+                    icon={<HamburgerMenuIcon/>}
                   />
                 }
               >
@@ -261,31 +261,31 @@ useEffect(()=>{
                     upgradable={upgradable ? true:false}
                   />
                   <SectionButton
-                    icon={<FiHome/>}
+                    icon={<HomeIcon/>}
                   >
                     ホーム
                   </SectionButton>
                   <SectionButton
                     slug={'news'}
-                    icon={<FiBook/>}
+                    icon={<BookmarkIcon/>}
                   >
                     SEIRYO NEWS
                   </SectionButton>
                   <SectionButton
                     slug={'about'}
-                    icon={<FiInfo/>}
+                    icon={<InfoCircledIcon/>}
                   >
                     SEIRYO GROUNDとは？
                   </SectionButton>
                   <SectionButton
                     slug={'levels'}
-                    icon={<FiCreditCard/>}
+                    icon={<IdCardIcon/>}
                   >
                     SEIRYO Cardについて
                   </SectionButton>
                   <SectionButton
                     slug={'tos'}
-                    icon={<FiInfo/>}
+                    icon={<FileTextIcon/>}
                   >
                     利用規約
                   </SectionButton>

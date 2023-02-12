@@ -1,8 +1,8 @@
 import React, { forwardRef } from "react";
 import * as Select from "@radix-ui/react-select";
 import { styled } from "../../stitches.config";
-import { FiCheck, FiChevronDown, FiChevronUp } from "react-icons/fi";
 import useSound from "use-sound";
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 
 export const Selector = (props) => (
   <Select.Root
@@ -15,19 +15,19 @@ export const Selector = (props) => (
         // value={props.value}
       />
       <SelectIcon>
-        <FiChevronDown />
+        <ChevronDownIcon />
       </SelectIcon>
     </SelectTrigger>
     <Select.Portal>
       <SelectContent>
         <SelectScrollUpButton>
-          <FiChevronUp />
+          <ChevronUpIcon />
         </SelectScrollUpButton>
         <SelectViewport>
           {props.children}
         </SelectViewport>
         <SelectScrollDownButton>
-          <FiChevronDown />
+          <ChevronDownIcon />
         </SelectScrollDownButton>
       </SelectContent>
     </Select.Portal>
@@ -74,16 +74,17 @@ const SelectViewport = styled(Select.Viewport, {
 });
 
 const SelectItem = forwardRef(({ children, ...props }:any, forwardedRef) => {
-  const [select1] = useSound('/sound/tap-3-sg.mp3');
+  const [select1] = useSound('/sound/select-1-sg.mp3');
+
   return (
     <StyledItem
       {...props}
       ref={forwardedRef}
-      onMouseEnter={()=>select1()}
+      onMouseDown={()=>select1()}
     >
       <Select.ItemText>{children}</Select.ItemText>
       <StyledItemIndicator>
-        <FiCheck/>
+        <CheckIcon/>
       </StyledItemIndicator>
     </StyledItem>
   );

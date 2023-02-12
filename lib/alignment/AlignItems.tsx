@@ -15,7 +15,8 @@ export default function AlignItems(props) {
         height: `${props.height}`,
         alignItems:`${props.alignItems ? props.alignItems:'center'}`,
         gap:`${props.gap ? props.gap:'0.5em'}`,
-        justifyContent:`${props.spaceBetween ? 'space-between':props.justifyContent}`
+        justifyContent:`${props.spaceBetween ? 'space-between':props.justifyContent}`,
+        ...props.css
       }}
     >
       {props.children}

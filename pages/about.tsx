@@ -1,12 +1,12 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router'
 import React from 'react'
-import { FiArrowLeft, FiExternalLink } from 'react-icons/fi';
 import Button from '../lib/button/Button'
 import sgCenteredLogo from '../public/sg-centered-logo.png'
 import Container from '../lib/component/Container';
 import AlignItems from '../lib/alignment/AlignItems';
 import Margin from '../lib/alignment/Margin';
+import { ArrowLeftIcon, ExternalLinkIcon } from '@radix-ui/react-icons';
 
 export default function About() {
   const router = useRouter();
@@ -48,7 +48,7 @@ export default function About() {
         <AlignItems justifyContent={'center'}>
           <Button
             styleType={'transparent'}
-            icon={<FiArrowLeft/>}
+            icon={<ArrowLeftIcon/>}
             onClick={()=> {
               router.push('/');
             }}
@@ -57,7 +57,7 @@ export default function About() {
           </Button>
           <Button
             styleType={'transparent'}
-            icon={<FiExternalLink/>}
+            icon={<ExternalLinkIcon/>}
             onClick={()=> {
               router.push('https://501a.netlify.app/')
             }}
