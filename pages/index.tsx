@@ -97,8 +97,7 @@ export default function Home({prefecD}) {
                       <PostThumbNail
                         key={doc.id}
                         id={doc.id}
-                        title={doc.data().name}
-                        type={doc.data().type}
+                        data={doc.data()}
                       />
                     )
                   }
@@ -145,8 +144,7 @@ export default function Home({prefecD}) {
                         <PostThumbNail
                           key={doc.id}
                           id={doc.id}
-                          title={doc.data().name}
-                          type={doc.data().type}
+                          data={doc.data()}
                         />
                       )
                     })}
@@ -192,8 +190,7 @@ export default function Home({prefecD}) {
                       <PostThumbNail
                         key={doc.id}
                         id={doc.id}
-                        title={doc.data().name}
-                        type={doc.data().type}
+                        data={doc.data()}
                       />
                     )
                   })}
@@ -244,7 +241,9 @@ export default function Home({prefecD}) {
 export async function getServerSideProps() {
   // Fetch data from external API
   const res = await fetch(`https://raw.githubusercontent.com/piuccio/open-data-jp-prefectures/master/prefectures.json`)
-  const prefecD = await res.json();  
+  const prefecD = await res.json();
+
+
 
   // Pass data to the page via props
   return {

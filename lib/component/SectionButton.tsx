@@ -15,7 +15,7 @@ const SectionButtonStyled = styled('button',{
   padding:'$medium',
   border:'none',
   color:'$gray11',
-  backgroundColor:'white',
+  backgroundColor:'$gray1',
 
   borderTop: '1px solid transparent',
   borderImage: 'linear-gradient(90deg, transparent 0%, $gray3 80%,transparent 100%)',
@@ -24,7 +24,6 @@ const SectionButtonStyled = styled('button',{
   transition:'$speed1',
   '&:hover':{
     backgroundColor:'$gray3',
-    transform:'scale(1.01)',
     color:'$gray12',
   },
 })

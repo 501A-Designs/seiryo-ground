@@ -111,7 +111,7 @@ const StyledItem = styled(Select.Item, {
 
   "&[data-highlighted]": {
     outline: "none",
-    background: "black",
+    background: "$gray12",
     color: "$gray1",
   },
 

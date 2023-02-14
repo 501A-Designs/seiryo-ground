@@ -613,33 +613,32 @@ export default function PlaceName({
           >
             {reviewData?.docs.length > 0 &&
               <Grid
-                gap={'extraSmall'}
-                grid={'duo'}
+                css={{
+                  marginBottom:'0.5em'
+                }}
               >
                 <Rating
-                  borderRadius={'topLeft'}
                   rating={round(averageOfDateRating)}
                   description={'デートスポット適正'}
                 />
                 <Rating
-                  borderRadius={'topRight'}
                   rating={round(averageOfAccessRating)}
                   description={'最寄駅のアクセス'}
                 />
                 <Rating
-                  borderRadius={'bottomLeft'}
                   rating={round(averageOfManagementRating)}
                   description={'設備管理の状況'}
                 />
                 <Rating
-                  borderRadius={'bottomRight'}
                   rating={placeData.likes ? placeData.likes.length:0}
                   description={'いいね数'}
                   hideMax={true}
                 />
               </Grid>
             }
-            <Container styleType={'white'}>
+            <Container
+              styleType={'white'}
+            >
               <Grid
                 grid={'oneTwo'}
                 gap={'medium'}
@@ -735,6 +734,7 @@ export default function PlaceName({
               <>
                 {/* CREATE REVIEW */}
                 <Button
+                  styleType={'transparent'}
                   size={'small'}
                   icon={openCreateReview ? <Cross1Icon/>:<>{hasReviewed ? <ReloadIcon/>:<PlusIcon/>}</>}
                   title={openCreateReview ? '閉じる':<>{hasReviewed ? '書いたレビューを編集':'レビューを書く'}</>}

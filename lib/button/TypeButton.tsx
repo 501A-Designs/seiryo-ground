@@ -68,6 +68,7 @@ const TypeButtonColorStyled = styled('div',{
   fontStyle: 'italic',
   borderRadius:'$r2',
   transition:'$speed2',
+  border:'1px solid $gray1',
 
   variants:{
     selected:{

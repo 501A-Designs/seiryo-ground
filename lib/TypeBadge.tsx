@@ -8,7 +8,7 @@ const TypeBadgeStyled = styled('div',{
   fontStyle: 'italic',
   height: '7px',
   borderRadius:'$round',
-  border:'0.5px solid white',
+  border:'0.5px solid $gray1',
   transition: '$speed2',
   variants:{
     width: {

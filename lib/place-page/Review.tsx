@@ -4,11 +4,11 @@ import AlignItems from '../alignment/AlignItems'
 import Grid from '../alignment/Grid';
 
 const ReviewStyled = styled('div', {
-  padding: '1em',
+  // padding: '1em',
   borderRadius: '$r2',
   // backgroundColor: '$gray2',
-  background: "linear-gradient($gray1 80%, $gray2 100%)",
-  border:'1px solid $gray5',
+  // background: "linear-gradient($gray1 80%, $gray2 100%)",
+  // border:'1px solid $gray5',
   cursor: 'pointer',
   userSelect: 'none',
   transition: '$speed2',
@@ -56,6 +56,7 @@ export default function Review(props) {
   const data = props.data;
   return (
     <ReviewStyled key={props.key}>
+      <hr/>
       <Grid
         css={{
           marginBottom:'1em'
@@ -64,10 +65,9 @@ export default function Review(props) {
         <h3>{data.title}</h3>
         <p>{data.description}</p>
       </Grid>
-      <hr/>
       <Grid
         css={{
-          marginTop:'1em'
+          marginBottom:'1em'
         }}
       >
         <ReviewValue text='デートスポット適性'>

@@ -33,12 +33,12 @@ const ButtonStyled = styled('button',{
     },
     styleType: {
       standard:{
-        backgroundColor: 'white',
-        border:'1px solid white',
+        backgroundColor: '$gray1',
+        border:'1px solid $gray1',
         color:'$gray10',
         '&:hover':{
           backgroundColor:'$gray3',
-          color: 'black',
+          color: '$gray12',
         }
       },
       transparent:{
@@ -67,7 +67,7 @@ const ButtonStyled = styled('button',{
         '&:hover':{
           transform:'scale(1.02)',
           opacity:'0.8',
-          color: 'white',
+          color: '$gray1',
         }
       },
       red:{

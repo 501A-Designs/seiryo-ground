@@ -1,12 +1,18 @@
 import {
   gray,
+  grayDark,
   grayA,
+  grayDarkA,
   blue,
+  blueDark,
   red,
+  redDark,
   green,
+  greenDark,
   orange,
+  orangeDark,
 } from '@radix-ui/colors';
-import { createStitches } from '@stitches/react';
+import { createStitches, createTheme } from '@stitches/react';
 
 export const {styled,getCssText,globalCss} = createStitches({
   theme: {
@@ -44,6 +50,7 @@ export const {styled,getCssText,globalCss} = createStitches({
       6: '1em',
       7: '0.9em',
       8: '0.8em',
+      9: '0.7em',
     },
     radii: {
       r1: '5px',
@@ -78,4 +85,16 @@ export const {styled,getCssText,globalCss} = createStitches({
     tablet: '(min-width: 901px) and (max-width: 1200px)',
     desktop: '(min-width: 1201px)',
   },
+});
+
+// define the dark theme using the de-constructed function
+export const darkTheme = createTheme({ 
+  colors: { 
+    ...grayDark,
+    ...grayDarkA,
+    ...blueDark,
+    ...redDark,
+    ...greenDark,
+    ...orangeDark,
+  } 
 });

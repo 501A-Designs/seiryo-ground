@@ -10,7 +10,7 @@ const EndStyled = styled('section',{
   gap: '1em',
   padding: '5% 0',
   'div':{
-    background: 'linear-gradient(0deg,transparent 0%,$gray11 50%,transparent 100%)',
+    background: 'linear-gradient(0deg,transparent 0%,$gray8 50%,transparent 100%)',
     width:'1px',
     height: '100px',
     borderRadius: '$r1'

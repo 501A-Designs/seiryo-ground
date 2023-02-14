@@ -21,20 +21,21 @@ export const globalStyles = globalCss({
     fontSize:'$8',
   },
   'table':{  
-    border: '1px solid $sgGray3',
+    border: '1px solid $gray4',
     borderCollapse: 'collapse',
     textAlign: 'center',
     width: '100%'
   },
   'td':{
-    border: '1px solid $sgGray3',
+    border: '1px solid $gray4',
     padding: '$small',
+    fontSize:'$8'
   },
   'th':{
-    border: '1px solid $sgGray3',
-    backgroundColor: 'black',
+    border: '1px solid $gray4',
+    backgroundColor: '$gray2',
     fontWeight: 'normal',
-    color: 'white',
+    color: '$gray11',
     padding: '$small',
   },
   'hr':{

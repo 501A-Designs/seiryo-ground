@@ -16,17 +16,17 @@ const PostThumbNailStyled = styled('div', {
   border:'1px solid transparent',
 
   height:'max-content',
-  padding:'1em',
+  padding:'0.7em',
   borderRadius: '$r2',
   transition: '$speed1',
   '&:hover':{
-    background: 'linear-gradient(45deg,white 0%,$gray3 50%,white 100%)',
+    background: 'linear-gradient(45deg,$gray1 0%,$gray3 50%,$gray1 100%)',
     backgroundSize: '200% 200%',
 
     zIndex: '100',
     animation:`${gradient} linear 0.3s`,
     border:'1px solid $gray3',
-    boxShadow:'0 0 10px white'
+    boxShadow:'0 0 10px $gray1'
   },
   'h5':{
     margin:'0',
@@ -35,6 +35,7 @@ const PostThumbNailStyled = styled('div', {
   },
   'p':{
     color:'$gray11',
+    fontSize:'$9',
     margin:'0',
   }
 })
@@ -46,6 +47,8 @@ export default function PostThumbNail(props) {
   // Sound
   const [action1] = useSound('/sound/action-1-sg.mp3',{playbackRate:1.1});
 
+  const data = props?.data;
+
   return (
     <PostThumbNailStyled
       onClick={()=> {
@@ -53,24 +56,21 @@ export default function PostThumbNail(props) {
         action1();
       }}
     >
-      <Grid gap={'medium'}>
-        <AlignItems justifyContent={'space-between'}>
-          <AlignItems
-          >
-            <TypeBadge
-              width={'small'}
-              type={props.type}
-            />
-            <h5>{props.title}</h5>
-          </AlignItems>
-          {/* <p>
-            {reviewsCollection?.docs.length > 0 ? 
-              <>{reviewsCollection.docs.length}件</>:
-              <>:(</>
+      <AlignItems>
+        <TypeBadge
+          width={'small'}
+          type={data?.type}
+        />
+        <Grid gap={'extraSmall'}>
+          <h5>{data?.name}</h5>
+          <p>
+            {reviewsCollection?.docs.length > 0 &&
+              <>{reviewsCollection.docs.length + '_'}review | </>
             }
-          </p> */}
-        </AlignItems>
-      </Grid>
+            {data?.likes?.length + '_'}heart
+          </p>
+        </Grid>
+      </AlignItems>
     </PostThumbNailStyled>
   )
 }

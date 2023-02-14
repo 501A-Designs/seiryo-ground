@@ -26,11 +26,11 @@ export default function Levels() {
       </AlignItems>
 
       <h1>SEIRYO CARD</h1>
-      <h3>カードのレベルについて</h3>
+      <h3>About</h3>
       <p>
         本サイト、「SEIRYO GROUND | 清涼広場」にログインしたユーザー様はみんなデフォルトでSEIRYO GROUND メンバーシップカードをもらいます。ログインしているユーザー様は<Link href="/profile">こちら</Link>からアクセスできます。カードにはそれぞれ5段階のレベルがあり清涼広場に貢献する頻度と量によってカードのレベルが上がります。
       </p>
-      <h3>マイルストーン</h3>
+      <h3>Milestones</h3>
       <p>カードがアップグレードされるときのマイルストーン：</p>
       <ul>
         <li>Level 1（白カード）：清涼広場にログインした全てのユーザー様</li>
@@ -39,7 +39,7 @@ export default function Levels() {
         <li>Level 4（黄カード）：清涼広場に新しい場所を10ヶ所追加し、レビューを10件追加したユーザー様</li>
         <li>Level 5（黒カード）：清涼広場に新しい場所を20ヶ所以上追加し、レビューを20件追加したユーザー様</li>
       </ul>
-      <h3>レベルにおける利点</h3>
+      <h3>Perks</h3>
       <table>
         <tr>
           <th></th>

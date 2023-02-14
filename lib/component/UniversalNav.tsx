@@ -14,7 +14,9 @@ import ProfileContainer from '../profile-page/ProfileContainer';
 import { checkLevel } from '../util/checkLevel';
 import { useDocument } from 'react-firebase-hooks/firestore';
 import { doc } from 'firebase/firestore';
-import { ArrowLeftIcon, BookmarkIcon, FileTextIcon, HamburgerMenuIcon, HomeIcon, IdCardIcon, InfoCircledIcon } from '@radix-ui/react-icons';
+import { ArrowLeftIcon, BookmarkIcon, FileTextIcon, HamburgerMenuIcon, HomeIcon, IdCardIcon, InfoCircledIcon, ShadowInnerIcon } from '@radix-ui/react-icons';
+import { useTheme } from 'next-themes';
+import AlignItems from '../alignment/AlignItems';
 
 const expandAni = keyframes({
   '10%':{
@@ -126,7 +128,7 @@ const NavStyled = styled('section',{
         animation:`${jiggleAni} 0.8s linear infinite`
       },
       shine:{
-        background: 'linear-gradient(45deg,$gray7 0%,white 50%,$gray7 100%)',
+        background: 'linear-gradient(45deg,$gray7 0%,$gray1 50%,$gray7 100%)',
         backgroundSize: '200% 200%',
         animation: `${gradient} 1s linear infinite`,
       },
@@ -143,7 +145,7 @@ const NavContentStyled = styled('div',{
   alignItems:'center',
   gap:'$small',
   // backdropFilter:'blur(20px)',
-  background:	'linear-gradient(white,$gray1)',
+  background:	'linear-gradient($gray2,$gray3)',
 
   width:'100%',
   borderRadius:'$round',
@@ -222,6 +224,9 @@ useEffect(()=>{
     }
   },[userData])
 
+  const { theme, setTheme } = useTheme();
+  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
+
   return (
     <>
       {!hideDelay &&
@@ -289,6 +294,19 @@ useEffect(()=>{
                   >
                     利用規約
                   </SectionButton>
+                  <AlignItems
+                    css={{
+                      marginTop:'1em'
+                    }}
+                    justifyContent={'flex-end'}
+                  >
+                    <Button
+                      icon={<ShadowInnerIcon/>}
+                      onClick={toggleTheme}
+                    >
+                      Disable {theme} mode
+                    </Button>
+                  </AlignItems>
                 </>
               </Modal>
             </NavContentStyled>

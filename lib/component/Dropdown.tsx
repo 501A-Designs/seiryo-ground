@@ -84,7 +84,7 @@ const AccordionContentStyled = styled(Accordion.Content, {
   overflow: 'hidden',
   fontSize: 15,
   color: '$gray12',
-  backgroundColor: 'white',
+  backgroundColor: '$gray1',
   '&[data-state="open"]': {
     animation: `${slideDown} 300ms cubic-bezier(0.87, 0, 0.13, 1)`,
   },

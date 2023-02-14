@@ -30,19 +30,16 @@ const ProfileCardStyled = styled('div',{
     margin:0,
     fontWeight: 'normal'
   },
-  '&:hover':{
-    transform:'scale(0.98)',
-  },
   variants:{
     upgradable:{
       true:{
         border:'1px solid $gray3',
-        background: 'linear-gradient(45deg,$gray7 0%,white 50%,$gray7 100%)',
+        background: 'linear-gradient(45deg,$gray7 0%,$gray1 50%,$gray7 100%)',
         backgroundSize: '200% 200%',
         animation:`${gradient} linear 1s infinite`,
       },
       false:{
-        border:'1px solid $gray4',
+        border:'1px solid $gray3',
         backgroundColor:'$gray2',
       }
     }
@@ -51,8 +48,8 @@ const ProfileCardStyled = styled('div',{
 
 const ProfileCardContentStyled = styled('div',{
   backdropFilter:'blur(20px)',
-  backgroundColor:'white',
-  // border:'1px solid $gray4',
+  backgroundColor:'$gray1',
+  border:'1px solid $gray4',
   boxShadow:'$shadow1',
   borderRadius:'$r2',
   padding: '$large',

@@ -41,9 +41,8 @@ const DialogBannerStyled = styled('div',{
 })
 
 const StyledContent = styled(Dialog.Content, {
-  fontFamily:'$sgFont1',
   border: '1px solid $gray4',
-  backgroundColor: 'white',
+  backgroundColor: '$gray1',
   borderRadius: '$r4',
   position: 'fixed',
   top: '50%',

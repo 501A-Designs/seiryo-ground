@@ -29,8 +29,8 @@ const ContainerStyled = styled('div', {
         border: '1px solid $gray4',
       },
       white: {
-        background: 'linear-gradient(20deg, $gray2 0%, white 100%)',
-        border: '1px solid $gray5',
+        background: 'linear-gradient(20deg, $gray3 0%, $gray1 100%)',
+        border: '1px solid $gray4',
       },
     },
     height: {

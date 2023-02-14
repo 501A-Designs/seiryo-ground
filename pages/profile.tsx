@@ -54,7 +54,7 @@ const ProfileCard = styled('div',{
   width: '400px',
   height: 'auto',
   boxShadow: '$shadow2',
-  border:'1px solid white',
+  border:'1px solid $gray6',
   fontFamily: '$sgFont2',
   transition: '$speed1',
   animation: `${rotateInBottonLeft} 1s`,
@@ -119,12 +119,11 @@ const ProfileCard = styled('div',{
       true:{
         animation: `${rotateAndZoom} 2s`,
         'h2':{
-          color:'black',
+          color:'$gray12',
           margin:'0'
         },
         'p':{
-          color:'black',
-          fontFamily:'$sgFont1',
+          color:'$gray11',
         }
       },
       false: {
