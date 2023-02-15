@@ -65,15 +65,19 @@ const ProfileCard = styled('div',{
     animation: `${spin} linear infinite 10s`
   },
   'h2':{
-    margin:0
+    margin:0,
+    color:'inherit'
+    // color:'white'
   },
   'p':{
     margin: '0',
+    color:'inherit'
+    // color:'white'
   },
   'h5':{
     margin:0,
-    fontWeight: 'normal',
-    fontFamily:'$sgFont2'
+    color:'inherit'
+    // color:'white'
   },
 
   // Levels

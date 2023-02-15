@@ -18,14 +18,14 @@ const CheckBoxStyled = styled('div',{
         backgroundColor: '$gray12',
         color: '$gray1',
         'h5':{
-          fontWeight:'500'
+          color:'$gray3'
         }
       },
       false: {
         backgroundColor: 'transparent',
         color: '$gray10',
         'h5':{
-          fontWeight:'normal'
+          color: '$gray10',
         },
         '&:hover': {
           backgroundColor:'$gray4',

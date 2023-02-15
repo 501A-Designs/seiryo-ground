@@ -7,7 +7,7 @@ import Button from '../lib/button/Button'
 import { useRouter } from 'next/router'
 
 import {db} from '../firebase'
-import { collection, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 import CreatePlaceForm from '../lib/landing-page/CreatePlaceForm'
 import { useCollection } from 'react-firebase-hooks/firestore';
@@ -25,13 +25,16 @@ import End from '../lib/End'
 import Selector from '../lib/component/Selector'
 import { UserContext } from '../lib/util/UserContext'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
-import { Heading } from '../lib/landing-page/Heading'
+import { jsonParse } from '../lib/util/jsonParse'
 
-export default function Home({prefecD}) {
+export default function Home({prefecD,placesData}) {
   let masonaryGrid = {350: 1, 750: 2, 900: 3, 1200:4};
   const router = useRouter();
   
-  const [placesCollection,placeCollectionLoading] = useCollection(collection(db, `places`));
+  // const [placesCollection,placeCollectionLoading] = useCollection(collection(db, `places`));
+
+  const [placesCollection] = useState(placesData);
+  console.log(placesCollection)
   
   // Modal / Popup State
   const [gettingStartedModalIsOpen, setGettingStartedModalIsOpen] = useState(false);
@@ -54,8 +57,6 @@ export default function Home({prefecD}) {
       }
     }
   }, [user])
-
-  const [filteredPlaces,filteredPlacesLoading] = useCollection(query(collection(db, `places`),where("prefecture", "==",`${prefectureInput && prefectureInput}`)));
 
   return (
     <>
@@ -85,39 +86,31 @@ export default function Home({prefecD}) {
 
           <Grid gap={'small'}>
             <AlignItems spaceBetween>
-              <Heading>Most Liked</Heading>
+              <p>Most Liked</p>
             </AlignItems>
             {placesCollection && <ResponsiveMasonry
               columnsCountBreakPoints={masonaryGrid}
             >
               <Masonry gutter={'0.25em'}>
-                {placesCollection.docs.map(doc => {
-                  if (doc.data().likes.length > 0) {
+                {placesCollection.map(doc => {
+                  if (doc.data.likes.length > 0) {
                     return (
                       <PostThumbNail
                         key={doc.id}
                         id={doc.id}
-                        data={doc.data()}
+                        data={doc.data}
                       />
                     )
                   }
                 })}
               </Masonry>
             </ResponsiveMasonry>}
-            {placeCollectionLoading && 
-              <Container
-                type='standard'
-                alignment='center'
-              >
-                <ClipLoader color="black"/>
-              </Container>
-            }
           </Grid>
 
           {/* Filter Section */}
-          <Grid gap={'small'}>
+          {/* <Grid gap={'small'}>
             <AlignItems spaceBetween>
-              <Heading>Filter Spots ({filteredPlaces?.docs.length})</Heading>
+              <p>Filter Spots ({placesCollection?.length})</p>
               <Selector
                 placeholder={'都道府県を選択'}
                 value={prefectureInput}
@@ -136,47 +129,28 @@ export default function Home({prefecD}) {
               </Selector>
             </AlignItems>
             <div>
-              {filteredPlaces && filteredPlaces.docs.length > 0 ?
-                <ResponsiveMasonry columnsCountBreakPoints={masonaryGrid}>
+              {placesCollection && <ResponsiveMasonry columnsCountBreakPoints={masonaryGrid}>
                   <Masonry gutter={'0.25em'}>
-                    {filteredPlaces.docs.map(doc => {
-                      return (
-                        <PostThumbNail
-                          key={doc.id}
-                          id={doc.id}
-                          data={doc.data()}
-                        />
-                      )
+                    {placesCollection.map(doc => {
+                      if (doc.data.likes.length > 0) {
+                        return (
+                          <PostThumbNail
+                            key={doc.id}
+                            id={doc.id}
+                            data={doc.data}
+                          />
+                        )
+                      }
                     })}
                   </Masonry>
-                </ResponsiveMasonry>:
-                <>
-                  {!filteredPlacesLoading &&
-                    <Container
-                      type='standard'
-                      alignment='center'
-                    >
-                      <p>
-                        ここにある場所は現在何も見つかりません。
-                      </p>
-                    </Container>
-                  }
-                </>
-              }
-              {filteredPlacesLoading &&
-                <Container
-                  type='standard'
-                  alignment='center'
-                >
-                  <ClipLoader color="black"/>
-                </Container>
+                </ResponsiveMasonry>
               }
             </div>
-          </Grid>
+          </Grid> */}
 
           {/* All Locations */}
           <Grid gap={'small'}>
-            <Heading>All Locations</Heading>
+            <p>All Locations</p>
             {placesCollection && 
               <ResponsiveMasonry
                 columnsCountBreakPoints={masonaryGrid}
@@ -185,25 +159,17 @@ export default function Home({prefecD}) {
                   gutter={'0.25em'}
                   columnsCountBreakPoints={{350: 1, 750: 2, 900: 3, 1200:4,1500:6}}
                 >
-                  {placesCollection.docs.map(doc => {
+                  {placesCollection.map(doc => {
                     return (
                       <PostThumbNail
                         key={doc.id}
                         id={doc.id}
-                        data={doc.data()}
+                        data={doc.data}
                       />
                     )
                   })}
                 </Masonry>
               </ResponsiveMasonry>
-            }
-            {placeCollectionLoading && 
-              <Container
-                type='standard'
-                alignment='center'
-              >
-                <ClipLoader color="black"/>
-              </Container>
             }
           </Grid>
         </Grid>
@@ -243,12 +209,25 @@ export async function getServerSideProps() {
   const res = await fetch(`https://raw.githubusercontent.com/piuccio/open-data-jp-prefectures/master/prefectures.json`)
   const prefecD = await res.json();
 
+  const placeDataArray = [];
+  const placesCollectionSnapshot = await getDocs(collection(db, `places`));
+  placesCollectionSnapshot.forEach((doc) => {
+    placeDataArray.push(
+      {
+        id:doc.id,
+        data:doc.data()
+      }
+    );
+  });
 
+
+  const placesData = jsonParse(placeDataArray);
 
   // Pass data to the page via props
   return {
     props: {
-      prefecD
+      prefecD,
+      placesData
     }
   }
 }

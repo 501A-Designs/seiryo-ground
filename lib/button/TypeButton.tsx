@@ -38,26 +38,30 @@ const TypeButtonStyled = styled('div', {
   variants:{
     selected:{
       true: {
-        backgroundColor: '$gray12',
-        color: '$gray1',
+        background: '$gray12',
+        borderColor:'$gray6',
+        shadow:'$shadow1',
         'h5':{
-          fontWeight: '500',
+          color: '$gray3',
         }
       },
       false: {
         backgroundColor:'transparent',
-        color: '$gray10',
+        'h5':{
+          color: '$gray10',
+        },
         '&:hover':{
           backgroundColor:'$gray4',
-          border:'1px solid $gray5',
-          color: '$gray11',
+          borderColor:'$gray5',
+          'h5':{
+            color: '$gray11',
+          }
         }
       }
     }
   },
   'h5':{
     margin:0,
-    fontWeight: 'normal',
   }
 })
 
@@ -68,7 +72,6 @@ const TypeButtonColorStyled = styled('div',{
   fontStyle: 'italic',
   borderRadius:'$r2',
   transition:'$speed2',
-  border:'1px solid $gray1',
 
   variants:{
     selected:{

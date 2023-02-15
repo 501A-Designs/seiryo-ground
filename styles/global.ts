@@ -13,12 +13,42 @@ export const globalStyles = globalCss({
     padding: 0,
     margin: 0,
   },
+  'h1':{
+    fontWeight:'500',
+    color:'$gray12',
+  },
+  'h2':{
+    fontWeight:'500',
+    color:'$gray12',
+  },
+  'h3':{
+    fontWeight:'500',
+    color:'$gray12',
+  },
+  'h4':{
+    fontWeight:'500',
+    color:'$gray12',
+  },
+  'h5':{
+    fontWeight:'500',
+    color:'$gray12',
+  },
+  'h6':{
+    fontWeight:'500',
+    color:'$gray12',
+  },
+
   'ul':{
     fontSize:'$8',
     margin:'$small 0'
   },
+  'li':{
+    fontSize:'$7',
+    color:'$gray12'
+  },
   'p':{
     fontSize:'$8',
+    color:'$gray11'
   },
   'table':{  
     border: '1px solid $gray4',
@@ -27,11 +57,13 @@ export const globalStyles = globalCss({
     width: '100%'
   },
   'td':{
+    fontSize:'$8',
     border: '1px solid $gray4',
     padding: '$small',
-    fontSize:'$8'
+    backgroundColor: '$gray1',
   },
   'th':{
+    fontSize:'$8',
     border: '1px solid $gray4',
     backgroundColor: '$gray2',
     fontWeight: 'normal',

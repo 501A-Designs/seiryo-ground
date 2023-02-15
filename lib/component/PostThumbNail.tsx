@@ -12,9 +12,7 @@ import { gradient } from '../ux/keyframes';
 
 const PostThumbNailStyled = styled('div', {
   cursor:'pointer',
-  // border:'1px solid $gray4',
   border:'1px solid transparent',
-
   height:'max-content',
   padding:'0.7em',
   borderRadius: '$r2',
@@ -31,10 +29,8 @@ const PostThumbNailStyled = styled('div', {
   'h5':{
     margin:'0',
     color:'$gray12',
-    fontWeight:'500'
   },
   'p':{
-    color:'$gray11',
     fontSize:'$9',
     margin:'0',
   }

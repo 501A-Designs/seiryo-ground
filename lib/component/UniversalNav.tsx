@@ -277,22 +277,16 @@ useEffect(()=>{
                     SEIRYO NEWS
                   </SectionButton>
                   <SectionButton
-                    slug={'about'}
-                    icon={<InfoCircledIcon/>}
-                  >
-                    SEIRYO GROUNDとは？
-                  </SectionButton>
-                  <SectionButton
                     slug={'levels'}
                     icon={<IdCardIcon/>}
                   >
                     SEIRYO Cardについて
                   </SectionButton>
                   <SectionButton
-                    slug={'tos'}
-                    icon={<FileTextIcon/>}
+                    slug={'links'}
+                    icon={<InfoCircledIcon/>}
                   >
-                    利用規約
+                    リンク集
                   </SectionButton>
                   <AlignItems
                     css={{

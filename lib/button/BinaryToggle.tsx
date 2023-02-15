@@ -16,6 +16,8 @@ const BinaryToggleItemStyled = styled('div',{
       true:{
         color: '$gray1',
         backgroundColor:'$gray12',
+        // background: 'linear-gradient($gray11,$gray12)',
+        borderColor:'$gray5',
         boxShadow: '$shadow1',
         width: '95px',
         height: '95px',

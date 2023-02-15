@@ -29,17 +29,20 @@ const DisplayRatingInputStyled = styled('div',{
     },
     '&::-webkit-slider-thumb': {
       WebkitAppearance: 'none',
-      background: '$gray1',
+      // backgroundColor:'$gray12',
+      background: 'linear-gradient($gray11,$gray12)',
       border:'1px solid $gray6',
       borderRadius: '$round',
-      width: '30px',
-      height: '30px',
+      width: '25px',
+      height: '25px',
       boxShadow: '$shadow1',
       color:'#a2a2a2',
       transition: '$speed2',
       '&:hover': {
         transform: 'scale(0.9)',
-        background: '$gray12',
+
+        // background: '$gray12',
+        // background: 'linear-gradient($gray1,$gray2)',
         boxShadow:'none'
       },
       '&:active': {

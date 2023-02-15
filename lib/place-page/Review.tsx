@@ -18,13 +18,11 @@ const ReviewStyled = styled('div', {
   },
   'p':{
     marginBottom: '0',
-    color:'$gray11'
   },
   // '&:hover':{
   //   borderRadius: '$r3',
   //   transform: 'scale(1.02)',
   //   boxShadow:'$shadow1',
-  //   backgroundColor:'$gray1'
   // }
 })
 

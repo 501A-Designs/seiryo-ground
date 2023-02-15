@@ -62,7 +62,8 @@ const ButtonStyled = styled('button',{
       },
       black:{
         backgroundColor: '$gray12',
-        border:'1px solid $gray12',
+        // background: 'linear-gradient($gray11,$gray12)',
+        border:'1px solid $gray5',
         color:'$gray6',
         '&:hover':{
           transform:'scale(1.02)',
