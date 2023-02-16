@@ -3,9 +3,8 @@ import React, { useState,useEffect, useContext } from 'react'
 import AlignItems from '../../lib/alignment/AlignItems'
 import TypeBadge from '../../lib/TypeBadge'
 
-import { db,auth } from '../../firebase'
+import { db } from '../../firebase'
 import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, increment, setDoc, updateDoc } from "firebase/firestore";
-import { useAuthState } from 'react-firebase-hooks/auth';
 import Rating from '../../lib/Rating'
 
 import LoadingBar from 'react-top-loading-bar';
@@ -24,8 +23,6 @@ import { isBrowser } from 'react-device-detect'
 
 import Head from 'next/head'
 
-import { useCollection, useDocument } from 'react-firebase-hooks/firestore'
-import { ClipLoader } from 'react-spinners'
 import Container from '../../lib/component/Container'
 import CreateContainer from '../../lib/component/CreateContainer'
 import Grid from '../../lib/alignment/Grid'
@@ -48,7 +45,8 @@ import Margin from '../../lib/alignment/Margin'
 import Header from '../../lib/component/Header'
 
 export default function PlaceName({
-  locationDataSnap
+  locationDataSnap,
+  reviewsData
 }) {
   const router = useRouter();
   const placeId = router.query.slug;
@@ -75,7 +73,7 @@ export default function PlaceName({
   const [hasReviewed, setHasReviewed] = useState(false);
 
   const [placeData, setPlaceData] = useState(locationDataSnap);
-  const [reviewData] = useCollection(collection(db, `places/${placeId}/reviews/`));
+  const [reviewsCollection] = useState(reviewsData);
 
   // const [currentUserLevel, setCurrentUserLevel] = useState('0')
   
@@ -115,21 +113,18 @@ export default function PlaceName({
   },[user]);
 
   useEffect(()=>{
-    reviewData?.docs?.forEach((doc) => {
+    reviewsCollection?.forEach((doc) => {
       if (user?.uid === doc.id) {
         setHasReviewed(true);
-        setTitleRatingInput(doc.data().title);
-        setDescriptionRatingInput(doc.data().description);
-        setDateRatingInput(doc.data().dateRating);
-        setAccessRatingInput(doc.data().accessRating);
-        setManagementRatingInput(doc.data().managementRating);
+        setTitleRatingInput(doc.data.title);
+        setDescriptionRatingInput(doc.data.description);
+        setDateRatingInput(doc.data.dateRating);
+        setAccessRatingInput(doc.data.accessRating);
+        setManagementRatingInput(doc.data.managementRating);
       }
     });
     updateAverageRatings();
-  },[reviewData])
-
-  // const [published, setPublished] = useState(false);
-  // const [newPlace, setNewPlace] = useState();
+  },[user])
 
   const editThisPlace = async() => {
     setModalIsOpen(false);
@@ -155,10 +150,10 @@ export default function PlaceName({
     let arrayOfDateRating = [];
     let arrayOfAccessRating = [];
     let arrayOfManagementRating = [];
-    reviewData?.docs?.forEach((doc) => {
-      arrayOfDateRating.push(parseInt(doc.data().dateRating));
-      arrayOfAccessRating.push(parseInt(doc.data().accessRating));
-      arrayOfManagementRating.push(parseInt(doc.data().managementRating));
+    reviewsCollection?.forEach((doc) => {
+      arrayOfDateRating.push(parseInt(doc.data.dateRating));
+      arrayOfAccessRating.push(parseInt(doc.data.accessRating));
+      arrayOfManagementRating.push(parseInt(doc.data.managementRating));
     })
     setAverageOfDateRating(arrayOfDateRating.reduce((sum, element) => sum + element, 0)/arrayOfDateRating.length);
     setAverageOfAccessRating(arrayOfAccessRating.reduce((sum, element) => sum + element, 0)/arrayOfAccessRating.length);
@@ -584,14 +579,14 @@ export default function PlaceName({
               }
 
 
-              {reviewData?.docs?.map((review) =>(
+              {reviewsData?.map((review) =>(
                   <Review
                     key={review.id}
-                    data={review.data()}
+                    data={review.data}
                   />
                 )
               )}
-              {reviewData?.docs?.length > 0 ? 
+              {reviewsData?.length > 0 ? 
                 <End>
                   おわり。
                   <br/>
@@ -611,7 +606,7 @@ export default function PlaceName({
               marginTop:'1.5em'
             }}
           >
-            {reviewData?.docs.length > 0 &&
+            {reviewsData?.length > 0 &&
               <Grid
                 css={{
                   marginBottom:'0.5em'
@@ -766,14 +761,26 @@ export default function PlaceName({
 
 export async function getServerSideProps({params}){
   const placeInfoDocSnap = await getDoc(doc(db, `places/${params.slug}`));
-  // const reviewsSnap = await getDocs(collection(db, `places/${params.slug}/reviews/`));
+  const reviewsDataArray = [];
+  const reviewsSnap = await getDocs(collection(db, `places/${params.slug}/reviews/`));
   const locationDataSnap = jsonParse(placeInfoDocSnap.data());
-  // const reviewsDataSnap = jsonParse(reviewsSnap);
 
+
+  reviewsSnap.forEach((doc) => {
+    reviewsDataArray.push(
+      {
+        id:doc.id,
+        data:doc.data()
+      }
+    );
+  });
+
+  const reviewsData = jsonParse(reviewsDataArray);
 
   return {
     props:{
       locationDataSnap,
+      reviewsData
     }
   }
 }

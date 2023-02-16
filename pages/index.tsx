@@ -7,15 +7,12 @@ import Button from '../lib/button/Button'
 import { useRouter } from 'next/router'
 
 import {db} from '../firebase'
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 
 import CreatePlaceForm from '../lib/landing-page/CreatePlaceForm'
-import { useCollection } from 'react-firebase-hooks/firestore';
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
 import WelcomeHeader from '../lib/landing-page/WelcomeHeader'
-import Container from '../lib/component/Container'
-import { ClipLoader } from 'react-spinners'
 import Grid from '../lib/alignment/Grid'
 import useSound from 'use-sound'
 import Footer from '../lib/component/Footer'
@@ -34,7 +31,9 @@ export default function Home({prefecD,placesData}) {
   // const [placesCollection,placeCollectionLoading] = useCollection(collection(db, `places`));
 
   const [placesCollection] = useState(placesData);
-  console.log(placesCollection)
+
+
+  const [prefectureInput, setPrefectureInput] = useState('東京都');
   
   // Modal / Popup State
   const [gettingStartedModalIsOpen, setGettingStartedModalIsOpen] = useState(false);
@@ -44,7 +43,6 @@ export default function Home({prefecD,placesData}) {
   const user = userContextData?.user;
   const userData = userContextData?.userData;
 
-  const [prefectureInput, setPrefectureInput] = useState('東京都');
 
   useEffect(() => {
     if (
@@ -83,34 +81,29 @@ export default function Home({prefecD,placesData}) {
       <Margin>
         <Grid gap={'extraExtraLarge'}>
           <WelcomeHeader/>
-
           <Grid gap={'small'}>
             <AlignItems spaceBetween>
               <p>Most Liked</p>
             </AlignItems>
-            {placesCollection && <ResponsiveMasonry
-              columnsCountBreakPoints={masonaryGrid}
-            >
-              <Masonry gutter={'0.25em'}>
-                {placesCollection.map(doc => {
-                  if (doc.data.likes.length > 0) {
-                    return (
-                      <PostThumbNail
-                        key={doc.id}
-                        id={doc.id}
-                        data={doc.data}
-                      />
-                    )
-                  }
-                })}
-              </Masonry>
-            </ResponsiveMasonry>}
+            <Grid grid={'quad'}>
+              {placesCollection.map(doc => {
+                if (doc.data.likes.length > 0) {
+                  return (
+                    <PostThumbNail
+                      key={doc.id}
+                      id={doc.id}
+                      data={doc.data}
+                    />
+                  )
+                }
+              })}
+            </Grid>
           </Grid>
 
           {/* Filter Section */}
-          {/* <Grid gap={'small'}>
+          <Grid gap={'small'}>
             <AlignItems spaceBetween>
-              <p>Filter Spots ({placesCollection?.length})</p>
+              <p>Filter Spots</p>
               <Selector
                 placeholder={'都道府県を選択'}
                 value={prefectureInput}
@@ -128,49 +121,35 @@ export default function Home({prefecD,placesData}) {
                 })}
               </Selector>
             </AlignItems>
-            <div>
-              {placesCollection && <ResponsiveMasonry columnsCountBreakPoints={masonaryGrid}>
-                  <Masonry gutter={'0.25em'}>
-                    {placesCollection.map(doc => {
-                      if (doc.data.likes.length > 0) {
-                        return (
-                          <PostThumbNail
-                            key={doc.id}
-                            id={doc.id}
-                            data={doc.data}
-                          />
-                        )
-                      }
-                    })}
-                  </Masonry>
-                </ResponsiveMasonry>
-              }
-            </div>
-          </Grid> */}
+            <Grid grid={'quad'}>
+              {placesCollection?.map(doc => {
+                if (doc.data.prefecture == prefectureInput) {
+                  return(
+                    <PostThumbNail
+                      key={doc.id}
+                      id={doc.id}
+                      data={doc.data}
+                    />
+                  )
+                }
+              })}
+            </Grid>
+          </Grid>
 
           {/* All Locations */}
           <Grid gap={'small'}>
             <p>All Locations</p>
-            {placesCollection && 
-              <ResponsiveMasonry
-                columnsCountBreakPoints={masonaryGrid}
-              >
-                <Masonry
-                  gutter={'0.25em'}
-                  columnsCountBreakPoints={{350: 1, 750: 2, 900: 3, 1200:4,1500:6}}
-                >
-                  {placesCollection.map(doc => {
-                    return (
-                      <PostThumbNail
-                        key={doc.id}
-                        id={doc.id}
-                        data={doc.data}
-                      />
-                    )
-                  })}
-                </Masonry>
-              </ResponsiveMasonry>
-            }
+            <Grid grid={'quad'}>
+              {placesCollection.map(doc => {
+                return (
+                  <PostThumbNail
+                    key={doc.id}
+                    id={doc.id}
+                    data={doc.data}
+                  />
+                )
+              })}
+            </Grid>
           </Grid>
         </Grid>
         <End>

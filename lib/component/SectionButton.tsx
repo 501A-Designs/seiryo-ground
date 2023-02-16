@@ -18,7 +18,7 @@ const SectionButtonStyled = styled('button',{
   backgroundColor:'$gray1',
 
   borderBottom: '1px solid transparent',
-  borderImage: 'linear-gradient(90deg, transparent 0%, $gray3 80%,transparent 100%)',
+  borderImage: 'linear-gradient(90deg, transparent 0%, $gray4 80%,transparent 100%)',
   borderImageSlice: 1,
 
   transition:'$speed1',
