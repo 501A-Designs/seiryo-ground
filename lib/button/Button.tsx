@@ -72,13 +72,12 @@ const ButtonStyled = styled('button',{
         }
       },
       red:{
-        backgroundColor: '$red3',
-        border:'1px solid $red3',
+        backgroundColor: 'transparent',
+        border:'1px solid transparent',
         color:'$red9',
         '&:hover':{
+          backgroundColor:'$grayA3',
           transform:'scale(1.02)',
-          backgroundColor:'$red4',
-          borderColor:'$red4',
           opacity:'0.8',
           color: '$red10',
         }

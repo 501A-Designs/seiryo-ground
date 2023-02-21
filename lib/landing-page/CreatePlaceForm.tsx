@@ -14,7 +14,7 @@ import { costButtonArray, sizeButtonArray, typeButtonArray } from '../button/but
 import FlipThrough from '../component/FlipThrough'
 
 import useSound from 'use-sound';
-import Dialog from '../component/Modal'
+import Dialog from '../component/Dialog'
 import { styled } from '../../stitches.config'
 import Map from '../component/Map'
 import BinaryToggle from '../button/BinaryToggle'
@@ -23,39 +23,6 @@ import Selector from '../component/Selector'
 import { ArrowRightIcon, MagnifyingGlassIcon, PaperPlaneIcon, PlusIcon } from '@radix-ui/react-icons'
 import LoadingBar from 'react-top-loading-bar'
 
-const selectStyle = {
-  option: (provided, state) => ({
-    ...provided,
-    backgroundColor: state.isSelected ? 'black' : 'white',
-    color: state.isSelected ? 'white' : 'black',
-    padding: '0.5em 1em',
-    '&:hover': {
-      cursor: 'pointer',
-      background: 'rgb(244, 244, 244)',
-      color:'black'
-    }
-  }),
-  control: base => ({
-    ...base,
-    borderRadius:'10px',
-    width: '100%',
-    padding:'0.2em',
-    fontSize: '0.8em',
-    outline: 'none',
-    boxShadow: 'none',
-    borderColor: 'rgb(244, 244, 244)',
-    backgroundColor: 'rgb(244, 244, 244)',
-    color: 'rgb(230, 230, 230)',
-    "&:hover": {
-      borderColor: "rgb(230, 230, 230)"
-    }
-  }),
-  singleValue: (provided, state) => {
-    const opacity = state.isDisabled ? 0.5 : 1;
-    const transition = 'opacity 300ms';
-    return { ...provided, opacity, transition };
-  },
-}
 
 export default function CreatePlaceForm(props) {
   const router = useRouter();
@@ -279,7 +246,7 @@ export default function CreatePlaceForm(props) {
                       }}
                     />
                     <Selector
-                      placeholder={'都道府県を選択'}
+                      placeholder={'選択'}
                       value={prefectureInput}
                       onValueChange={setPrefectureInput}
                     >
@@ -317,17 +284,14 @@ export default function CreatePlaceForm(props) {
                 currentSection={section}
               >
                 <SizeSelect
-                  currentState={sizeSelect}
+                  state={sizeSelect}
                 >
                   {sizeButtonArray.map(size=>{
                     return <SizeSelect.Item
-                      name={size}
                       key={size}
-                      currentState={sizeSelect}
-                      onClick={()=> {
-                        select1();
-                        setSizeSelect(size);
-                      }}
+                      name={size}
+                      state={sizeSelect}
+                      onClick={()=> setSizeSelect(size)}
                     />
                   })}
                 </SizeSelect>
@@ -348,26 +312,10 @@ export default function CreatePlaceForm(props) {
                 }}
                 currentSection={section}
               >
-                <BinaryToggle>
-                  <BinaryToggle.Item
-                    currentState={binaryToggle}
-                    selected={binaryToggle === true}
-                    onClick={()=>{
-                      select1();
-                      setBinaryToggle(true)
-                    }}
-                    name={'有'}
-                  />
-                  <BinaryToggle.Item
-                    currentState={binaryToggle}
-                    selected={binaryToggle === false}
-                    onClick={()=>{
-                      select2();
-                      setBinaryToggle(false)
-                    }}
-                    name={'無'}
-                  />
-                </BinaryToggle>
+                <BinaryToggle
+                  state={binaryToggle}
+                  onClick={()=>setBinaryToggle(!binaryToggle)}
+                />
               </FlipThrough>
             }
 
@@ -391,10 +339,7 @@ export default function CreatePlaceForm(props) {
                       return <TypeButton
                         key={color}
                         type={color}
-                        onClick={()=>{
-                          select1();
-                          setTypeInput(color);
-                        }}
+                        onClick={()=>setTypeInput(color)}
                         selectedInput={typeInput}
                       />
                     })}

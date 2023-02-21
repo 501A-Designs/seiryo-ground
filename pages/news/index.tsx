@@ -24,39 +24,24 @@ export async function getStaticProps(){
 }
 
 export default function News({sgPosts}) {
-  const router = useRouter();
-
   return (
     <MainBody>
-      <AlignItems spaceBetween={true} margin={'0.5em 0 0 0'}>
-        <Button
-          color={'transparent'}
-          iconPosition={'left'}
-          icon={<ArrowLeftIcon/>}
-          onClick={()=> {router.back()}}
-        >
-          戻る
-        </Button>
-      </AlignItems>
-      <Grid
-        grid={'oneTwo'}
+      <AlignItems
+        justifyContent={'center'}
+        flexDirection={'column'}
       >
-        <Grid>
-          <h1>清涼 NEWS</h1>
-          <p>清涼広場に関する新情報を徹底的に更新していきたいと思います。作成者は501Aです。</p>
-        </Grid>
-        <Grid>
-          {sgPosts.map(data =>{
-            return(
-              <NewsThumbnail
-                key={data.sys.id}
-                slug={data.fields.slug}
-                title={data.fields.title}
-                date={data.fields.date.split('T')[0]}
-              />
-            )
-          })}
-        </Grid>
+        <h3>SEIRYO NEWS</h3>
+      </AlignItems>
+      <Grid>
+        {sgPosts.map(data =>(
+            <NewsThumbnail
+              key={data.sys.id}
+              slug={data.fields.slug}
+              title={data.fields.title}
+              date={data.fields.date.split('T')[0]}
+            />
+          )
+        )}
       </Grid>
     </MainBody>
   )

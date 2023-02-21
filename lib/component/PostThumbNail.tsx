@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useState } from 'react'
 import AlignItems from '../alignment/AlignItems';
 import TypeBadge from '../TypeBadge';
 import { useCollection } from 'react-firebase-hooks/firestore';
@@ -18,12 +18,8 @@ const PostThumbNailStyled = styled('div', {
   borderRadius: '$r2',
   transition: '$speed1',
   '&:hover':{
-    background: 'linear-gradient(45deg,$gray1 0%,$gray3 50%,$gray1 100%)',
-    backgroundSize: '200% 200%',
-
     zIndex: '100',
-    animation:`${gradient} linear 0.3s`,
-    border:'1px solid $gray3',
+    border:'1px solid $gray5',
     boxShadow:'0 0 10px $gray1'
   },
   'h5':{
@@ -33,23 +29,33 @@ const PostThumbNailStyled = styled('div', {
   'p':{
     fontSize:'$9',
     margin:'0',
+  },
+  variants:{
+    loading:{
+      true:{
+        background: 'linear-gradient(45deg,$gray1 0%,$gray5 50%,$gray1 100%)',
+        backgroundSize: '200% 200%',
+        animation:`${gradient} linear 0.3s infinite`,
+      }
+    }
   }
 })
 
 export default function PostThumbNail(props) {
   const router = useRouter();
-  const [reviewsCollection] = useCollection(collection(db, `places/${props.id}/reviews/`));
-
-  // Sound
-  const [action1] = useSound('/sound/action-1-sg.mp3',{playbackRate:1.1});
+  // const [reviewsCollection] = useCollection(collection(db, `places/${props.id}/reviews/`));
 
   const data = props?.data;
 
+  const [loadingState, setLoadingState] = useState(false);
+
   return (
     <PostThumbNailStyled
+      key={props.key}
+      loading={loadingState}
       onClick={()=> {
+        setLoadingState(true)
         router.push(`/place/${props.id}/`);
-        action1();
       }}
     >
       <AlignItems>
@@ -60,9 +66,9 @@ export default function PostThumbNail(props) {
         <Grid gap={'extraSmall'}>
           <h5>{data?.name}</h5>
           <p>
-            {reviewsCollection?.docs.length > 0 &&
+            {/* {reviewsCollection?.docs.length > 0 &&
               <>{reviewsCollection.docs.length + '_'}review | </>
-            }
+            } */}
             {data?.likes?.length + '_'}heart
           </p>
         </Grid>

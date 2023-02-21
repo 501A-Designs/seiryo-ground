@@ -44,6 +44,7 @@ export default function Home({prefecD,placesData}) {
   const userData = userContextData?.userData;
 
 
+
   useEffect(() => {
     if (
       user &&
@@ -55,6 +56,19 @@ export default function Home({prefecD,placesData}) {
       }
     }
   }, [user])
+
+  const [filteredPlaceCollection,setFilteredPlaceCollection] = useState([]);
+  useEffect(() => {
+    let filteredArray:any = [];
+    placesCollection?.map(doc => {
+      if (doc.data.prefecture == prefectureInput) {
+        filteredArray.push(doc)
+      }
+    })
+    setFilteredPlaceCollection(filteredArray)
+  }, [prefectureInput])
+  
+
 
   return (
     <>
@@ -122,17 +136,15 @@ export default function Home({prefecD,placesData}) {
               </Selector>
             </AlignItems>
             <Grid grid={'quad'}>
-              {placesCollection?.map(doc => {
-                if (doc.data.prefecture == prefectureInput) {
-                  return(
-                    <PostThumbNail
-                      key={doc.id}
-                      id={doc.id}
-                      data={doc.data}
-                    />
-                  )
-                }
-              })}
+              {filteredPlaceCollection?.length > 0 ? filteredPlaceCollection?.map(doc => {
+                return (
+                  <PostThumbNail
+                    key={doc.id}
+                    id={doc.id}
+                    data={doc.data}
+                  />
+                )
+              }):<h2>現在ありません。</h2>}
             </Grid>
           </Grid>
 

@@ -37,12 +37,12 @@ import BinaryToggle from '../../lib/button/BinaryToggle'
 import SizeSelect from '../../lib/button/SizeSelect'
 import Dropdown from '../../lib/component/Dropdown'
 import { popOut } from '../../lib/ux/keyframes'
-import Modal from '../../lib/component/Modal'
 import { jsonParse } from '../../lib/util/jsonParse'
 import { UserContext } from '../../lib/util/UserContext'
 import { ArrowLeftIcon, AspectRatioIcon, CardStackIcon, CheckIcon, Cross1Icon, CrumpledPaperIcon, ExternalLinkIcon, FaceIcon, HeartFilledIcon, HeartIcon, HomeIcon, LockClosedIcon, MobileIcon, Pencil1Icon, PlusIcon, ReloadIcon, UpdateIcon } from '@radix-ui/react-icons'
 import Margin from '../../lib/alignment/Margin'
 import Header from '../../lib/component/Header'
+import Dialog from '../../lib/component/Dialog'
 
 export default function PlaceName({
   locationDataSnap,
@@ -58,24 +58,19 @@ export default function PlaceName({
 
   // Sound
   const [tap1] = useSound('/sound/tap-1-sg.mp3');
-  const [tap2] = useSound('/sound/tap-2-sg.mp3');
+  // const [tap2] = useSound('/sound/tap-2-sg.mp3');
   const [tap3] = useSound('/sound/tap-3-sg.mp3');
   const [select1] = useSound('/sound/select-1-sg.mp3');
   const [select2] = useSound('/sound/select-2-sg.mp3');
-  const [action1] = useSound('/sound/action-1-sg.mp3');
+  // const [action1] = useSound('/sound/action-1-sg.mp3');
   const [load1] = useSound('/sound/load-1-sg.mp3');
   const [celebrate1] = useSound('/sound/celebrate-1-sg.mp3');
   const [celebrate2] = useSound('/sound/celebrate-2-sg.mp3');
 
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-
-  const [openCreateReview, setOpenCreateReview] = useState(false);
   const [hasReviewed, setHasReviewed] = useState(false);
 
-  const [placeData, setPlaceData] = useState(locationDataSnap);
+  const [placeData] = useState(locationDataSnap);
   const [reviewsCollection] = useState(reviewsData);
-
-  // const [currentUserLevel, setCurrentUserLevel] = useState('0')
   
   const [averageOfDateRating, setAverageOfDateRating] = useState(0);
   const [averageOfAccessRating, setAverageOfAccessRating] = useState(0);
@@ -83,26 +78,15 @@ export default function PlaceName({
   
   const [liked, setLiked] = useState(false);
 
-  const [placeInput, setPlaceInput] = useState('');
-  const [locationInput, setLocationInput] = useState('');
-  const [descriptionInput, setDescriptionInput] = useState('');
-  const [officialSiteInput, setOfficialSiteInput] = useState('');
+  const [placeInput, setPlaceInput] = useState(placeData.name ? placeData.name:'');
+  const [locationInput, setLocationInput] = useState(placeData.location ? placeData.location:'');
+  const [descriptionInput, setDescriptionInput] = useState(placeData.description ? placeData.description:'');
+  const [officialSiteInput, setOfficialSiteInput] = useState(placeData.officialSite ? placeData.officialSite:'');
 
-  const [sizeSelect, setSizeSelect] = useState('medium');
-  const [binaryToggle, setBinaryToggle] = useState(false)
-  const [typeInput, setTypeInput] = useState('');
-  const [costCheckBox, setCostCheckBox] = useState(['free']);
-
-  useEffect(() => {   
-    setPlaceInput(placeData.name);
-    setLocationInput(placeData.location);
-    setDescriptionInput(placeData.description);
-    setOfficialSiteInput(placeData.officialSite);
-    setSizeSelect(placeData.size);
-    setBinaryToggle(placeData.toilet);
-    setTypeInput(placeData.type);
-    setCostCheckBox(placeData.cost);
-  },[modalIsOpen]);
+  const [sizeSelect, setSizeSelect] = useState(placeData.size ? placeData.size:'medium');
+  const [binaryToggle, setBinaryToggle] = useState(placeData.toilet ? placeData.toilet:false)
+  const [typeInput, setTypeInput] = useState(placeData.type ? placeData.type:'');
+  const [costCheckBox, setCostCheckBox] = useState(placeData.cost ? placeData.cost:['free']);
 
   useEffect(()=>{
     placeData.likes.map((uid) => {
@@ -110,9 +94,6 @@ export default function PlaceName({
         setLiked(true);
       }
     });
-  },[user]);
-
-  useEffect(()=>{
     reviewsCollection?.forEach((doc) => {
       if (user?.uid === doc.id) {
         setHasReviewed(true);
@@ -124,10 +105,9 @@ export default function PlaceName({
       }
     });
     updateAverageRatings();
-  },[user])
+  },[user]);
 
   const editThisPlace = async() => {
-    setModalIsOpen(false);
     load1();
     await updateDoc(doc(db, `places/${placeId}`), {
       name: placeInput,
@@ -226,16 +206,6 @@ export default function PlaceName({
     setLiked(false);
   }
 
-  const closeCreateReviewContainer = () =>{
-    setOpenCreateReview(false);
-    tap1();
-  }
-
-  const openCreateReviewContainer = () =>{
-    setOpenCreateReview(true);
-    tap1();
-  }
-
   return (
     <>
       <Head>
@@ -259,16 +229,12 @@ export default function PlaceName({
               type={'header'}
               title={`Level ${userData?.data().level} ユーザーとして編集可能`}
             >
-              <Modal
+              <Dialog
                 title={'編集'}
                 size={'large'}
                 trigger={
                   <Button
                     styleType={'black'}
-                    onClick={()=> {
-                      action1();
-                      setModalIsOpen(true);
-                    }}
                     icon={<Pencil1Icon/>}
                   >
                     このページを編集
@@ -331,8 +297,8 @@ export default function PlaceName({
                             name={'種類'}
                           >
                             <Grid gap={'extraSmall'}>
-                              {typeButtonArray.map(color =>{
-                                return <TypeButton
+                              {typeButtonArray.map(color =>(
+                                <TypeButton
                                   key={color}
                                   type={color}
                                   onClick={()=>{
@@ -341,7 +307,7 @@ export default function PlaceName({
                                   }}
                                   selectedInput={typeInput}
                                 />
-                              })}
+                              ))}
                             </Grid>
                           </Dropdown.Item>
                         }
@@ -352,25 +318,23 @@ export default function PlaceName({
                               name={'値段'}
                             >
                               <Grid gap={'extraSmall'}>
-                                {costButtonArray.map(name =>{
-                                  return(
-                                    <CheckBox
-                                      key={name}
-                                      checked={costCheckBox.some(element => element === name)}
-                                      name={name}
-                                      onClick={()=>
-                                        {
-                                          tap1();
-                                          costCheckBox.some(element => element === name) ?
-                                          setCostCheckBox(prev => prev.filter(element => element !== name )):
-                                          setCostCheckBox([...costCheckBox, name]);
-                                        }
+                                {costButtonArray.map(name =>(
+                                  <CheckBox
+                                    key={name}
+                                    checked={costCheckBox.some(element => element === name)}
+                                    name={name}
+                                    onClick={()=>
+                                      {
+                                        tap1();
+                                        costCheckBox.some(element => element === name) ?
+                                        setCostCheckBox(prev => prev.filter(element => element !== name )):
+                                        setCostCheckBox([...costCheckBox, name]);
                                       }
-                                    >
-                                      {name}
-                                    </CheckBox>
-                                  )
-                                })}
+                                    }
+                                  >
+                                    {name}
+                                  </CheckBox>
+                                ))}
                               </Grid>
                             </Dropdown.Item>
                             <Dropdown.Item
@@ -381,8 +345,8 @@ export default function PlaceName({
                                 hide
                                 currentState={sizeSelect}
                               >
-                                {sizeButtonArray.map(size=>{
-                                  return <SizeSelect.Item
+                                {sizeButtonArray.map(size=> (
+                                  <SizeSelect.Item
                                     name={size}
                                     key={size}
                                     currentState={sizeSelect}
@@ -391,7 +355,7 @@ export default function PlaceName({
                                       setSizeSelect(size);
                                     }}
                                   />
-                                })}
+                                ))}
                               </SizeSelect>
                             </Dropdown.Item>
                           </>
@@ -442,15 +406,15 @@ export default function PlaceName({
                             setLocationInput(e.target.value)
                           }}
                         />
-                        <Map
+                        {/* <Map
                           location={locationInput}
-                        />
+                        /> */}
                       </>
                       }
                     </Grid>
                   </Grid>
                 }
-              </Modal>
+              </Dialog>
             </Header>
           }
         </>:
@@ -493,92 +457,6 @@ export default function PlaceName({
             </AlignItems>
             <p>{placeData.description}</p>
             <Grid gap={'small'}>
-              {openCreateReview && 
-                <CreateContainer>
-                  <Grid gap={'extraSmall'}>
-                    <h3>{hasReviewed ? '内容を更新':'新規レビュー'}</h3>
-                    <Input
-                      value={titleRatingInput}
-                      onChange={(e)=> {
-                        tap3();
-                        setTitleRatingInput(e.target.value)
-                      }}
-                      placeholder={'レビュータイトル'}
-                    />
-                    <Grid grid={'tri'} gap={'extraSmall'}>
-                      <DisplayRatingInput
-                        value={dateRatingInput}
-                        onChange={(e)=> {
-                          tap3();
-                          setDateRatingInput(e.target.value)
-                        }}
-                        maxValue={10}
-                        minValue={0}
-                        placeholder={'デートスポット適正'}
-                      />
-                      <DisplayRatingInput
-                        value={accessRatingInput}
-                        onChange={(e)=> {
-                          tap3();
-                          setAccessRatingInput(e.target.value)
-                        }}
-                        maxValue={10}
-                        minValue={0}
-                        placeholder={'最寄駅からのアクセス'}
-                      />
-                      <DisplayRatingInput
-                        value={managementRatingInput}
-                        onChange={(e)=> {
-                          tap3();
-                          setManagementRatingInput(e.target.value)
-                        }}
-                        maxValue={10}
-                        minValue={0}
-                        placeholder={'設備管理の状況'}
-                      />
-                    </Grid>
-                    <TextArea
-                      value={descriptionRatingInput}
-                      onChange={(e)=> {
-                        tap3();
-                        setDescriptionRatingInput(e.target.value)
-                      }}
-                      placeholder={'行って感じた事、評価項目に写らない場所の良さ等。'}
-                    />
-                    {titleRatingInput && descriptionRatingInput &&
-                      <AlignItems
-                        justifyContent={'center'}
-                        margin={'1em 0 0 0'}
-                      >
-                        {hasReviewed ?
-                          <Button
-                            styleType={'black'}
-                            icon={<UpdateIcon/>}
-                            onClick={()=>{
-                              updateReview();
-                              setOpenCreateReview(false);
-                            }}
-                          >
-                            レビューの内容を更新
-                          </Button>:
-                          <Button
-                            styleType={'black'}
-                            icon={<CheckIcon/>}
-                            onClick={()=>{
-                              publishReview();
-                              setOpenCreateReview(false);
-                            }}
-                          >
-                            レビューを公開
-                          </Button>
-                        }
-                      </AlignItems>
-                    }
-                  </Grid>
-                </CreateContainer>
-              }
-
-
               {reviewsData?.map((review) =>(
                   <Review
                     key={review.id}
@@ -671,8 +549,8 @@ export default function PlaceName({
                 <Grid
                   gap={'small'}
                 >
-                  {placeData.cost.map(name =>{
-                    return <AlignItems gap={'0.5em'}
+                  {placeData.cost.map(name =>(
+                    <AlignItems gap={'0.5em'}
                       key={name}
                     >
                       {name === 'free' && 
@@ -700,7 +578,7 @@ export default function PlaceName({
                         </>
                       }
                     </AlignItems>
-                  })
+                  ))
                   }
                 </Grid>
               </Grid>
@@ -727,17 +605,92 @@ export default function PlaceName({
             />
             {user &&
               <>
-                {/* CREATE REVIEW */}
-                <Button
-                  styleType={'transparent'}
-                  size={'small'}
-                  icon={openCreateReview ? <Cross1Icon/>:<>{hasReviewed ? <ReloadIcon/>:<PlusIcon/>}</>}
-                  title={openCreateReview ? '閉じる':<>{hasReviewed ? '書いたレビューを編集':'レビューを書く'}</>}
-                  onClick={()=>{openCreateReview ? 
-                    closeCreateReviewContainer():
-                    openCreateReviewContainer()
-                  }}
-                />
+                <Dialog
+                  title={hasReviewed ? '内容を更新':'新規レビュー'}
+                  size={'medium'}
+                  trigger={
+                    <Button
+                      styleType={'transparent'}
+                      size={'small'}
+                      icon={hasReviewed ? <ReloadIcon/>:<PlusIcon/>}
+                      title={hasReviewed ? '書いたレビューを編集':'レビューを書く'}
+                    />
+                  }
+                >
+                  <Grid gap={'extraSmall'}>
+                    <Input
+                      value={titleRatingInput}
+                      onChange={(e)=> {
+                        tap3();
+                        setTitleRatingInput(e.target.value)
+                      }}
+                      placeholder={'レビュータイトル'}
+                    />
+                    <Grid grid={'tri'} gap={'extraSmall'}>
+                      <DisplayRatingInput
+                        value={dateRatingInput}
+                        onChange={(e)=> {
+                          tap3();
+                          setDateRatingInput(e.target.value)
+                        }}
+                        maxValue={10}
+                        minValue={0}
+                        placeholder={'デートスポット適正'}
+                      />
+                      <DisplayRatingInput
+                        value={accessRatingInput}
+                        onChange={(e)=> {
+                          tap3();
+                          setAccessRatingInput(e.target.value)
+                        }}
+                        maxValue={10}
+                        minValue={0}
+                        placeholder={'最寄駅からのアクセス'}
+                      />
+                      <DisplayRatingInput
+                        value={managementRatingInput}
+                        onChange={(e)=> {
+                          tap3();
+                          setManagementRatingInput(e.target.value)
+                        }}
+                        maxValue={10}
+                        minValue={0}
+                        placeholder={'設備管理の状況'}
+                      />
+                    </Grid>
+                    <TextArea
+                      value={descriptionRatingInput}
+                      onChange={(e)=> {
+                        tap3();
+                        setDescriptionRatingInput(e.target.value)
+                      }}
+                      placeholder={'行って感じた事、評価項目に写らない場所の良さ等。'}
+                    />
+                    {titleRatingInput && descriptionRatingInput &&
+                      <AlignItems
+                        justifyContent={'center'}
+                        margin={'1em 0 0 0'}
+                      >
+                        {hasReviewed ?
+                          <Button
+                            styleType={'black'}
+                            icon={<UpdateIcon/>}
+                            onClick={()=>updateReview()}
+                          >
+                            レビューの内容を更新
+                          </Button>:
+                          <Button
+                            styleType={'black'}
+                            icon={<CheckIcon/>}
+                            onClick={()=>publishReview()}
+                          >
+                            レビューを公開
+                          </Button>
+                        }
+                      </AlignItems>
+                    }
+                  </Grid>
+                </Dialog>
 
                 <Button
                   size={'small'}

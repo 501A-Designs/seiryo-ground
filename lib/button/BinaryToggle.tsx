@@ -1,8 +1,9 @@
 import React from 'react'
 import { styled } from '../../stitches.config'
 import { spin } from '../ux/keyframes'
+import useSound from 'use-sound'
 
-const BinaryToggleItemStyled = styled('div',{
+const BinaryToggleItemStyled = styled('button',{
   backgroundColor: 'black',
   borderRadius: '$round',
   display:'flex',
@@ -16,7 +17,7 @@ const BinaryToggleItemStyled = styled('div',{
       true:{
         color: '$gray1',
         backgroundColor:'$gray12',
-        // background: 'linear-gradient($gray11,$gray12)',
+        userSelect:'none',
         borderColor:'$gray5',
         boxShadow: '$shadow1',
         width: '95px',
@@ -49,25 +50,46 @@ const BinaryToggleStyled = styled('div',{
   gap: '$small',
   width: '100%',
   height: '100%',
-  minHeight: '103px'
+  minHeight: '103px',
 })
 
-const BinaryToggleItem = (props:any)=> {
-  return (
+const BinaryToggleItem = (toggleItemProps:any)=> {
+  const [select1] = useSound('/sound/select-1-sg.mp3',{playbackRate:1.1});
+  const [select2] = useSound('/sound/select-2-sg.mp3',{playbackRate:1.1});
+
+  return(
     <BinaryToggleItemStyled
-      selected={props.selected}
-      onClick={props.onClick}
+      selected={toggleItemProps.selected}
+      onMouseDown={()=>{
+        toggleItemProps.inputValue ? 
+        !toggleItemProps.selected && select1():
+        !toggleItemProps.selected && select2()
+      }}
+      onClick={toggleItemProps.onClick}
     >
-      {props.name}
+      {
+        toggleItemProps.inputValue ? 
+        '有':
+        '無'
+      }
     </BinaryToggleItemStyled>
   )
-}
+};
 
-BinaryToggle.Item = BinaryToggleItem;
+// BinaryToggle.Item = BinaryToggleItem;
 export default function BinaryToggle(props) {
   return (
     <BinaryToggleStyled>
-      {props.children}
+      <BinaryToggleItem
+        selected={props.state}
+        onClick={!props.state ? props.onClick:null}
+        inputValue={true}
+      />
+      <BinaryToggleItem
+        selected={!props.state}
+        onClick={props.state ? props.onClick:null}
+        inputValue={false}
+      />
     </BinaryToggleStyled>
   )
 }

@@ -10,7 +10,7 @@ const WelcomeHeaderStyled = styled('section', {
   marginTop:'2em',
   'h1':{
     fontSize:'1.5em',
-    margin: '0',
+    margin: '0 0 0.25em 0',
     textShadow:'$shadow1',
     color:'$gray12'
   },
@@ -23,10 +23,7 @@ const WelcomeHeaderStyled = styled('section', {
 export default function WelcomeHeader() {
   return (
     <WelcomeHeaderStyled>
-      <h1>
-        SEIRYO GROUND | 清涼広場
-      </h1>
-      <p>Find places where you can truly relax.</p>
+      <h1>SEIRYO GROUND</h1>
       <p>Produced By <Link href="https://twitter.com/501A_Designs">@501A_Designs</Link></p>
       <p>Photos By <Link href="https://twitter.com/EyesObsolete">@EyesObsolete</Link></p>
     </WelcomeHeaderStyled>

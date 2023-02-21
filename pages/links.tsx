@@ -9,10 +9,10 @@ export default function Links() {
       <p>本サイトのリンク集</p>
       <ul>
         <li>
-          <Link href={'/design'}>About</Link> - SEIRYO GROUNDについて
+          <Link href={'/about'}>About</Link> - SEIRYO GROUNDについて
         </li>
         <li>
-          <Link href={'/design'}>SEIRYO News</Link> - ニュースページ
+          <Link href={'/news'}>SEIRYO News</Link> - ニュースページ
         </li>
         <li>
           <Link href={'/design'}>SEIRYO Design</Link> - デザインについて
@@ -21,10 +21,10 @@ export default function Links() {
           <Link href={'/tos'}>利用規約</Link> - 本サイトを使用する利用する上でのルール
         </li>
         <li>
-          <Link href={'/tos'}>SEIRYO Card</Link> - カード・レベルについて
+          <Link href={'/profile'}>SEIRYO Card</Link> - カード・レベルについて
         </li>
         <li>
-          <Link href={'/tos'}>Profile</Link> - ユーザー様の情報・カードを閲覧
+          <Link href={'/profile'}>Profile</Link> - ユーザー様の情報・カードを閲覧
         </li>
       </ul>
     </Margin>

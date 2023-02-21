@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../../firebase';
 import Button from '../button/Button';
-import Modal from './Modal';
+import Modal from './Dialog';
 import SectionButton from './SectionButton';
 
 import { styled } from '../../stitches.config';

@@ -2,11 +2,15 @@
 import React from 'react'
 import { styled } from '../../stitches.config';
 import AlignItems from '../alignment/AlignItems';
+import useSound from 'use-sound';
 
 export default function TypeButton(props) {
+  const [select1] = useSound('/sound/select-1-sg.mp3',{playbackRate:1.1});
+
   return (
     <TypeButtonStyled
       selected={props.selectedInput === props.type}
+      onMouseDown={()=> select1()}
       onClick={props.onClick}
     >
       <AlignItems gap={'0.7em'}>

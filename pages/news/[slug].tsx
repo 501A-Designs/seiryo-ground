@@ -46,15 +46,13 @@ export default function IndivisualNewsArticle({newsDetails}) {
 
   return (
     <MainBody>
-      <AlignItems spaceBetween={true} margin={'0.5em 0 0 0'}>
-        <Button
-          color={'transparent'}
-          iconPosition={'left'}
-          onClick={()=> {router.push('/news/')}}
-        >
-          ニュースページに戻る
-        </Button>
-      </AlignItems>
+      <Button
+        color={'transparent'}
+        iconPosition={'left'}
+        onClick={()=> {router.push('/news/')}}
+      >
+        ニュースページに戻る
+      </Button>
       <Grid>
         <h1>{newsDetailsData.title}</h1>
         <time>{newsDetailsData.date}</time>

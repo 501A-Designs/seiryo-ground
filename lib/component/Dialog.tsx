@@ -63,13 +63,16 @@ const StyledContent = styled(Dialog.Content, {
       large:{
         maxWidth: '800px',
       },
-      standard:{
-        maxWidth: '450px',
+      medium:{
+        maxWidth: '600px',
+      },
+      small:{
+        maxWidth: '400px',
       }
     },
   },
   defaultVariants:{
-    size:'standard'
+    size:'small'
   }
 });
 
@@ -97,7 +100,7 @@ const StyledDescription = styled(Dialog.Description, {
   lineHeight: 1.5,
 });
 
-export default function Modal(props){
+export default function (props){
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>

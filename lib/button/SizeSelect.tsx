@@ -2,6 +2,8 @@ import React from 'react'
 import { styled } from '../../stitches.config'
 import Grid from '../alignment/Grid'
 import Container from '../component/Container'
+import useSound from 'use-sound'
+import AlignItems from '../alignment/AlignItems'
 
 const SizeSelectItemStyled = styled('div',{
   cursor: 'pointer',
@@ -39,10 +41,13 @@ const SizeSelectItemStyled = styled('div',{
 })
 
 const SizeSelectItem = (props)=> {
+  const [select1] = useSound('/sound/select-1-sg.mp3',{playbackRate:1.1});
+
   return (
     <SizeSelectItemStyled
       key={props.key}
-      selected={props.name === props.currentState}
+      selected={props.name == props.state}
+      onMouseDown={()=> props.name != props.state ? select1():null}
       onClick={props.onClick}
     >
       {props.name === 'small' && '小'}
@@ -55,50 +60,47 @@ const SizeSelectItem = (props)=> {
 const SizeSelectStyled = styled('section',{
   display: 'flex',
   gap:'$extraSmall',
+  maxWidth:'300px'
 })
 
 SizeSelect.Item = SizeSelectItem;
 export default function SizeSelect(props) {
   return (
-    <Grid gap={'extraSmall'}>
-      <SizeSelectStyled>
+    <Grid>
+      <AlignItems
+        justifyContent={'center'}
+        flexDirection={'column'}
+      >
+        {!props.hide &&
+          <>
+            {props.state === 'small' &&
+              <>
+                <h4>~20m</h4>
+                <p>
+                  小さい公園・カフェ
+                </p>
+              </>
+            }
+            {props.state === 'medium' &&
+              <>
+                <h4>20~100m</h4>
+                <p>大きめな公園・建物</p>
+              </>
+            }
+            {props.state === 'large' &&
+              <>
+                <h4>100m~</h4>
+                <p>
+                  島・海・大きい建物
+                </p>
+              </>
+            }
+          </>
+        }
+      </AlignItems>
+      <SizeSelectStyled css={props.css}>
         {props.children}
       </SizeSelectStyled>
-      {!props.hide &&
-        <Grid>
-          <Container type="standard" height={'fullHeight'}>
-            <Grid>
-              {props.currentState === 'small' &&
-                <>
-                  <h4>~20m</h4>
-                  <ul>
-                    <li>小さい公園</li>
-                    <li>カフェ</li>
-                  </ul>
-                </>
-              }
-              {props.currentState === 'medium' &&
-                <>
-                  <h4>20~100m</h4>
-                  <ul>
-                    <li>大きめな公園</li>
-                    <li>建物</li>
-                  </ul>
-                </>
-              }
-              {props.currentState === 'large' &&
-                <>
-                  <h4>100m~</h4>
-                  <ul>
-                    <li>島・海</li>
-                    <li>大きい建物</li>
-                  </ul>
-                </>
-              }
-            </Grid>
-          </Container>
-        </Grid>
-      }
     </Grid>
   )
 }

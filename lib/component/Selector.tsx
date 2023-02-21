@@ -46,11 +46,13 @@ const SelectTrigger = styled(Select.SelectTrigger, {
   lineHeight: 1,
   minHeight: 35,
   gap: 5,
-  backgroundColor: "$gray2",
-  color: "$gray12",
-  border:"1px solid $gray4",
+  // backgroundColor: "$gray2",
+  border:"1px solid transparent",
   "&:hover": {
-    backgroundColor: "$gray4",
+    cursor:"pointer",
+    borderColor:"$gray4",
+    color: "$gray12",
+    backgroundColor: "$gray1",
   },
   "&[data-placeholder]": { color: "$gray11" },
 });
