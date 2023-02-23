@@ -5,19 +5,16 @@ import Container from '../lib/component/Container'
 // import AlignItems from '../lib/alignment/AlignItems'
 // import mountainGreen1 from '../public/concept/sg-mountain.png'
 // import mountainGreen2 from '../public/concept/sg-mountain2.png'
-// import openPicture from '../public/concept/open-nakameguro.jpg'
 
-// import Image from 'next/image'
 import BinaryToggle from '../lib/button/BinaryToggle'
 import Grid from '../lib/alignment/Grid';
 import SizeSelect from '../lib/button/SizeSelect';
 import { sizeButtonArray, typeButtonArray } from '../lib/button/buttonData';
 import TypeButton from '../lib/button/TypeButton';
-import Selector from '../lib/component/Selector';
 import AlignItems from '../lib/alignment/AlignItems';
 
 
-export default function design() {
+export default function Design() {
   const [binaryToggle, setBinaryToggle] = useState(true);
   const [sizeSelect, setSizeSelect] = useState('medium');
   const [typeInput, setTypeInput] = useState('green');
@@ -73,9 +70,9 @@ export default function design() {
         </Container>
       </Grid>
       <p>
-        フォントにも拘りました。長く悩んだ結果、最終的には「Clash Display」というフォントを使用することにしました。これに加え、pタグは他のテキストより薄い灰色にし、ヘッダータグは全て黒に設定しました。これに加え、フォントウェイトもヘッダー以外全て通常400にし、ヘッダーは少し太字になる500にしました。
+        
       </p>
-      
+
       <h2>Headings</h2>
       <p>
         フォントにも拘りました。長く悩んだ結果、最終的には「Clash Display」というフォントを使用することにしました。これに加え、pタグは他のテキストより薄い灰色にし、ヘッダータグは全て黒に設定しました。これに加え、フォントウェイトもヘッダー以外全て通常400にし、ヘッダーは少し太字になる500にしました。

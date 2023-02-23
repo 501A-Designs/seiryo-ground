@@ -1,10 +1,64 @@
 import React from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { keyframes, styled } from '@stitches/react';
-import Button from '../button/Button';
-import { topSlideIn } from '../ux/keyframes';
-import AlignItems from '../alignment/AlignItems';
+import Button from '../../button/Button';
+import { topSlideIn } from '../../ux/keyframes';
+import AlignItems from '../../alignment/AlignItems';
 import { Cross1Icon } from '@radix-ui/react-icons';
+
+function Content({ children, ...props }) {
+  return (
+    <Dialog.Portal>
+      <StyledOverlay />
+      <StyledContent {...props}>{children}</StyledContent>
+    </Dialog.Portal>
+  );
+}
+
+export default function RadixDialog(props){
+  return (
+    <Dialog.Root>
+      <Dialog.Trigger asChild>
+        {props.trigger}
+      </Dialog.Trigger>
+      <Content
+        size={props.size}
+      >
+        <AlignItems
+          justifyContent={'space-between'}
+          margin={'0 0 1em 0'}
+        >
+          {props.title ? 
+            <StyledTitle>
+              {props.title}
+            </StyledTitle>:
+            props.topLeftComponent
+          }
+          {props.topCenterComponent}
+          <Dialog.Close asChild>
+            <Button
+              backTapSound
+              size={'small'}
+              aria-label="Close"
+              icon={<Cross1Icon/>}
+            />
+          </Dialog.Close>
+        </AlignItems>
+        {props.banner &&
+          <DialogBannerStyled>
+            {props.banner}
+          </DialogBannerStyled>
+        }
+        {props.description &&
+          <StyledDescription>
+            {props.description}
+          </StyledDescription>
+        }
+        {props.children}
+      </Content>
+    </Dialog.Root>
+  )
+};
 
 
 const popOutDialog = keyframes({
@@ -80,15 +134,6 @@ const StyledContent = styled(Dialog.Content, {
   }
 });
 
-function Content({ children, ...props }) {
-  return (
-    <Dialog.Portal>
-      <StyledOverlay />
-      <StyledContent {...props}>{children}</StyledContent>
-    </Dialog.Portal>
-  );
-}
-
 const StyledTitle = styled(Dialog.Title, {
   fontSize: 13,
   userSelect:'none',
@@ -103,48 +148,3 @@ const StyledDescription = styled(Dialog.Description, {
   fontSize: 15,
   lineHeight: 1.5,
 });
-
-export default function (props){
-  return (
-    <Dialog.Root>
-      <Dialog.Trigger asChild>
-        {props.trigger}
-      </Dialog.Trigger>
-      <Content
-        size={props.size}
-      >
-        <AlignItems
-          justifyContent={'space-between'}
-          margin={'0 0 1em 0'}
-        >
-          {props.title ? 
-            <StyledTitle>
-              {props.title}
-            </StyledTitle>:
-            props.topLeftComponent
-          }
-          {props.topCenterComponent}
-          <Dialog.Close asChild>
-            <Button
-              backTapSound
-              size={'small'}
-              aria-label="Close"
-              icon={<Cross1Icon/>}
-            />
-          </Dialog.Close>
-        </AlignItems>
-        {props.banner &&
-          <DialogBannerStyled>
-            {props.banner}
-          </DialogBannerStyled>
-        }
-        {props.description &&
-          <StyledDescription>
-            {props.description}
-          </StyledDescription>
-        }
-        {props.children}
-      </Content>
-    </Dialog.Root>
-  )
-};

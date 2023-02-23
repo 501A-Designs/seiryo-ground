@@ -1,13 +1,13 @@
 import React, { forwardRef } from 'react';
 import * as Accordion from '@radix-ui/react-accordion';
-import { styled } from '../../stitches.config';
+import { styled } from '../../../stitches.config';
 import { keyframes } from '@stitches/react';
 
-const DropdownRootStyled = styled(Accordion.Root, {
+const AccordionRootStyled = styled(Accordion.Root, {
   borderRadius: '$r2',
 });
 
-const DropdownItemStyled = styled(Accordion.Item, {
+const AccordionItemStyled = styled(Accordion.Item, {
   cursor:'pointer',
   overflow: 'hidden',
   marginTop: 2,
@@ -57,7 +57,7 @@ const AccordionTriggerStyled = styled(Accordion.Trigger, {
   },
 });
 
-const DropdownTrigger = forwardRef(
+const AccordionTrigger = forwardRef(
   ({ children, ...props }:any, forwardedRef:any) => (
   <AccordionHeaderStyled>
     <AccordionTriggerStyled
@@ -68,7 +68,7 @@ const DropdownTrigger = forwardRef(
     </AccordionTriggerStyled>
   </AccordionHeaderStyled>
 ));
-DropdownTrigger.displayName = "DropdownTrigger";
+AccordionTrigger.displayName = "AccordionTrigger";
 
 const slideDown = keyframes({
   from: { height: 0 },
@@ -98,7 +98,7 @@ const AccordionContentTextStyled = styled('div', {
   padding: '$medium',
 });
 
-const DropdownContent = forwardRef(({ children, ...props }:any, forwardedRef) => (
+const AccordionContent = forwardRef(({ children, ...props }:any, forwardedRef) => (
   <AccordionContentStyled
     {...props}
     ref={forwardedRef}
@@ -106,30 +106,30 @@ const DropdownContent = forwardRef(({ children, ...props }:any, forwardedRef) =>
     <AccordionContentTextStyled>{children}</AccordionContentTextStyled>
   </AccordionContentStyled>
 ));
-DropdownContent.displayName = "DropdownContent";
+AccordionContent.displayName = "AccordionContent";
 
-function DropdownItem(props) {
+function AccordionItem(props) {
   return(
-    <DropdownItemStyled value={`item-${props.number}`}>
-      <DropdownTrigger>
+    <AccordionItemStyled value={`item-${props.number}`}>
+      <AccordionTrigger>
         {props.name}
-      </DropdownTrigger>
-      <DropdownContent>
+      </AccordionTrigger>
+      <AccordionContent>
         {props.children}
-      </DropdownContent>
-    </DropdownItemStyled>
+      </AccordionContent>
+    </AccordionItemStyled>
   )
 }
 
-Dropdown.Item = DropdownItem;
-export default function Dropdown(props){
+RadixAccordion.Item = AccordionItem;
+export default function RadixAccordion(props){
   return(
-    <DropdownRootStyled
+    <AccordionRootStyled
       type="single"
       defaultValue="item-1"
       collapsible
     >
       {props.children}
-    </DropdownRootStyled>
+    </AccordionRootStyled>
   )
 };

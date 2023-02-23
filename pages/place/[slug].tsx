@@ -24,7 +24,6 @@ import { isBrowser } from 'react-device-detect'
 import Head from 'next/head'
 
 import Container from '../../lib/component/Container'
-import CreateContainer from '../../lib/component/CreateContainer'
 import Grid from '../../lib/alignment/Grid'
 import { costButtonArray, sizeButtonArray, typeButtonArray } from '../../lib/button/buttonData'
 import CheckBox from '../../lib/button/CheckBox'
@@ -35,14 +34,16 @@ import UniversalNav from '../../lib/component/UniversalNav'
 import Map from '../../lib/component/Map'
 import BinaryToggle from '../../lib/button/BinaryToggle'
 import SizeSelect from '../../lib/button/SizeSelect'
-import Dropdown from '../../lib/component/Dropdown'
 import { popOut } from '../../lib/ux/keyframes'
 import { jsonParse } from '../../lib/util/jsonParse'
 import { UserContext } from '../../lib/util/UserContext'
 import { ArrowLeftIcon, AspectRatioIcon, CardStackIcon, CheckIcon, Cross1Icon, CrumpledPaperIcon, ExternalLinkIcon, FaceIcon, HeartFilledIcon, HeartIcon, HomeIcon, LockClosedIcon, MobileIcon, Pencil1Icon, PlusIcon, ReloadIcon, UpdateIcon } from '@radix-ui/react-icons'
 import Margin from '../../lib/alignment/Margin'
 import Header from '../../lib/component/Header'
-import Dialog from '../../lib/component/Dialog'
+
+// RADIX
+import RadixDialog from '../../lib/component/radix/Dialog'
+import RadixAccordion from '../../lib/component/radix/Accordion'
 
 export default function PlaceName({
   locationDataSnap,
@@ -224,7 +225,7 @@ export default function PlaceName({
               type={'header'}
               title={`Level ${userData?.data().level} ユーザーとして編集可能`}
             >
-              <Dialog
+              <RadixDialog
                 title={'編集'}
                 size={'large'}
                 trigger={
@@ -258,9 +259,9 @@ export default function PlaceName({
                     grid={'oneTwo'}
                   >
                     <Grid gap={'extraSmall'}>
-                      <Dropdown>
+                      <RadixAccordion>
                         {userData.data().level > 1 &&
-                          <Dropdown.Item
+                          <RadixAccordion.Item
                             number={'1'}
                             name={'トイレの有無'}
                           >
@@ -268,10 +269,10 @@ export default function PlaceName({
                               state={binaryToggle}
                               onClick={()=>setBinaryToggle(!binaryToggle)}
                             />
-                          </Dropdown.Item>                          
+                          </RadixAccordion.Item>                          
                         }
                         {userData.data().level > 3 &&
-                          <Dropdown.Item
+                          <RadixAccordion.Item
                             number={'2'}
                             name={'種類'}
                           >
@@ -285,11 +286,11 @@ export default function PlaceName({
                                 />
                               ))}
                             </TypeButton>
-                          </Dropdown.Item>
+                          </RadixAccordion.Item>
                         }
                         {userData.data().level > 2 &&
                           <>
-                            <Dropdown.Item
+                            <RadixAccordion.Item
                               number={'3'}
                               name={'値段'}
                             >
@@ -311,8 +312,8 @@ export default function PlaceName({
                                   </CheckBox.Item>
                                 ))}
                               </CheckBox>
-                            </Dropdown.Item>
-                            <Dropdown.Item
+                            </RadixAccordion.Item>
+                            <RadixAccordion.Item
                               number={'4'}
                               name={'大きさ'}
                             >   
@@ -329,10 +330,10 @@ export default function PlaceName({
                                   />
                                 ))}
                               </SizeSelect>
-                            </Dropdown.Item>
+                            </RadixAccordion.Item>
                           </>
                         }
-                      </Dropdown>
+                      </RadixAccordion>
                     </Grid>
                     <Grid gap={'extraSmall'}>
                       {userData.data().level > 4 &&
@@ -375,7 +376,7 @@ export default function PlaceName({
                     </Grid>
                   </Grid>
                 }
-              </Dialog>
+              </RadixDialog>
             </Header>
           }
         </>:
@@ -566,7 +567,7 @@ export default function PlaceName({
             />
             {user &&
               <>
-                <Dialog
+                <RadixDialog
                   title={hasReviewed ? '内容を更新':'新規レビュー'}
                   size={'medium'}
                   trigger={
@@ -641,7 +642,7 @@ export default function PlaceName({
                       </AlignItems>
                     }
                   </Grid>
-                </Dialog>
+                </RadixDialog>
 
                 <Button
                   size={'small'}

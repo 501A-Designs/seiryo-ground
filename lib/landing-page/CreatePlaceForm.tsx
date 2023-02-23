@@ -14,14 +14,16 @@ import { costButtonArray, sizeButtonArray, typeButtonArray } from '../button/but
 import FlipThrough from '../component/FlipThrough'
 
 import useSound from 'use-sound';
-import Dialog from '../component/Dialog'
 import { styled } from '../../stitches.config'
 import Map from '../component/Map'
 import BinaryToggle from '../button/BinaryToggle'
 import SizeSelect from '../button/SizeSelect'
-import Selector from '../component/Selector'
 import { ArrowRightIcon, MagnifyingGlassIcon, PaperPlaneIcon, PlusIcon } from '@radix-ui/react-icons'
 import LoadingBar from 'react-top-loading-bar'
+
+// RADIX
+import RadixDialog from '../component/radix/Dialog'
+import RadixSelect from '../component/radix/Select'
 
 
 export default function CreatePlaceForm(props) {
@@ -106,7 +108,7 @@ export default function CreatePlaceForm(props) {
   // </Container>
 
   return (
-    <Dialog
+    <RadixDialog
       title={
         section == 1 && '新規追加' ||
         section == 2 && '場所' ||
@@ -223,22 +225,22 @@ export default function CreatePlaceForm(props) {
                       value={locationInput}
                       onChange={(e)=>setLocationInput(e.target.value)}
                     />
-                    <Selector
+                    <RadixSelect
                       placeholder={'選択'}
                       value={prefectureInput}
                       onValueChange={setPrefectureInput}
                     >
                       {props.prefecD.map(obj => {
                         return (
-                          <Selector.Item
+                          <RadixSelect.Item
                             key={obj.iso}
                             value={obj.prefecture_kanji}
                           >
                             {obj.prefecture_kanji}
-                          </Selector.Item>
+                          </RadixSelect.Item>
                         )
                       })}
-                    </Selector>
+                    </RadixSelect>
                   </Grid>
                   <Map
                     location={locationInput}
@@ -365,6 +367,6 @@ export default function CreatePlaceForm(props) {
           </>
         }
       </Grid>
-    </Dialog>
+    </RadixDialog>
   );
 }

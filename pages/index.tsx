@@ -10,19 +10,17 @@ import {db} from '../firebase'
 import { collection, getDocs } from "firebase/firestore";
 
 import CreatePlaceForm from '../lib/landing-page/CreatePlaceForm'
-import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
 import WelcomeHeader from '../lib/landing-page/WelcomeHeader'
 import Grid from '../lib/alignment/Grid'
-import useSound from 'use-sound'
 import Footer from '../lib/component/Footer'
 import UniversalNav from '../lib/component/UniversalNav'
 import Margin from '../lib/alignment/Margin'
 import End from '../lib/End'
-import Selector from '../lib/component/Selector'
 import { UserContext } from '../lib/util/UserContext'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
 import { jsonParse } from '../lib/util/jsonParse'
+import RadixSelect from '../lib/component/radix/Select'
 
 export default function Home({prefecD,placesData}) {
   let masonaryGrid = {350: 1, 750: 2, 900: 3, 1200:4};
@@ -118,22 +116,22 @@ export default function Home({prefecD,placesData}) {
           <Grid gap={'small'}>
             <AlignItems spaceBetween>
               <p>Filter Spots</p>
-              <Selector
+              <RadixSelect
                 placeholder={'都道府県を選択'}
                 value={prefectureInput}
                 onValueChange={setPrefectureInput}
               >
                 {prefecD.map(obj => {
                   return (
-                    <Selector.Item
+                    <RadixSelect.Item
                       key={obj.iso}
                       value={obj.prefecture_kanji}
                     >
                       {obj.prefecture_kanji}
-                    </Selector.Item>
+                    </RadixSelect.Item>
                   )
                 })}
-              </Selector>
+              </RadixSelect>
             </AlignItems>
             <Grid grid={'quad'}>
               {filteredPlaceCollection?.length > 0 ? filteredPlaceCollection?.map(doc => {

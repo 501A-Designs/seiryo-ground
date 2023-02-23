@@ -1,10 +1,10 @@
 import React, { forwardRef } from "react";
 import * as Select from "@radix-ui/react-select";
-import { styled } from "../../stitches.config";
+import { styled } from "../../../stitches.config";
 import useSound from "use-sound";
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 
-export const Selector = (props) => (
+export const RadixSelect = (props) => (
   <Select.Root
     value={props.value}
     onValueChange={props.onValueChange}
@@ -162,8 +162,8 @@ const SelectScrollUpButton = styled(Select.ScrollUpButton, scrollButtonStyles);
 
 const SelectScrollDownButton = styled(Select.ScrollDownButton, scrollButtonStyles);
 
-Selector.Item = SelectItem;
-Selector.Hr = SelectSeparator;
-Selector.Group = Select.Group;
-Selector.Label = SelectLabel;
-export default Selector;
+RadixSelect.Item = SelectItem;
+RadixSelect.Hr = SelectSeparator;
+RadixSelect.Group = Select.Group;
+RadixSelect.Label = SelectLabel;
+export default RadixSelect;

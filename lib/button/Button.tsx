@@ -1,13 +1,11 @@
 import React from 'react'
 import { styled } from '../../stitches.config'
-// import { tapSound } from '../ux/audio'
 import { popOutNoBlur } from '../ux/keyframes'
 import useSound from 'use-sound';
 
 const ButtonStyled = styled('button',{
   outlineColor:'$gray6',
   fontFamily: '$sgFont1',
-  // fontSize:'15px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -15,7 +13,6 @@ const ButtonStyled = styled('button',{
   cursor:'pointer',
   width:'fit-content',
   height:'fit-content',
-  // minHeight:'35px',
   userSelect:'none',
   borderRadius:'50px',
   animation: `${popOutNoBlur} 0.3s`,

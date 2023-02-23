@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../../firebase';
 import Button from '../button/Button';
-import Modal from './Dialog';
 import SectionButton from './SectionButton';
 
 import { styled } from '../../stitches.config';
@@ -14,9 +13,11 @@ import ProfileContainer from '../profile-page/ProfileContainer';
 import { checkLevel } from '../util/checkLevel';
 import { useDocument } from 'react-firebase-hooks/firestore';
 import { doc } from 'firebase/firestore';
-import { ArrowLeftIcon, BookmarkIcon, FileTextIcon, HamburgerMenuIcon, HomeIcon, IdCardIcon, InfoCircledIcon, ShadowInnerIcon } from '@radix-ui/react-icons';
+import { ArrowLeftIcon, BookmarkIcon, HamburgerMenuIcon, HomeIcon, IdCardIcon, InfoCircledIcon, ShadowInnerIcon } from '@radix-ui/react-icons';
 import { useTheme } from 'next-themes';
 import AlignItems from '../alignment/AlignItems';
+
+import RadixDialog from './radix/Dialog';
 
 const expandAni = keyframes({
   '10%':{
@@ -249,7 +250,7 @@ useEffect(()=>{
                   上へ戻る
                 </Button>
               }
-              <Modal
+              <RadixDialog
                 title={'メニュー'}
                 trigger={
                   <Button
@@ -303,7 +304,7 @@ useEffect(()=>{
                     </Button>
                   </AlignItems>
                 </>
-              </Modal>
+              </RadixDialog>
             </NavContentStyled>
           </NavStyled>
         </NavContainerStyled>
