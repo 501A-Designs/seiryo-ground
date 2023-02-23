@@ -297,6 +297,7 @@ useEffect(()=>{
                     <Button
                       icon={<ShadowInnerIcon/>}
                       onClick={toggleTheme}
+                      backTapSound={theme}
                     >
                       Disable {theme} mode
                     </Button>

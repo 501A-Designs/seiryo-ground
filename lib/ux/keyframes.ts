@@ -26,9 +26,22 @@ const popOut = keyframes({
     transform: 'scale(0.5)',
     opacity: 0
   },
-  // '50%':{
-  //   transform: 'scale(1.03)'
-  // }
+  '30%':{
+    filter:'blur(5px)',
+  },
+  '50%':{
+    transform: 'scale(1.02)',
+  }
+});
+
+const popOutNoBlur = keyframes({
+  '0%': {
+    transform: 'scale(0.5)',
+    opacity: 0
+  },
+  '50%':{
+    transform: 'scale(1.02)',
+  }
 });
 
 const rotateIn = keyframes({
@@ -94,4 +107,4 @@ const fillClipPath = keyframes({
   },
 })
 
-export {leftSlideIn,topSlideIn,bottomSlideIn,popOut,rotateIn,rotateInBottonLeft,rotateAndZoom,gradient,spin,fillClipPath}
+export {leftSlideIn,topSlideIn,bottomSlideIn,popOut,popOutNoBlur,rotateIn,rotateInBottonLeft,rotateAndZoom,gradient,spin,fillClipPath}

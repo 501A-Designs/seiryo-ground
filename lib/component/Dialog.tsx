@@ -11,6 +11,10 @@ const popOutDialog = keyframes({
   '0%': {
     opacity: 0,
 		transform: 'translateY(0px) translateX(-50%) scale(0.5)',
+  },
+  '40%':{
+    filter:'blur(5px)',
+		transform: 'translateY(-50%) translateX(-50%) scale(1.02)',
   }
 });
 
@@ -55,7 +59,7 @@ const StyledContent = styled(Dialog.Content, {
   boxShadow:'$shadow1',
   zIndex:'200',
   '@media (prefers-reduced-motion: no-preference)': {
-    animation: `${popOutDialog} 300ms cubic-bezier(0.16, 1, 0.3, 1)`,
+    animation: `${popOutDialog} 400ms`,
   },
   '&:focus': { outline: 'none' },
   variants:{
@@ -122,6 +126,7 @@ export default function (props){
           {props.topCenterComponent}
           <Dialog.Close asChild>
             <Button
+              backTapSound
               size={'small'}
               aria-label="Close"
               icon={<Cross1Icon/>}

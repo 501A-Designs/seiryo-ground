@@ -29,13 +29,9 @@ export default function CreatePlaceForm(props) {
   const [progress, setProgress] = useState(0);
 
   let user = props.user;
-  const [tap1] = useSound('/sound/tap-1-sg.mp3',{playbackRate:1.1});
-  const [tap2] = useSound('/sound/tap-2-sg.mp3',{playbackRate:1.1});
-  const [tap3] = useSound('/sound/tap-3-sg.mp3',{playbackRate:1.1});
+
   const [action1] = useSound('/sound/action-1-sg.mp3',{playbackRate:1.5});
   const [celebrate1] = useSound('/sound/celebrate-1-sg.mp3',{playbackRate:1.1});
-  const [select1] = useSound('/sound/select-1-sg.mp3',{playbackRate:1.1});
-  const [select2] = useSound('/sound/select-2-sg.mp3',{playbackRate:1.1});
   const [load1] = useSound('/sound/load-1-sg.mp3');
 
   const [sizeSelect, setSizeSelect] = useState('medium');
@@ -151,10 +147,7 @@ export default function CreatePlaceForm(props) {
                 // styleType={'black'}
                 iconPosition={'left'}
                 icon={<MagnifyingGlassIcon/>}
-                onClick={()=> {
-                  tap1();
-                  router.push(`/place/${newPlace?.id}/`);
-                }}
+                onClick={()=> router.push(`/place/${newPlace?.id}/`)}
               >
                 追加した場所のページを閲覧
               </Button>
@@ -178,26 +171,17 @@ export default function CreatePlaceForm(props) {
                   <Input
                     placeholder={"場所の名前"}
                     value={placeInput}
-                    onChange={(e)=>{
-                      tap3();
-                      setPlaceInput(e.target.value)
-                    }}
+                    onChange={(e)=>setPlaceInput(e.target.value)}
                   />
                   <TextArea
                     placeholder={"概要"}
                     value={descriptionInput}
-                    onChange={(e)=>{
-                      tap3();
-                      setDescriptionInput(e.target.value)
-                    }}
+                    onChange={(e)=>setDescriptionInput(e.target.value)}
                   />
                   <Input
                     placeholder={"公式サイト（無い場合は空欄）"}
                     value={officialSiteInput}
-                    onChange={(e)=>{
-                      tap3();
-                      setOfficialSiteInput(e.target.value)
-                    }}
+                    onChange={(e)=>setOfficialSiteInput(e.target.value)}
                   />
                 </Grid>
                 {
@@ -207,7 +191,6 @@ export default function CreatePlaceForm(props) {
                     <Button
                       icon={<ArrowRightIcon/>}
                       onClick={()=>{
-                        tap1();
                         setSection(2);
                         setProgress(10);
                       }}
@@ -221,12 +204,10 @@ export default function CreatePlaceForm(props) {
             {section == 2 &&
               <FlipThrough
                 leftClick={()=>{
-                  tap2();
                   setSection(1);
                   setProgress(1);
                 }}
                 rightClick={()=>{
-                  tap1();
                   setSection(3);
                   setProgress(20);
                 }}
@@ -240,10 +221,7 @@ export default function CreatePlaceForm(props) {
                     <Input
                       placeholder={"場所（例：koishikawa-korakuen）"}
                       value={locationInput}
-                      onChange={(e)=>{
-                        tap3();
-                        setLocationInput(e.target.value)
-                      }}
+                      onChange={(e)=>setLocationInput(e.target.value)}
                     />
                     <Selector
                       placeholder={'選択'}
@@ -272,12 +250,10 @@ export default function CreatePlaceForm(props) {
             {section == 3 &&
               <FlipThrough
                 leftClick={()=>{
-                  tap2();
                   setSection(2);
                   setProgress(10);
                 }}
                 rightClick={()=>{
-                  tap1();
                   setSection(4);
                   setProgress(30);
                 }}
@@ -286,14 +262,14 @@ export default function CreatePlaceForm(props) {
                 <SizeSelect
                   state={sizeSelect}
                 >
-                  {sizeButtonArray.map(size=>{
-                    return <SizeSelect.Item
+                  {sizeButtonArray.map(size=>(
+                    <SizeSelect.Item
                       key={size}
                       name={size}
                       state={sizeSelect}
                       onClick={()=> setSizeSelect(size)}
                     />
-                  })}
+                  ))}
                 </SizeSelect>
               </FlipThrough>
             }
@@ -301,12 +277,10 @@ export default function CreatePlaceForm(props) {
             {section == 4 &&    
               <FlipThrough
                 leftClick={()=>{
-                  tap2();
                   setSection(3);
                   setProgress(20);
                 }}
                 rightClick={()=>{
-                  tap1();
                   setSection(5);
                   setProgress(40);
                 }}
@@ -322,28 +296,26 @@ export default function CreatePlaceForm(props) {
             {section == 5 &&
               <FlipThrough
                 leftClick={()=>{
-                  tap2();
                   setSection(4);
                   setProgress(30);
                 }}
                 rightClick={()=>{
-                  tap1();
                   setSection(6);
                   setProgress(50);
                 }}
                 currentSection={section}
               >
                 <AlignItems justifyContent={'center'}>
-                  <Grid gap={'extraSmall'}>
-                    {typeButtonArray.map(color =>{
-                      return <TypeButton
+                  <TypeButton>
+                    {typeButtonArray.map(color =>(
+                      <TypeButton.Item
                         key={color}
                         type={color}
                         onClick={()=>setTypeInput(color)}
                         selectedInput={typeInput}
                       />
-                    })}
-                  </Grid>
+                    ))}
+                  </TypeButton>
                 </AlignItems>
               </FlipThrough>
             }
@@ -351,7 +323,6 @@ export default function CreatePlaceForm(props) {
             {section == 6 &&
               <FlipThrough
                 leftClick={()=>{
-                  tap2();
                   setSection(5);
                   setProgress(40);
                 }}
@@ -360,26 +331,23 @@ export default function CreatePlaceForm(props) {
                     styleType={'black'}
                     iconPosition={'right'}
                     icon={<PaperPlaneIcon/>}
-                    onClick={()=>{
-                      load1();
-                      createNewPlace();
-                    }}
+                    overRideSound={()=>load1()}
+                    onClick={()=>createNewPlace()}
                   >
                     公開
                   </Button>
                 }
               >
                 <AlignItems justifyContent={'center'}>                  
-                  <Grid gap={'extraSmall'}>
+                  <CheckBox>
                     {costButtonArray.map(name =>{
                       return(
-                        <CheckBox
+                        <CheckBox.Item
                           checked={costCheckBox.some(element => element === name)}
                           name={name}
                           key={name}
                           onClick={()=>
                             {
-                              tap1();
                               costCheckBox.some(element => element === name) ?
                               setCostCheckBox(prev => prev.filter(element => element !== name )):
                               setCostCheckBox([...costCheckBox, name]);
@@ -387,10 +355,10 @@ export default function CreatePlaceForm(props) {
                           }
                         >
                           {name}
-                        </CheckBox>
+                        </CheckBox.Item>
                       )
                     })}
-                  </Grid>
+                  </CheckBox>
                 </AlignItems>
               </FlipThrough>
             }

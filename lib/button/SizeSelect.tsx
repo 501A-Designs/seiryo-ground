@@ -4,6 +4,7 @@ import Grid from '../alignment/Grid'
 import Container from '../component/Container'
 import useSound from 'use-sound'
 import AlignItems from '../alignment/AlignItems'
+import { popOutNoBlur } from '../ux/keyframes'
 
 const SizeSelectItemStyled = styled('div',{
   cursor: 'pointer',
@@ -11,7 +12,7 @@ const SizeSelectItemStyled = styled('div',{
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'center',
-  height: 'fit-content',
+  maxHeight: '20px',
   border: '1px solid transparent',
   borderRadius: '$r2',
   padding: '$small',
@@ -20,16 +21,20 @@ const SizeSelectItemStyled = styled('div',{
   variants: {
     selected: {
       true: {
-        color: '$gray1',
+        'h4':{
+          color: '$gray1',
+        },
         background: '$gray12',
         borderColor:'$gray12',
-        width: '66%',
+        width: '68%',
         fontWeight:'500',
         boxShadow:'$shadow1',
       },
       false: {
-        color: '$gray10',
-        width: '33%',
+        'h4':{
+          color: '$gray10',
+        },
+        width: '16%',
         '&:hover':{
           color: '$gray11',
           backgroundColor:'$gray4',
@@ -50,57 +55,83 @@ const SizeSelectItem = (props)=> {
       onMouseDown={()=> props.name != props.state ? select1():null}
       onClick={props.onClick}
     >
-      {props.name === 'small' && '小'}
-      {props.name === 'medium' && '中'}
-      {props.name === 'large' && '大'}
+      <h4>
+        {props.name === 'small' && '小'}
+        {props.name === 'medium' && '中'}
+        {props.name === 'large' && '大'}
+      </h4>
     </SizeSelectItemStyled>
   )
 }
 
+const SizeSelectContainerStyled = styled('section',{
+  display: 'flex',
+  gap:'$extraSmall',
+  flexDirection:'column',
+  alignItems:'center',
+  justifyContent:'space-between',
+  height:'100%'
+  // maxWidth:'300px'
+})
+
 const SizeSelectStyled = styled('section',{
   display: 'flex',
   gap:'$extraSmall',
-  maxWidth:'300px'
+  maxWidth:'250px',
+  width:'100%'
+})
+
+const SizeSelectLabelStyled = styled('section',{
+  'h3':{
+    animation:`${popOutNoBlur} 0.1s`,
+    margin:'1em 0 0 0'
+  },
+  'p':{
+    animation:`${popOutNoBlur} 0.2s`,
+    margin:'0 0 1.3em 0'
+  }
 })
 
 SizeSelect.Item = SizeSelectItem;
 export default function SizeSelect(props) {
   return (
-    <Grid>
-      <AlignItems
-        justifyContent={'center'}
-        flexDirection={'column'}
-      >
-        {!props.hide &&
-          <>
-            {props.state === 'small' &&
-              <>
-                <h4>~20m</h4>
-                <p>
-                  小さい公園・カフェ
-                </p>
-              </>
-            }
-            {props.state === 'medium' &&
-              <>
-                <h4>20~100m</h4>
-                <p>大きめな公園・建物</p>
-              </>
-            }
-            {props.state === 'large' &&
-              <>
-                <h4>100m~</h4>
-                <p>
-                  島・海・大きい建物
-                </p>
-              </>
-            }
-          </>
-        }
-      </AlignItems>
+    <SizeSelectContainerStyled>
+      <SizeSelectLabelStyled>
+        <AlignItems
+          justifyContent={'center'}
+          flexDirection={'column'}
+        >
+          {!props.hide &&
+            <>
+              {props.state === 'small' &&
+                <>
+                  <h3>~20m</h3>
+                  <p>
+                    小さい公園・カフェ
+                  </p>
+                </>
+              }
+              {props.state === 'medium' &&
+                <>
+                  <h3>20~100m</h3>
+                  <p>大きめな公園・建物</p>
+                </>
+              }
+              {props.state === 'large' &&
+                <>
+                  <h3>100m~</h3>
+                  <p>
+                    島・海・大きい建物
+                  </p>
+                </>
+              }
+            </>
+          }
+        </AlignItems>
+      </SizeSelectLabelStyled>
       <SizeSelectStyled css={props.css}>
         {props.children}
       </SizeSelectStyled>
-    </Grid>
+    </SizeSelectContainerStyled>
   )
 }

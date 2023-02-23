@@ -1,5 +1,6 @@
 import React from 'react'
 import { styled } from '../../stitches.config'
+import useSound from 'use-sound';
 
 const DisplayRatingInputStyled = styled('div',{
   display: 'grid',
@@ -59,6 +60,8 @@ const DisplayRatingInputStyled = styled('div',{
 })
 
 export default function DisplayRatingInput(props) {
+  const [tap3] = useSound('/sound/tap-3-sg.mp3',{playbackRate:1.1});
+
   return (
     <DisplayRatingInputStyled>
       <h1>{props.value}</h1>
@@ -68,6 +71,7 @@ export default function DisplayRatingInput(props) {
         type={"range"}
         value={props.value}
         onChange={props.onChange}
+        onChangeCapture={()=>tap3()}
       />
       <p>{props.placeholder}</p>
     </DisplayRatingInputStyled>

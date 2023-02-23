@@ -1,7 +1,8 @@
 import React from 'react'
 import { styled } from '../../stitches.config'
 // import { tapSound } from '../ux/audio'
-import { popOut } from '../ux/keyframes'
+import { popOutNoBlur } from '../ux/keyframes'
+import useSound from 'use-sound';
 
 const ButtonStyled = styled('button',{
   outlineColor:'$gray6',
@@ -17,7 +18,7 @@ const ButtonStyled = styled('button',{
   // minHeight:'35px',
   userSelect:'none',
   borderRadius:'50px',
-  animation: `${popOut} 0.5s`,
+  animation: `${popOutNoBlur} 0.3s`,
   transition:'$speed1',
   variants:{
     size:{
@@ -100,11 +101,14 @@ const ButtonStyled = styled('button',{
 })
 
 export default function Button(props) {
+  const [tap1] = useSound('/sound/tap-1-sg.mp3',{playbackRate:1.1});
+  const [tap2] = useSound('/sound/tap-2-sg.mp3',{playbackRate:1.1});
 
   return (
     <ButtonStyled
       size={props.size}
       styleType={props.styleType}
+      onMouseDown={props.overRideSound ? props.overRideSound:()=>props.backTapSound ? tap2():tap1()}
       onClick={props.onClick}
       title={props.children}
       css={props.css}

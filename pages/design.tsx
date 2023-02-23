@@ -21,33 +21,17 @@ export default function design() {
   const [binaryToggle, setBinaryToggle] = useState(true);
   const [sizeSelect, setSizeSelect] = useState('medium');
   const [typeInput, setTypeInput] = useState('green');
-  const [prefectureInput, setPrefectureInput] = useState();
-
-  const sampleArray = [
-    {
-      id:0,
-      value:'SEIRYO GROUND'
-    },
-    {
-      id:1,
-      value:'501A Designs'
-    },
-    {
-      id:2,
-      value:'I Love Design'
-    }
-  ]
 
   return (
     <Margin>
       <h1>SEIRYO Designs</h1>
       <h2>Philosophy</h2>
       <p>
-        SEIRYO GROUNDは、純粋であり、遊び心もある機能的なデザインを心がけています。自然的な動きを取り入れつつ、コンポーネントとしてまとめることで、スケーラブルでありかつ機能的なUIを作り上げるよう努力しています。UXを通し人との交流を大事にして行きたいです。より良いモノにするため、様々な可能性を探求しています。デザインは、シンプルかつ効率的であるものを心がけ、感覚などを大事にしています。ボタンを押した時にどういったフィードバックを与えるかや、どのようにすれば二次元であるUIに三次元の軸・リアルさを与えるかの探究を行なっています。レイアウトも、わかりやすい構成で、使い勝手の良いものにするよう意識し、視覚的要素は、精巧に作り込み、初めてみた人でも理解しやすいものにし、視認性が高いものを創り上げるよう努力しています。清潔な印象を与え、心地よい環境を提供するために、シンプルで純粋なデザイン、そして、簡素さと、実用性を兼ね備え、コンセプトから抜けた実際の使用に向いている機能性あるデザインを実現しています。他にもフォントにも拘りました。長く悩んだ結果、最終的には「Clash Display」というフォントを使用することにしました。これに加え、pタグは他のテキストより薄い灰色にし、ヘッダータグは全て黒に設定しました。これに加え、フォントウェイトもヘッダー以外全て通常400にし、ヘッダーは少し太字になる500にしました。
+        SEIRYO GROUNDは、純粋であり、遊び心もある機能的なデザインを心がけています。自然的な動きを取り入れつつ、コンポーネントとしてまとめることで、スケーラブルでありかつ機能的なUIを作り上げるよう努力しています。UXを通し人との交流を大事にして行きたいです。より良いモノにするため、様々な可能性を探求しています。デザインは、シンプルかつ効率的であるものを心がけ、感覚などを大事にしています。ボタンを押した時にどういったフィードバックを与えるかや、どのようにすれば二次元であるUIに三次元の軸・リアルさを与えるかの探究を行なっています。レイアウトも、わかりやすい構成で、使い勝手の良いものにするよう意識し、視覚的要素は、精巧に作り込み、初めてみた人でも理解しやすいものにし、視認性が高いものを創り上げるよう努力しています。清潔な印象を与え、心地よい環境を提供するために、シンプルで純粋なデザイン、そして、簡素さと、実用性を兼ね備え、コンセプトから抜けた実際の使用に向いている機能性あるデザインを実現しています。
       </p>
       <h2>UI Elements</h2>
       <Grid
-        grid={'duo'}
+        grid={'tri'}
         gap={'small'}
         css={{
           margin:'1.5em 0'
@@ -63,50 +47,39 @@ export default function design() {
           <SizeSelect
             state={sizeSelect}
           >
-            {sizeButtonArray.map(size=>{
-              return <SizeSelect.Item
+            {sizeButtonArray.map(size=>(
+              <SizeSelect.Item
                 key={size}
                 name={size}
-
                 state={sizeSelect}
                 onClick={()=> setSizeSelect(size)}
               />
-            })}
+            ))}
           </SizeSelect>
         </Container>
         <Container styleType={'white'}>
-          <Grid gap={'extraSmall'}>
-            {typeButtonArray.map(color =>{
-              return <TypeButton
-                key={color}
-                type={color}
-                onClick={()=> setTypeInput(color)}
-                selectedInput={typeInput}
-              />
-            })}
-          </Grid>
-        </Container>
-        <Container styleType={'white'}>
           <AlignItems justifyContent={'center'}>
-            <Selector
-              placeholder={'選択'}
-              value={prefectureInput}
-              onValueChange={setPrefectureInput}
-            >
-              {sampleArray.map(obj => (
-                  <Selector.Item
-                    key={obj.id}
-                    value={obj.value}
-                  >
-                    {obj.value}
-                  </Selector.Item>
-                ))
-              }
-            </Selector>
+            <TypeButton>
+              {typeButtonArray.map(color =>{
+                return <TypeButton.Item
+                  key={color}
+                  type={color}
+                  onClick={()=> setTypeInput(color)}
+                  selectedInput={typeInput}
+                />
+              })}
+            </TypeButton>
           </AlignItems>
         </Container>
       </Grid>
+      <p>
+        フォントにも拘りました。長く悩んだ結果、最終的には「Clash Display」というフォントを使用することにしました。これに加え、pタグは他のテキストより薄い灰色にし、ヘッダータグは全て黒に設定しました。これに加え、フォントウェイトもヘッダー以外全て通常400にし、ヘッダーは少し太字になる500にしました。
+      </p>
+      
       <h2>Headings</h2>
+      <p>
+        フォントにも拘りました。長く悩んだ結果、最終的には「Clash Display」というフォントを使用することにしました。これに加え、pタグは他のテキストより薄い灰色にし、ヘッダータグは全て黒に設定しました。これに加え、フォントウェイトもヘッダー以外全て通常400にし、ヘッダーは少し太字になる500にしました。
+      </p>
       <table>
         <tr>
           <th>Descriptor</th>

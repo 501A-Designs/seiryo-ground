@@ -3,14 +3,14 @@ import { styled } from '../../stitches.config'
 import AlignItems from '../alignment/AlignItems'
 import Grid from '../alignment/Grid'
 import Button from '../button/Button'
-import { popOut } from '../ux/keyframes'
+import { popOutNoBlur } from '../ux/keyframes'
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons'
 
 const FlipThroughMainContainer = styled('div', {
   perspective: '200px',
 })
 const FlipThroughMain = styled('div', {
-  animation: `${popOut} 0.8s`,
+  animation: `${popOutNoBlur} 0.4s`,
 })
 
 export default function FlipThrough(props) {

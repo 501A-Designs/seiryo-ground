@@ -49,12 +49,14 @@ export default function PostThumbNail(props) {
 
   const [loadingState, setLoadingState] = useState(false);
 
+  const [tap1] = useSound('/sound/tap-1-sg.mp3');
   return (
     <PostThumbNailStyled
       key={props.key}
       loading={loadingState}
       onClick={()=> {
-        setLoadingState(true)
+        tap1();
+        setLoadingState(true);
         router.push(`/place/${props.id}/`);
       }}
     >

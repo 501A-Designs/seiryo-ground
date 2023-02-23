@@ -3,7 +3,7 @@ import { popOut } from '../ux/keyframes'
 import { styled } from '../../stitches.config'
 
 const MarginStyled = styled('div',{
-  // animation: `${popOut} 0.8s`,
+  animation: `${popOut} 0.7s`,
   '@mobile':{padding:'0% 5%'},
   '@tablet':{padding:'0% 8%'},
   '@desktop':{padding:'0% 15%'},

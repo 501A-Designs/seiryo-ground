@@ -15,7 +15,9 @@ const BinaryToggleItemStyled = styled('button',{
   variants:{
     selected:{
       true:{
-        color: '$gray1',
+        'h4':{
+          color: '$gray1',
+        },
         backgroundColor:'$gray12',
         userSelect:'none',
         borderColor:'$gray5',
@@ -26,7 +28,9 @@ const BinaryToggleItemStyled = styled('button',{
         animation: `${spin} 0.5s`
       },
       false:{
-        color: '$gray10',
+        'h4':{
+          color: '$gray10',
+        },
         // background:'$gray3',
         backgroundColor:'transparent',
         width: '50px',
@@ -67,11 +71,13 @@ const BinaryToggleItem = (toggleItemProps:any)=> {
       }}
       onClick={toggleItemProps.onClick}
     >
-      {
-        toggleItemProps.inputValue ? 
-        '有':
-        '無'
-      }
+      <h4>
+        {
+          toggleItemProps.inputValue ? 
+          '有':
+          '無'
+        }
+      </h4>
     </BinaryToggleItemStyled>
   )
 };

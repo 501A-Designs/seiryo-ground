@@ -32,14 +32,14 @@ const NewsThumbNailStyled = styled('div',{
 
 export default function PostThumbNail(props) {
   const router = useRouter();
-  const [tap1] = useSound('/sound/tap-1-sg.mp3');
+  const [action3] = useSound('/sound/action-3-sg.mp3');
 
   return (
     <NewsThumbNailStyled
       key={props.key}
       onClick={()=> {
         router.push(`/news/${props.slug}`);
-        tap1();
+        action3();
       }}
     >
       <h3>{props.title}</h3>

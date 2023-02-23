@@ -57,12 +57,7 @@ export default function PlaceName({
   const userData = userContextData?.userData;
 
   // Sound
-  const [tap1] = useSound('/sound/tap-1-sg.mp3');
-  // const [tap2] = useSound('/sound/tap-2-sg.mp3');
-  const [tap3] = useSound('/sound/tap-3-sg.mp3');
-  const [select1] = useSound('/sound/select-1-sg.mp3');
-  const [select2] = useSound('/sound/select-2-sg.mp3');
-  // const [action1] = useSound('/sound/action-1-sg.mp3');
+  const [tap1] = useSound('/sound/tap-1-sg.mp3',{playbackRate:1.1});
   const [load1] = useSound('/sound/load-1-sg.mp3');
   const [celebrate1] = useSound('/sound/celebrate-1-sg.mp3');
   const [celebrate2] = useSound('/sound/celebrate-2-sg.mp3');
@@ -269,26 +264,10 @@ export default function PlaceName({
                             number={'1'}
                             name={'トイレの有無'}
                           >
-                            <BinaryToggle>
-                              <BinaryToggle.Item
-                                currentState={binaryToggle}
-                                selected={binaryToggle === true}
-                                onClick={()=>{
-                                  select1();
-                                  setBinaryToggle(true)
-                                }}
-                                name={'有'}
-                              />
-                              <BinaryToggle.Item
-                                currentState={binaryToggle}
-                                selected={binaryToggle === false}
-                                onClick={()=>{
-                                  select2();
-                                  setBinaryToggle(false)
-                                }}
-                                name={'無'}
-                              />
-                            </BinaryToggle>
+                            <BinaryToggle
+                              state={binaryToggle}
+                              onClick={()=>setBinaryToggle(!binaryToggle)}
+                            />
                           </Dropdown.Item>                          
                         }
                         {userData.data().level > 3 &&
@@ -296,19 +275,16 @@ export default function PlaceName({
                             number={'2'}
                             name={'種類'}
                           >
-                            <Grid gap={'extraSmall'}>
+                            <TypeButton>
                               {typeButtonArray.map(color =>(
-                                <TypeButton
+                                <TypeButton.Item
                                   key={color}
                                   type={color}
-                                  onClick={()=>{
-                                    select1();
-                                    setTypeInput(color);
-                                  }}
+                                  onClick={()=>setTypeInput(color)}
                                   selectedInput={typeInput}
                                 />
                               ))}
-                            </Grid>
+                            </TypeButton>
                           </Dropdown.Item>
                         }
                         {userData.data().level > 2 &&
@@ -317,15 +293,14 @@ export default function PlaceName({
                               number={'3'}
                               name={'値段'}
                             >
-                              <Grid gap={'extraSmall'}>
+                              <CheckBox>
                                 {costButtonArray.map(name =>(
-                                  <CheckBox
+                                  <CheckBox.Item
                                     key={name}
                                     checked={costCheckBox.some(element => element === name)}
                                     name={name}
                                     onClick={()=>
                                       {
-                                        tap1();
                                         costCheckBox.some(element => element === name) ?
                                         setCostCheckBox(prev => prev.filter(element => element !== name )):
                                         setCostCheckBox([...costCheckBox, name]);
@@ -333,9 +308,9 @@ export default function PlaceName({
                                     }
                                   >
                                     {name}
-                                  </CheckBox>
+                                  </CheckBox.Item>
                                 ))}
-                              </Grid>
+                              </CheckBox>
                             </Dropdown.Item>
                             <Dropdown.Item
                               number={'4'}
@@ -349,11 +324,8 @@ export default function PlaceName({
                                   <SizeSelect.Item
                                     name={size}
                                     key={size}
-                                    currentState={sizeSelect}
-                                    onClick={()=> {
-                                      select1();
-                                      setSizeSelect(size);
-                                    }}
+                                    state={sizeSelect}
+                                    onClick={()=> setSizeSelect(size)}
                                   />
                                 ))}
                               </SizeSelect>
@@ -367,10 +339,8 @@ export default function PlaceName({
                         <Input
                           placeholder={"場所の名前"}
                           value={placeInput}
-                          onChange={(e)=>{
-                            tap3();
-                            setPlaceInput(e.target.value)
-                          }}
+                          onChange={(e)=>
+                            setPlaceInput(e.target.value)}
                         />
                       }
 
@@ -378,10 +348,7 @@ export default function PlaceName({
                       <TextArea
                         placeholder={"概要"}
                         value={descriptionInput}
-                        onChange={(e)=>{
-                          tap3();
-                          setDescriptionInput(e.target.value)
-                        }}
+                        onChange={(e)=>setDescriptionInput(e.target.value)}
                       />
                       }
 
@@ -389,10 +356,7 @@ export default function PlaceName({
                         <Input
                           placeholder={"公式サイト（無い場合は空欄）"}
                           value={officialSiteInput}
-                          onChange={(e)=>{
-                            tap3();
-                            setOfficialSiteInput(e.target.value)
-                          }}
+                          onChange={(e)=>setOfficialSiteInput(e.target.value)}
                         />
                       }
 
@@ -401,10 +365,7 @@ export default function PlaceName({
                         <Input
                           placeholder={"場所（スペース無し英語表記｜例：koishikawa-korakuen）"}
                           value={locationInput}
-                          onChange={(e)=>{
-                            tap3();
-                            setLocationInput(e.target.value)
-                          }}
+                          onChange={(e)=>setLocationInput(e.target.value)}
                         />
                         {/* <Map
                           location={locationInput}
@@ -620,39 +581,31 @@ export default function PlaceName({
                   <Grid gap={'extraSmall'}>
                     <Input
                       value={titleRatingInput}
-                      onChange={(e)=> {
-                        tap3();
-                        setTitleRatingInput(e.target.value)
-                      }}
+                      onChange={(e)=> setTitleRatingInput(e.target.value)
+                      }
                       placeholder={'レビュータイトル'}
                     />
                     <Grid grid={'tri'} gap={'extraSmall'}>
                       <DisplayRatingInput
                         value={dateRatingInput}
-                        onChange={(e)=> {
-                          tap3();
-                          setDateRatingInput(e.target.value)
-                        }}
+                        onChange={(e)=> setDateRatingInput(e.target.value)
+                        }
                         maxValue={10}
                         minValue={0}
                         placeholder={'デートスポット適正'}
                       />
                       <DisplayRatingInput
                         value={accessRatingInput}
-                        onChange={(e)=> {
-                          tap3();
-                          setAccessRatingInput(e.target.value)
-                        }}
+                        onChange={(e)=> setAccessRatingInput(e.target.value)
+                        }
                         maxValue={10}
                         minValue={0}
                         placeholder={'最寄駅からのアクセス'}
                       />
                       <DisplayRatingInput
                         value={managementRatingInput}
-                        onChange={(e)=> {
-                          tap3();
-                          setManagementRatingInput(e.target.value)
-                        }}
+                        onChange={(e)=> setManagementRatingInput(e.target.value)
+                        }
                         maxValue={10}
                         minValue={0}
                         placeholder={'設備管理の状況'}
@@ -660,10 +613,8 @@ export default function PlaceName({
                     </Grid>
                     <TextArea
                       value={descriptionRatingInput}
-                      onChange={(e)=> {
-                        tap3();
-                        setDescriptionRatingInput(e.target.value)
-                      }}
+                      onChange={(e)=> setDescriptionRatingInput(e.target.value)
+                      }
                       placeholder={'行って感じた事、評価項目に写らない場所の良さ等。'}
                     />
                     {titleRatingInput && descriptionRatingInput &&
@@ -697,8 +648,8 @@ export default function PlaceName({
                   styleType={liked ? 'red':'transparent'}
                   css={{animation:liked ? `${popOut} 0.5s`:'none'}}
                   icon={liked ? <HeartFilledIcon/>:<HeartIcon/>}
+                  overRideSound={()=>!liked ? celebrate2():tap1()}
                   onClick={()=> {
-                    !liked && celebrate2();
                     liked ? removeLike():addLike()
                   }}
                 />

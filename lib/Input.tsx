@@ -1,3 +1,4 @@
+import useSound from 'use-sound';
 import { styled } from '../stitches.config'
 
 const InputStyled = styled('input', {
@@ -16,12 +17,15 @@ const InputStyled = styled('input', {
 })
 
 export default function Input(props) {
+  const [tap3] = useSound('/sound/tap-3-sg.mp3',{playbackRate:1.1});
+
   return (
     <InputStyled
       type={props.type ? props.type : "text"}
+      placeholder={props.placeholder}
       value={props.value}
       onChange={props.onChange}
-      placeholder={props.placeholder}
+      onKeyDown={()=>tap3()}
     />
   )
 }

@@ -4,72 +4,88 @@ import { styled } from '../../stitches.config';
 import AlignItems from '../alignment/AlignItems';
 import useSound from 'use-sound';
 
-export default function TypeButton(props) {
+const TypeButtonItem =(props)=> {
   const [select1] = useSound('/sound/select-1-sg.mp3',{playbackRate:1.1});
 
   return (
-    <TypeButtonStyled
+    <TypeButtonItemStyled
       selected={props.selectedInput === props.type}
-      onMouseDown={()=> select1()}
+      onMouseDown={()=> props.selectedInput != props.type ? select1():null}
       onClick={props.onClick}
     >
       <AlignItems gap={'0.7em'}>
-        <TypeButtonColorStyled
+        <TypeButtonItemColorStyled
           selected={props.selectedInput === props.type}
           type={props.type}
         />
-        <h5>
+        <h4>
           {props.type === 'blue' && '海。池。川等'}
           {props.type === 'green' && '森。山。公園等'}
           {props.type === 'red' && '建物。カフェ等'}
           {props.type === 'purple' && 'その他'}
-        </h5>
+        </h4>
       </AlignItems>
+    </TypeButtonItemStyled>
+  )
+}
+
+TypeButton.Item = TypeButtonItem;
+export default function TypeButton({children}) {
+  return(
+    <TypeButtonStyled>
+      {children}
     </TypeButtonStyled>
   )
 }
 
 const TypeButtonStyled = styled('div', {
+  display:'grid',
+  gap:'0.25em',
+  maxWidth: '220px',
+  minWidth: '200px',
+  width:'100%',
+})
+
+const TypeButtonItemStyled = styled('button', {
   fontFamily: '$sgFont1',
   cursor: 'pointer',
   textAlign: 'center',
   borderRadius:'$r2',
-  padding:'0.5em 0.5em 0.5em 0.7em',
+  padding:'0.5em 1em',
   transition:'$speed1',
-  minWidth: '200px',
   margin:'0',
   border:'1px solid transparent',
   variants:{
     selected:{
       true: {
-        background: '$gray12',
-        borderColor:'$gray6',
-        shadow:'$shadow1',
-        'h5':{
+        'h4':{
           color: '$gray3',
-        }
+        },
+        background: '$gray12',
+        borderColor:'$gray12',
+        shadow:'$shadow1',
       },
       false: {
-        backgroundColor:'transparent',
-        'h5':{
+        'h4':{
           color: '$gray10',
         },
+        backgroundColor:'transparent',
         '&:hover':{
           backgroundColor:'$gray4',
           borderColor:'$gray5',
-          'h5':{
+          'h4':{
             color: '$gray11',
           }
         }
       }
     }
   },
-  'h5':{
+  'h4':{
     margin:0,
   }
 })
 
-const TypeButtonColorStyled = styled('div',{
+const TypeButtonItemColorStyled = styled('div',{
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
