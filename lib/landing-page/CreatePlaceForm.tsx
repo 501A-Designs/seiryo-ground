@@ -92,17 +92,6 @@ export default function CreatePlaceForm(props) {
     }
   }
 
-
-  const ProgressBarStyled = styled('div',{
-    height:'10px',
-    borderRadius:'$round',
-  })
-  function ProgressBar(props) {
-    return (
-      <ProgressBarStyled css={props.css}></ProgressBarStyled>
-    )
-  }
-
   // <Container type="standard">
   //   <p>※よく内容を確認した上で公開してください。一度公開すると<Link href="/levels">Level 3 Contributor</Link>になるまでは編集することできないのでご了承ください。また、記入された内容は清涼広場の利用規約に反していないものであるようお願い致します。</p>
   // </Container>

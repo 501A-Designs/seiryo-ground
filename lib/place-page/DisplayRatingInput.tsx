@@ -15,6 +15,7 @@ const DisplayRatingInputStyled = styled('div',{
     margin: '0',
     textAlign: 'center',
     fontWeight:'500',
+
   },
   'input': {
     WebkitAppearance: 'none',
@@ -56,7 +57,7 @@ const DisplayRatingInputStyled = styled('div',{
   },
   '&:hover':{
     backgroundColor:'$gray2',
-  }
+  },
 })
 
 export default function DisplayRatingInput(props) {

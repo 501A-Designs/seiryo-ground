@@ -5,6 +5,7 @@ export const globalStyles = globalCss({
   '*': {
     fontFamily: 'Clash Display, Helvetica, sans-serif',
     WebkitFontSmoothing: 'antialiased',
+    textRendering:'optimizeLegibility',
     fontWeight:'normal',
     userSelect: 'none',
   },

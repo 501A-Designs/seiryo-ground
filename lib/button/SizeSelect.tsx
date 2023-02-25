@@ -83,11 +83,11 @@ const SizeSelectStyled = styled('section',{
 
 const SizeSelectLabelStyled = styled('section',{
   'h3':{
-    animation:`${popOutNoBlur} 0.1s`,
+    animation:`${popOutNoBlur} 0.2s`,
     margin:'1em 0 0 0'
   },
   'p':{
-    animation:`${popOutNoBlur} 0.2s`,
+    animation:`${popOutNoBlur} 0.3s`,
     margin:'0 0 1.3em 0'
   }
 })

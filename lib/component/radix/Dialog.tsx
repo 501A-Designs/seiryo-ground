@@ -1,27 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { keyframes, styled } from '@stitches/react';
 import Button from '../../button/Button';
 import { topSlideIn } from '../../ux/keyframes';
 import AlignItems from '../../alignment/AlignItems';
-import { Cross1Icon } from '@radix-ui/react-icons';
+import { CheckIcon, Cross1Icon } from '@radix-ui/react-icons';
+
+
+// const transitions = useTransition(open, {
+//   from: { opacity: 0, y: -10 },
+//   enter: { opacity: 1, y: 0 },
+//   leave: { opacity: 0, y: 10 },
+//   config: config.stiff,
+// });
 
 function Content({ children, ...props }) {
   return (
     <Dialog.Portal>
-      <StyledOverlay />
-      <StyledContent {...props}>{children}</StyledContent>
+      <StyledOverlay/>
+      <StyledContent
+        {...props}
+        openState={props.openState}
+      >{children}</StyledContent>
     </Dialog.Portal>
   );
 }
 
 export default function RadixDialog(props){
+  const [open, setOpen] = useState(false);
+
   return (
-    <Dialog.Root>
+    <Dialog.Root
+      open={open}
+      onOpenChange={setOpen}
+    >
       <Dialog.Trigger asChild>
         {props.trigger}
       </Dialog.Trigger>
       <Content
+        openState={open}
         size={props.size}
       >
         <AlignItems
@@ -34,14 +51,16 @@ export default function RadixDialog(props){
             </StyledTitle>:
             props.topLeftComponent
           }
-          {props.topCenterComponent}
           <Dialog.Close asChild>
-            <Button
-              backTapSound
-              size={'small'}
-              aria-label="Close"
-              icon={<Cross1Icon/>}
-            />
+            {props.saveClose ?
+              props.saveClose:
+              <Button
+                backTapSound
+                size={'small'}
+                aria-label="Close"
+                icon={<Cross1Icon/>}
+              />
+            }
           </Dialog.Close>
         </AlignItems>
         {props.banner &&
@@ -61,24 +80,41 @@ export default function RadixDialog(props){
 };
 
 
-const popOutDialog = keyframes({
+const popInDialog = keyframes({
   '0%': {
-    opacity: 0,
+    opacity: 0.9,
+    filter:'blur(5px)',
 		transform: 'translateY(0px) translateX(-50%) scale(0.5)',
   },
-  '40%':{
-    filter:'blur(5px)',
-		transform: 'translateY(-50%) translateX(-50%) scale(1.02)',
+  '50%':{
+		transform: 'translateY(-50%) translateX(-50%) scale(1.04)',
   }
 });
 
+const popOutDialog = keyframes({
+  '20%':{
+    transform: 'translateY(-50%) translateX(-50%) scale(1.04)',
+  },
+  '100%': {
+    opacity: 0,
+    filter:'blur(5px)',
+    transform: 'translateY(50%) translateX(-50%) scale(0)',
+  },
+});
+
 const StyledOverlay = styled(Dialog.Overlay, {
-  background: `linear-gradient($grayA2, $gray1)`,
   cursor: 'pointer',
+  background: `linear-gradient($grayA2, $gray1)`,
   backdropFilter: `blur(3px)`,
   position: 'fixed',
   inset: 0,
   zIndex:'100',
+  // variants:{
+  //   openState:{
+  //     true:{
+  //     }
+  //   }
+  // }
   '@media (prefers-reduced-motion: no-preference)': {
     animation: `${topSlideIn} 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
   },
@@ -112,9 +148,9 @@ const StyledContent = styled(Dialog.Content, {
   padding: '$medium',
   boxShadow:'$shadow1',
   zIndex:'200',
-  '@media (prefers-reduced-motion: no-preference)': {
-    animation: `${popOutDialog} 400ms`,
-  },
+  // '@media (prefers-reduced-motion: no-preference)': {
+  //   animation: `${popOutDialog} 500ms`,
+  // },
   '&:focus': { outline: 'none' },
   variants:{
     size:{
@@ -128,6 +164,14 @@ const StyledContent = styled(Dialog.Content, {
         maxWidth: '400px',
       }
     },
+    openState:{
+      true:{
+        animation: `${popInDialog} 500ms`,
+      },
+      false:{
+        animation: `${popOutDialog} 500ms`,
+      }
+    }
   },
   defaultVariants:{
     size:'small'

@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { useState,useEffect, useContext } from 'react'
+import React, { useState,useEffect, useContext, useMemo } from 'react'
 import AlignItems from '../../lib/alignment/AlignItems'
 import TypeBadge from '../../lib/TypeBadge'
 
@@ -65,7 +65,7 @@ export default function PlaceName({
 
   const [hasReviewed, setHasReviewed] = useState(false);
 
-  const [placeData] = useState(locationDataSnap);
+  const [placeData, setPlaceData] = useState(locationDataSnap);
   const [reviewsCollection] = useState(reviewsData);
   
   const [averageOfDateRating, setAverageOfDateRating] = useState(0);
@@ -84,6 +84,10 @@ export default function PlaceName({
   const [typeInput, setTypeInput] = useState(placeData.type ? placeData.type:'');
   const [costCheckBox, setCostCheckBox] = useState(placeData.cost ? placeData.cost:['free']);
 
+
+  const [currentReviewData, setCurrentReviewData] = useState<any>();
+  const [currentPlaceData, setCurrentPlaceData] = useState(locationDataSnap);
+
   useEffect(()=>{
     placeData.likes.map((uid) => {
       if (user && user.uid == uid) {
@@ -93,6 +97,7 @@ export default function PlaceName({
     reviewsCollection?.forEach((doc) => {
       if (user?.uid === doc.id) {
         setHasReviewed(true);
+        setCurrentReviewData(doc.data)
         setTitleRatingInput(doc.data.title);
         setDescriptionRatingInput(doc.data.description);
         setDateRatingInput(doc.data.dateRating);
@@ -105,7 +110,8 @@ export default function PlaceName({
 
   const editThisPlace = async() => {
     load1();
-    await updateDoc(doc(db, `places/${placeId}`), {
+    setProgress(10)
+    const updatedContent = {
       name: placeInput,
       location: locationInput,
       description: descriptionInput,
@@ -114,11 +120,11 @@ export default function PlaceName({
       cost: costCheckBox,
       size: sizeSelect,
       officialSite:officialSiteInput,
-    });
-    setPlaceInput('');
-    setLocationInput('');
-    setDescriptionInput('');
-    setTypeInput('');
+    }
+    await updateDoc(doc(db, `places/${placeId}`), updatedContent);
+    setCurrentPlaceData(updatedContent);
+    setPlaceData(updatedContent);
+    setProgress(100);
     celebrate1();
   }
 
@@ -164,7 +170,7 @@ export default function PlaceName({
 
   const updateReview = async() =>{
     load1();
-    setProgress(10)
+    setProgress(10);
     await updateDoc(doc(db, `places/${placeId}/reviews/${user && user.uid}`), {
       title: titleRatingInput,
       description: descriptionRatingInput,
@@ -173,7 +179,7 @@ export default function PlaceName({
       managementRating: managementRatingInput,
       lastUpdated:timeNow
     });
-    setProgress(100)
+    setProgress(100);
     celebrate1();
   }
 
@@ -243,14 +249,24 @@ export default function PlaceName({
                     <p>全ての編集機能をアクセスするにはカードをアップグレードする必要があります。</p>
                   </AlignItems>
                 }
-                topCenterComponent={
+                saveClose={
+                  currentPlaceData.name != placeInput ||
+                  currentPlaceData.location != locationInput ||
+                  currentPlaceData.description != descriptionInput ||
+                  currentPlaceData.toilet != binaryToggle ||
+                  currentPlaceData.type != typeInput ||
+                  currentPlaceData.cost != costCheckBox ||
+                  currentPlaceData.size != sizeSelect ||
+                  currentPlaceData.officialSite != officialSiteInput
+                   ?
                   <Button
                     styleType={'black'}
-                    icon={<CheckIcon/>}
-                    onClick={()=> editThisPlace()}
+                    icon={<UpdateIcon/>}
+                    onClick={()=>editThisPlace()}
                   >
-                    変更を保存
-                  </Button>
+                    レビューの内容を更新
+                  </Button>:
+                  false
                 }
               >
                 {userData && userData.data() &&
@@ -419,14 +435,14 @@ export default function PlaceName({
             </AlignItems>
             <p>{placeData.description}</p>
             <Grid gap={'small'}>
-              {reviewsData?.map((review) =>(
+              {reviewsCollection?.map((review) =>(
                   <Review
                     key={review.id}
                     data={review.data}
                   />
                 )
               )}
-              {reviewsData?.length > 0 ? 
+              {reviewsCollection?.length > 0 ? 
                 <End>
                   おわり。
                   <br/>
@@ -578,6 +594,30 @@ export default function PlaceName({
                       title={hasReviewed ? '書いたレビューを編集':'レビューを書く'}
                     />
                   }
+                  saveClose={
+                    hasReviewed && currentReviewData ?
+                      currentReviewData?.title != titleRatingInput ||
+                      currentReviewData?.description != descriptionRatingInput ||
+                      currentReviewData?.dateRating != dateRatingInput ||
+                      currentReviewData?.accessRating != accessRatingInput ||
+                      currentReviewData?.managementRating != managementRatingInput ?
+                        <Button
+                          styleType={'black'}
+                          icon={<UpdateIcon/>}
+                          onClick={()=>updateReview()}
+                        >
+                          レビューの内容を更新
+                        </Button>:false:
+                      titleRatingInput && descriptionRatingInput ?
+                      <Button
+                        styleType={'black'}
+                        icon={<CheckIcon/>}
+                        onClick={()=>publishReview()}
+                      >
+                        レビューを公開
+                      </Button>:
+                      false
+                  }
                 >
                   <Grid gap={'extraSmall'}>
                     <Input
@@ -618,29 +658,6 @@ export default function PlaceName({
                       }
                       placeholder={'行って感じた事、評価項目に写らない場所の良さ等。'}
                     />
-                    {titleRatingInput && descriptionRatingInput &&
-                      <AlignItems
-                        justifyContent={'center'}
-                        margin={'1em 0 0 0'}
-                      >
-                        {hasReviewed ?
-                          <Button
-                            styleType={'black'}
-                            icon={<UpdateIcon/>}
-                            onClick={()=>updateReview()}
-                          >
-                            レビューの内容を更新
-                          </Button>:
-                          <Button
-                            styleType={'black'}
-                            icon={<CheckIcon/>}
-                            onClick={()=>publishReview()}
-                          >
-                            レビューを公開
-                          </Button>
-                        }
-                      </AlignItems>
-                    }
                   </Grid>
                 </RadixDialog>
 

@@ -42,12 +42,12 @@ export default function Levels() {
       <h3>Perks</h3>
       <table>
         <tr>
-          <th></th>
-          <th>Level 1</th>
-          <th>Level 2</th>
-          <th>Level 3</th>
-          <th>Level 4</th>
-          <th>Level 5</th>
+          <th>Levels</th>
+          <th>1</th>
+          <th>2</th>
+          <th>3</th>
+          <th>4</th>
+          <th>5</th>
         </tr>
         <tr>
           <td>場所の追加・レビューを作成</td>

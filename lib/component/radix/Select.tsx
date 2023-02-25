@@ -3,6 +3,8 @@ import * as Select from "@radix-ui/react-select";
 import { styled } from "../../../stitches.config";
 import useSound from "use-sound";
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
+import { popOutNoBlur } from "../../ux/keyframes";
+import { keyframes } from "@stitches/react";
 
 export const RadixSelect = (props) => (
   <Select.Root
@@ -61,6 +63,18 @@ const SelectIcon = styled(Select.SelectIcon, {
   color: "$gray11",
 });
 
+
+const popOutSqueeze = keyframes({
+  '0%': {
+    transform: 'scaleY(0)',
+    opacity: 0.5,
+    filter:'blur(5px)',
+  },
+  '50%':{
+    transform: 'scale(1.02)',
+  }
+});
+
 const SelectContent = styled(Select.Content, {
   overflow: "hidden",
   background: "linear-gradient($gray1,$gray3)",
@@ -69,6 +83,7 @@ const SelectContent = styled(Select.Content, {
   zIndex:"1000",
   boxShadow:"$shadow3",
   width:'fit-content',
+  animation:`${popOutSqueeze} 0.4s`
 });
 
 const SelectViewport = styled(Select.Viewport, {
