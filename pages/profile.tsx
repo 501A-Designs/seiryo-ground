@@ -79,7 +79,6 @@ const ProfileCard = styled('div',{
     color:'inherit'
     // color:'white'
   },
-
   // Levels
   variants:{
     level:{
@@ -92,7 +91,7 @@ const ProfileCard = styled('div',{
       },
       2:{
         color: '$blue1',
-        background: 'linear-gradient(45deg, $blue11 0%, $blue8 100%)',
+        background: 'linear-gradient(45deg, $blue11 0%, $blue8 100%) url(https://grainy-gradients.vercel.app/noise.svg)',
         [`& ${VerticalText}`]:{
           color: '$blue6',
         }

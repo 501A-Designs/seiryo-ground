@@ -13,7 +13,7 @@ import ProfileContainer from '../profile-page/ProfileContainer';
 import { checkLevel } from '../util/checkLevel';
 import { useDocument } from 'react-firebase-hooks/firestore';
 import { doc } from 'firebase/firestore';
-import { ArrowLeftIcon, BookmarkIcon, HamburgerMenuIcon, HomeIcon, IdCardIcon, InfoCircledIcon, ShadowInnerIcon } from '@radix-ui/react-icons';
+import { ArrowLeftIcon, ArrowUpIcon, BookmarkIcon, HamburgerMenuIcon, HomeIcon, IdCardIcon, InfoCircledIcon, ShadowInnerIcon } from '@radix-ui/react-icons';
 import { useTheme } from 'next-themes';
 import AlignItems from '../alignment/AlignItems';
 
@@ -178,11 +178,11 @@ export default function UniversalNav(props:UniversalNavProps) {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       if (!props.showInitially) {
-        currentScrollY < 100 ? setHide(true):setHide(false);
+        currentScrollY < 70 ? setHide(true):setHide(false);
       }
       if (props.scrollPop) {        
-        currentScrollY < 1500 ? setHideScrollUp(true):setHideScrollUp(false);
-        currentScrollY < 1500 ? setDynamicSize(props.minSize):setDynamicSize(props.maxSize)
+        currentScrollY < 800 ? setHideScrollUp(true):setHideScrollUp(false);
+        currentScrollY < 800 ? setDynamicSize(props.minSize):setDynamicSize(props.maxSize)
       }
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -244,7 +244,7 @@ useEffect(()=>{
                 <Button
                   size={'small'}
                   styleType={'transparent'}
-                  icon={<ArrowLeftIcon/>}
+                  icon={<ArrowUpIcon/>}
                   onClick={()=>{scroll.scrollToTop();}}
                 >
                   上へ戻る

@@ -3,38 +3,42 @@ import * as Select from "@radix-ui/react-select";
 import { styled } from "../../../stitches.config";
 import useSound from "use-sound";
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
-import { popOutNoBlur } from "../../ux/keyframes";
 import { keyframes } from "@stitches/react";
 
-export const RadixSelect = (props) => (
-  <Select.Root
-    value={props.value}
-    onValueChange={props.onValueChange}
-  >
-    <SelectTrigger aria-label="Course">
-      <Select.Value
-        placeholder={props.placeholder}
-        // value={props.value}
-      />
-      <SelectIcon>
-        <ChevronDownIcon />
-      </SelectIcon>
-    </SelectTrigger>
-    <Select.Portal>
-      <SelectContent>
-        <SelectScrollUpButton>
-          <ChevronUpIcon />
-        </SelectScrollUpButton>
-        <SelectViewport>
-          {props.children}
-        </SelectViewport>
-        <SelectScrollDownButton>
+export const RadixSelect = (props) => {
+  // const [tap2] = useSound('/sound/tap-2-sg.mp3',{playbackRate:1.1});
+  return(
+    <Select.Root
+      value={props.value}
+      onValueChange={props.onValueChange}
+    >
+      <SelectTrigger
+        aria-label="Course"
+      >
+        <Select.Value
+          placeholder={props.placeholder}
+          // value={props.value}
+        />
+        <SelectIcon>
           <ChevronDownIcon />
-        </SelectScrollDownButton>
-      </SelectContent>
-    </Select.Portal>
-  </Select.Root>
-);
+        </SelectIcon>
+      </SelectTrigger>
+      <Select.Portal>
+        <SelectContent>
+          <SelectScrollUpButton>
+            <ChevronUpIcon />
+          </SelectScrollUpButton>
+          <SelectViewport>
+            {props.children}
+          </SelectViewport>
+          <SelectScrollDownButton>
+            <ChevronDownIcon />
+          </SelectScrollDownButton>
+        </SelectContent>
+      </Select.Portal>
+    </Select.Root>
+  )
+}
 
 const SelectTrigger = styled(Select.SelectTrigger, {
   all: "unset",

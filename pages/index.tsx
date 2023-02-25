@@ -21,6 +21,9 @@ import { UserContext } from '../lib/util/UserContext'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
 import { jsonParse } from '../lib/util/jsonParse'
 import RadixSelect from '../lib/component/radix/Select'
+import Image from 'next/image'
+import mountainGreen from '../public/img/mountain-green.jpg'
+import openNakameguro from '../public/img/open-nakameguro.jpg'
 
 export default function Home({prefecD,placesData}) {
   let masonaryGrid = {350: 1, 750: 2, 900: 3, 1200:4};
@@ -145,7 +148,6 @@ export default function Home({prefecD,placesData}) {
               }):<h2>現在ありません。</h2>}
             </Grid>
           </Grid>
-
           {/* All Locations */}
           <Grid gap={'small'}>
             <p>All Locations</p>
@@ -162,11 +164,24 @@ export default function Home({prefecD,placesData}) {
             </Grid>
           </Grid>
         </Grid>
+        <Image
+          alt={'Mountain Image'}
+          src={mountainGreen}
+          placeholder='blur'
+          // fill
+          layout={"responsive"}
+          style={{
+            marginTop:'5em',
+            borderRadius:10,
+          }}
+        />
+
         <End>
           おわり。
           <br/>
           The End.
         </End>
+
       </Margin>
       <Footer type={'blur'}/>
       <UniversalNav

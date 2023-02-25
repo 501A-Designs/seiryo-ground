@@ -2,8 +2,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/router'
 import React from 'react'
 import Button from '../lib/button/Button'
-import seiryoLogo from '../public/seiryoLogo.png'
-import mountainGreen from '../public/concept/sg-mountain.png'
+import seiryoBannerLogo from '../public/img/seiryoBannerLogo.png'
+import mountainGreen from '../public/img/sg-mountain.png'
 import AlignItems from '../lib/alignment/AlignItems';
 import Margin from '../lib/alignment/Margin';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
@@ -21,6 +21,7 @@ export default function About() {
           placeholder='blur'
           // fill
           layout={"responsive"}
+          style={{marginTop:'1em'}}
         />
         <br/>
         <h3>初めまして。そして、</h3>
@@ -59,11 +60,10 @@ export default function About() {
           >
             <Image
               alt={'SG-logo'}
-              src={seiryoLogo}
-              width={15}
-              height={15}
+              src={seiryoBannerLogo}
+              width={180}
+              height={45}
             />
-            <h5>SEIRYO GROUND</h5>
           </AlignItems>
         </AlignItems>
       </Grid>

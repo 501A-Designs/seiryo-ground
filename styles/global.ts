@@ -93,4 +93,8 @@ export const globalStyles = globalCss({
     borderRadius: '$r2',
     // filter: 'grayscale(1)',
   },
+  // 'img':{
+  //   border: '1px solid $sgGray2',
+  //   borderRadius: '$r2',
+  // }
 })

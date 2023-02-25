@@ -66,7 +66,7 @@ export default function PlaceName({
   const [hasReviewed, setHasReviewed] = useState(false);
 
   const [placeData, setPlaceData] = useState(locationDataSnap);
-  const [reviewsCollection] = useState(reviewsData);
+  const [reviewsCollection,setReviewsCollection] = useState(reviewsData);
   
   const [averageOfDateRating, setAverageOfDateRating] = useState(0);
   const [averageOfAccessRating, setAverageOfAccessRating] = useState(0);
@@ -171,14 +171,21 @@ export default function PlaceName({
   const updateReview = async() =>{
     load1();
     setProgress(10);
-    await updateDoc(doc(db, `places/${placeId}/reviews/${user && user.uid}`), {
+    const updatedReviewData = {
       title: titleRatingInput,
       description: descriptionRatingInput,
       dateRating: dateRatingInput,
       accessRating: accessRatingInput,
       managementRating: managementRatingInput,
       lastUpdated:timeNow
-    });
+    }
+    await updateDoc(doc(db, `places/${placeId}/reviews/${user && user.uid}`), updatedReviewData);
+    setCurrentReviewData(updatedReviewData);
+
+    const tempReviewsCollection = [...reviewsCollection];
+    const artwork = tempReviewsCollection.find(obj => obj.id === user.uid);
+    artwork.data = updatedReviewData;
+    setReviewsCollection(tempReviewsCollection);
     setProgress(100);
     celebrate1();
   }

@@ -25,7 +25,6 @@ const ButtonStyled = styled('button',{
       small:{
         minWidth:'35px',
         minHeight:'35px',
-        fontSize:'$5',
         padding:'0.5em',
       }
     },
