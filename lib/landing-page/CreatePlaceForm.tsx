@@ -67,6 +67,11 @@ export default function CreatePlaceForm(props) {
         type: typeInput,
         cost: costCheckBox,
         officialSite:officialSiteInput,
+        averageRating:{
+          access:0,
+          date:0,
+          management:0,
+        },
         likes:[],
       });
       setProgress(80);

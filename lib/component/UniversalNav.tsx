@@ -10,7 +10,7 @@ import { keyframes } from "@stitches/react";
 import { useEffect, useState } from 'react';
 import { scroll } from '../ux/scroll';
 import ProfileContainer from '../profile-page/ProfileContainer';
-import { checkLevel } from '../util/checkLevel';
+import { checkLevel } from '../util/helper';
 import { useDocument } from 'react-firebase-hooks/firestore';
 import { doc } from 'firebase/firestore';
 import { ArrowLeftIcon, ArrowUpIcon, BookmarkIcon, HamburgerMenuIcon, HomeIcon, IdCardIcon, InfoCircledIcon, ShadowInnerIcon } from '@radix-ui/react-icons';

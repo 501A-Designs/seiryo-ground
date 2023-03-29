@@ -2,13 +2,12 @@ import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import AlignItems from '../alignment/AlignItems';
 import TypeBadge from '../TypeBadge';
-import { useCollection } from 'react-firebase-hooks/firestore';
-import { collection } from 'firebase/firestore';
-import { db } from '../../firebase';
 import { styled } from '../../stitches.config';
 import Grid from '../alignment/Grid';
 import useSound from 'use-sound';
 import { gradient } from '../ux/keyframes';
+import { FileTextIcon, HeartIcon, PlayIcon, TargetIcon } from '@radix-ui/react-icons';
+import { round } from '../util/helper';
 
 const PostThumbNailStyled = styled('div', {
   cursor:'pointer',
@@ -41,15 +40,35 @@ const PostThumbNailStyled = styled('div', {
   }
 })
 
+const IconTextContainerStyled = styled('div',{
+  display:'flex',
+  alignItems:'center',
+  gap:'$extraSmall',
+  color:'$gray10',
+  fontSize:'$9',
+  'svg':{
+    width:12,
+    height:12
+  }
+})
+
 export default function PostThumbNail(props) {
   const router = useRouter();
-  // const [reviewsCollection] = useCollection(collection(db, `places/${props.id}/reviews/`));
-
   const data = props?.data;
+  const averageRate = data?.averageRating;
+
+  const overallScore:number = round(
+    100*
+    ((
+      averageRate?.access + 
+      averageRate?.date + 
+      averageRate?.management
+    )/3)/10
+  );
 
   const [loadingState, setLoadingState] = useState(false);
-
   const [tap1] = useSound('/sound/tap-1-sg.mp3');
+
   return (
     <PostThumbNailStyled
       key={props.key}
@@ -60,21 +79,43 @@ export default function PostThumbNail(props) {
         router.push(`/place/${props.id}/`);
       }}
     >
-      <AlignItems>
-        <TypeBadge
-          width={'small'}
-          type={data?.type}
-        />
-        <Grid gap={'extraSmall'}>
+      <Grid gap={'extraSmall'}>
+        <AlignItems>
+          <TypeBadge
+            width={'small'}
+            type={data?.type}
+          />
           <h5>{data?.name}</h5>
-          <p>
-            {/* {reviewsCollection?.docs.length > 0 &&
-              <>{reviewsCollection.docs.length + '_'}review | </>
-            } */}
-            {data?.likes?.length + '_'}heart
-          </p>
-        </Grid>
-      </AlignItems>
+        </AlignItems>
+          {/* {reviewsCollection?.docs.length > 0 &&
+            <>{reviewsCollection.docs.length + '_'}review | </>
+          } */}
+        <AlignItems spaceBetween>
+          <AlignItems>
+            {
+              data?.likes?.length > 0 &&
+              <IconTextContainerStyled>
+                <HeartIcon/>
+                {data?.likes?.length}
+              </IconTextContainerStyled>
+            }
+            {
+              data?.reviewNum > 0 &&
+              <IconTextContainerStyled>
+                <FileTextIcon/>
+                {data?.reviewNum}
+              </IconTextContainerStyled>
+            }
+          </AlignItems>
+          {
+            overallScore > 0 &&
+            <IconTextContainerStyled>
+              {/* <TargetIcon/> */}
+              {overallScore}%
+            </IconTextContainerStyled>
+          }
+        </AlignItems>
+      </Grid>
     </PostThumbNailStyled>
   )
 }

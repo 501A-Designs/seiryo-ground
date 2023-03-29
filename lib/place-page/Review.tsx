@@ -52,6 +52,7 @@ function ReviewValue(reviewValueProps) {
 
 export default function Review(props) {
   const data = props.data;
+  const ratingData = data.rating;
   return (
     <ReviewStyled key={props.key}>
       <hr/>
@@ -69,13 +70,13 @@ export default function Review(props) {
         }}
       >
         <ReviewValue text='デートスポット適性'>
-          {data.dateRating}
+          {ratingData.date}
         </ReviewValue>
         <ReviewValue text='最寄駅のアクセス'>
-          {data.accessRating}
+          {ratingData.access}
         </ReviewValue>
         <ReviewValue text='設備管理の状況'>
-          {data.managementRating}
+          {ratingData.management}
         </ReviewValue>
       </Grid>
     </ReviewStyled>

@@ -26,3 +26,9 @@ export const checkLevel = (postCount,reviewCount) =>{
     return 1;
   }
 }
+
+export const round = (number):number => {
+  if (number == 10) return 10;
+  if (number == 0) return 0;
+  else return parseFloat((Math.round(number * 100) / 100).toFixed(1));
+}

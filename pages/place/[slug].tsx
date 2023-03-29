@@ -44,6 +44,7 @@ import Header from '../../lib/component/Header'
 // RADIX
 import RadixDialog from '../../lib/component/radix/Dialog'
 import RadixAccordion from '../../lib/component/radix/Accordion'
+import { round } from '../../lib/util/helper'
 
 export default function PlaceName({
   locationDataSnap,
@@ -66,7 +67,7 @@ export default function PlaceName({
   const [hasReviewed, setHasReviewed] = useState(false);
 
   const [placeData, setPlaceData] = useState(locationDataSnap);
-  const [reviewsCollection,setReviewsCollection] = useState(reviewsData);
+  const [reviewsCollection, setReviewsCollection] = useState(reviewsData);
   
   const [averageOfDateRating, setAverageOfDateRating] = useState(0);
   const [averageOfAccessRating, setAverageOfAccessRating] = useState(0);
@@ -100,9 +101,10 @@ export default function PlaceName({
         setCurrentReviewData(doc.data)
         setTitleRatingInput(doc.data.title);
         setDescriptionRatingInput(doc.data.description);
-        setDateRatingInput(doc.data.dateRating);
-        setAccessRatingInput(doc.data.accessRating);
-        setManagementRatingInput(doc.data.managementRating);
+
+        setDateRatingInput(doc.data.rating.date);
+        setAccessRatingInput(doc.data.rating.access);
+        setManagementRatingInput(doc.data.rating.management);
       }
     });
     updateAverageRatings();
@@ -133,34 +135,55 @@ export default function PlaceName({
     let arrayOfAccessRating = [];
     let arrayOfManagementRating = [];
     reviewsCollection?.forEach((doc) => {
-      arrayOfDateRating.push(parseInt(doc.data.dateRating));
-      arrayOfAccessRating.push(parseInt(doc.data.accessRating));
-      arrayOfManagementRating.push(parseInt(doc.data.managementRating));
+      arrayOfDateRating.push(doc.data.rating.date);
+      arrayOfAccessRating.push(doc.data.rating.access);
+      arrayOfManagementRating.push(doc.data.rating.management);
     })
-    setAverageOfDateRating(arrayOfDateRating.reduce((sum, element) => sum + element, 0)/arrayOfDateRating.length);
-    setAverageOfAccessRating(arrayOfAccessRating.reduce((sum, element) => sum + element, 0)/arrayOfAccessRating.length);
-    setAverageOfManagementRating(arrayOfManagementRating.reduce((sum, element) => sum + element, 0)/arrayOfManagementRating.length);
+    const averageDate = arrayOfDateRating.reduce((sum, element) => sum + element, 0)/arrayOfDateRating.length;
+    const averageAccess = arrayOfAccessRating.reduce((sum, element) => sum + element, 0)/arrayOfAccessRating.length;
+    const averageManagement = arrayOfManagementRating.reduce((sum, element) => sum + element, 0)/arrayOfManagementRating.length;
+    setAverageOfDateRating(averageDate);
+    setAverageOfAccessRating(averageAccess);
+    setAverageOfManagementRating(averageManagement);
+
+    if (
+      averageDate &&
+      averageAccess &&
+      averageManagement &&
+      user
+    ) {
+      await updateDoc(doc(db,`places/${placeId}/`), {
+        averageRating:{
+          date: averageDate,
+          access: averageAccess,
+          management: averageManagement,
+        },
+      });
+    }
   }
 
   const [titleRatingInput, setTitleRatingInput] = useState('');
-  const [dateRatingInput, setDateRatingInput] = useState(0);
-  const [accessRatingInput, setAccessRatingInput] = useState(0);
-  const [managementRatingInput, setManagementRatingInput] = useState(0);
   const [descriptionRatingInput, setDescriptionRatingInput] = useState('');
 
+  const [dateRatingInput, setDateRatingInput] = useState<number>(0);
+  const [accessRatingInput, setAccessRatingInput] = useState<number>(0);
+  const [managementRatingInput, setManagementRatingInput] = useState<number>(0);
   let timeNow = moment().format('MMMM Do YYYY, h:mm a');
 
   const publishReview = async() =>{
     load1();
-    if (user) {      
+    if (user) {
       await setDoc(doc(collection(db, `places/${placeId}/reviews/`), `${user.uid}`), {
         title: titleRatingInput,
         description: descriptionRatingInput,
-        dateRating: dateRatingInput,
-        accessRating: accessRatingInput,
-        managementRating: managementRatingInput,
-        lastUpdated:timeNow
+        lastUpdated:timeNow,
+        rating:{
+          date: dateRatingInput,
+          access: accessRatingInput,
+          management: managementRatingInput,
+        },
       });
+      updateAverageRatings();
       await updateDoc(doc(db,`users/${user.uid}`), {
         reviewCount: increment(1)
       });
@@ -174,26 +197,23 @@ export default function PlaceName({
     const updatedReviewData = {
       title: titleRatingInput,
       description: descriptionRatingInput,
-      dateRating: dateRatingInput,
-      accessRating: accessRatingInput,
-      managementRating: managementRatingInput,
-      lastUpdated:timeNow
+      lastUpdated:timeNow,
+      rating:{
+        date: dateRatingInput,
+        access: accessRatingInput,
+        management: managementRatingInput,
+      },
     }
     await updateDoc(doc(db, `places/${placeId}/reviews/${user && user.uid}`), updatedReviewData);
     setCurrentReviewData(updatedReviewData);
-
     const tempReviewsCollection = [...reviewsCollection];
-    const artwork = tempReviewsCollection.find(obj => obj.id === user.uid);
-    artwork.data = updatedReviewData;
+    const newReviewData = tempReviewsCollection.find(obj => obj.id === user.uid);
+    newReviewData.data = updatedReviewData;
+
     setReviewsCollection(tempReviewsCollection);
+    updateAverageRatings();
     setProgress(100);
     celebrate1();
-  }
-
-  const round = (number) =>{
-    if (number == 10) return 10;
-    if (number == 0) return 0;
-    else return (Math.round(number * 100) / 100).toFixed(1);
   }
 
   const addLike = async() =>{
@@ -364,7 +384,8 @@ export default function PlaceName({
                           placeholder={"場所の名前"}
                           value={placeInput}
                           onChange={(e)=>
-                            setPlaceInput(e.target.value)}
+                            setPlaceInput(e.target.value)
+                          }
                         />
                       }
 
@@ -476,6 +497,20 @@ export default function PlaceName({
                 }}
               >
                 <Rating
+                  rating={
+                    round(
+                      100*
+                      ((
+                        averageOfDateRating + 
+                        averageOfAccessRating + 
+                        averageOfManagementRating
+                      )/3)/10
+                    )
+                  }
+                  description={'%：総合点数'}
+                  hideMax={true}
+                />
+                <Rating
                   rating={round(averageOfDateRating)}
                   description={'デートスポット適正'}
                 />
@@ -568,7 +603,7 @@ export default function PlaceName({
                 </Grid>
               </Grid>
             </Container>
-            <Map location={placeData.location}/>
+            {/* <Map location={placeData.location}/> */}
           </Grid>
         </Grid>
         <Footer type={'blur'}/>
@@ -605,9 +640,9 @@ export default function PlaceName({
                     hasReviewed && currentReviewData ?
                       currentReviewData?.title != titleRatingInput ||
                       currentReviewData?.description != descriptionRatingInput ||
-                      currentReviewData?.dateRating != dateRatingInput ||
-                      currentReviewData?.accessRating != accessRatingInput ||
-                      currentReviewData?.managementRating != managementRatingInput ?
+                      currentReviewData?.rating.date != dateRatingInput ||
+                      currentReviewData?.rating.access != accessRatingInput ||
+                      currentReviewData?.rating.management != managementRatingInput ?
                         <Button
                           styleType={'black'}
                           icon={<UpdateIcon/>}
@@ -636,7 +671,7 @@ export default function PlaceName({
                     <Grid grid={'tri'} gap={'extraSmall'}>
                       <DisplayRatingInput
                         value={dateRatingInput}
-                        onChange={(e)=> setDateRatingInput(e.target.value)
+                        onChange={(e)=> setDateRatingInput(parseInt(e.target.value))
                         }
                         maxValue={10}
                         minValue={0}
@@ -644,7 +679,7 @@ export default function PlaceName({
                       />
                       <DisplayRatingInput
                         value={accessRatingInput}
-                        onChange={(e)=> setAccessRatingInput(e.target.value)
+                        onChange={(e)=> setAccessRatingInput(parseInt(e.target.value))
                         }
                         maxValue={10}
                         minValue={0}
@@ -652,7 +687,7 @@ export default function PlaceName({
                       />
                       <DisplayRatingInput
                         value={managementRatingInput}
-                        onChange={(e)=> setManagementRatingInput(e.target.value)
+                        onChange={(e)=> setManagementRatingInput(parseInt(e.target.value))
                         }
                         maxValue={10}
                         minValue={0}

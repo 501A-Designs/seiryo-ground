@@ -7,7 +7,7 @@ import Button from '../lib/button/Button'
 import { useRouter } from 'next/router'
 
 import {db} from '../firebase'
-import { collection, getDocs } from "firebase/firestore";
+import { DocumentData, QuerySnapshot, collection, getCountFromServer, getDocs } from "firebase/firestore";
 
 import CreatePlaceForm from '../lib/landing-page/CreatePlaceForm'
 
@@ -23,28 +23,26 @@ import { jsonParse } from '../lib/util/jsonParse'
 import RadixSelect from '../lib/component/radix/Select'
 import Image from 'next/image'
 import mountainGreen from '../public/img/mountain-green.jpg'
-import openNakameguro from '../public/img/open-nakameguro.jpg'
+import { round } from '../lib/util/helper'
 
 export default function Home({prefecD,placesData}) {
-  let masonaryGrid = {350: 1, 750: 2, 900: 3, 1200:4};
   const router = useRouter();
-  
-  // const [placesCollection,placeCollectionLoading] = useCollection(collection(db, `places`));
-
   const [placesCollection] = useState(placesData);
 
 
+  let likesSum:number = 0;
+  placesCollection.map(d => {
+    likesSum = d.data.reviewNum + likesSum;
+  })
+
   const [prefectureInput, setPrefectureInput] = useState('東京都');
   
-  // Modal / Popup State
   const [gettingStartedModalIsOpen, setGettingStartedModalIsOpen] = useState(false);
 
   // Auth & Firestore
   const userContextData = useContext(UserContext);
   const user = userContextData?.user;
   const userData = userContextData?.userData;
-
-
 
   useEffect(() => {
     if (
@@ -68,7 +66,6 @@ export default function Home({prefecD,placesData}) {
     })
     setFilteredPlaceCollection(filteredArray)
   }, [prefectureInput])
-  
 
 
   return (
@@ -98,11 +95,12 @@ export default function Home({prefecD,placesData}) {
           <WelcomeHeader/>
           <Grid gap={'small'}>
             <AlignItems spaceBetween>
-              <p>Most Liked</p>
+              <p>平均いいね数以上</p>
+              <p>平均：{round(likesSum/placesCollection.length)}</p>
             </AlignItems>
             <Grid grid={'quad'}>
               {placesCollection.map(doc => {
-                if (doc.data.likes.length > 0) {
+                if (doc.data.likes.length > likesSum/placesCollection.length) {
                   return (
                     <PostThumbNail
                       key={doc.id}
@@ -118,7 +116,7 @@ export default function Home({prefecD,placesData}) {
           {/* Filter Section */}
           <Grid gap={'small'}>
             <AlignItems spaceBetween>
-              <p>Filter Spots</p>
+              <p>県で絞る（{filteredPlaceCollection?.length}）</p>
               <RadixSelect
                 placeholder={'都道府県を選択'}
                 value={prefectureInput}
@@ -148,9 +146,11 @@ export default function Home({prefecD,placesData}) {
               }):<h2>現在ありません。</h2>}
             </Grid>
           </Grid>
-          {/* All Locations */}
           <Grid gap={'small'}>
-            <p>All Locations</p>
+            <AlignItems spaceBetween>
+              <p>全ての場所</p>
+              <p>{placesCollection.length}ヶ所</p>
+            </AlignItems>
             <Grid grid={'quad'}>
               {placesCollection.map(doc => {
                 return (
@@ -209,25 +209,27 @@ export default function Home({prefecD,placesData}) {
 }
 
 export async function getServerSideProps() {
-  // Fetch data from external API
   const res = await fetch(`https://raw.githubusercontent.com/piuccio/open-data-jp-prefectures/master/prefectures.json`)
   const prefecD = await res.json();
 
   const placeDataArray = [];
-  const placesCollectionSnapshot = await getDocs(collection(db, `places`));
-  placesCollectionSnapshot.forEach((doc) => {
+  const placesCollectionSnapshot: QuerySnapshot<DocumentData> = await getDocs(collection(db, `places`));
+  
+  for (const doc of placesCollectionSnapshot.docs) {
+    const reviewsCollection = collection(db, `places/${doc.id}/reviews`);
+    const reviewCount = await getCountFromServer(reviewsCollection);
     placeDataArray.push(
       {
         id:doc.id,
-        data:doc.data()
+        data:{
+          ...doc.data(),
+          reviewNum: reviewCount.data().count
+        },
       }
     );
-  });
-
-
+  }
   const placesData = jsonParse(placeDataArray);
 
-  // Pass data to the page via props
   return {
     props: {
       prefecD,
