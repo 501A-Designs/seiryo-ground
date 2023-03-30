@@ -2,6 +2,16 @@ import React from 'react'
 import { styled } from '../../stitches.config'
 import { popOutNoBlur } from '../ux/keyframes'
 import useSound from 'use-sound';
+import { keyframes } from '@stitches/react';
+
+const spinAni = keyframes({
+  from: {
+    transform: 'rotate(0deg)'
+  },
+  to: {
+    transform: 'rotate(360deg)'
+  }
+})
 
 const ButtonStyled = styled('button',{
   outlineColor:'$gray6',
@@ -18,6 +28,11 @@ const ButtonStyled = styled('button',{
   animation: `${popOutNoBlur} 0.3s`,
   transition:'$speed1',
   variants:{
+    animation:{
+      load:{
+        animation: `${spinAni} 2s infinite`
+      },
+    },
     size:{
       medium:{
         padding:'0.5em 1em',
@@ -100,11 +115,17 @@ export default function Button(props) {
   const [tap1] = useSound('/sound/tap-1-sg.mp3',{playbackRate:1.1});
   const [tap2] = useSound('/sound/tap-2-sg.mp3',{playbackRate:1.1});
 
+
+
   return (
     <ButtonStyled
       size={props.size}
       styleType={props.styleType}
-      onMouseDown={props.overRideSound ? props.overRideSound:()=>props.backTapSound ? tap2():tap1()}
+      onMouseDown={
+        props.overRideSound ? 
+        props.overRideSound : ()=> props.backTapSound ? tap2():tap1()
+      }
+      animation={props.animate}
       onClick={props.onClick}
       title={props.children}
       css={props.css}

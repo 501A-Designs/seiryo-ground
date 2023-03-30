@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { useState,useEffect, useContext, useMemo } from 'react'
+import React, { useState,useEffect, useContext } from 'react'
 import AlignItems from '../../lib/alignment/AlignItems'
 import TypeBadge from '../../lib/TypeBadge'
 
@@ -31,7 +31,6 @@ import useSound from 'use-sound'
 import Footer from '../../lib/component/Footer'
 import Link from 'next/link'
 import UniversalNav from '../../lib/component/UniversalNav'
-import Map from '../../lib/component/Map'
 import BinaryToggle from '../../lib/button/BinaryToggle'
 import SizeSelect from '../../lib/button/SizeSelect'
 import { popOut } from '../../lib/ux/keyframes'
@@ -76,7 +75,6 @@ export default function PlaceName({
   const [liked, setLiked] = useState(false);
 
   const [placeInput, setPlaceInput] = useState(placeData.name ? placeData.name:'');
-  const [locationInput, setLocationInput] = useState(placeData.location ? placeData.location:'');
   const [descriptionInput, setDescriptionInput] = useState(placeData.description ? placeData.description:'');
   const [officialSiteInput, setOfficialSiteInput] = useState(placeData.officialSite ? placeData.officialSite:'');
 
@@ -115,7 +113,6 @@ export default function PlaceName({
     setProgress(10)
     const updatedContent = {
       name: placeInput,
-      location: locationInput,
       description: descriptionInput,
       toilet: binaryToggle,
       type: typeInput,
@@ -170,7 +167,7 @@ export default function PlaceName({
   const [managementRatingInput, setManagementRatingInput] = useState<number>(0);
   let timeNow = moment().format('MMMM Do YYYY, h:mm a');
 
-  const publishReview = async() =>{
+  const publishReview = async () =>{
     load1();
     if (user) {
       await setDoc(doc(collection(db, `places/${placeId}/reviews/`), `${user.uid}`), {
@@ -278,7 +275,6 @@ export default function PlaceName({
                 }
                 saveClose={
                   currentPlaceData.name != placeInput ||
-                  currentPlaceData.location != locationInput ||
                   currentPlaceData.description != descriptionInput ||
                   currentPlaceData.toilet != binaryToggle ||
                   currentPlaceData.type != typeInput ||
@@ -403,19 +399,6 @@ export default function PlaceName({
                           value={officialSiteInput}
                           onChange={(e)=>setOfficialSiteInput(e.target.value)}
                         />
-                      }
-
-                      {userData.data().level > 3 &&
-                      <>
-                        <Input
-                          placeholder={"場所（スペース無し英語表記｜例：koishikawa-korakuen）"}
-                          value={locationInput}
-                          onChange={(e)=>setLocationInput(e.target.value)}
-                        />
-                        {/* <Map
-                          location={locationInput}
-                        /> */}
-                      </>
                       }
                     </Grid>
                   </Grid>
@@ -603,7 +586,6 @@ export default function PlaceName({
                 </Grid>
               </Grid>
             </Container>
-            {/* <Map location={placeData.location}/> */}
           </Grid>
         </Grid>
         <Footer type={'blur'}/>
@@ -621,7 +603,11 @@ export default function PlaceName({
               size={'small'}
               styleType={'transparent'}
               icon={<ArrowLeftIcon/>}
-              onClick={()=> {router.back()}}
+              onClick={()=> {
+                setProgress(10);
+                router.back();
+                setProgress(100);
+              }}
             />
             {user &&
               <>
@@ -729,7 +715,6 @@ export async function getServerSideProps({params}){
   const reviewsSnap = await getDocs(collection(db, `places/${params.slug}/reviews/`));
   const locationDataSnap = jsonParse(placeInfoDocSnap.data());
 
-
   reviewsSnap.forEach((doc) => {
     reviewsDataArray.push(
       {
@@ -740,7 +725,6 @@ export async function getServerSideProps({params}){
   });
 
   const reviewsData = jsonParse(reviewsDataArray);
-
   return {
     props:{
       locationDataSnap,

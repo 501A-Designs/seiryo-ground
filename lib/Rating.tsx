@@ -3,9 +3,9 @@ import { styled } from '../stitches.config'
 import AlignItems from './alignment/AlignItems'
 
 const RatingStyled = styled('div',{
-  // background: "linear-gradient(20deg, $gray4 0%, $gray1 100%)",
   color: '$gray12',
   padding: '0.5em 1em',
+  borderRadius:'$r2',
   'h2':{
     margin: '0',
     fontWeight:'500',
@@ -18,12 +18,19 @@ const RatingStyled = styled('div',{
     margin: '0',
     color:'$gray11'
   },
-  borderRadius:'$r1',
+  variants:{
+    fill:{
+      true:{
+        border:"1px solid $gray4",
+        background: "linear-gradient(20deg, $gray4 0%, $gray1 100%)",
+      }
+    }
+  }
 })
 
 export default function Rating(props) {
   return (
-    <RatingStyled>
+    <RatingStyled fill={props.fill}>
       <AlignItems>
         <h2>{props.rating}</h2>
         {props.hideMax ? 

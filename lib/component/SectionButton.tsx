@@ -12,35 +12,29 @@ const SectionButtonStyled = styled('button',{
   gap:'$medium',
   width:'100%',
   borderRadius:'$r2',
-  padding:'$medium',
-  border:'none',
-  color:'$gray11',
+  padding:'0.7em $medium',
+  border:'1px solid $gray1',
+  color:'$gray10',
   backgroundColor:'$gray1',
 
-  borderBottom: '1px solid transparent',
-  borderImage: 'linear-gradient(90deg, transparent 0%, $gray4 80%,transparent 100%)',
-  borderImageSlice: 1,
-
-  transition:'$speed1',
+  // borderBottom: '1px solid transparent',
+  // borderImage: 'linear-gradient(90deg, transparent 0%, $gray4 80%,transparent 100%)',
+  // borderImageSlice: 1,
   '&:hover':{
-    backgroundColor:'$gray3',
+    // backgroundColor:'$gray3',
+    border:'1px solid $gray3',
+    background:'linear-gradient(45deg, $gray3, $gray2)',
     color:'$gray12',
   },
-})
-
-const IconContainer = styled('div',{
-  width:'20px',
-  height:'20px',
-  display:'flex',
-  alignItems:'center',
-  justifyContent:'center'
+  // 'svg':{
+  //   width:'12px',
+  //   height:'12px',
+  // }
 })
 
 const SlugStyled = styled('div',{
   color:'$gray9',
   fontSize:'$6',
-  // background:'linear-gradient(45deg, $gray1, $gray6)',
-  // border:'1px solid $gray6',
   padding:'$extraSmall $small',
   borderRadius:'$r1',
 })
@@ -60,10 +54,8 @@ export default function SectionButton(props) {
       }}
     >
       <AlignItems spaceBetween>
-        <AlignItems>
-          <IconContainer>
-            {props.icon}
-          </IconContainer>
+        <AlignItems gap={'0.7em'}>
+          {props.icon}
           <span>
             {props.children}
           </span>

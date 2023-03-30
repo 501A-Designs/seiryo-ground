@@ -13,7 +13,7 @@ import ProfileContainer from '../profile-page/ProfileContainer';
 import { checkLevel } from '../util/helper';
 import { useDocument } from 'react-firebase-hooks/firestore';
 import { doc } from 'firebase/firestore';
-import { ArrowLeftIcon, ArrowUpIcon, BookmarkIcon, HamburgerMenuIcon, HomeIcon, IdCardIcon, InfoCircledIcon, ShadowInnerIcon } from '@radix-ui/react-icons';
+import { ArrowLeftIcon, ArrowUpIcon, BookmarkIcon, FrameIcon, HamburgerMenuIcon, HomeIcon, IdCardIcon, InfoCircledIcon, ShadowInnerIcon } from '@radix-ui/react-icons';
 import { useTheme } from 'next-themes';
 import AlignItems from '../alignment/AlignItems';
 
@@ -269,25 +269,31 @@ useEffect(()=>{
                   <SectionButton
                     icon={<HomeIcon/>}
                   >
-                    ホーム
+                    メイン
                   </SectionButton>
                   <SectionButton
                     slug={'news'}
                     icon={<BookmarkIcon/>}
                   >
-                    SEIRYO NEWS
+                    新着情報
                   </SectionButton>
                   <SectionButton
                     slug={'levels'}
                     icon={<IdCardIcon/>}
                   >
-                    SEIRYO Cardについて
+                    カード別レベルについて
+                  </SectionButton>
+                  <SectionButton
+                    slug={'design'}
+                    icon={<FrameIcon/>}
+                  >
+                    デザインについて
                   </SectionButton>
                   <SectionButton
                     slug={'links'}
                     icon={<InfoCircledIcon/>}
                   >
-                    リンク集
+                    他全てのページのリンク集
                   </SectionButton>
                   <AlignItems
                     css={{

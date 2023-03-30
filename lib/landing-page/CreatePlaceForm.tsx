@@ -14,8 +14,6 @@ import { costButtonArray, sizeButtonArray, typeButtonArray } from '../button/but
 import FlipThrough from '../component/FlipThrough'
 
 import useSound from 'use-sound';
-import { styled } from '../../stitches.config'
-import Map from '../component/Map'
 import BinaryToggle from '../button/BinaryToggle'
 import SizeSelect from '../button/SizeSelect'
 import { ArrowRightIcon, MagnifyingGlassIcon, PaperPlaneIcon, PlusIcon } from '@radix-ui/react-icons'
@@ -24,6 +22,7 @@ import LoadingBar from 'react-top-loading-bar'
 // RADIX
 import RadixDialog from '../component/radix/Dialog'
 import RadixSelect from '../component/radix/Select'
+import Container from '../component/Container'
 
 
 export default function CreatePlaceForm(props) {
@@ -42,7 +41,6 @@ export default function CreatePlaceForm(props) {
   const [costCheckBox, setCostCheckBox] = useState(['free']);
 
   const [placeInput, setPlaceInput] = useState('');
-  const [locationInput, setLocationInput] = useState('');
   const [prefectureInput, setPrefectureInput] = useState();
   const [descriptionInput, setDescriptionInput] = useState('');
   const [officialSiteInput, setOfficialSiteInput] = useState('');
@@ -58,7 +56,6 @@ export default function CreatePlaceForm(props) {
     if (user) {
       const docRef = await addDoc(collection(db, "places"), {
         name: placeInput,
-        location: locationInput,
         prefecture: prefectureInput,
         description: descriptionInput,
         authorUid:user.uid,
@@ -82,7 +79,6 @@ export default function CreatePlaceForm(props) {
       setPublished(true);
 
       setPlaceInput('');
-      setLocationInput('');
       setDescriptionInput('');
       setPrefectureInput(null);
       setOfficialSiteInput('');
@@ -140,7 +136,6 @@ export default function CreatePlaceForm(props) {
             </AlignItems>
             <AlignItems justifyContent={'center'}>
               <Button
-                // styleType={'black'}
                 iconPosition={'left'}
                 icon={<MagnifyingGlassIcon/>}
                 onClick={()=> router.push(`/place/${newPlace?.id}/`)}
@@ -148,7 +143,6 @@ export default function CreatePlaceForm(props) {
                 追加した場所のページを閲覧
               </Button>
               <Button
-                // styleType={'black'}
                 iconPosition={'left'}
                 icon={<PlusIcon/>}
                 onClick={()=> {
@@ -209,16 +203,8 @@ export default function CreatePlaceForm(props) {
                 }}
                 currentSection={section}
               >
-                <Grid gap={'extraSmall'}>
-                  <Grid
-                    grid={'twoOne'}
-                    gap={'extraSmall'}
-                  >
-                    <Input
-                      placeholder={"場所（例：koishikawa-korakuen）"}
-                      value={locationInput}
-                      onChange={(e)=>setLocationInput(e.target.value)}
-                    />
+                <Container>
+                  <AlignItems justifyContent={'center'}>
                     <RadixSelect
                       placeholder={'選択'}
                       value={prefectureInput}
@@ -235,11 +221,8 @@ export default function CreatePlaceForm(props) {
                         )
                       })}
                     </RadixSelect>
-                  </Grid>
-                  <Map
-                    location={locationInput}
-                  />
-                </Grid>
+                  </AlignItems>
+                </Container>
               </FlipThrough>
             }
 

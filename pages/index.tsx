@@ -23,20 +23,36 @@ import { jsonParse } from '../lib/util/jsonParse'
 import RadixSelect from '../lib/component/radix/Select'
 import Image from 'next/image'
 import mountainGreen from '../public/img/mountain-green.jpg'
-import { round } from '../lib/util/helper'
+import Rating from '../lib/Rating'
 
-export default function Home({prefecD,placesData}) {
+export default function Home({prefecD,placeCountData,placesData}) {
   const router = useRouter();
   const [placesCollection] = useState(placesData);
 
+  const likesAverage:number = placesCollection.reduce((sum, element) => sum + element.data.likes.length, 0)/placeCountData;
 
-  let likesSum:number = 0;
-  placesCollection.map(d => {
-    likesSum = d.data.reviewNum + likesSum;
-  })
 
-  const [prefectureInput, setPrefectureInput] = useState('東京都');
-  
+  let accessAverage:number = 0;
+  let dateAverage:number = 0;
+  let managementAverage:number = 0;
+  const addValues = (type:string, sumVariable:number) => {
+    placesCollection.map((i:any) => {
+      let rateValue = i?.data?.averageRating?.[type];
+      if(rateValue != undefined) sumVariable = sumVariable + rateValue;
+    });
+  }
+
+  addValues("access", accessAverage);
+  addValues("date", dateAverage);
+  addValues("management", managementAverage);
+
+  console.log(
+    accessAverage,
+    dateAverage,
+    managementAverage
+  )
+
+  const [prefectureInput, setPrefectureInput] = useState('東京都');  
   const [gettingStartedModalIsOpen, setGettingStartedModalIsOpen] = useState(false);
 
   // Auth & Firestore
@@ -93,22 +109,22 @@ export default function Home({prefecD,placesData}) {
       <Margin>
         <Grid gap={'extraExtraLarge'}>
           <WelcomeHeader/>
+
+
           <Grid gap={'small'}>
             <AlignItems spaceBetween>
-              <p>平均いいね数以上</p>
-              <p>平均：{round(likesSum/placesCollection.length)}</p>
+              <p>全ての場所</p>
+              <p>{placesCollection.length}ヶ所</p>
             </AlignItems>
             <Grid grid={'quad'}>
               {placesCollection.map(doc => {
-                if (doc.data.likes.length > likesSum/placesCollection.length) {
-                  return (
-                    <PostThumbNail
-                      key={doc.id}
-                      id={doc.id}
-                      data={doc.data}
-                    />
-                  )
-                }
+                return (
+                  <PostThumbNail
+                    key={doc.id}
+                    id={doc.id}
+                    data={doc.data}
+                  />
+                )
               })}
             </Grid>
           </Grid>
@@ -146,35 +162,102 @@ export default function Home({prefecD,placesData}) {
               }):<h2>現在ありません。</h2>}
             </Grid>
           </Grid>
+
+          <Image
+            alt={'Mountain Image'}
+            src={mountainGreen}
+            placeholder='blur'
+            // fill
+            layout={"responsive"}
+            style={{
+              marginTop:'5em',
+              borderRadius:10,
+            }}
+          />
+
+
+          {likesAverage}
+
           <Grid gap={'small'}>
-            <AlignItems spaceBetween>
-              <p>全ての場所</p>
-              <p>{placesCollection.length}ヶ所</p>
+            <AlignItems justifyContent={'center'}>
+              <h4>項目別ランク</h4>
             </AlignItems>
-            <Grid grid={'quad'}>
-              {placesCollection.map(doc => {
-                return (
-                  <PostThumbNail
-                    key={doc.id}
-                    id={doc.id}
-                    data={doc.data}
-                  />
-                )
-              })}
+            <Grid
+              grid={'tri'}
+              gap={'small'}
+            >
+              <Grid gap={'small'}>
+                <AlignItems spaceBetween>
+                  <p>デートスボット適正</p>
+                </AlignItems>
+                <Rating
+                  fill
+                  rating={dateAverage}
+                  description={'平均'}
+                />
+                <Grid>
+                  {/* {placesCollection.map(doc => {
+                    if (doc.data.likes.length > likesSum/placesCollection.length) {
+                      return (
+                        <PostThumbNail
+                          key={doc.id}
+                          id={doc.id}
+                          data={doc.data}
+                        />
+                      )
+                    }
+                  })} */}
+                </Grid>
+              </Grid>
+              <Grid gap={'small'}>
+                <AlignItems spaceBetween>
+                  <p>最寄り駅へのアクセス</p>
+                </AlignItems>
+                <Rating
+                  fill
+                  // rating={accessAverage}
+                  description={'平均'}
+                />
+                <Grid>
+                  {/* {placesCollection.map(doc => {
+                    if (doc.data.likes.length > likesSum/placesCollection.length) {
+                      return (
+                        <PostThumbNail
+                          key={doc.id}
+                          id={doc.id}
+                          data={doc.data}
+                        />
+                      )
+                    }
+                  })} */}
+                </Grid>
+              </Grid>
+              <Grid gap={'small'}>
+                <AlignItems spaceBetween>
+                  <p>設備管理の状況</p>
+                </AlignItems>
+                <Rating
+                  fill
+                  rating={managementAverage}
+                  description={'平均'}
+                />
+                <Grid>
+                  {/* {placesCollection.map(doc => {
+                    if (doc.data.likes.length > likesSum/placesCollection.length) {
+                      return (
+                        <PostThumbNail
+                          key={doc.id}
+                          id={doc.id}
+                          data={doc.data}
+                        />
+                      )
+                    }
+                  })} */}
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-        <Image
-          alt={'Mountain Image'}
-          src={mountainGreen}
-          placeholder='blur'
-          // fill
-          layout={"responsive"}
-          style={{
-            marginTop:'5em',
-            borderRadius:10,
-          }}
-        />
 
         <End>
           おわり。
@@ -185,7 +268,6 @@ export default function Home({prefecD,placesData}) {
       </Margin>
       <Footer type={'blur'}/>
       <UniversalNav
-        // animate={'scaleUp'}
         showInitially={false}
         scrollPop={true}
         popOnMount={false}
@@ -213,26 +295,24 @@ export async function getServerSideProps() {
   const prefecD = await res.json();
 
   const placeDataArray = [];
-  const placesCollectionSnapshot: QuerySnapshot<DocumentData> = await getDocs(collection(db, `places`));
+  const placeCollection = collection(db, `places`);
+  const placesCollectionSnapshot: QuerySnapshot<DocumentData> = await getDocs(placeCollection);
+  const placeCount = await getCountFromServer(placeCollection);
   
   for (const doc of placesCollectionSnapshot.docs) {
-    const reviewsCollection = collection(db, `places/${doc.id}/reviews`);
-    const reviewCount = await getCountFromServer(reviewsCollection);
-    placeDataArray.push(
-      {
-        id:doc.id,
-        data:{
-          ...doc.data(),
-          reviewNum: reviewCount.data().count
-        },
-      }
-    );
+    placeDataArray.push({
+      id:doc.id,
+      data:doc.data()
+    });
   }
+
+  const placeCountData = jsonParse(placeCount.data().count)
   const placesData = jsonParse(placeDataArray);
 
   return {
     props: {
       prefecD,
+      placeCountData,
       placesData
     }
   }
