@@ -1,10 +1,10 @@
-import { doc, updateDoc } from 'firebase/firestore';
+import { DocumentData, doc, updateDoc } from 'firebase/firestore';
 import { useRouter } from 'next/router';
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { ClipLoader } from 'react-spinners';
 import useSound from 'use-sound';
-import { db } from '../firebase'
+import { auth, db } from '../firebase'
 import AlignItems from '../lib/alignment/AlignItems';
 import Grid from '../lib/alignment/Grid';
 import Margin from '../lib/alignment/Margin';
@@ -15,14 +15,14 @@ import { checkLevel } from '../lib/util/helper';
 import { popOut, rotateAndZoom, rotateInBottonLeft, spin } from '../lib/ux/keyframes';
 import { styled } from '../stitches.config';
 import UniversalNav from '../lib/component/UniversalNav';
-import { UserContext } from '../lib/util/UserContext';
 import { ArrowLeftIcon, Cross1Icon, DownloadIcon, InfoCircledIcon } from '@radix-ui/react-icons';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useDocument } from 'react-firebase-hooks/firestore';
 
 export default function Profile() {
   const router = useRouter();
-  const userContextData = useContext(UserContext);
-  const user = userContextData?.user;
-  const userData = userContextData?.userData;
+  const [user] = useAuthState(auth);
+  const [userData] = useDocument<DocumentData>(doc(db, `users/${user && user.uid}`));
 
   const [openDetails, setOpenDetails] = useState(false)
   const [showNewContent, setShowNewContent] = useState(false)
@@ -33,7 +33,6 @@ export default function Profile() {
   const [celebrate1] = useSound('/sound/celebrate-1-sg.mp3')
   const [celebrate2] = useSound('/sound/celebrate-2-sg.mp3')
   const [tap2] = useSound('/sound/tap-2-sg.mp3',{playbackRate:1.3})
-  
 
   const flip = async () => {
     setOpenDetails(true);
@@ -91,64 +90,62 @@ export default function Profile() {
                   </Notification>
                 }
               </AlignItems>
-              {!loading && userData &&    
+              {!loading && userData &&
                 <Perspective>
-                  {/* <Tilt options={tiltConfig}> */}
-                    <ProfileCard
-                      level={userData?.data()?.level}
-                      rotateAndZoom={openDetails}
-                    >
-                      {showNewContent ?
-                        <Grid gap={'medium'}>
-                          <h3>{user.displayName}</h3>
-                          <Container styleType={'white'}>
-                            <Grid gap={'large'}>
-                              <Grid gap={'small'}>
-                                <p>Level {userData.data().level}から</p>
-                                <AlignItems>
-                                  <h2>Level {upgradableLevel}</h2>
-                                  <p>にアップグレード</p>
-                                </AlignItems>
-                              </Grid>
-                              <p>
-                                {user.displayName}おめでとうございます。
-                                <br/>
-                                いつもSEIRYO GROUNDへの貢献大変ありがとうございます。
-                                <br/>
-                                以下のボタンを押すとカードのアップグレードができます。
-                              </p>
-                              <AlignItems justifyContent={'center'}>
-                                <Button
-                                  styleType={'black'}
-                                  onClick={()=>upgrade()}
-                                  iconPosition={'left'}
-                                  icon={<DownloadIcon/>}
-                                >
-                                  アップグレード
-                                </Button>
+                  <ProfileCard
+                    level={userData?.data()?.level}
+                    rotateAndZoom={openDetails}
+                  >
+                    {showNewContent ?
+                      <Grid gap={'medium'}>
+                        <h3>{user.displayName}</h3>
+                        <Container styleType={'white'}>
+                          <Grid gap={'large'}>
+                            <Grid gap={'small'}>
+                              <p>Level {userData.data().level}から</p>
+                              <AlignItems>
+                                <h2>Level {upgradableLevel}</h2>
+                                <p>にアップグレード</p>
                               </AlignItems>
                             </Grid>
-                          </Container>
-                        </Grid>:
-                        <AlignItems
-                          justifyContent={'space-between'}
-                          alignItems={'top'}
-                        >
-                          <Grid gap={'medium'}>
-                            <h5>SEIRYO GROUND | 清涼広場</h5>
-                            <Grid>
-                              <h2>{user.displayName}</h2>
-                              <p>{user.email}</p>
-                            </Grid>
+                            <p>
+                              {user.displayName}おめでとうございます。
+                              <br/>
+                              いつもSEIRYO GROUNDへの貢献大変ありがとうございます。
+                              <br/>
+                              以下のボタンを押すとカードのアップグレードができます。
+                            </p>
+                            <AlignItems justifyContent={'center'}>
+                              <Button
+                                styleType={'black'}
+                                onClick={()=>upgrade()}
+                                iconPosition={'left'}
+                                icon={<DownloadIcon/>}
+                              >
+                                アップグレード
+                              </Button>
+                            </AlignItems>
                           </Grid>
-                          <VerticalText>
-                            <p>Level {userData.data().level} Membership Card</p>
-                            <p>{user.uid}</p>
-                          </VerticalText>
-                        </AlignItems>
-                      }
-                    </ProfileCard>
-                  {/* </Tilt> */}
+                        </Container>
+                      </Grid>:
+                      <AlignItems
+                        justifyContent={'space-between'}
+                        alignItems={'top'}
+                      >
+                        <Grid gap={'medium'}>
+                          <h5>SEIRYO GROUND | 清涼広場</h5>
+                          <Grid>
+                            <h2>{user.displayName}</h2>
+                            <p>{user.metadata.creationTime}</p>
+                          </Grid>
+                        </Grid>
+                        <VerticalText>
+                          <p>Level {userData?.data()?.level} Membership Card</p>
+                          <p>{user.metadata.lastSignInTime}</p>
+                        </VerticalText>
+                      </AlignItems>
+                    }
+                  </ProfileCard>
                 </Perspective>
               }
             </>
@@ -230,7 +227,7 @@ const ProfileCard = styled('div',{
   borderRadius:'$r4',
   padding: '$extraLarge',
   width: '400px',
-  height: 'auto',
+  height: '230px',
   boxShadow: '$shadow2',
   border:'1px solid $gray6',
   fontFamily: '$sgFont2',

@@ -5,7 +5,7 @@ import AlignItems from '../alignment/AlignItems'
 import Grid from '../alignment/Grid'
 import Button from '../button/Button'
 import ProfileImage from './ProfileImage'
-import { useSignInWithGoogle } from 'react-firebase-hooks/auth'
+import { useAuthState, useSignInWithGoogle } from 'react-firebase-hooks/auth'
 import { auth } from '../../firebase'
 import { gradient } from '../ux/keyframes'
 import { EnterIcon } from '@radix-ui/react-icons'
@@ -55,32 +55,35 @@ const ProfileCardContentStyled = styled('div',{
   padding: '$large',
 })
 
-export default function ProfileContainer(props:any) {
+export default function ProfileContainer({upgradable}:{upgradable:boolean}) {
+  const [user] = useAuthState(auth);
   const router = useRouter();
   const [signInWithGoogle] = useSignInWithGoogle(auth);
+
+  console.log(user)
 
   return (
     <ProfileCardStyled
       onClick={()=>router.push('/profile')}
-      upgradable={props.upgradable}
+      upgradable={upgradable}
     >
       <ProfileCardContentStyled>
-        {props.user ?
+        {user ?
           <AlignItems gap={'1em'}>
             <ProfileImage
               width={'35'}
               height={'35'}
               alt={'profile image'}
-              src={props.user.photoURL}
+              src={user.photoURL}
               onClick={()=>{
                 router.push('/profile')
               }}
             />
             <Grid>
               <h4>
-                {props.user.displayName}
+                {user.displayName}
               </h4>
-              <p>{props.user.uid}</p>
+              <p>{user.email}</p>
             </Grid>
           </AlignItems>:
           <AlignItems justifyContent={"center"} flexDirection={"column"} gap={'1em'}>

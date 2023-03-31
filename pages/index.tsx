@@ -6,7 +6,7 @@ import Button from '../lib/button/Button'
 
 import { useRouter } from 'next/router'
 
-import {db} from '../firebase'
+import {auth, db} from '../firebase'
 import { DocumentData, QuerySnapshot, collection, getCountFromServer, getDocs } from "firebase/firestore";
 
 import CreatePlaceForm from '../lib/landing-page/CreatePlaceForm'
@@ -17,15 +17,17 @@ import Footer from '../lib/component/Footer'
 import UniversalNav from '../lib/component/UniversalNav'
 import Margin from '../lib/alignment/Margin'
 import End from '../lib/End'
-import { UserContext } from '../lib/util/UserContext'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
 import { jsonParse } from '../lib/util/jsonParse'
 import RadixSelect from '../lib/component/radix/Select'
 import Image from 'next/image'
 import mountainGreen from '../public/img/mountain-green.jpg'
 import Rating from '../lib/Rating'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 export default function Home({prefecD,placeCountData,placesData}) {
+  const [user] = useAuthState(auth);
+
   const router = useRouter();
   const [placesCollection] = useState(placesData);
 
@@ -54,11 +56,6 @@ export default function Home({prefecD,placeCountData,placesData}) {
 
   const [prefectureInput, setPrefectureInput] = useState('東京都');  
   const [gettingStartedModalIsOpen, setGettingStartedModalIsOpen] = useState(false);
-
-  // Auth & Firestore
-  const userContextData = useContext(UserContext);
-  const user = userContextData?.user;
-  const userData = userContextData?.userData;
 
   useEffect(() => {
     if (

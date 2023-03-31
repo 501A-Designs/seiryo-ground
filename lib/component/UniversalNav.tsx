@@ -13,156 +13,10 @@ import ProfileContainer from '../profile-page/ProfileContainer';
 import { checkLevel } from '../util/helper';
 import { useDocument } from 'react-firebase-hooks/firestore';
 import { doc } from 'firebase/firestore';
-import { ArrowLeftIcon, ArrowUpIcon, BookmarkIcon, FrameIcon, HamburgerMenuIcon, HomeIcon, IdCardIcon, InfoCircledIcon, ShadowInnerIcon } from '@radix-ui/react-icons';
+import { ArrowUpIcon, BookmarkIcon, FrameIcon, HamburgerMenuIcon, HomeIcon, IdCardIcon, InfoCircledIcon, ShadowInnerIcon } from '@radix-ui/react-icons';
 import { useTheme } from 'next-themes';
 import AlignItems from '../alignment/AlignItems';
-
 import RadixDialog from './radix/Dialog';
-
-const expandAni = keyframes({
-  '10%':{
-    width: '260px',
-    transform:'scale(1.05)'
-  },
-  '50%':{
-    transform:'scale(0.80)'
-  }
-});
-
-const jiggleAni = keyframes({
-  '10%, 90%':{
-    transform: 'translate3d(-1px, 0, 0)',
-  },
-  '20%, 80%':{
-    transform: 'translate3d(2px, 0, 0)',
-  },
-  '30%, 50%, 70%':{
-    transform: 'translate3d(-4px, 0, 0)',
-  },
-  '40%, 60%':{
-    transform: 'translate3d(4px, 0, 0)',
-  }
-});
-const hideAni = keyframes({
-  '40%':{
-    transform: 'translate3d(0, -15px, 0) scale(1.01)',
-  },
-  '100%':{
-    transform: 'translate3d(0, 80px, 0) scale(0.5)',
-  },
-});
-const showAni = keyframes({
-  '0%':{
-    transform: 'translate3d(0, 80px, 0) scale(0.5)',
-  },
-  '40%':{
-    transform: 'translate3d(0, -15px, 0) scale(1.01)',
-  },
-  '100%':{
-    transform: 'translate3d(0, 0px, 0)',
-  },
-});
-
-const scaleUpAni = keyframes({
-  '50%':{
-    transform: 'scale(1.05)',
-  },
-});
-
-const NavContainerStyled = styled('nav', {
-  position: 'sticky',
-  userSelect:'none',
-  bottom: '$medium',
-  zIndex:100,
-  display:'flex',
-  alignItems:'center',
-  justifyContent:'center',
-  variants:{
-    hide:{
-      true:{
-        animation:`${hideAni} 0.5s`,
-      },
-      false:{
-        animation:`${showAni} 0.5s`,
-      }
-    },
-  }
-})
-
-const NavStyled = styled('section',{
-  display: 'flex',
-  justifyContent:'space-between',
-  alignItems:'center',
-  gap:'$small',
-
-  maxHeight: '45px',
-  maxWidth:'300px',
-  padding:'calc($small*0.5)',
-  borderRadius:'$round',
-  // backdropFilter: 'blur(10px)',
-  border: '1px solid $grayA4',
-
-  backgroundColor:'$gray1',
-  boxShadow:'$shadow3',
-  transition:'$speed1',
-
-  variants:{
-    size:{
-      xl:{
-        width: '250px',
-      },
-      l:{
-        width: '200px',
-      },
-      m:{
-        width: '150px',
-      },
-      s:{
-        width: '100px',
-      },
-    },
-    animate:{
-      expand:{
-        animation:`${expandAni} 0.3s linear`,
-      },
-      jiggle:{
-        animation:`${jiggleAni} 0.8s linear infinite`
-      },
-      shine:{
-        background: 'linear-gradient(45deg,$gray7 0%,$gray1 50%,$gray7 100%)',
-        backgroundSize: '200% 200%',
-        animation: `${gradient} 1s linear infinite`,
-      },
-      scaleUp:{
-        animation: `${scaleUpAni} 1s ease infinite`,
-      }
-    },
-  }
-})
-
-const NavContentStyled = styled('div',{
-  display: 'flex',
-  justifyContent:'space-between',
-  alignItems:'center',
-  gap:'$small',
-  // backdropFilter:'blur(20px)',
-  background:	'linear-gradient($gray2,$gray3)',
-
-  width:'100%',
-  borderRadius:'$round',
-  // border:'1px solid $grayA1'
-})
-
-interface UniversalNavProps{
-  showInitially:boolean,
-  scrollPop:boolean,
-  popOnMount:boolean,
-  mount?:any,
-  animate?:any,
-  minSize?:"s" | "xl" | "l" | "m",
-  maxSize?:"s" | "xl" | "l" | "m",
-  dynamicButton?:JSX.Element | JSX.Element[]
-}
 
 export default function UniversalNav(props:UniversalNavProps) {
   const router = useRouter();
@@ -261,14 +115,8 @@ useEffect(()=>{
                 }
               >
                 <>
-                  <ProfileContainer
-                    size={'l'}
-                    user={user}
-                    upgradable={upgradable ? true:false}
-                  />
-                  <SectionButton
-                    icon={<HomeIcon/>}
-                  >
+                  <ProfileContainer upgradable={upgradable ? true:false}/>
+                  <SectionButton icon={<HomeIcon/>}>
                     メイン
                   </SectionButton>
                   <SectionButton
@@ -306,7 +154,7 @@ useEffect(()=>{
                       onClick={toggleTheme}
                       backTapSound={theme}
                     >
-                      Disable {theme} mode
+                      表示色
                     </Button>
                   </AlignItems>
                 </>
@@ -317,4 +165,144 @@ useEffect(()=>{
       }
     </>
   )
+}
+const expandAni = keyframes({
+  '10%':{
+    width: '260px',
+    transform:'scale(1.05)'
+  },
+  '50%':{
+    transform:'scale(0.80)'
+  }
+});
+
+const jiggleAni = keyframes({
+  '10%, 90%':{
+    transform: 'translate3d(-1px, 0, 0)',
+  },
+  '20%, 80%':{
+    transform: 'translate3d(2px, 0, 0)',
+  },
+  '30%, 50%, 70%':{
+    transform: 'translate3d(-4px, 0, 0)',
+  },
+  '40%, 60%':{
+    transform: 'translate3d(4px, 0, 0)',
+  }
+});
+const hideAni = keyframes({
+  '40%':{
+    transform: 'translate3d(0, -15px, 0) scale(1.01)',
+  },
+  '100%':{
+    transform: 'translate3d(0, 80px, 0) scale(0.5)',
+  },
+});
+const showAni = keyframes({
+  '0%':{
+    transform: 'translate3d(0, 80px, 0) scale(0.5)',
+  },
+  '40%':{
+    transform: 'translate3d(0, -15px, 0) scale(1.01)',
+  },
+  '100%':{
+    transform: 'translate3d(0, 0px, 0)',
+  },
+});
+
+const scaleUpAni = keyframes({
+  '50%':{
+    transform: 'scale(1.05)',
+  },
+});
+
+const NavContainerStyled = styled('nav', {
+  position: 'sticky',
+  userSelect:'none',
+  bottom: '$medium',
+  zIndex:100,
+  display:'flex',
+  alignItems:'center',
+  justifyContent:'center',
+  variants:{
+    hide:{
+      true:{
+        animation:`${hideAni} 0.5s`,
+      },
+      false:{
+        animation:`${showAni} 0.5s`,
+      }
+    },
+  }
+})
+
+const NavStyled = styled('section',{
+  display: 'flex',
+  justifyContent:'space-between',
+  alignItems:'center',
+  gap:'$small',
+
+  maxHeight: '45px',
+  maxWidth:'300px',
+  padding:'calc($small*0.5)',
+  borderRadius:'$round',
+  border: '1px solid $grayA4',
+
+  backgroundColor:'$gray1',
+  boxShadow:'$shadow3',
+  transition:'$speed1',
+
+  variants:{
+    size:{
+      xl:{
+        width: '250px',
+      },
+      l:{
+        width: '200px',
+      },
+      m:{
+        width: '150px',
+      },
+      s:{
+        width: '100px',
+      },
+    },
+    animate:{
+      expand:{
+        animation:`${expandAni} 0.3s linear`,
+      },
+      jiggle:{
+        animation:`${jiggleAni} 0.8s linear infinite`
+      },
+      shine:{
+        background: 'linear-gradient(45deg,$gray7 0%,$gray1 50%,$gray7 100%)',
+        backgroundSize: '200% 200%',
+        animation: `${gradient} 1s linear infinite`,
+      },
+      scaleUp:{
+        animation: `${scaleUpAni} 1s ease infinite`,
+      }
+    },
+  }
+})
+
+const NavContentStyled = styled('div',{
+  display: 'flex',
+  justifyContent:'space-between',
+  alignItems:'center',
+  gap:'$small',
+  background:	'linear-gradient($gray2,$gray3)',
+  width:'100%',
+  borderRadius:'$round',
+})
+
+interface UniversalNavProps{
+  showInitially:boolean,
+  scrollPop:boolean,
+  popOnMount:boolean,
+  mount?:any,
+  animate?:any,
+  minSize?:"s" | "xl" | "l" | "m",
+  maxSize?:"s" | "xl" | "l" | "m",
+  dynamicButton?:JSX.Element | JSX.Element[]
 }

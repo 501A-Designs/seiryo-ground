@@ -3,8 +3,8 @@ import React, { useState,useEffect, useContext } from 'react'
 import AlignItems from '../../lib/alignment/AlignItems'
 import TypeBadge from '../../lib/TypeBadge'
 
-import { db } from '../../firebase'
-import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, increment, setDoc, updateDoc } from "firebase/firestore";
+import { auth, db } from '../../firebase'
+import { DocumentData, arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, increment, setDoc, updateDoc } from "firebase/firestore";
 import Rating from '../../lib/Rating'
 
 import LoadingBar from 'react-top-loading-bar';
@@ -35,7 +35,6 @@ import BinaryToggle from '../../lib/button/BinaryToggle'
 import SizeSelect from '../../lib/button/SizeSelect'
 import { popOut } from '../../lib/ux/keyframes'
 import { jsonParse } from '../../lib/util/jsonParse'
-import { UserContext } from '../../lib/util/UserContext'
 import { ArrowLeftIcon, AspectRatioIcon, CardStackIcon, CheckIcon, Cross1Icon, CrumpledPaperIcon, ExternalLinkIcon, FaceIcon, HeartFilledIcon, HeartIcon, HomeIcon, LockClosedIcon, MobileIcon, Pencil1Icon, PlusIcon, ReloadIcon, UpdateIcon } from '@radix-ui/react-icons'
 import Margin from '../../lib/alignment/Margin'
 import Header from '../../lib/component/Header'
@@ -44,18 +43,19 @@ import Header from '../../lib/component/Header'
 import RadixDialog from '../../lib/component/radix/Dialog'
 import RadixAccordion from '../../lib/component/radix/Accordion'
 import { round } from '../../lib/util/helper'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { useDocument } from 'react-firebase-hooks/firestore'
 
 export default function PlaceName({
   locationDataSnap,
   reviewsData
 }) {
+  const [user] = useAuthState(auth);
+  const [userData] = useDocument<DocumentData>(doc(db, `users/${user && user.uid}`));
+
   const router = useRouter();
   const placeId = router.query.slug;
   const [progress, setProgress] = useState(0);
-
-  const userContextData = useContext(UserContext);
-  const user = userContextData?.user;
-  const userData = userContextData?.userData;
 
   // Sound
   const [tap1] = useSound('/sound/tap-1-sg.mp3',{playbackRate:1.1});
