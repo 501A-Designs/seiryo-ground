@@ -70,12 +70,12 @@ const SelectIcon = styled(Select.SelectIcon, {
 
 const popOutSqueeze = keyframes({
   '0%': {
-    transform: 'scaleY(0)',
-    opacity: 0.5,
-    filter:'blur(5px)',
+    transform: 'scaleY(1)',
+    opacity:0
   },
-  '50%':{
+  '30%':{
     transform: 'scale(1.02)',
+    filter:'blur(2px)',
   }
 });
 

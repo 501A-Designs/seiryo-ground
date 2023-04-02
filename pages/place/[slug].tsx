@@ -76,7 +76,7 @@ export default function PlaceName({
 
   const [placeInput, setPlaceInput] = useState(placeData.name ? placeData.name:'');
   const [descriptionInput, setDescriptionInput] = useState(placeData.description ? placeData.description:'');
-  const [officialSiteInput, setOfficialSiteInput] = useState(placeData.officialSite ? placeData.officialSite:'');
+  const [officialSiteInput, setOfficialSiteInput] = useState(placeData?.officialSite ? placeData.officialSite:undefined);
 
   const [sizeSelect, setSizeSelect] = useState(placeData.size ? placeData.size:'medium');
   const [binaryToggle, setBinaryToggle] = useState(placeData.toilet ? placeData.toilet:false)
@@ -428,7 +428,7 @@ export default function PlaceName({
       <Margin>
         <Grid
           gap={'large'}
-          grid={'twoOne'}
+          // grid={'twoOne'}
         >
           <Grid>
             <AlignItems>
@@ -436,43 +436,11 @@ export default function PlaceName({
                 width={'large'}
                 type={placeData.type}
               />
-              <h2
-                style={{
-                  fontWeight:'500'
-                }}
-              >
-                {placeData.name}
-              </h2>
+              <h2>{placeData.name}</h2>
             </AlignItems>
             <p>{placeData.description}</p>
-            <Grid gap={'small'}>
-              {reviewsCollection?.map((review) =>(
-                  <Review
-                    key={review.id}
-                    data={review.data}
-                  />
-                )
-              )}
-              {reviewsCollection?.length > 0 ? 
-                <End>
-                  おわり。
-                  <br/>
-                  The End.
-                </End>:
-                <End>
-                  レビューはありません。
-                  <br/>
-                  No reviews were written.
-                </End>
-              }
-            </Grid>
-          </Grid>
-          <Grid
-            gap={'small'}
-            css={{
-              marginTop:'1.5em'
-            }}
-          >
+
+
             {reviewsData?.length > 0 &&
               <Grid
                 css={{
@@ -512,6 +480,35 @@ export default function PlaceName({
                 />
               </Grid>
             }
+
+            <Grid gap={'small'} grid={'duo'}>
+              {reviewsCollection?.map((review) =>(
+                  <Review
+                    key={review.id}
+                    data={review.data}
+                  />
+                )
+              )}
+            </Grid>
+              {reviewsCollection?.length > 0 ? 
+                <End>
+                  おわり。
+                  <br/>
+                  The End.
+                </End>:
+                <End>
+                  レビューはありません。
+                  <br/>
+                  No reviews were written.
+                </End>
+              }
+          </Grid>
+          <Grid
+            gap={'small'}
+            css={{
+              marginTop:'1.5em'
+            }}
+          >
             <Container
               styleType={'white'}
             >

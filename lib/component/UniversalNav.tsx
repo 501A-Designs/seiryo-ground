@@ -244,7 +244,7 @@ const NavStyled = styled('section',{
 
   maxHeight: '45px',
   maxWidth:'300px',
-  padding:'calc($small*0.5)',
+  padding:'calc($small*0.25)',
   borderRadius:'$round',
   border: '1px solid $grayA4',
 

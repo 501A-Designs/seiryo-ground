@@ -2,6 +2,17 @@ import React from 'react'
 import { styled } from '../../stitches.config'
 import { keyframes } from '@stitches/react';
 
+export default function Margin(props) {
+  return (
+    <MarginStyled
+      fullHeight={props.fullHeight}
+      css={props.css}
+    >
+      {props.children}
+    </MarginStyled>
+  )
+}
+
 const fadeIn = keyframes({
   '0%': {
     transform: 'scale(0.95)',
@@ -31,14 +42,3 @@ const MarginStyled = styled('div',{
     fullHeight:true
   }
 })
-
-export default function Margin(props) {
-  return (
-    <MarginStyled
-      fullHeight={props.fullHeight}
-      css={props.css}
-    >
-      {props.children}
-    </MarginStyled>
-  )
-}

@@ -25,11 +25,11 @@ const ContainerStyled = styled('div', {
   variants: {
     styleType: {
       standard: {
-        backgroundColor: '$gray2',
+        backgroundColor: '$gray3',
         border: '1px solid $gray4',
       },
       white: {
-        background: 'linear-gradient(20deg, $gray3 0%, $gray1 100%)',
+        // background: 'linear-gradient(20deg, $gray3 0%, $gray1 100%)',
         border: '1px solid $gray4',
       },
     },

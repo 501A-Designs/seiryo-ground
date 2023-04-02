@@ -6,17 +6,12 @@ const RatingStyled = styled('div',{
   color: '$gray12',
   padding: '0.5em 1em',
   borderRadius:'$r2',
-  'h2':{
+  'h3':{
     margin: '0',
-    fontWeight:'500',
-  },
-  'h4':{
-    margin: '0',
-    color:'$gray11'
   },
   'p':{
     margin: '0',
-    color:'$gray11'
+    color:'$gray11',
   },
   variants:{
     fill:{
@@ -32,7 +27,7 @@ export default function Rating(props) {
   return (
     <RatingStyled fill={props.fill}>
       <AlignItems>
-        <h2>{props.rating}</h2>
+        <h3>{props.rating}</h3>
         {props.hideMax ? 
           <p>{props.description}</p>:
           <p>/10：{props.description}</p>

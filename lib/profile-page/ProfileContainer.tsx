@@ -13,7 +13,7 @@ import { EnterIcon } from '@radix-ui/react-icons'
 const ProfileCardStyled = styled('div',{
   cursor:'pointer',
   borderRadius:'$r3',
-  padding:'calc($small/1.5)',
+  padding:'calc($small*0.25)',
   marginBottom:'$medium',
 
   height: 'auto',
@@ -50,9 +50,12 @@ const ProfileCardContentStyled = styled('div',{
   backdropFilter:'blur(20px)',
   backgroundColor:'$gray1',
   border:'1px solid $gray4',
-  boxShadow:'$shadow1',
-  borderRadius:'$r2',
+  borderRadius:'calc($r3*0.8)',
   padding: '$large',
+  transition:'$speed1',
+  '&:hover':{
+    boxShadow:'$shadow1',
+  }
 })
 
 export default function ProfileContainer({upgradable}:{upgradable:boolean}) {

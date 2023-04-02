@@ -6,20 +6,21 @@ import { styled } from '../../stitches.config';
 import Grid from '../alignment/Grid';
 import useSound from 'use-sound';
 import { gradient } from '../ux/keyframes';
-import { FileTextIcon, HeartIcon, PlayIcon, TargetIcon } from '@radix-ui/react-icons';
+import { HeartIcon, TargetIcon } from '@radix-ui/react-icons';
 import { round } from '../util/helper';
 
 const PostThumbNailStyled = styled('div', {
   cursor:'pointer',
-  border:'1px solid transparent',
+  // border:'1px solid transparent',
   height:'max-content',
   padding:'0.7em',
   borderRadius: '$r2',
   transition: '$speed1',
+  border:'1px solid $gray4',
+  backgroundColor:'$gray2',
   '&:hover':{
     zIndex: '100',
-    border:'1px solid $gray5',
-    boxShadow:'0 0 10px $gray1'
+    backgroundColor:'$gray3',
   },
   'h5':{
     margin:'0',
@@ -46,6 +47,7 @@ const IconTextContainerStyled = styled('div',{
   gap:'$extraSmall',
   color:'$gray10',
   fontSize:'$9',
+  whiteSpace:'nowrap',
   'svg':{
     width:12,
     height:12
@@ -87,11 +89,24 @@ export default function PostThumbNail(props) {
           />
           <h5>{data?.name}</h5>
         </AlignItems>
+        <p>
+          {data?.description}
+        </p>
           {/* {reviewsCollection?.docs.length > 0 &&
             <>{reviewsCollection.docs.length + '_'}review | </>
           } */}
-        <AlignItems spaceBetween>
+        <AlignItems
+          spaceBetween
+          margin={'0.5em 0 0 0'}
+        >
           <AlignItems>
+            {
+              overallScore > 0 &&
+              <IconTextContainerStyled>
+                <TargetIcon/>
+                {overallScore}%
+              </IconTextContainerStyled>
+            }
             {
               data?.likes?.length > 0 &&
               <IconTextContainerStyled>
@@ -99,21 +114,10 @@ export default function PostThumbNail(props) {
                 {data?.likes?.length}
               </IconTextContainerStyled>
             }
-            {
-              data?.reviewNum > 0 &&
-              <IconTextContainerStyled>
-                <FileTextIcon/>
-                {data?.reviewNum}
-              </IconTextContainerStyled>
-            }
           </AlignItems>
-          {
-            overallScore > 0 &&
-            <IconTextContainerStyled>
-              {/* <TargetIcon/> */}
-              {overallScore}%
-            </IconTextContainerStyled>
-          }
+          <IconTextContainerStyled>
+            {data?.prefecture}
+          </IconTextContainerStyled>
         </AlignItems>
       </Grid>
     </PostThumbNailStyled>
