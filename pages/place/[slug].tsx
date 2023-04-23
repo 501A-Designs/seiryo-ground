@@ -23,7 +23,6 @@ import { isBrowser } from 'react-device-detect'
 
 import Head from 'next/head'
 
-import Container from '../../lib/component/Container'
 import Grid from '../../lib/alignment/Grid'
 import { costButtonArray, sizeButtonArray, typeButtonArray } from '../../lib/button/buttonData'
 import CheckBox from '../../lib/button/CheckBox'
@@ -35,7 +34,7 @@ import BinaryToggle from '../../lib/button/BinaryToggle'
 import SizeSelect from '../../lib/button/SizeSelect'
 import { popOut } from '../../lib/ux/keyframes'
 import { jsonParse } from '../../lib/util/jsonParse'
-import { ArrowLeftIcon, AspectRatioIcon, CardStackIcon, CheckIcon, Cross1Icon, CrumpledPaperIcon, ExternalLinkIcon, FaceIcon, HeartFilledIcon, HeartIcon, HomeIcon, LockClosedIcon, MobileIcon, Pencil1Icon, PlusIcon, ReloadIcon, UpdateIcon } from '@radix-ui/react-icons'
+import { ArrowLeftIcon, AspectRatioIcon, CheckIcon, ExternalLinkIcon, FaceIcon, HeartFilledIcon, HeartIcon, HomeIcon, LockClosedIcon, Pencil1Icon, PlusIcon, ReloadIcon, UpdateIcon } from '@radix-ui/react-icons'
 import Margin from '../../lib/alignment/Margin'
 import Header from '../../lib/component/Header'
 
@@ -77,9 +76,9 @@ export default function PlaceName({
 
   const [placeInput, setPlaceInput] = useState(placeData.name ? placeData.name:'');
   const [descriptionInput, setDescriptionInput] = useState(placeData.description ? placeData.description:'');
-  const [officialSiteInput, setOfficialSiteInput] = useState(placeData?.officialSite ? placeData.officialSite:undefined);
+  const [officialSiteInput, setOfficialSiteInput] = useState(placeData?.officialSite ? placeData.officialSite:"");
 
-  const [sizeSelect, setSizeSelect] = useState(placeData.size ? placeData.size:'medium');
+  const [sizeSelect, setSizeSelect] = useState(placeData.size ? placeData.size:'普通');
   const [binaryToggle, setBinaryToggle] = useState(placeData.toilet ? placeData.toilet:false)
   const [typeInput, setTypeInput] = useState(placeData.type ? placeData.type:'');
   const [costCheckBox, setCostCheckBox] = useState(placeData.cost ? placeData.cost:['free']);
@@ -419,7 +418,9 @@ export default function PlaceName({
             >
               メイン
             </Button>:
-            <p>※モバイルからのログインは出来ないです。パソコンからアクセスして頂くとログインが可能となります。</p>
+            <p>
+              ※モバイルからのログインは出来ないです。パソコンからアクセスして頂くとログインが可能となります。
+            </p>
           }
         </Header>
       }
@@ -427,9 +428,13 @@ export default function PlaceName({
       <Margin>
         <Grid
           gap={'large'}
-          // grid={'twoOne'}
+          grid={'twoOne'}
+          css={{
+            marginBottom:'1.5em'
+          }}
         >
-          <Grid>
+          <Grid
+            gap={'extraSmall'}>
             <AlignItems>
               <TypeBadge
                 width={'large'}
@@ -437,17 +442,48 @@ export default function PlaceName({
               />
               <h2>{placeData.name}</h2>
             </AlignItems>
-            <Tag>
+            <p>{placeData.description}</p>
+
+            <Tag title={'基本情報'}>       
+              {placeData.officialSite && 
+                <Tag.Item
+                  icon={<ExternalLinkIcon/>}
+                  name={
+                    <Link
+                      href={placeData.officialSite}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      公式サイト
+                    </Link>
+                  }
+                />
+              }
+              <Tag.Item
+                icon={<AspectRatioIcon/>}
+                name={placeData.size}
+              />
+              <Tag.Item
+                icon={<FaceIcon/>}
+                name={<>トイレ{placeData.toilet ? '有':'無'}</>}
+              />
+            </Tag>
+
+            <Tag title={'入場料'}>
               {placeData.cost.map(name => 
                 <Tag.Item
                   key={name}
-                  // icon={}
                   name={name}
                 />
               )}
             </Tag>
-            <p>{placeData.description}</p>
-
+          </Grid>
+          <Grid
+            gap={'small'}
+            css={{
+              marginTop:'1.5em'
+            }}
+          >
             {reviewsData?.length > 0 &&
               <Grid
                 css={{
@@ -487,79 +523,29 @@ export default function PlaceName({
                 />
               </Grid>
             }
-
-            <Grid gap={'small'} grid={'duo'}>
-              {reviewsCollection?.map((review) =><Review
-                  key={review.id}
-                  data={review.data}
-                />
-              )}
-            </Grid>
-            {reviewsCollection?.length > 0 ? 
-              <End>
-                おわり。
-                <br/>
-                The End.
-              </End>:
-              <End>
-                レビューはありません。
-                <br/>
-                No reviews were written.
-              </End>
-            }
-          </Grid>
-          <Grid
-            gap={'small'}
-            css={{
-              marginTop:'1.5em'
-            }}
-          >
-            <Container
-              styleType={'white'}
-            >
-              <Grid
-                grid={'oneTwo'}
-                gap={'medium'}
-              >
-                <h5>基本情報</h5>
-                <Grid
-                  gap={'small'}
-                >
-                  {placeData.officialSite && 
-                    <AlignItems gap={'0.5em'}>
-                      <ExternalLinkIcon/>
-                      <p>
-                        <Link
-                          href={placeData.officialSite}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          公式サイト
-                        </Link>
-                      </p>
-                    </AlignItems>
-                  }
-                  <AlignItems gap={'0.5em'}>
-                    <FaceIcon/>
-                    <p>トイレ{placeData.toilet ? '有':'無'}</p>
-                  </AlignItems>
-                  <AlignItems gap={'0.5em'}>
-                    <AspectRatioIcon/>
-                    {placeData.size == 'small' && <p>小さい</p>}
-                    {placeData.size == 'medium' && <p>普通</p>}
-                    {placeData.size == 'large' && <p>大きい</p>}
-                  </AlignItems>
-                </Grid>
-                <h5>料金</h5>
-                <Grid
-                  gap={'small'}
-                >
-
-                </Grid>
-              </Grid>
-            </Container>
           </Grid>
         </Grid>
+
+        <Grid gap={'small'} grid={'duo'}>
+          {reviewsCollection?.map((review) =><Review
+              key={review.id}
+              data={review.data}
+            />
+          )}
+        </Grid>
+        {reviewsCollection?.length > 0 ? 
+          <End>
+            おわり。
+            <br/>
+            The End.
+          </End>:
+          <End>
+            レビューはありません。
+            <br/>
+            No reviews were written.
+          </End>
+        }
+
         <Footer type={'blur'}/>
       </Margin>
       <UniversalNav

@@ -19,7 +19,7 @@ const TagItem = ({
   name
 }:{
   icon?:JSX.Element,
-  name:string,
+  name:string | JSX.Element,
 }) => (
   <TagItemStyled>
     {icon}

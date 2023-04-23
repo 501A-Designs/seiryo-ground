@@ -26,7 +26,7 @@ const SizeSelectItemStyled = styled('div',{
         },
         background: '$gray12',
         borderColor:'$gray12',
-        width: '68%',
+        width: '50%',
         fontWeight:'500',
         boxShadow:'$shadow1',
       },
@@ -34,7 +34,7 @@ const SizeSelectItemStyled = styled('div',{
         'h4':{
           color: '$gray10',
         },
-        width: '16%',
+        width: '25%',
         '&:hover':{
           color: '$gray11',
           backgroundColor:'$gray4',
@@ -56,9 +56,7 @@ const SizeSelectItem = (props)=> {
       onClick={props.onClick}
     >
       <h4>
-        {props.name === 'small' && '小'}
-        {props.name === 'medium' && '中'}
-        {props.name === 'large' && '大'}
+        {props.name}
       </h4>
     </SizeSelectItemStyled>
   )
@@ -103,7 +101,7 @@ export default function SizeSelect(props) {
         >
           {!props.hide &&
             <>
-              {props.state === 'small' &&
+              {props.state === '小さい' &&
                 <>
                   <h3>~20m</h3>
                   <p>
@@ -111,13 +109,13 @@ export default function SizeSelect(props) {
                   </p>
                 </>
               }
-              {props.state === 'medium' &&
+              {props.state === '普通' &&
                 <>
                   <h3>20~100m</h3>
                   <p>大きめな公園・建物</p>
                 </>
               }
-              {props.state === 'large' &&
+              {props.state === '広い' &&
                 <>
                   <h3>100m~</h3>
                   <p>
