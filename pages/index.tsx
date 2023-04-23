@@ -191,18 +191,17 @@ export default function Home({prefectureData}) {
               >
                 {
                   prefectureInput == "全て表示" ?
-                    placesCollection?.docs?.map(doc => <PostThumbNail
-                        key={doc.id}
-                        id={doc.id}
-                        data={doc.data()}
-                      />
-                    ):
-                    filteredPlaceCollection?.docs?.map(doc => <PostThumbNail
-                        key={doc.id}
-                        id={doc.id}
-                        data={doc.data()}
-                      />
-                    )
+                  placesCollection?.docs?.map(doc => <PostThumbNail
+                      key={doc.id}
+                      id={doc.id}
+                      data={doc.data()}
+                    />
+                  ):filteredPlaceCollection?.docs?.map(doc => <PostThumbNail
+                      key={doc.id}
+                      id={doc.id}
+                      data={doc.data()}
+                    />
+                  )
                 }
               </Masonry>
             </ResponsiveMasonry>

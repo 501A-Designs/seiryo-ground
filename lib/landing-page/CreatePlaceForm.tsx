@@ -3,7 +3,7 @@ import AlignItems from '../alignment/AlignItems'
 import Button from '../button/Button'
 import TypeButton from '../button/TypeButton'
 import TextArea from '../TextArea'
-import Input from '../Input'
+import Input from '../TextInput'
 
 import { db } from '../../firebase'
 import { addDoc, collection, doc, increment, updateDoc } from "firebase/firestore";
@@ -23,6 +23,7 @@ import LoadingBar from 'react-top-loading-bar'
 import RadixDialog from '../component/radix/Dialog'
 import RadixSelect from '../component/radix/Select'
 import Container from '../component/Container'
+import { Category, Cost, Size } from '../util/types'
 
 
 export default function CreatePlaceForm(props) {
@@ -35,10 +36,10 @@ export default function CreatePlaceForm(props) {
   const [celebrate1] = useSound('/sound/celebrate-1-sg.mp3',{playbackRate:1.1});
   const [load1] = useSound('/sound/load-1-sg.mp3');
 
-  const [sizeSelect, setSizeSelect] = useState('medium');
-  const [binaryToggle, setBinaryToggle] = useState(true);
-  const [typeInput, setTypeInput] = useState('green');
-  const [costCheckBox, setCostCheckBox] = useState(['free']);
+  const [sizeSelect, setSizeSelect] = useState<Size>('普通');
+  const [binaryToggle, setBinaryToggle] = useState<boolean>(true);
+  const [typeInput, setTypeInput] = useState<Category>('green');
+  const [costCheckBox, setCostCheckBox] = useState<Cost[]>(['無料']);
 
   const [placeInput, setPlaceInput] = useState('');
   const [prefectureInput, setPrefectureInput] = useState();
@@ -82,10 +83,10 @@ export default function CreatePlaceForm(props) {
       setDescriptionInput('');
       setPrefectureInput(null);
       setOfficialSiteInput('');
-      setSizeSelect('medium');
+      setSizeSelect('普通');
       setBinaryToggle(true);
       setTypeInput('green');
-      setCostCheckBox(['free']);
+      setCostCheckBox(['無料']);
       setSection(1)
 
       setProgress(100);
@@ -136,14 +137,12 @@ export default function CreatePlaceForm(props) {
             </AlignItems>
             <AlignItems justifyContent={'center'}>
               <Button
-                iconPosition={'left'}
                 icon={<MagnifyingGlassIcon/>}
                 onClick={()=> router.push(`/place/${newPlace?.id}/`)}
               >
                 追加した場所のページを閲覧
               </Button>
               <Button
-                iconPosition={'left'}
                 icon={<PlusIcon/>}
                 onClick={()=> {
                   action1();
@@ -308,7 +307,6 @@ export default function CreatePlaceForm(props) {
                 publish={
                   <Button
                     styleType={'black'}
-                    iconPosition={'right'}
                     icon={<PaperPlaneIcon/>}
                     overRideSound={()=>load1()}
                     onClick={()=>createNewPlace()}

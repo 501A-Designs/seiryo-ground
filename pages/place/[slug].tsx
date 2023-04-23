@@ -9,7 +9,7 @@ import Rating from '../../lib/Rating'
 
 import LoadingBar from 'react-top-loading-bar';
 import Review from '../../lib/place-page/Review'
-import Input from '../../lib/Input'
+import TextInput from '../../lib/TextInput'
 import TextArea from '../../lib/TextArea'
 import End from '../../lib/End'
 
@@ -374,7 +374,7 @@ export default function PlaceName({
                     </Grid>
                     <Grid gap={'extraSmall'}>
                       {userData.data().level > 4 &&
-                        <Input
+                        <TextInput
                           placeholder={"場所の名前"}
                           value={placeInput}
                           onChange={(e)=>
@@ -392,7 +392,7 @@ export default function PlaceName({
                       }
 
                       {userData.data().level > 1 &&
-                        <Input
+                        <TextInput
                           placeholder={"公式サイト（無い場合は空欄）"}
                           value={officialSiteInput}
                           onChange={(e)=>setOfficialSiteInput(e.target.value)}
@@ -413,7 +413,6 @@ export default function PlaceName({
             <Button
               styleType={'black'}
               onClick={()=>router.push('/')}
-              iconPosition={'left'}
               icon={<HomeIcon/>}
             >
               メイン
@@ -606,7 +605,7 @@ export default function PlaceName({
                   }
                 >
                   <Grid gap={'extraSmall'}>
-                    <Input
+                    <TextInput
                       value={titleRatingInput}
                       onChange={(e)=> setTitleRatingInput(e.target.value)
                       }
@@ -650,7 +649,7 @@ export default function PlaceName({
                 <Button
                   size={'small'}
                   styleType={liked ? 'red':'transparent'}
-                  css={{animation:liked ? `${popOut} 0.5s`:'none'}}
+                  // css={{animation:liked ? `${popOut} 0.5s`:'none'}}
                   icon={liked ? <HeartFilledIcon/>:<HeartIcon/>}
                   overRideSound={()=>!liked ? celebrate2():tap1()}
                   onClick={()=> {

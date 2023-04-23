@@ -2,6 +2,55 @@ import React from 'react'
 import { styled } from '../../stitches.config'
 import { spin } from '../ux/keyframes'
 import useSound from 'use-sound'
+import { VariantProps } from '@stitches/react';
+
+interface BinaryToggleItemProps extends
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  VariantProps<typeof BinaryToggleItemStyled>{
+    inputValue:boolean
+}
+
+interface BinaryToggleProps{
+  state:VariantProps<typeof BinaryToggleItemStyled>["state"],
+  onClick:React.ButtonHTMLAttributes<HTMLButtonElement>["onClick"],
+}
+
+const BinaryToggleItem = (toggleItemProps:BinaryToggleItemProps)=> {
+  const [select1] = useSound('/sound/select-1-sg.mp3',{playbackRate:1.1});
+  const [select2] = useSound('/sound/select-2-sg.mp3',{playbackRate:1.1});
+
+  return(
+    <BinaryToggleItemStyled
+      state={toggleItemProps.state}
+      onMouseDown={()=>{
+        toggleItemProps.inputValue ? 
+        !toggleItemProps.state && select1():
+        !toggleItemProps.state && select2()
+      }}
+      {...toggleItemProps}
+    >
+      <h4>{toggleItemProps.inputValue ? '有':'無'}</h4>
+    </BinaryToggleItemStyled>
+  )
+};
+
+export default function BinaryToggle(props:BinaryToggleProps) {
+  return (
+    <BinaryToggleStyled>
+      <BinaryToggleItem
+        state={props.state}
+        onClick={!props.state ? props.onClick:null}
+        inputValue={true}
+      />
+      <BinaryToggleItem
+        state={!props.state}
+        onClick={props.state ? props.onClick:null}
+        inputValue={false}
+      />
+    </BinaryToggleStyled>
+  )
+}
+
 
 const BinaryToggleItemStyled = styled('button',{
   backgroundColor: 'black',
@@ -13,7 +62,7 @@ const BinaryToggleItemStyled = styled('button',{
   border: '1px solid transparent',
   transition:'ease $speed1',
   variants:{
-    selected:{
+    state:{
       true:{
         'h4':{
           color: '$gray1',
@@ -31,7 +80,6 @@ const BinaryToggleItemStyled = styled('button',{
         'h4':{
           color: '$gray10',
         },
-        // background:'$gray3',
         backgroundColor:'transparent',
         width: '50px',
         height: '50px',
@@ -56,46 +104,3 @@ const BinaryToggleStyled = styled('div',{
   height: '100%',
   minHeight: '103px',
 })
-
-const BinaryToggleItem = (toggleItemProps:any)=> {
-  const [select1] = useSound('/sound/select-1-sg.mp3',{playbackRate:1.1});
-  const [select2] = useSound('/sound/select-2-sg.mp3',{playbackRate:1.1});
-
-  return(
-    <BinaryToggleItemStyled
-      selected={toggleItemProps.selected}
-      onMouseDown={()=>{
-        toggleItemProps.inputValue ? 
-        !toggleItemProps.selected && select1():
-        !toggleItemProps.selected && select2()
-      }}
-      onClick={toggleItemProps.onClick}
-    >
-      <h4>
-        {
-          toggleItemProps.inputValue ? 
-          '有':
-          '無'
-        }
-      </h4>
-    </BinaryToggleItemStyled>
-  )
-};
-
-// BinaryToggle.Item = BinaryToggleItem;
-export default function BinaryToggle(props) {
-  return (
-    <BinaryToggleStyled>
-      <BinaryToggleItem
-        selected={props.state}
-        onClick={!props.state ? props.onClick:null}
-        inputValue={true}
-      />
-      <BinaryToggleItem
-        selected={!props.state}
-        onClick={props.state ? props.onClick:null}
-        inputValue={false}
-      />
-    </BinaryToggleStyled>
-  )
-}

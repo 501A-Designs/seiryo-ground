@@ -1,49 +1,12 @@
-import React from 'react'
-import { styled } from '../../stitches.config'
-import Grid from '../alignment/Grid'
-import Container from '../component/Container'
-import useSound from 'use-sound'
-import AlignItems from '../alignment/AlignItems'
-import { popOutNoBlur } from '../ux/keyframes'
+import React from 'react';
+import { styled } from '../../stitches.config';
+import useSound from 'use-sound';
+import AlignItems from '../alignment/AlignItems';
+import { popOutNoBlur } from '../ux/keyframes';
 
-const SizeSelectItemStyled = styled('div',{
-  cursor: 'pointer',
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'center',
-  maxHeight: '20px',
-  border: '1px solid transparent',
-  borderRadius: '$r2',
-  padding: '$small',
-  fontSize: '$8',
-  transition: '$speed1',
-  variants: {
-    selected: {
-      true: {
-        'h4':{
-          color: '$gray1',
-        },
-        background: '$gray12',
-        borderColor:'$gray12',
-        width: '50%',
-        fontWeight:'500',
-        boxShadow:'$shadow1',
-      },
-      false: {
-        'h4':{
-          color: '$gray10',
-        },
-        width: '25%',
-        '&:hover':{
-          color: '$gray11',
-          backgroundColor:'$gray4',
-          border:'1px solid $gray5',
-        }
-      },
-    },
-  },
-})
+// interface SizeSelectItemProps {
+
+// }
 
 const SizeSelectItem = (props)=> {
   const [select1] = useSound('/sound/select-1-sg.mp3',{playbackRate:1.1});
@@ -61,34 +24,6 @@ const SizeSelectItem = (props)=> {
     </SizeSelectItemStyled>
   )
 }
-
-const SizeSelectContainerStyled = styled('section',{
-  display: 'flex',
-  gap:'$extraSmall',
-  flexDirection:'column',
-  alignItems:'center',
-  justifyContent:'space-between',
-  height:'100%'
-  // maxWidth:'300px'
-})
-
-const SizeSelectStyled = styled('section',{
-  display: 'flex',
-  gap:'$extraSmall',
-  maxWidth:'250px',
-  width:'100%'
-})
-
-const SizeSelectLabelStyled = styled('section',{
-  'h3':{
-    animation:`${popOutNoBlur} 0.2s`,
-    margin:'1em 0 0 0'
-  },
-  'p':{
-    animation:`${popOutNoBlur} 0.3s`,
-    margin:'0 0 1.3em 0'
-  }
-})
 
 SizeSelect.Item = SizeSelectItem;
 export default function SizeSelect(props) {
@@ -133,3 +68,69 @@ export default function SizeSelect(props) {
     </SizeSelectContainerStyled>
   )
 }
+
+const SizeSelectItemStyled = styled('div',{
+  cursor: 'pointer',
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
+  maxHeight: '20px',
+  border: '1px solid transparent',
+  borderRadius: '$r2',
+  padding: '$small',
+  fontSize: '$8',
+  transition: '$speed1',
+  variants: {
+    selected: {
+      true: {
+        'h4':{
+          color: '$gray1',
+        },
+        background: '$gray12',
+        borderColor:'$gray12',
+        width: '50%',
+        fontWeight:'500',
+        boxShadow:'$shadow1',
+      },
+      false: {
+        'h4':{
+          color: '$gray10',
+        },
+        width: '25%',
+        '&:hover':{
+          color: '$gray11',
+          backgroundColor:'$gray4',
+          border:'1px solid $gray5',
+        }
+      },
+    },
+  },
+});
+
+const SizeSelectContainerStyled = styled('section',{
+  display: 'flex',
+  gap:'$extraSmall',
+  flexDirection:'column',
+  alignItems:'center',
+  justifyContent:'space-between',
+  height:'100%'
+});
+
+const SizeSelectStyled = styled('section',{
+  display: 'flex',
+  gap:'$extraSmall',
+  maxWidth:'250px',
+  width:'100%'
+});
+
+const SizeSelectLabelStyled = styled('section',{
+  'h3':{
+    animation:`${popOutNoBlur} 0.2s`,
+    margin:'1em 0 0 0'
+  },
+  'p':{
+    animation:`${popOutNoBlur} 0.3s`,
+    margin:'0 0 1.3em 0'
+  }
+});

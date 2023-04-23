@@ -2,16 +2,37 @@ import React from 'react'
 import { styled } from '../../stitches.config'
 import { popOutNoBlur } from '../ux/keyframes'
 import useSound from 'use-sound';
-import { keyframes } from '@stitches/react';
+import { VariantProps } from '@stitches/react';
 
-const spinAni = keyframes({
-  from: {
-    transform: 'rotate(0deg)'
-  },
-  to: {
-    transform: 'rotate(360deg)'
-  }
-})
+interface ButtonProps extends 
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  VariantProps<typeof ButtonStyled>{
+    overRideSound?:any,
+    backTapSound?:any,
+    icon:JSX.Element,
+};
+
+export default function Button(props:ButtonProps) {
+  const [tap1] = useSound('/sound/tap-1-sg.mp3',{playbackRate:1.1});
+  const [tap2] = useSound('/sound/tap-2-sg.mp3',{playbackRate:1.1});
+
+  return (
+    <ButtonStyled
+      {...props}
+      styleType={props.styleType}
+      onMouseDown={
+        props.overRideSound ? 
+          props.overRideSound:
+          ()=> props.backTapSound ? 
+            tap2():
+            tap1()
+      }
+    >
+      {props.icon && props.icon}
+      {props.children && <span>{props.children}</span>}
+    </ButtonStyled>
+  )
+}
 
 const ButtonStyled = styled('button',{
   outlineColor:'$gray6',
@@ -28,11 +49,6 @@ const ButtonStyled = styled('button',{
   animation: `${popOutNoBlur} 0.3s`,
   transition:'$speed1',
   variants:{
-    animation:{
-      load:{
-        animation: `${spinAni} 2s infinite`
-      },
-    },
     size:{
       medium:{
         padding:'0.5em 1em',
@@ -110,28 +126,3 @@ const ButtonStyled = styled('button',{
     size:'medium'
   }
 })
-
-export default function Button(props) {
-  const [tap1] = useSound('/sound/tap-1-sg.mp3',{playbackRate:1.1});
-  const [tap2] = useSound('/sound/tap-2-sg.mp3',{playbackRate:1.1});
-
-
-
-  return (
-    <ButtonStyled
-      size={props.size}
-      styleType={props.styleType}
-      onMouseDown={
-        props.overRideSound ? 
-        props.overRideSound : ()=> props.backTapSound ? tap2():tap1()
-      }
-      animation={props.animate}
-      onClick={props.onClick}
-      title={props.children}
-      css={props.css}
-    >
-      {props.icon && props.icon}
-      {props.children && <span>{props.children}</span>}
-    </ButtonStyled>
-  )
-}

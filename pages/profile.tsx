@@ -119,7 +119,6 @@ export default function Profile() {
                               <Button
                                 styleType={'black'}
                                 onClick={()=>upgrade()}
-                                iconPosition={'left'}
                                 icon={<DownloadIcon/>}
                               >
                                 アップグレード
