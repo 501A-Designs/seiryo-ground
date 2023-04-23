@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { useState,useEffect, useContext } from 'react'
+import React, { useState,useEffect } from 'react'
 import AlignItems from '../../lib/alignment/AlignItems'
 import TypeBadge from '../../lib/TypeBadge'
 
@@ -45,6 +45,7 @@ import RadixAccordion from '../../lib/component/radix/Accordion'
 import { round } from '../../lib/util/helper'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useDocument } from 'react-firebase-hooks/firestore'
+import Tag from '../../lib/component/Tag'
 
 export default function PlaceName({
   locationDataSnap,
@@ -339,13 +340,11 @@ export default function PlaceName({
                                     key={name}
                                     checked={costCheckBox.some(element => element === name)}
                                     name={name}
-                                    onClick={()=>
-                                      {
-                                        costCheckBox.some(element => element === name) ?
-                                        setCostCheckBox(prev => prev.filter(element => element !== name )):
-                                        setCostCheckBox([...costCheckBox, name]);
-                                      }
-                                    }
+                                    onClick={()=>{
+                                      costCheckBox.some(element => element === name) ?
+                                      setCostCheckBox(prev => prev.filter(element => element !== name )):
+                                      setCostCheckBox([...costCheckBox, name]);
+                                    }}
                                   >
                                     {name}
                                   </CheckBox.Item>
@@ -438,8 +437,16 @@ export default function PlaceName({
               />
               <h2>{placeData.name}</h2>
             </AlignItems>
+            <Tag>
+              {placeData.cost.map(name => 
+                <Tag.Item
+                  key={name}
+                  // icon={}
+                  name={name}
+                />
+              )}
+            </Tag>
             <p>{placeData.description}</p>
-
 
             {reviewsData?.length > 0 &&
               <Grid
@@ -482,26 +489,24 @@ export default function PlaceName({
             }
 
             <Grid gap={'small'} grid={'duo'}>
-              {reviewsCollection?.map((review) =>(
-                  <Review
-                    key={review.id}
-                    data={review.data}
-                  />
-                )
+              {reviewsCollection?.map((review) =><Review
+                  key={review.id}
+                  data={review.data}
+                />
               )}
             </Grid>
-              {reviewsCollection?.length > 0 ? 
-                <End>
-                  おわり。
-                  <br/>
-                  The End.
-                </End>:
-                <End>
-                  レビューはありません。
-                  <br/>
-                  No reviews were written.
-                </End>
-              }
+            {reviewsCollection?.length > 0 ? 
+              <End>
+                おわり。
+                <br/>
+                The End.
+              </End>:
+              <End>
+                レビューはありません。
+                <br/>
+                No reviews were written.
+              </End>
+            }
           </Grid>
           <Grid
             gap={'small'}
@@ -549,37 +554,7 @@ export default function PlaceName({
                 <Grid
                   gap={'small'}
                 >
-                  {placeData.cost.map(name =>(
-                    <AlignItems gap={'0.5em'}
-                      key={name}
-                    >
-                      {name === 'free' && 
-                        <>
-                          <CheckIcon/>
-                          <p>無料</p>
-                        </>
-                      }
-                      {name === 'cash' &&
-                        <>
-                          <CrumpledPaperIcon/>
-                          <p>現金</p>
-                        </>
-                      }
-                      {name === 'credit' &&
-                        <>
-                          <CardStackIcon/>
-                          <p>クレジットカード</p>
-                        </>
-                      }
-                      {name === 'digitalMoney' &&
-                        <>
-                          <MobileIcon/>
-                          <p>電子マネー</p>
-                        </>
-                      }
-                    </AlignItems>
-                  ))
-                  }
+
                 </Grid>
               </Grid>
             </Container>

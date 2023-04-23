@@ -17,10 +17,7 @@ const CheckBoxItem =(props)=> {
       <AlignItems>
         {props.checked ? <CheckCircledIcon/>:<CircleIcon/>}
         <h5>
-          {props.name == "free" && '無料'}
-          {props.name == "cash" && '現金'}
-          {props.name == "credit" && 'クレジットカード'}
-          {props.name == "digitalMoney" && '電子マネー'}
+          {props.name}
         </h5>
       </AlignItems>
     </CheckBoxItemStyled>
