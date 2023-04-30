@@ -1,8 +1,8 @@
 import React from 'react'
-import { styled } from '../../stitches.config'
-import { spin } from '../ux/keyframes'
+import { styled } from '../../../stitches.config'
 import useSound from 'use-sound'
-import { VariantProps } from '@stitches/react';
+import { VariantProps, keyframes } from '@stitches/react';
+import useLocale from '../../util/useLocale';
 
 interface BinaryToggleItemProps extends
   React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -10,14 +10,23 @@ interface BinaryToggleItemProps extends
     inputValue:boolean
 }
 
-interface BinaryToggleProps{
+interface ToggleInputProps{
   state:VariantProps<typeof BinaryToggleItemStyled>["state"],
   onClick:React.ButtonHTMLAttributes<HTMLButtonElement>["onClick"],
 }
 
 const BinaryToggleItem = (toggleItemProps:BinaryToggleItemProps)=> {
-  const [select1] = useSound('/sound/select-1-sg.mp3',{playbackRate:1.1});
-  const [select2] = useSound('/sound/select-2-sg.mp3',{playbackRate:1.1});
+  const { t } = useLocale();
+  const NAME = t.INPUT.BINARY;
+  
+  const [select1] = useSound(
+    '/sound/select-1-sg.mp3',
+    {playbackRate:1.1}
+  );
+  const [select2] = useSound(
+    '/sound/select-2-sg.mp3',
+    {playbackRate:1.1}
+  );
 
   return(
     <BinaryToggleItemStyled
@@ -29,12 +38,18 @@ const BinaryToggleItem = (toggleItemProps:BinaryToggleItemProps)=> {
       }}
       {...toggleItemProps}
     >
-      <h4>{toggleItemProps.inputValue ? '有':'無'}</h4>
+      <h4>
+        {
+          toggleItemProps.inputValue ? 
+          NAME.TRUE:
+          NAME.FALSE
+        }
+      </h4>
     </BinaryToggleItemStyled>
   )
 };
 
-export default function BinaryToggle(props:BinaryToggleProps) {
+export default function ToggleInput(props:ToggleInputProps) {
   return (
     <BinaryToggleStyled>
       <BinaryToggleItem
@@ -51,6 +66,17 @@ export default function BinaryToggle(props:BinaryToggleProps) {
   )
 }
 
+const spinScale = keyframes({
+  '0%': {
+    rotate: '0deg',
+  },
+  '30%':{
+    scale:'1.2'
+  },
+  '100%':{
+    rotate:'360deg',
+  }
+});
 
 const BinaryToggleItemStyled = styled('button',{
   backgroundColor: 'black',
@@ -74,7 +100,7 @@ const BinaryToggleItemStyled = styled('button',{
         width: '95px',
         height: '95px',
         fontWeight: '500',
-        animation: `${spin} 0.5s`
+        animation: `${spinScale} 0.3s`
       },
       false:{
         'h4':{

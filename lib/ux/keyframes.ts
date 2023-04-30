@@ -89,15 +89,6 @@ const gradient = keyframes({
   },
 });
 
-const spin = keyframes({
-  '0%': {
-    transform: 'rotate(0deg)',
-  },
-  '100%':{
-    transform: 'rotate(360deg)'
-  }
-});
-
 const fillClipPath = keyframes({
   '0%':{
     clipPath: 'ellipse(0px 0px at 10% 20%)',
@@ -109,4 +100,4 @@ const fillClipPath = keyframes({
 
 
 
-export {leftSlideIn,topSlideIn,bottomSlideIn,popOut,popOutNoBlur,rotateIn,rotateInBottonLeft,rotateAndZoom,gradient,spin,fillClipPath}
+export {leftSlideIn,topSlideIn,bottomSlideIn,popOut,popOutNoBlur,rotateIn,rotateInBottonLeft,rotateAndZoom,gradient,fillClipPath}

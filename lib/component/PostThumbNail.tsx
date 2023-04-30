@@ -95,10 +95,7 @@ export default function PostThumbNail(props) {
           {/* {reviewsCollection?.docs.length > 0 &&
             <>{reviewsCollection.docs.length + '_'}review | </>
           } */}
-        <AlignItems
-          spaceBetween
-          margin={'0.5em 0 0 0'}
-        >
+        <AlignItems justifyContent={'spaceBetween'}>
           <AlignItems>
             {
               overallScore > 0 &&

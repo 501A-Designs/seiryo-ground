@@ -1,7 +1,7 @@
 
 import React from 'react'
-import { styled } from '../../stitches.config';
-import AlignItems from '../alignment/AlignItems';
+import { styled } from '../../../stitches.config';
+import AlignItems from '../../alignment/AlignItems';
 import useSound from 'use-sound';
 
 const TypeButtonItem =(props)=> {
@@ -13,7 +13,7 @@ const TypeButtonItem =(props)=> {
       onMouseDown={()=> props.selectedInput != props.type ? select1():null}
       onClick={props.onClick}
     >
-      <AlignItems gap={'0.7em'}>
+      <AlignItems>
         <TypeButtonItemColorStyled
           selected={props.selectedInput === props.type}
           type={props.type}

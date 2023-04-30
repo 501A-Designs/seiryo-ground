@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../../firebase';
-import Button from '../button/Button';
+import Button from './button/Button';
 import SectionButton from './SectionButton';
 
 import { styled } from '../../stitches.config';
@@ -17,26 +17,33 @@ import { ArrowUpIcon, BookmarkIcon, FrameIcon, HamburgerMenuIcon, HomeIcon, IdCa
 import { useTheme } from 'next-themes';
 import AlignItems from '../alignment/AlignItems';
 import RadixDialog from './radix/Dialog';
+import useLocale from '../util/useLocale';
 
-export default function UniversalNav(props:UniversalNavProps) {
+export default function UniversalNav(props: UniversalNavProps) {
   const router = useRouter();
   const [user] = useAuthState(auth);
+
+  const { t } = useLocale();
+  const tLABEL = t.LABEL;
+  const tROUTE = t.ROUTE;
+  const tBUTTON = t.BUTTON;
+
   // const [userData,loadingUserData] = useDocument(doc(db, `users/${user && user.uid}`))
 
-  const [hide, setHide] = useState(props.showInitially ? false:true);
-  const [hideDelay, setHideDelay] = useState(props.showInitially ? false:true)
-  const [hideScrollUp, setHideScrollUp] = useState(props.showInitially ? true:false);
+  const [hide, setHide] = useState(props.showInitially ? false : true);
+  const [hideDelay, setHideDelay] = useState(props.showInitially ? false : true)
+  const [hideScrollUp, setHideScrollUp] = useState(props.showInitially ? true : false);
   const [dynamicSize, setDynamicSize] = useState(props.minSize);
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       if (!props.showInitially) {
-        currentScrollY < 70 ? setHide(true):setHide(false);
+        currentScrollY < 70 ? setHide(true) : setHide(false);
       }
-      if (props.scrollPop) {        
-        currentScrollY < 800 ? setHideScrollUp(true):setHideScrollUp(false);
-        currentScrollY < 800 ? setDynamicSize(props.minSize):setDynamicSize(props.maxSize)
+      if (props.scrollPop) {
+        currentScrollY < 800 ? setHideScrollUp(true) : setHideScrollUp(false);
+        currentScrollY < 800 ? setDynamicSize(props.minSize) : setDynamicSize(props.maxSize)
       }
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -44,15 +51,15 @@ export default function UniversalNav(props:UniversalNavProps) {
   }, [hide]);
 
 
-useEffect(()=>{
-  hide ? setTimeout(()=>setHideDelay(true),500):setTimeout(()=>setHideDelay(false),500);
-  if (props.popOnMount) {
-    setDynamicSize(props.minSize)
-    if (props.mount) {
-      setDynamicSize(props.maxSize)
+  useEffect(() => {
+    hide ? setTimeout(() => setHideDelay(true), 500) : setTimeout(() => setHideDelay(false), 500);
+    if (props.popOnMount) {
+      setDynamicSize(props.minSize)
+      if (props.mount) {
+        setDynamicSize(props.maxSize)
+      }
     }
-  }
-})
+  })
 
   useEffect(() => {
     const down = (e) => {
@@ -67,17 +74,17 @@ useEffect(()=>{
     return () => document.removeEventListener('keydown', down)
   }, [])
 
-  const [userData,loadingUserData] = useDocument(doc(db, `users/${user && user.uid}`));
+  const [userData, loadingUserData] = useDocument(doc(db, `users/${user && user.uid}`));
   const [upgradable, setUpgradable] = useState(null)
   useEffect(() => {
     if (user && userData) {
       let postCount = userData.data().postCount;
       let reviewCount = userData.data().reviewCount;
-      if (checkLevel(postCount,reviewCount) !== userData.data().level) {
-        setUpgradable(checkLevel(postCount,reviewCount))
+      if (checkLevel(postCount, reviewCount) !== userData.data().level) {
+        setUpgradable(checkLevel(postCount, reviewCount))
       }
     }
-  },[userData])
+  }, [userData])
 
   const { theme, setTheme } = useTheme();
   const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
@@ -85,11 +92,11 @@ useEffect(()=>{
   return (
     <>
       {!hideDelay &&
-        <NavContainerStyled  
+        <NavContainerStyled
           hide={hide}
         >
           <NavStyled
-            animate={upgradable ? router.asPath !== '/profile' && 'shine':props.animate}
+            animate={upgradable ? router.asPath !== '/profile' && 'shine' : props.animate}
             size={dynamicSize}
           >
             <NavContentStyled>
@@ -98,63 +105,58 @@ useEffect(()=>{
                 <Button
                   size={'small'}
                   styleType={'transparent'}
-                  icon={<ArrowUpIcon/>}
-                  onClick={()=>{scroll.scrollToTop();}}
+                  icon={<ArrowUpIcon />}
+                  onClick={() => { scroll.scrollToTop(); }}
                 >
-                  上へ戻る
+                  {tBUTTON.TOP}
                 </Button>
               }
               <RadixDialog
-                title={'メニュー'}
+                title={tLABEL.MENU}
                 trigger={
                   <Button
                     size={'small'}
                     styleType={'transparent'}
-                    icon={<HamburgerMenuIcon/>}
+                    icon={<HamburgerMenuIcon />}
                   />
                 }
               >
                 <>
-                  <ProfileContainer upgradable={upgradable ? true:false}/>
-                  <SectionButton icon={<HomeIcon/>}>
-                    メイン
+                  <ProfileContainer upgradable={upgradable ? true : false} />
+                  <SectionButton icon={<HomeIcon />}>
+                    {tROUTE.MAIN}
                   </SectionButton>
                   <SectionButton
                     slug={'news'}
-                    icon={<BookmarkIcon/>}
+                    icon={<BookmarkIcon />}
                   >
-                    新着情報
+                    {tROUTE.NEWS}
                   </SectionButton>
                   <SectionButton
                     slug={'levels'}
-                    icon={<IdCardIcon/>}
+                    icon={<IdCardIcon />}
                   >
-                    カード別レベルについて
+                    {tROUTE.CARD}
                   </SectionButton>
                   <SectionButton
                     slug={'design'}
-                    icon={<FrameIcon/>}
+                    icon={<FrameIcon />}
                   >
-                    デザインについて
+                    {tROUTE.DESIGN}
                   </SectionButton>
                   <SectionButton
                     slug={'links'}
-                    icon={<InfoCircledIcon/>}
+                    icon={<InfoCircledIcon />}
                   >
-                    他全てのページのリンク集
+                    {tROUTE.LINKS}
                   </SectionButton>
-                  <AlignItems
-                    css={{
-                      marginTop:'1em'
-                    }}
-                    justifyContent={'flex-end'}
-                  >
+                  <AlignItems justifyContent={'end'}>
                     <Button
-                      icon={<ShadowInnerIcon/>}
+                      icon={<ShadowInnerIcon />}
                       onClick={toggleTheme}
                       backTapSound={theme}
                     >
-                      表示色
+                      {tBUTTON.THEME}
                     </Button>
                   </AlignItems>
                 </>
@@ -167,142 +169,142 @@ useEffect(()=>{
   )
 }
 const expandAni = keyframes({
-  '10%':{
+  '10%': {
     width: '260px',
-    transform:'scale(1.05)'
+    transform: 'scale(1.05)'
   },
-  '50%':{
-    transform:'scale(0.80)'
+  '50%': {
+    transform: 'scale(0.80)'
   }
 });
 
 const jiggleAni = keyframes({
-  '10%, 90%':{
+  '10%, 90%': {
     transform: 'translate3d(-1px, 0, 0)',
   },
-  '20%, 80%':{
+  '20%, 80%': {
     transform: 'translate3d(2px, 0, 0)',
   },
-  '30%, 50%, 70%':{
+  '30%, 50%, 70%': {
     transform: 'translate3d(-4px, 0, 0)',
   },
-  '40%, 60%':{
+  '40%, 60%': {
     transform: 'translate3d(4px, 0, 0)',
   }
 });
 const hideAni = keyframes({
-  '40%':{
+  '40%': {
     transform: 'translate3d(0, -15px, 0) scale(1.01)',
   },
-  '100%':{
+  '100%': {
     transform: 'translate3d(0, 80px, 0) scale(0.5)',
   },
 });
 const showAni = keyframes({
-  '0%':{
+  '0%': {
     transform: 'translate3d(0, 80px, 0) scale(0.5)',
   },
-  '40%':{
+  '40%': {
     transform: 'translate3d(0, -15px, 0) scale(1.01)',
   },
-  '100%':{
+  '100%': {
     transform: 'translate3d(0, 0px, 0)',
   },
 });
 
 const scaleUpAni = keyframes({
-  '50%':{
+  '50%': {
     transform: 'scale(1.05)',
   },
 });
 
 const NavContainerStyled = styled('nav', {
   position: 'sticky',
-  userSelect:'none',
+  userSelect: 'none',
   bottom: '$medium',
-  zIndex:100,
-  display:'flex',
-  alignItems:'center',
-  justifyContent:'center',
-  variants:{
-    hide:{
-      true:{
-        animation:`${hideAni} 0.5s`,
+  zIndex: 100,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  variants: {
+    hide: {
+      true: {
+        animation: `${hideAni} 0.5s`,
       },
-      false:{
-        animation:`${showAni} 0.5s`,
+      false: {
+        animation: `${showAni} 0.5s`,
       }
     },
   }
 })
 
-const NavStyled = styled('section',{
+const NavStyled = styled('section', {
   display: 'flex',
-  justifyContent:'space-between',
-  alignItems:'center',
-  gap:'$small',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  gap: '$small',
 
   maxHeight: '45px',
-  maxWidth:'300px',
-  padding:'calc($small*0.25)',
-  borderRadius:'$round',
+  maxWidth: '300px',
+  padding: 'calc($small*0.25)',
+  borderRadius: '$round',
   border: '1px solid $grayA4',
 
-  backgroundColor:'$gray1',
-  boxShadow:'$shadow3',
-  transition:'$speed1',
+  backgroundColor: '$gray1',
+  boxShadow: '$shadow3',
+  transition: '$speed1',
 
-  variants:{
-    size:{
-      xl:{
+  variants: {
+    size: {
+      xl: {
         width: '250px',
       },
-      l:{
+      l: {
         width: '200px',
       },
-      m:{
+      m: {
         width: '150px',
       },
-      s:{
+      s: {
         width: '100px',
       },
     },
-    animate:{
-      expand:{
-        animation:`${expandAni} 0.3s linear`,
+    animate: {
+      expand: {
+        animation: `${expandAni} 0.3s linear`,
       },
-      jiggle:{
-        animation:`${jiggleAni} 0.8s linear infinite`
+      jiggle: {
+        animation: `${jiggleAni} 0.8s linear infinite`
       },
-      shine:{
+      shine: {
         background: 'linear-gradient(45deg,$gray7 0%,$gray1 50%,$gray7 100%)',
         backgroundSize: '200% 200%',
         animation: `${gradient} 1s linear infinite`,
       },
-      scaleUp:{
+      scaleUp: {
         animation: `${scaleUpAni} 1s ease infinite`,
       }
     },
   }
 })
 
-const NavContentStyled = styled('div',{
+const NavContentStyled = styled('div', {
   display: 'flex',
-  justifyContent:'space-between',
-  alignItems:'center',
-  gap:'$small',
-  background:	'linear-gradient($gray2,$gray3)',
-  width:'100%',
-  borderRadius:'$round',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  gap: '$small',
+  background: 'linear-gradient($gray2,$gray3)',
+  width: '100%',
+  borderRadius: '$round',
 })
 
-interface UniversalNavProps{
-  showInitially:boolean,
-  scrollPop:boolean,
-  popOnMount:boolean,
-  mount?:any,
-  animate?:any,
-  minSize?:"s" | "xl" | "l" | "m",
-  maxSize?:"s" | "xl" | "l" | "m",
-  dynamicButton?:JSX.Element | JSX.Element[]
+interface UniversalNavProps {
+  showInitially: boolean,
+  scrollPop: boolean,
+  popOnMount: boolean,
+  mount?: any,
+  animate?: any,
+  minSize?: "s" | "xl" | "l" | "m",
+  maxSize?: "s" | "xl" | "l" | "m",
+  dynamicButton?: JSX.Element | JSX.Element[]
 }

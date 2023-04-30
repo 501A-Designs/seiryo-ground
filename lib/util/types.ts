@@ -1,4 +1,4 @@
-export type Size = "小さい" | "普通" | "広い";
+export type Size = "s" | "m" | "l";
 export type Category = "green" | "blue" | "red" | "purple";
 export type Cost = "無料" | "現金" | "クレジットカード" | "電子マネー";
 

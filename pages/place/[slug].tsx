@@ -9,12 +9,11 @@ import Rating from '../../lib/Rating'
 
 import LoadingBar from 'react-top-loading-bar';
 import Review from '../../lib/place-page/Review'
-import TextInput from '../../lib/TextInput'
-import TextArea from '../../lib/TextArea'
+
 import End from '../../lib/End'
 
-import Button from '../../lib/button/Button'
-import TypeButton from '../../lib/button/TypeButton'
+import Button from '../../lib/component/button/Button'
+import TypeButton from '../../lib/component/button/TypeButton'
 
 import moment from 'moment';
 import 'moment/locale/ja'
@@ -24,15 +23,13 @@ import { isBrowser } from 'react-device-detect'
 import Head from 'next/head'
 
 import Grid from '../../lib/alignment/Grid'
-import { costButtonArray, sizeButtonArray, typeButtonArray } from '../../lib/button/buttonData'
-import CheckBox from '../../lib/button/CheckBox'
+import { costButtonArray, typeButtonArray } from '../../lib/component/button/buttonData'
+import CheckBox from '../../lib/component/button/CheckBox'
 import useSound from 'use-sound'
 import Footer from '../../lib/component/Footer'
 import Link from 'next/link'
 import UniversalNav from '../../lib/component/UniversalNav'
-import BinaryToggle from '../../lib/button/BinaryToggle'
-import SizeSelect from '../../lib/button/SizeSelect'
-import { popOut } from '../../lib/ux/keyframes'
+
 import { jsonParse } from '../../lib/util/jsonParse'
 import { ArrowLeftIcon, AspectRatioIcon, CheckIcon, ExternalLinkIcon, FaceIcon, HeartFilledIcon, HeartIcon, HomeIcon, LockClosedIcon, Pencil1Icon, PlusIcon, ReloadIcon, UpdateIcon } from '@radix-ui/react-icons'
 import Margin from '../../lib/alignment/Margin'
@@ -46,6 +43,16 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { useDocument } from 'react-firebase-hooks/firestore'
 import Tag from '../../lib/component/Tag'
 
+// TYPES
+import { Size } from '../../lib/util/types'
+
+// INPUT
+import TextInput from '../../lib/TextInput'
+import TextArea from '../../lib/TextArea'
+import RadioInput from '../../lib/component/input/RadioInput'
+import ToggleInput from '../../lib/component/input/ToggleInput'
+import useLocale from '../../lib/util/useLocale'
+
 export default function PlaceName({
   locationDataSnap,
   reviewsData
@@ -56,6 +63,11 @@ export default function PlaceName({
   const router = useRouter();
   const placeId = router.query.slug;
   const [progress, setProgress] = useState(0);
+
+  const { t } = useLocale();
+  const tLABEL = t.LABEL;
+  const tINPUT = t.INPUT;
+  const tBUTTON = t.BUTTON;
 
   // Sound
   const [tap1] = useSound('/sound/tap-1-sg.mp3',{playbackRate:1.1});
@@ -256,14 +268,14 @@ export default function PlaceName({
               title={`Level ${userData?.data().level} ユーザーとして編集可能`}
             >
               <RadixDialog
-                title={'編集'}
+                title={tLABEL.EDIT}
                 size={'large'}
                 trigger={
                   <Button
                     styleType={'black'}
                     icon={<Pencil1Icon/>}
                   >
-                    このページを編集
+                    {tBUTTON.EDIT_PAGE}
                   </Button>
                 }
                 banner={
@@ -287,7 +299,7 @@ export default function PlaceName({
                     icon={<UpdateIcon/>}
                     onClick={()=>editThisPlace()}
                   >
-                    レビューの内容を更新
+                    {tBUTTON.UPDATE_CHANGES}
                   </Button>:
                   false
                 }
@@ -302,9 +314,9 @@ export default function PlaceName({
                         {userData.data().level > 1 &&
                           <RadixAccordion.Item
                             number={'1'}
-                            name={'トイレの有無'}
+                            name={tLABEL.TOILET}
                           >
-                            <BinaryToggle
+                            <ToggleInput
                               state={binaryToggle}
                               onClick={()=>setBinaryToggle(!binaryToggle)}
                             />
@@ -313,7 +325,7 @@ export default function PlaceName({
                         {userData.data().level > 3 &&
                           <RadixAccordion.Item
                             number={'2'}
-                            name={'種類'}
+                            name={tLABEL.CATEGORY}
                           >
                             <TypeButton>
                               {typeButtonArray.map(color =>(
@@ -331,7 +343,7 @@ export default function PlaceName({
                           <>
                             <RadixAccordion.Item
                               number={'3'}
-                              name={'値段'}
+                              name={tLABEL.PAYMENT}
                             >
                               <CheckBox>
                                 {costButtonArray.map(name =>(
@@ -352,21 +364,12 @@ export default function PlaceName({
                             </RadixAccordion.Item>
                             <RadixAccordion.Item
                               number={'4'}
-                              name={'大きさ'}
+                              name={tLABEL.SIZE}
                             >   
-                              <SizeSelect
-                                hide
-                                currentState={sizeSelect}
-                              >
-                                {sizeButtonArray.map(size=> (
-                                  <SizeSelect.Item
-                                    name={size}
-                                    key={size}
-                                    state={sizeSelect}
-                                    onClick={()=> setSizeSelect(size)}
-                                  />
-                                ))}
-                              </SizeSelect>
+                              <RadioInput
+                                state={sizeSelect}
+                                handleChange={(val:Size)=>setSizeSelect(val)}
+                              />
                             </RadixAccordion.Item>
                           </>
                         }
@@ -375,7 +378,7 @@ export default function PlaceName({
                     <Grid gap={'extraSmall'}>
                       {userData.data().level > 4 &&
                         <TextInput
-                          placeholder={"場所の名前"}
+                          placeholder={tINPUT.PLACE_NAME}
                           value={placeInput}
                           onChange={(e)=>
                             setPlaceInput(e.target.value)
@@ -385,7 +388,7 @@ export default function PlaceName({
 
                       {userData.data().level > 3 &&
                       <TextArea
-                        placeholder={"概要"}
+                        placeholder={tINPUT.PLACE_DESCRIPTION}
                         value={descriptionInput}
                         onChange={(e)=>setDescriptionInput(e.target.value)}
                       />
@@ -393,7 +396,7 @@ export default function PlaceName({
 
                       {userData.data().level > 1 &&
                         <TextInput
-                          placeholder={"公式サイト（無い場合は空欄）"}
+                          placeholder={tINPUT.PLACE_SITE}
                           value={officialSiteInput}
                           onChange={(e)=>setOfficialSiteInput(e.target.value)}
                         />
@@ -505,15 +508,15 @@ export default function PlaceName({
                 />
                 <Rating
                   rating={round(averageOfDateRating)}
-                  description={'デートスポット適正'}
+                  description={tLABEL.RATING.DATE}
                 />
                 <Rating
                   rating={round(averageOfAccessRating)}
-                  description={'最寄駅のアクセス'}
+                  description={tLABEL.RATING.ACCESS}
                 />
                 <Rating
                   rating={round(averageOfManagementRating)}
-                  description={'設備管理の状況'}
+                  description={tLABEL.RATING.MANAGEMENT}
                 />
                 <Rating
                   rating={placeData.likes ? placeData.likes.length:0}
@@ -532,18 +535,11 @@ export default function PlaceName({
             />
           )}
         </Grid>
-        {reviewsCollection?.length > 0 ? 
-          <End>
-            おわり。
-            <br/>
-            The End.
-          </End>:
-          <End>
-            レビューはありません。
-            <br/>
-            No reviews were written.
-          </End>
-        }
+        <End>
+          {reviewsCollection?.length > 0 ? 
+            t.END_FOOTER.END:t.END_FOOTER.NO_REVIEWS
+          }
+        </End>
 
         <Footer type={'blur'}/>
       </Margin>
@@ -569,14 +565,26 @@ export default function PlaceName({
             {user &&
               <>
                 <RadixDialog
-                  title={hasReviewed ? '内容を更新':'新規レビュー'}
+                  title={
+                    hasReviewed ? 
+                    tBUTTON.UPDATE_CHANGES:
+                    tBUTTON.NEW
+                  }
                   size={'medium'}
                   trigger={
                     <Button
                       styleType={'transparent'}
                       size={'small'}
-                      icon={hasReviewed ? <ReloadIcon/>:<PlusIcon/>}
-                      title={hasReviewed ? '書いたレビューを編集':'レビューを書く'}
+                      icon={
+                        hasReviewed ? 
+                        <ReloadIcon/>:
+                        <PlusIcon/>
+                      }
+                      title={
+                        hasReviewed ? 
+                        '書いたレビューを編集':
+                        'レビューを書く'
+                      }
                     />
                   }
                   saveClose={
@@ -599,7 +607,7 @@ export default function PlaceName({
                         icon={<CheckIcon/>}
                         onClick={()=>publishReview()}
                       >
-                        レビューを公開
+                        {tBUTTON.PUBLISH}
                       </Button>:
                       false
                   }
@@ -609,7 +617,7 @@ export default function PlaceName({
                       value={titleRatingInput}
                       onChange={(e)=> setTitleRatingInput(e.target.value)
                       }
-                      placeholder={'レビュータイトル'}
+                      placeholder={tINPUT.REVIEW_TITLE}
                     />
                     <Grid grid={'tri'} gap={'extraSmall'}>
                       <DisplayRatingInput
@@ -618,7 +626,7 @@ export default function PlaceName({
                         }
                         maxValue={10}
                         minValue={0}
-                        placeholder={'デートスポット適正'}
+                        placeholder={tLABEL.RATING.DATE}
                       />
                       <DisplayRatingInput
                         value={accessRatingInput}
@@ -626,7 +634,7 @@ export default function PlaceName({
                         }
                         maxValue={10}
                         minValue={0}
-                        placeholder={'最寄駅からのアクセス'}
+                        placeholder={tLABEL.RATING.ACCESS}
                       />
                       <DisplayRatingInput
                         value={managementRatingInput}
@@ -634,14 +642,14 @@ export default function PlaceName({
                         }
                         maxValue={10}
                         minValue={0}
-                        placeholder={'設備管理の状況'}
+                        placeholder={tLABEL.RATING.MANAGEMENT}
                       />
                     </Grid>
                     <TextArea
                       value={descriptionRatingInput}
                       onChange={(e)=> setDescriptionRatingInput(e.target.value)
                       }
-                      placeholder={'行って感じた事、評価項目に写らない場所の良さ等。'}
+                      placeholder={tINPUT.REVIEW_DESCRIPTION}
                     />
                   </Grid>
                 </RadixDialog>

@@ -8,7 +8,7 @@ import { auth, db } from '../firebase'
 import AlignItems from '../lib/alignment/AlignItems';
 import Grid from '../lib/alignment/Grid';
 import Margin from '../lib/alignment/Margin';
-import Button from '../lib/button/Button';
+import Button from '../lib/component/button/Button';
 import CenterAll from '../lib/component/CenterAll';
 import Container from '../lib/component/Container';
 import { checkLevel } from '../lib/util/helper';

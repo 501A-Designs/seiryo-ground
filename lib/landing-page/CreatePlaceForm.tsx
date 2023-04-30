@@ -1,21 +1,19 @@
 import React,{useState} from 'react'
 import AlignItems from '../alignment/AlignItems'
-import Button from '../button/Button'
-import TypeButton from '../button/TypeButton'
+import Button from '../component/button/Button'
+import TypeButton from '../component/button/TypeButton'
 import TextArea from '../TextArea'
-import Input from '../TextInput'
+import TextInput from '../TextInput'
 
 import { db } from '../../firebase'
 import { addDoc, collection, doc, increment, updateDoc } from "firebase/firestore";
 import { useRouter } from 'next/router'
 import Grid from '../alignment/Grid'
-import CheckBox from '../button/CheckBox'
-import { costButtonArray, sizeButtonArray, typeButtonArray } from '../button/buttonData'
+import CheckBox from '../component/button/CheckBox'
+import { costButtonArray, sizeButtonArray, typeButtonArray } from '../component/button/buttonData'
 import FlipThrough from '../component/FlipThrough'
 
 import useSound from 'use-sound';
-import BinaryToggle from '../button/BinaryToggle'
-import SizeSelect from '../button/SizeSelect'
 import { ArrowRightIcon, MagnifyingGlassIcon, PaperPlaneIcon, PlusIcon } from '@radix-ui/react-icons'
 import LoadingBar from 'react-top-loading-bar'
 
@@ -25,10 +23,19 @@ import RadixSelect from '../component/radix/Select'
 import Container from '../component/Container'
 import { Category, Cost, Size } from '../util/types'
 
+// INPUTS
+import RadioInput from '../component/input/RadioInput'
+import ToggleInput from '../component/input/ToggleInput'
+import useLocale from '../util/useLocale'
 
 export default function CreatePlaceForm(props) {
   const router = useRouter();
   const [progress, setProgress] = useState(0);
+
+  const { t } = useLocale();
+  const tLABEL = t.LABEL;
+  const tINPUT = t.INPUT;
+  const tBUTTON = t.BUTTON;
 
   let user = props.user;
 
@@ -36,7 +43,7 @@ export default function CreatePlaceForm(props) {
   const [celebrate1] = useSound('/sound/celebrate-1-sg.mp3',{playbackRate:1.1});
   const [load1] = useSound('/sound/load-1-sg.mp3');
 
-  const [sizeSelect, setSizeSelect] = useState<Size>('普通');
+  const [sizeSelect, setSizeSelect] = useState<Size>('m');
   const [binaryToggle, setBinaryToggle] = useState<boolean>(true);
   const [typeInput, setTypeInput] = useState<Category>('green');
   const [costCheckBox, setCostCheckBox] = useState<Cost[]>(['無料']);
@@ -83,7 +90,7 @@ export default function CreatePlaceForm(props) {
       setDescriptionInput('');
       setPrefectureInput(null);
       setOfficialSiteInput('');
-      setSizeSelect('普通');
+      setSizeSelect('m');
       setBinaryToggle(true);
       setTypeInput('green');
       setCostCheckBox(['無料']);
@@ -101,12 +108,12 @@ export default function CreatePlaceForm(props) {
   return (
     <RadixDialog
       title={
-        section == 1 && '新規追加' ||
-        section == 2 && '場所' ||
-        section == 3 && '大きさ' ||
-        section == 4 && 'トイレ有無' ||
-        section == 5 && '種類' ||
-        section == 6 && '現地での支払い'
+        section == 1 && tLABEL.NEW ||
+        section == 2 && tLABEL.LOCATION ||
+        section == 3 && tLABEL.SIZE ||
+        section == 4 && tLABEL.TOILET ||
+        section == 5 && tLABEL.CATEGORY ||
+        section == 6 && tLABEL.PAYMENT
       }
       trigger={
         <Button
@@ -126,7 +133,7 @@ export default function CreatePlaceForm(props) {
           <>
             <AlignItems
               justifyContent={'center'}
-              flexDirection="column"
+              flexDirection={'column'}
             >
               <h3>
                 清涼広場への貢献ありがとうございます。
@@ -149,7 +156,7 @@ export default function CreatePlaceForm(props) {
                   setPublished(false);
                 }}
               >
-                また新しく追加
+                {tBUTTON.NEW_AGAIN}
               </Button>
             </AlignItems>
           </>:
@@ -157,18 +164,18 @@ export default function CreatePlaceForm(props) {
             {section == 1 && 
               <>
                 <Grid gap={'extraSmall'}>
-                  <Input
-                    placeholder={"場所の名前"}
+                  <TextInput
+                    placeholder={tINPUT.PLACE_NAME}
                     value={placeInput}
                     onChange={(e)=>setPlaceInput(e.target.value)}
                   />
                   <TextArea
-                    placeholder={"概要"}
+                    placeholder={tINPUT.PLACE_DESCRIPTION}
                     value={descriptionInput}
                     onChange={(e)=>setDescriptionInput(e.target.value)}
                   />
-                  <Input
-                    placeholder={"公式サイト（無い場合は空欄）"}
+                  <TextInput
+                    placeholder={tINPUT.PLACE_SITE}
                     value={officialSiteInput}
                     onChange={(e)=>setOfficialSiteInput(e.target.value)}
                   />
@@ -184,7 +191,7 @@ export default function CreatePlaceForm(props) {
                         setProgress(10);
                       }}
                     >
-                      次へ
+                      {tBUTTON.FORWARD}
                     </Button>
                   </AlignItems>
                 }
@@ -237,18 +244,10 @@ export default function CreatePlaceForm(props) {
                 }}
                 currentSection={section}
               >
-                <SizeSelect
+                <RadioInput
                   state={sizeSelect}
-                >
-                  {sizeButtonArray.map(size=>(
-                    <SizeSelect.Item
-                      key={size}
-                      name={size}
-                      state={sizeSelect}
-                      onClick={()=> setSizeSelect(size)}
-                    />
-                  ))}
-                </SizeSelect>
+                  handleChange={(val:Size)=>setSizeSelect(val)}
+                />
               </FlipThrough>
             }
 
@@ -264,7 +263,7 @@ export default function CreatePlaceForm(props) {
                 }}
                 currentSection={section}
               >
-                <BinaryToggle
+                <ToggleInput
                   state={binaryToggle}
                   onClick={()=>setBinaryToggle(!binaryToggle)}
                 />
@@ -311,7 +310,7 @@ export default function CreatePlaceForm(props) {
                     overRideSound={()=>load1()}
                     onClick={()=>createNewPlace()}
                   >
-                    公開
+                    {tBUTTON.PUBLISH}
                   </Button>
                 }
               >

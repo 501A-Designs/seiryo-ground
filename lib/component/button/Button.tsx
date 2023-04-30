@@ -1,6 +1,6 @@
 import React from 'react'
-import { styled } from '../../stitches.config'
-import { popOutNoBlur } from '../ux/keyframes'
+import { styled } from '../../../stitches.config'
+import { popOutNoBlur } from '../../ux/keyframes'
 import useSound from 'use-sound';
 import { VariantProps } from '@stitches/react';
 

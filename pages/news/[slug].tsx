@@ -1,7 +1,7 @@
 import React from 'react'
 import { createClient } from 'contentful'
 import { useRouter } from 'next/router'
-import Button from '../../lib/button/Button'
+import Button from '../../lib/component/button/Button'
 import AlignItems from '../../lib/alignment/AlignItems'
 import MainBody from '../../lib/alignment/Margin'
 import Grid from '../../lib/alignment/Grid'

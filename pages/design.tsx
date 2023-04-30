@@ -6,17 +6,18 @@ import Container from '../lib/component/Container'
 // import mountainGreen1 from '../public/concept/sg-mountain.png'
 // import mountainGreen2 from '../public/concept/sg-mountain2.png'
 
-import BinaryToggle from '../lib/button/BinaryToggle'
 import Grid from '../lib/alignment/Grid';
-import SizeSelect from '../lib/button/SizeSelect';
-import { sizeButtonArray, typeButtonArray } from '../lib/button/buttonData';
-import TypeButton from '../lib/button/TypeButton';
+import { typeButtonArray } from '../lib/component/button/buttonData';
+import TypeButton from '../lib/component/button/TypeButton';
 import AlignItems from '../lib/alignment/AlignItems';
+import RadioInput from '../lib/component/input/RadioInput';
+import { Size } from '../lib/util/types';
+import ToggleInput from '../lib/component/input/ToggleInput';
 
 
 export default function Design() {
   const [binaryToggle, setBinaryToggle] = useState(true);
-  const [sizeSelect, setSizeSelect] = useState('medium');
+  const [sizeSelect, setSizeSelect] = useState<Size>('m');
   const [typeInput, setTypeInput] = useState('green');
 
   return (
@@ -34,26 +35,21 @@ export default function Design() {
           margin:'1.5em 0'
         }}
       >
+
         <Container styleType={'white'}>
-          <BinaryToggle
+          <ToggleInput
             state={binaryToggle}
             onClick={()=>setBinaryToggle(!binaryToggle)}
           />
         </Container>
+
         <Container styleType={'white'}>
-          <SizeSelect
+          <RadioInput
             state={sizeSelect}
-          >
-            {sizeButtonArray.map(size=>(
-              <SizeSelect.Item
-                key={size}
-                name={size}
-                state={sizeSelect}
-                onClick={()=> setSizeSelect(size)}
-              />
-            ))}
-          </SizeSelect>
+            handleChange={(val:Size)=>setSizeSelect(val)}
+          />
         </Container>
+        
         <Container styleType={'white'}>
           <AlignItems justifyContent={'center'}>
             <TypeButton>
@@ -61,7 +57,7 @@ export default function Design() {
                 return <TypeButton.Item
                   key={color}
                   type={color}
-                  onClick={()=> setTypeInput(color)}
+                  onClick={()=>setTypeInput(color)}
                   selectedInput={typeInput}
                 />
               })}

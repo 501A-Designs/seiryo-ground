@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router'
 import React from 'react'
-import Button from '../lib/button/Button'
+import Button from '../lib/component/button/Button'
 import seiryoBannerLogo from '../public/img/seiryoBannerLogo.png'
 import mountainGreen from '../public/img/sg-mountain.png'
 import AlignItems from '../lib/alignment/AlignItems';

@@ -1,6 +1,6 @@
 import React from 'react'
-import { styled } from '../../stitches.config'
-import AlignItems from '../alignment/AlignItems'
+import { styled } from '../../../stitches.config'
+import AlignItems from '../../alignment/AlignItems'
 import { CheckCircledIcon, CircleIcon } from '@radix-ui/react-icons'
 import useSound from 'use-sound'
 

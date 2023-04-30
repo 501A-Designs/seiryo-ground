@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { keyframes, styled } from '@stitches/react';
-import Button from '../../button/Button';
+import Button from '../button/Button';
 import { topSlideIn } from '../../ux/keyframes';
 import AlignItems from '../../alignment/AlignItems';
 import { CheckIcon, Cross1Icon } from '@radix-ui/react-icons';
@@ -17,7 +17,7 @@ import { CheckIcon, Cross1Icon } from '@radix-ui/react-icons';
 function Content({ children, ...props }) {
   return (
     <Dialog.Portal>
-      <StyledOverlay/>
+      <StyledOverlay />
       <StyledContent
         {...props}
         openState={props.openState}
@@ -26,7 +26,7 @@ function Content({ children, ...props }) {
   );
 }
 
-export default function RadixDialog(props){
+export default function RadixDialog(props) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -41,24 +41,24 @@ export default function RadixDialog(props){
         openState={open}
         size={props.size}
       >
+        {/* margin={'0 0 1em 0'} */}
         <AlignItems
-          justifyContent={'space-between'}
-          margin={'0 0 1em 0'}
+          justifyContent={'spaceBetween'}
         >
-          {props.title ? 
+          {props.title ?
             <StyledTitle>
               {props.title}
-            </StyledTitle>:
+            </StyledTitle> :
             props.topLeftComponent
           }
           <Dialog.Close asChild>
             {props.saveClose ?
-              props.saveClose:
+              props.saveClose :
               <Button
                 backTapSound
                 size={'small'}
                 aria-label="Close"
-                icon={<Cross1Icon/>}
+                icon={<Cross1Icon />}
               />
             }
           </Dialog.Close>
@@ -83,21 +83,21 @@ export default function RadixDialog(props){
 const popInDialog = keyframes({
   '0%': {
     opacity: 0.9,
-    filter:'blur(5px)',
-		transform: 'translateY(0px) translateX(-50%) scale(0.5)',
+    filter: 'blur(5px)',
+    transform: 'translateY(0px) translateX(-50%) scale(0.5)',
   },
-  '50%':{
-		transform: 'translateY(-50%) translateX(-50%) scale(1.04)',
+  '50%': {
+    transform: 'translateY(-50%) translateX(-50%) scale(1.04)',
   }
 });
 
 const popOutDialog = keyframes({
-  '20%':{
+  '20%': {
     transform: 'translateY(-50%) translateX(-50%) scale(1.04)',
   },
   '100%': {
     opacity: 0,
-    filter:'blur(5px)',
+    filter: 'blur(5px)',
     transform: 'translateY(50%) translateX(-50%) scale(0)',
   },
 });
@@ -108,7 +108,7 @@ const StyledOverlay = styled(Dialog.Overlay, {
   backdropFilter: `blur(3px)`,
   position: 'fixed',
   inset: 0,
-  zIndex:'100',
+  zIndex: '100',
   // variants:{
   //   openState:{
   //     true:{
@@ -120,17 +120,17 @@ const StyledOverlay = styled(Dialog.Overlay, {
   },
 });
 
-const DialogBannerStyled = styled('div',{
-  background:'linear-gradient(45deg,$gray2,$gray4)',
-  border:'1px solid $gray4',
-  color:'$gray12',
-  padding:'1em',
-  marginBottom:'0.5em',
-  borderRadius:'$r2',
-  fontSize:'$8',
-  'p':{
-    margin:0,
-    fontSize:'$7',
+const DialogBannerStyled = styled('div', {
+  background: 'linear-gradient(45deg,$gray2,$gray4)',
+  border: '1px solid $gray4',
+  color: '$gray12',
+  padding: '1em',
+  marginBottom: '0.5em',
+  borderRadius: '$r2',
+  fontSize: '$8',
+  'p': {
+    margin: 0,
+    fontSize: '$7',
   }
 })
 
@@ -144,46 +144,46 @@ const StyledContent = styled(Dialog.Content, {
   transform: 'translate(-50%, -50%)',
   width: '90vw',
   maxHeight: '85vh',
-  overflowY:'scroll',
+  overflowY: 'scroll',
   padding: '$medium',
-  boxShadow:'$shadow1',
-  zIndex:'200',
+  boxShadow: '$shadow1',
+  zIndex: '200',
   // '@media (prefers-reduced-motion: no-preference)': {
   //   animation: `${popOutDialog} 500ms`,
   // },
   '&:focus': { outline: 'none' },
-  variants:{
-    size:{
-      large:{
+  variants: {
+    size: {
+      large: {
         maxWidth: '800px',
       },
-      medium:{
+      medium: {
         maxWidth: '600px',
       },
-      small:{
+      small: {
         maxWidth: '400px',
       }
     },
-    openState:{
-      true:{
+    openState: {
+      true: {
         animation: `${popInDialog} 500ms`,
       },
-      false:{
+      false: {
         animation: `${popOutDialog} 500ms`,
       }
     }
   },
-  defaultVariants:{
-    size:'small'
+  defaultVariants: {
+    size: 'small'
   }
 });
 
 const StyledTitle = styled(Dialog.Title, {
   fontSize: 13,
-  userSelect:'none',
-  textTransform:'uppercase',
-  color:'$gray11',
-  margin:'5px 5px 10px 5px'
+  userSelect: 'none',
+  textTransform: 'uppercase',
+  color: '$gray11',
+  margin: '5px 5px 10px 5px'
 });
 
 const StyledDescription = styled(Dialog.Description, {

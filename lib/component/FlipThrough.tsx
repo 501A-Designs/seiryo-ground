@@ -2,9 +2,10 @@ import React from 'react'
 import { styled } from '../../stitches.config'
 import AlignItems from '../alignment/AlignItems'
 import Grid from '../alignment/Grid'
-import Button from '../button/Button'
+import Button from './button/Button'
 import { popOutNoBlur } from '../ux/keyframes'
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons'
+import useLocale from '../util/useLocale'
 
 const FlipThroughMainContainer = styled('div', {
   perspective: '200px',
@@ -14,6 +15,8 @@ const FlipThroughMain = styled('div', {
 })
 
 export default function FlipThrough(props) {
+  const { t } = useLocale();
+
   return (
     <Grid gap={'large'}>
       <FlipThroughMainContainer>
@@ -21,15 +24,13 @@ export default function FlipThrough(props) {
           {props.children}
         </FlipThroughMain>
       </FlipThroughMainContainer>
-      <AlignItems
-        justifyContent={'space-between'}
-      >
+      <AlignItems justifyContent={'spaceBetween'}>
         <Button
           size={'small'}
           icon={<ArrowLeftIcon/>}
           onClick={props.leftClick}
         >
-          戻る
+          {t.BUTTON.BACK}
         </Button>
         {props.publish ?
           props.publish:
@@ -38,7 +39,7 @@ export default function FlipThrough(props) {
             icon={<ArrowRightIcon/>}
             onClick={props.rightClick}
           >
-            次へ
+            {t.BUTTON.FORWARD}
           </Button>
         }
       </AlignItems>

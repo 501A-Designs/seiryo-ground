@@ -1,7 +1,6 @@
 import React from 'react'
 import { styled } from '../stitches.config'
 
-
 const EndStyled = styled('section',{
   display: 'flex',
   alignItems: 'center',

@@ -1,12 +1,12 @@
-import React, {useState,useEffect, useContext} from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Head from 'next/head'
 import AlignItems from '../lib/alignment/AlignItems'
 import PostThumbNail from '../lib/component/PostThumbNail'
-import Button from '../lib/button/Button'
+import Button from '../lib/component/button/Button'
 
 import { useRouter } from 'next/router'
 
-import {auth, db} from '../firebase'
+import { auth, db } from '../firebase'
 import { DocumentData, QuerySnapshot, collection, getCountFromServer, getDocs, limit, orderBy, query, where } from "firebase/firestore";
 
 import CreatePlaceForm from '../lib/landing-page/CreatePlaceForm'
@@ -28,7 +28,8 @@ import { round } from '../lib/util/helper'
 import { GetServerSideProps } from 'next'
 import { useCollection } from 'react-firebase-hooks/firestore'
 
-import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+import useLocale from '../lib/util/useLocale'
 
 export const getServerSideProps = async () => {
   const res = await fetch(`https://raw.githubusercontent.com/piuccio/open-data-jp-prefectures/master/prefectures.json`)
@@ -64,7 +65,7 @@ export const getServerSideProps = async () => {
   //     data:doc.data()
   //   });
   // }
-  
+
   // const placeCountData = jsonParse(placeCount.data().count);
   // const likesAverage = round(likesSum/placeCountDataRaw);
   // const accessRatingAverage = round(accessRatingSum/placeCountDataRaw);
@@ -82,9 +83,14 @@ export const getServerSideProps = async () => {
   }
 }
 
-export default function Home({prefectureData}) {
+export default function Home({ prefectureData }) {
   const [user] = useAuthState(auth);
   const router = useRouter();
+
+  const { t } = useLocale();
+  const tLABEL = t.LABEL;
+  const tINPUT = t.INPUT;
+  const tBUTTON = t.BUTTON;
 
   const modifiedPrefectureData = [
     {
@@ -97,13 +103,13 @@ export default function Home({prefectureData}) {
   const [prefectureInput, setPrefectureInput] = useState('全て表示');
 
   const placesCollectionRef = collection(db, `places`);
-  const [placesCollection,placeCollectionLoading] = useCollection(
+  const [placesCollection, placeCollectionLoading] = useCollection(
     query(
       placesCollectionRef,
       limit(25)
     )
   );
-  const [filteredPlaceCollection,filteredPlaceCollectionLoading] = useCollection(
+  const [filteredPlaceCollection, filteredPlaceCollectionLoading] = useCollection(
     query(
       placesCollectionRef,
       where("prefecture", "==", prefectureInput),
@@ -118,7 +124,7 @@ export default function Home({prefectureData}) {
     if (
       user &&
       user.metadata.creationTime == user.metadata.lastSignInTime
-    ){
+    ) {
       setGettingStartedModalIsOpen(true)
       if (localStorage.getItem('getStartedComplete')) {
         setGettingStartedModalIsOpen(false)
@@ -149,7 +155,7 @@ export default function Home({prefectureData}) {
           href="/favicon.ico"
         />
       </Head>
-      
+
       {/* <GettingStartedModal
         modalState={gettingStartedModalIsOpen}
         user={user}
@@ -160,11 +166,11 @@ export default function Home({prefectureData}) {
       /> */}
       <Margin>
         <Grid gap={'extraExtraLarge'}>
-          <WelcomeHeader/>
+          <WelcomeHeader />
 
 
           <Grid gap={'small'}>
-            <AlignItems spaceBetween>
+            <AlignItems justifyContent={'spaceBetween'}>
               <p>Explore</p>
               <RadixSelect
                 placeholder={'都道府県を選択'}
@@ -184,30 +190,30 @@ export default function Home({prefectureData}) {
               </RadixSelect>
             </AlignItems>
             <ResponsiveMasonry
-              columnsCountBreakPoints={{350: 1, 750: 2, 900: 3}}
+              columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}
             >
               <Masonry
                 gutter={'0.5em'}
               >
                 {
                   prefectureInput == "全て表示" ?
-                  placesCollection?.docs?.map(doc => <PostThumbNail
+                    placesCollection?.docs?.map(doc => <PostThumbNail
                       key={doc.id}
                       id={doc.id}
                       data={doc.data()}
                     />
-                  ):filteredPlaceCollection?.docs?.map(doc => <PostThumbNail
+                    ) : filteredPlaceCollection?.docs?.map(doc => <PostThumbNail
                       key={doc.id}
                       id={doc.id}
                       data={doc.data()}
                     />
-                  )
+                    )
                 }
               </Masonry>
             </ResponsiveMasonry>
           </Grid>
 
-          {/* 
+          {/*
           {averages.likes}
 
           <Grid gap={'small'}>
@@ -292,30 +298,26 @@ export default function Home({prefectureData}) {
           </Grid> */}
         </Grid>
 
-        <End>
-          おわり。
-          <br/>
-          The End.
-        </End>
+        <End>{t.END_FOOTER.END}</End>
 
       </Margin>
-      <Footer type={'blur'}/>
+      <Footer type={'blur'} />
       <UniversalNav
         showInitially={false}
         scrollPop={true}
         popOnMount={false}
         minSize={'s'}
         maxSize={'l'}
-        dynamicButton={user ? 
+        dynamicButton={user ?
           <CreatePlaceForm
             user={user}
             prefecD={prefectureData}
-          />:
+          /> :
           <Button
             size={'small'}
             styleType={'transparent'}
-            icon={<InfoCircledIcon/>}
-            onClick={()=>router.push('/about')}
+            icon={<InfoCircledIcon />}
+            onClick={() => router.push('/about')}
           />
         }
       />
