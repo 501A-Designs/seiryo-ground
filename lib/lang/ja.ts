@@ -13,13 +13,17 @@ export default {
     LOCATION:'場所',
     SIZE:'大きさ',
     TOILET:'トイレの有無',
+    PARKING:'駐車場',
     CATEGORY:'種類',
     PAYMENT:'現地での支払い',
     RATING:{
+      OVERALL:'総合点数',
       DATE:'デートスポット適正',
       ACCESS:'最寄駅からのアクセス',
       MANAGEMENT:'設備管理の状況',
-    }
+    },
+    LIKES:'いいね数',
+    BASIC_INFO:'基本情報',
   },
   INPUT:{
     PLACE_NAME:'場所の名前',
@@ -50,6 +54,11 @@ export default {
       BLUE:"海。池。川等",
       RED:"建物。カフェ等",
       PURPLE:"その他",
+    },
+    PAYMENT:{
+      CARD:'クレジットカード',
+      CASH:'現金',
+      DIGITAL:'電子マネー',
     },
   },
   BUTTON:{

@@ -2,19 +2,18 @@ import React, { forwardRef } from "react";
 import * as Select from "@radix-ui/react-select";
 import { styled } from "../../../stitches.config";
 import useSound from "use-sound";
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from "@radix-ui/react-icons";
 import { keyframes } from "@stitches/react";
 
 export const RadixSelect = (props) => {
   // const [tap2] = useSound('/sound/tap-2-sg.mp3',{playbackRate:1.1});
-  return(
-    <Select.Root
-      value={props.value}
-      onValueChange={props.onValueChange}
-    >
-      <SelectTrigger
-        aria-label="Course"
-      >
+  return (
+    <Select.Root value={props.value} onValueChange={props.onValueChange}>
+      <SelectTrigger aria-label="Course">
         <Select.Value
           placeholder={props.placeholder}
           // value={props.value}
@@ -28,21 +27,19 @@ export const RadixSelect = (props) => {
           <SelectScrollUpButton>
             <ChevronUpIcon />
           </SelectScrollUpButton>
-          <SelectViewport>
-            {props.children}
-          </SelectViewport>
+          <SelectViewport>{props.children}</SelectViewport>
           <SelectScrollDownButton>
             <ChevronDownIcon />
           </SelectScrollDownButton>
         </SelectContent>
       </Select.Portal>
     </Select.Root>
-  )
-}
+  );
+};
 
 const SelectTrigger = styled(Select.SelectTrigger, {
   all: "unset",
-  outline:"none",
+  outline: "none",
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",
@@ -53,10 +50,10 @@ const SelectTrigger = styled(Select.SelectTrigger, {
   minHeight: 35,
   gap: 5,
   // backgroundColor: "$gray2",
-  border:"1px solid transparent",
+  border: "1px solid transparent",
   "&:hover": {
-    cursor:"pointer",
-    borderColor:"$gray4",
+    cursor: "pointer",
+    borderColor: "$gray4",
     color: "$gray12",
     backgroundColor: "$gray1",
   },
@@ -67,45 +64,40 @@ const SelectIcon = styled(Select.SelectIcon, {
   color: "$gray11",
 });
 
-
 const popOutSqueeze = keyframes({
-  '0%': {
-    transform: 'scaleY(1)',
-    opacity:0
+  "0%": {
+    transform: "scaleY(1)",
+    opacity: 0,
   },
-  '30%':{
-    transform: 'scale(1.02)',
-    filter:'blur(2px)',
-  }
+  "30%": {
+    transform: "scale(1.02)",
+    filter: "blur(2px)",
+  },
 });
 
 const SelectContent = styled(Select.Content, {
   overflow: "hidden",
   background: "linear-gradient($gray1,$gray3)",
-  border:"1px solid $gray5",
+  border: "1px solid $gray5",
   borderRadius: "$r3",
-  zIndex:"1000",
-  boxShadow:"$shadow3",
-  width:'fit-content',
-  animation:`${popOutSqueeze} 0.4s`
+  zIndex: "1000",
+  boxShadow: "$shadow3",
+  width: "fit-content",
+  animation: `${popOutSqueeze} 0.4s`,
 });
 
 const SelectViewport = styled(Select.Viewport, {
   padding: 10,
 });
 
-const SelectItem = forwardRef(({ children, ...props }:any, forwardedRef) => {
-  const [select1] = useSound('/sound/select-1-sg.mp3');
+const SelectItem = forwardRef(({ children, ...props }: any, forwardedRef) => {
+  const [select1] = useSound("/sound/select-1-sg.mp3");
 
   return (
-    <StyledItem
-      {...props}
-      ref={forwardedRef}
-      onMouseDown={()=>select1()}
-    >
+    <StyledItem {...props} ref={forwardedRef} onMouseDown={() => select1()}>
       <Select.ItemText>{children}</Select.ItemText>
       <StyledItemIndicator>
-        <CheckIcon/>
+        <CheckIcon />
       </StyledItemIndicator>
     </StyledItem>
   );
@@ -136,11 +128,11 @@ const StyledItem = styled(Select.Item, {
     color: "$gray1",
   },
 
-  "&:hover":{
-    cursor:'pointer',
-    boxShadow:'$shadow1',
-    transform:'scale(1.01)'
-  }
+  "&:hover": {
+    cursor: "pointer",
+    boxShadow: "$shadow1",
+    transform: "scale(1.01)",
+  },
 });
 
 const SelectLabel = styled(Select.Label, {
@@ -157,7 +149,7 @@ const SelectSeparator = styled(Select.Separator, {
 });
 
 const StyledItemIndicator = styled(Select.ItemIndicator, {
-  cursor:"pointer",
+  cursor: "pointer",
   position: "absolute",
   left: 0,
   width: 25,
@@ -171,7 +163,7 @@ const scrollButtonStyles = {
   alignItems: "center",
   justifyContent: "center",
   height: 25,
-  opacity:'0.5',
+  opacity: "0.5",
   // backgroundColor: "white",
   color: "$gray11",
   cursor: "default",
@@ -179,7 +171,10 @@ const scrollButtonStyles = {
 
 const SelectScrollUpButton = styled(Select.ScrollUpButton, scrollButtonStyles);
 
-const SelectScrollDownButton = styled(Select.ScrollDownButton, scrollButtonStyles);
+const SelectScrollDownButton = styled(
+  Select.ScrollDownButton,
+  scrollButtonStyles
+);
 
 RadixSelect.Item = SelectItem;
 RadixSelect.Hr = SelectSeparator;

@@ -13,13 +13,17 @@ export default {
     LOCATION:'Location',
     SIZE:'General Size',
     TOILET:'Restroom Availability',
+    PARKING:'Parking Availability',
     CATEGORY:'Category',
-    PAYMENT:'Accepted Payments',
+    PAYMENT:'Payments',
     RATING:{
+      OVERALL:'Overall Score',
       DATE:'Date spot suitability',
       ACCESS:'Access from stations',
       MANAGEMENT:'Maintenance score',
-    }
+    },
+    LIKES:'Number of Likes',
+    BASIC_INFO:'Basics',
   },
   INPUT:{
     PLACE_NAME:'Name Of Place',
@@ -50,7 +54,12 @@ export default {
       BLUE:"Oceans & Blue",
       RED:"Buildings & Cafes",
       PURPLE:"Others",
-    }
+    },
+    PAYMENT:{
+      CARD:'Credit Card',
+      CASH:'Cash',
+      DIGITAL:'Digital Currency',
+    },
   },
   BUTTON:{
     BACK:'Back',

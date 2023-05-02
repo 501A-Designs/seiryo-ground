@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  uid         String   @unique
+  icon        String
+  displayName String
+  created     DateTime @default(now())
+  modified    DateTime @updatedAt
+  reviews     Review[]
+  places      Place[]
+}
+
+model Place {
+  id          Int    @id @default(autoincrement())
+  title       String @db.TinyText
+  description String @db.LongText
+  iso         String
+  website     String
+  category    String @db.Char(1)
+
+  restroom Boolean
+  parking  Boolean
+
+  cash    Boolean
+  credit  Boolean
+  digital Boolean
+
+  created  DateTime @default(now())
+  modified DateTime @updatedAt
+  reviews  Review[]
+
+  User   User? @relation(fields: [userId], references: [id])
+  userId Int?
+}
+
+model Review {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(34)
+  description String   @db.LongText
+  created     DateTime @default(now())
+  modified    DateTime @updatedAt
+  author      User     @relation(fields: [authorId], references: [id])
+  authorId    Int
+  Place       Place?   @relation(fields: [placeId], references: [id])
+  placeId     Int?
+}
