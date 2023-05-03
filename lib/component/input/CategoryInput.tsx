@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import { styled } from "../../../stitches.config";
-import AlignItems from "../../alignment/AlignItems";
 import useSound from "use-sound";
 import useLocale from "../../util/useLocale";
 import { categories } from "../button/buttonData";

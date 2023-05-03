@@ -34,11 +34,8 @@ import { isBrowser } from "react-device-detect";
 import Head from "next/head";
 
 import Grid from "../../lib/alignment/Grid";
-import {
-  costButtonArray,
-  typeButtonArray,
-} from "../../lib/component/button/buttonData";
-import CheckBox from "../../lib/component/button/CheckBox";
+import { costButtonArray } from "../../lib/component/button/buttonData";
+import CheckBox from "../../lib/component/input/Checkbox";
 import useSound from "use-sound";
 import Footer from "../../lib/component/Footer";
 import Link from "next/link";
@@ -81,6 +78,8 @@ import RadioInput from "../../lib/component/input/CrowdInput";
 import ToggleInput from "../../lib/component/input/ToggleInput";
 import useLocale from "../../lib/util/useLocale";
 import Table from "../../lib/component/general/Table";
+import CategoryInput from "../../lib/component/input/CategoryInput";
+import PaymentInput from "../../lib/component/input/Checkbox";
 
 export default function PlaceName({ locationDataSnap, reviewsData }) {
   const [user] = useAuthState(auth);
@@ -373,16 +372,10 @@ export default function PlaceName({ locationDataSnap, reviewsData }) {
                             number={"2"}
                             name={tLABEL.CATEGORY}
                           >
-                            <TypeButton>
-                              {typeButtonArray.map((color) => (
-                                <TypeButton.Item
-                                  key={color}
-                                  type={color}
-                                  onClick={() => setTypeInput(color)}
-                                  selectedInput={typeInput}
-                                />
-                              ))}
-                            </TypeButton>
+                            <CategoryInput
+                              state={typeInput}
+                              setState={setTypeInput}
+                            />
                           </RadixAccordion.Item>
                         )}
                         {userData.data().level > 2 && (
@@ -391,33 +384,10 @@ export default function PlaceName({ locationDataSnap, reviewsData }) {
                               number={"3"}
                               name={tLABEL.PAYMENT}
                             >
-                              <CheckBox>
-                                {costButtonArray.map((name) => (
-                                  <CheckBox.Item
-                                    key={name}
-                                    checked={costCheckBox.some(
-                                      (element) => element === name
-                                    )}
-                                    name={name}
-                                    onClick={() => {
-                                      costCheckBox.some(
-                                        (element) => element === name
-                                      )
-                                        ? setCostCheckBox((prev) =>
-                                            prev.filter(
-                                              (element) => element !== name
-                                            )
-                                          )
-                                        : setCostCheckBox([
-                                            ...costCheckBox,
-                                            name,
-                                          ]);
-                                    }}
-                                  >
-                                    {name}
-                                  </CheckBox.Item>
-                                ))}
-                              </CheckBox>
+                              <PaymentInput
+                                state={costCheckBox}
+                                setState={setCostCheckBox}
+                              />
                             </RadixAccordion.Item>
                             <RadixAccordion.Item
                               number={"4"}
@@ -425,7 +395,7 @@ export default function PlaceName({ locationDataSnap, reviewsData }) {
                             >
                               <RadioInput
                                 state={sizeSelect}
-                                handleChange={(val: Size) => setSizeSelect(val)}
+                                setState={setSizeSelect}
                               />
                             </RadixAccordion.Item>
                           </>

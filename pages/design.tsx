@@ -8,15 +8,27 @@ import Container from "../lib/component/Container";
 
 import Grid from "../lib/alignment/Grid";
 import AlignItems from "../lib/alignment/AlignItems";
-import { Category, Size } from "../lib/util/types";
+import { Category, PlacePaymentType, Size } from "../lib/util/types";
 import ToggleInput from "../lib/component/input/ToggleInput";
 import CategoryInput from "../lib/component/input/CategoryInput";
 import CrowdInput from "../lib/component/input/CrowdInput";
+import Table from "../lib/component/general/Table";
+import PaymentInput from "../lib/component/input/Checkbox";
+import useLocale from "../lib/util/useLocale";
+// import { paymentOptions } from "../lib/component/button/buttonData";
 
 export default function Design() {
+  const { t } = useLocale();
+  const tPayment = t.INPUT.PAYMENT;
   const [binaryToggle, setBinaryToggle] = useState(true);
   const [sizeSelect, setSizeSelect] = useState<Size>("m");
   const [categoryInput, setCategoryInput] = useState<Category>("g");
+
+  const [placePayment, setPlacePayment] = useState<PlacePaymentType>({
+    cash: false,
+    card: false,
+    digital: false,
+  });
 
   return (
     <Margin>
@@ -42,14 +54,19 @@ export default function Design() {
         </Container>
 
         <Container styleType={"white"}>
-          <CrowdInput state={sizeSelect} setState={setSizeSelect} />
+          {/* <CrowdInputstate={sizeSelect} setState={setSizeSelect} /> */}
         </Container>
 
-        <Container styleType={"white"}>
+        {/* <Container styleType={"white"}>
           <AlignItems justifyContent={"center"}>
             <CategoryInput state={categoryInput} setState={setCategoryInput} />
           </AlignItems>
-        </Container>
+        </Container> */}
+        <PaymentInput
+          options={placePayment}
+          onChange={(options: PlacePaymentType) => setPlacePayment(options)}
+          labels={tPayment}
+        />
       </Grid>
       <p></p>
 
@@ -58,7 +75,7 @@ export default function Design() {
         フォントにも拘りました。長く悩んだ結果、最終的には「Clash
         Display」というフォントを使用することにしました。これに加え、pタグは他のテキストより薄い灰色にし、ヘッダータグは全て黒に設定しました。これに加え、フォントウェイトもヘッダー以外全て通常400にし、ヘッダーは少し太字になる500にしました。
       </p>
-      <table>
+      <Table>
         <tr>
           <th>Descriptor</th>
           <th>Sample Text</th>
@@ -108,7 +125,7 @@ export default function Design() {
             </p>
           </td>
         </tr>
-      </table>
+      </Table>
     </Margin>
   );
 }

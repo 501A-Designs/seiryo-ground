@@ -1,6 +1,10 @@
 export type Size = "s" | "m" | "l";
 export type Category = "g" | "b" | "r" | "p";
-export type Cost = "無料" | "現金" | "クレジットカード" | "電子マネー";
+export type Cost = "g" | "c" | "e";
+
+export type PlacePaymentType = {
+  [key: string]: boolean;
+};
 
 export type User = {
   displayName: string;

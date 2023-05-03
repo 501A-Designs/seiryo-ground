@@ -42,9 +42,10 @@ async function addPlace(req: NextApiRequest, res: NextApiResponse) {
         restroom: body.placeRestroom,
         parking: body.placeParking,
 
-        cash: body.placeCash,
-        credit: body.placeCredit,
-        digital: body.placeDigital,
+        cash: body.placePayment.cash,
+        credit: body.placePayment.credit,
+        digital: body.placePayment.digital,
+
         created: body.placeCreated,
         modified: body.placeModified,
       },

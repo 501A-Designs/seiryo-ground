@@ -15,12 +15,7 @@ import {
 } from "firebase/firestore";
 import { useRouter } from "next/router";
 import Grid from "../alignment/Grid";
-import CheckBox from "../component/button/CheckBox";
-import {
-  costButtonArray,
-  sizeButtonArray,
-  typeButtonArray,
-} from "../component/button/buttonData";
+import CheckBox from "../component/input/Checkbox";
 import FlipThrough from "../component/FlipThrough";
 
 import useSound from "use-sound";
@@ -43,6 +38,8 @@ import RadioInput from "../component/input/CrowdInput";
 import ToggleInput from "../component/input/ToggleInput";
 import useLocale from "../util/useLocale";
 import CategoryInput from "../component/input/CategoryInput";
+import PaymentInput from "../component/input/Checkbox";
+import { paymentOptions } from "../component/button/buttonData";
 
 export default function CreatePlaceForm(props) {
   const router = useRouter();
@@ -69,7 +66,7 @@ export default function CreatePlaceForm(props) {
 
   const [placeRestroom, setPlaceRestroom] = useState<Boolean>(false);
 
-  const [costCheckBox, setCostCheckBox] = useState<Cost[]>(["無料"]);
+  const [placePayment, setPlacePayment] = useState({});
 
   const [published, setPublished] = useState(false);
   const [newPlace, setNewPlace] = useState(null);
@@ -339,28 +336,10 @@ export default function CreatePlaceForm(props) {
                 }
               >
                 <AlignItems justifyContent={"center"}>
-                  <CheckBox>
-                    {costButtonArray.map((name) => {
-                      return (
-                        <CheckBox.Item
-                          checked={costCheckBox.some(
-                            (element) => element === name
-                          )}
-                          name={name}
-                          key={name}
-                          onClick={() => {
-                            costCheckBox.some((element) => element === name)
-                              ? setCostCheckBox((prev) =>
-                                  prev.filter((element) => element !== name)
-                                )
-                              : setCostCheckBox([...costCheckBox, name]);
-                          }}
-                        >
-                          {name}
-                        </CheckBox.Item>
-                      );
-                    })}
-                  </CheckBox>
+                  {/* <PaymentInput
+                    options={paymentOptions}
+                    onChange={setPlacePayment}
+                  /> */}
                 </AlignItems>
               </FlipThrough>
             )}
