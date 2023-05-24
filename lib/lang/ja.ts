@@ -25,27 +25,32 @@ export default {
     LIKES: "いいね数",
     BASIC_INFO: "基本情報",
   },
-  INPUT: {
+  TEXT_INPUT: {
     PLACE_NAME: "場所の名前",
     PLACE_DESCRIPTION: "概要",
     PLACE_SITE: "公式サイト（無い場合は空欄）",
     REVIEW_TITLE: "レビュータイトル",
     REVIEW_DESCRIPTION: "行って感じた事、評価項目に写らない場所の良さ等。",
+  },
+  RADIO_INPUT: {
     BINARY: {
       TRUE: "有",
       FALSE: "無",
     },
-    SIZE: {
+    CROWD: {
       SMALL: {
-        LABEL: "小さい",
+        LABEL: "少ない",
+        TITLE: "",
         EX: "小さい公園・カフェ",
       },
       MEDIUM: {
         LABEL: "普通",
+        TITLE: "",
         EX: "大きめな公園・建物",
       },
       LARGE: {
-        LABEL: "大きい",
+        LABEL: "多い",
+        TITLE: "",
         EX: "島・海・大きい建物",
       },
     },
@@ -55,6 +60,8 @@ export default {
       RED: "建物。カフェ等",
       PURPLE: "その他",
     },
+  },
+  CHECKBOX_INPUT: {
     PAYMENT: {
       CARD: "クレジットカード",
       CASH: "現金",

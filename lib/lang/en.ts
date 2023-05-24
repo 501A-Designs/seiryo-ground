@@ -25,13 +25,15 @@ export default {
     LIKES: "Number of Likes",
     BASIC_INFO: "Basics",
   },
-  INPUT: {
+  TEXT_INPUT: {
     PLACE_NAME: "Name Of Place",
     PLACE_DESCRIPTION: "Description",
     PLACE_SITE: "Website URL (Keep empty if N/A)",
     REVIEW_TITLE: "Review Title",
     REVIEW_DESCRIPTION:
       "What you felt, or other factors that may not reflect on the rating.",
+  },
+  RADIO_INPUT: {
     BINARY: {
       TRUE: "Yes",
       FALSE: "No",
@@ -56,6 +58,8 @@ export default {
       RED: "Buildings & Cafes",
       PURPLE: "Others",
     },
+  },
+  CHECKBOX_INPUT: {
     PAYMENT: {
       CARD: "Credit Card",
       CASH: "Cash",

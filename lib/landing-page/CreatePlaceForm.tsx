@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AlignItems from "../alignment/AlignItems";
+import AlignItems from "../alignment/Align";
 import Button from "../component/button/Button";
 import TypeButton from "../component/input/CategoryInput";
 import TextArea from "../TextArea";
@@ -34,7 +34,7 @@ import Container from "../component/Container";
 import { Category, Cost, Size } from "../util/types";
 
 // INPUTS
-import RadioInput from "../component/input/CrowdInput";
+import RadioInput from "../component/input/RadioInput";
 import ToggleInput from "../component/input/ToggleInput";
 import useLocale from "../util/useLocale";
 import CategoryInput from "../component/input/CategoryInput";

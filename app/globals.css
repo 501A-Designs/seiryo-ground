@@ -1,0 +1,121 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* @import url('https://api.fontshare.com/v2/css?f[]=clash-display@400,500&display=swap'); */
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+* {
+  @apply antialiased selection:bg-cyan-300 selection:text-black;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-normal text-black dark:text-white my-2;
+}
+
+h1 {
+  @apply text-2xl;
+}
+h2 {
+  @apply text-xl;
+}
+h3 {
+  @apply text-lg;
+}
+h4 {
+  @apply text-base;
+}
+h5 {
+  @apply text-sm;
+}
+h6 {
+  @apply text-xs;
+}
+
+p {
+  @apply text-sm text-zinc-400 dark:text-zinc-500;
+}
+
+ul {
+  @apply my-2 mx-0 text-sm;
+}
+li {
+  @apply text-zinc-800 dark:text-zinc-100;
+}
+
+table {
+  @apply border border-zinc-400 dark:border-zinc-700 divide-y divide-zinc-400 dark:divide-zinc-700 text-center w-full
+  p-0 mx-0 my-4;
+}
+
+th {
+  @apply px-4 py-2 border border-zinc-200 border-b-zinc-300  dark:border-zinc-800 dark:border-b-zinc-700 bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-300 font-normal text-xs uppercase;
+}
+
+td {
+  @apply px-4 py-2 border border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-400 text-left text-xs;
+}
+
+caption {
+  @apply my-3 caption-bottom text-zinc-400 dark:text-zinc-500 text-xs;
+}
+
+a {
+  @apply text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-500 decoration-solid decoration-zinc-600;
+}
+/* textDecorationStyle: "none",
+borderColor: "$gray2",
+borderBottom: "1px",
+color: "inherit", */
+
+hr {
+  @apply bg-gradient-to-r from-transparent via-zinc-200 dark:via-zinc-800 to-transparent border-none h-0.5 w-full rounded-full my-10;
+}
+
+input[type="text"] {
+  @apply text-sm text-zinc-950 dark:text-zinc-100 
+  px-4 py-2 rounded-md 
+  border 
+  border-zinc-300 
+  dark:border-zinc-800 
+  bg-zinc-200
+  dark:bg-zinc-900 
+  focus:bg-zinc-100 
+  dark:focus:bg-zinc-950 
+  focus:border-zinc-600 
+  dark:focus:border-zinc-400 
+  outline-none transition duration-200 shadow-inner;
+}
+
+@layer components {
+  .skeumorphic {
+    @apply border
+    border-zinc-700
+    dark:border-zinc-200
+    text-zinc-100
+    dark:text-zinc-900 
+    bg-gradient-to-b
+    to-zinc-900
+    dark:to-zinc-300
+    from-zinc-700
+    dark:from-zinc-100
+    shadow-md;
+  }
+}
