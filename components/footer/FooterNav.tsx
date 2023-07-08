@@ -1,11 +1,6 @@
-import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../firebase";
-import Button from "./button/Button";
-import SectionButton from "./SectionButton";
 
-import { styled } from "../../stitches.config";
-import { gradient } from "../ux/keyframes";
 import { keyframes } from "@stitches/react";
 import { useEffect, useState } from "react";
 import { scroll } from "../ux/scroll";
@@ -25,7 +20,10 @@ import {
 } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 import AlignItems from "../alignment/AlignItems";
-import RadixDialog from "../radix/RadixDialog";
+import RadixDialog from "../radix/Dialog";
+import Button from "../button/Button";
+
+import { useRouter } from "next/navigation";
 
 export default function UniversalNav(props: UniversalNavProps) {
   const router = useRouter();
@@ -118,53 +116,15 @@ export default function UniversalNav(props: UniversalNavProps) {
               {!hideScrollUp && (
                 <Button
                   size={"small"}
-                  styleType={"transparent"}
+                  intent={"transparent"}
                   icon={<ArrowUpIcon />}
                   onClick={() => {
                     scroll.scrollToTop();
                   }}
                 >
-                  {tBUTTON.TOP}
+                  上へ戻る
                 </Button>
               )}
-              <RadixDialog
-                title={tLABEL.MENU}
-                trigger={
-                  <Button
-                    size={"small"}
-                    styleType={"transparent"}
-                    icon={<HamburgerMenuIcon />}
-                  />
-                }
-              >
-                <>
-                  <ProfileContainer upgradable={upgradable ? true : false} />
-                  <SectionButton icon={<HomeIcon />}>
-                    {tROUTE.MAIN}
-                  </SectionButton>
-                  <SectionButton slug={"news"} icon={<BookmarkIcon />}>
-                    {tROUTE.NEWS}
-                  </SectionButton>
-                  <SectionButton slug={"levels"} icon={<IdCardIcon />}>
-                    {tROUTE.CARD}
-                  </SectionButton>
-                  <SectionButton slug={"design"} icon={<FrameIcon />}>
-                    {tROUTE.DESIGN}
-                  </SectionButton>
-                  <SectionButton slug={"links"} icon={<InfoCircledIcon />}>
-                    {tROUTE.LINKS}
-                  </SectionButton>
-                  <AlignItems justifyContent={"end"}>
-                    <Button
-                      icon={<ShadowInnerIcon />}
-                      onClick={toggleTheme}
-                      backTapSound={theme}
-                    >
-                      {tBUTTON.THEME}
-                    </Button>
-                  </AlignItems>
-                </>
-              </RadixDialog>
             </NavContentStyled>
           </NavStyled>
         </NavContainerStyled>

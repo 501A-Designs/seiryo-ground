@@ -2,7 +2,7 @@ import "./globals.css";
 import { Archivo } from "next/font/google";
 import Link from "next/link";
 import Align from "../lib/alignment/Align";
-import RadixDialog from "../components/radix/RadixDialog";
+import RadixDialog from "../components/radix/Dialog";
 import Button from "../components/button/Button";
 import { EnterIcon } from "@radix-ui/react-icons";
 import Header from "../components/general/Header";
@@ -26,40 +26,43 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
       <Header />
       <section className={`min-h-screen`}>{children}</section>
       <footer
-        className={` rounded-xl
+        className={`
           px-10 py-5
           grid grid-cols-4
           border-t 
           border-t-zinc-300
-          dark:border-t-zinc-800 
-          bg-zinc-200
-          dark:bg-zinc-900
+          dark:border-t-zinc-800
+          bg-gradient-to-b
+          from-zinc-200
+          to-zinc-50
+          dark:from-zinc-900
+          dark:to-zinc-950
         `}
       >
         <div>
           <p>SEIRYO GROUND</p>
           <ul>
             <li>
-              Produced By <Link href={"/"}>@501A_Designs</Link>
+              作者：<Link href={"/"}>@501A_Designs</Link>
             </li>
             <li>
-              Photos By <Link href={"/"}>@EyesObsolete</Link>
+              写真提供：<Link href={"/"}>@EyesObsolete</Link>
             </li>
           </ul>
         </div>
         <div>
-          <p>General Information</p>
+          <p>基本情報</p>
           <ul>
             <li>
-              <Link href={"/about"}>About This Site</Link>
+              <Link href={"/about"}>本サイトについて</Link>
             </li>
             <li>
-              <Link href={"/levels"}>Terms of Service</Link>
+              <Link href={"/levels"}>利用規約</Link>
             </li>
           </ul>
         </div>
         <div>
-          <p>Other Relevant Pages</p>
+          <p>他のページ</p>
           <ul>
             <li>
               <Link href={"/levels"}>Updates / News</Link>

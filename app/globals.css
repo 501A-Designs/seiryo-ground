@@ -78,7 +78,7 @@ caption {
 }
 
 a {
-  @apply text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-500 decoration-solid decoration-zinc-600;
+  @apply text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-500 decoration-solid underline decoration-zinc-400 dark:decoration-zinc-500;
 }
 /* textDecorationStyle: "none",
 borderColor: "$gray2",

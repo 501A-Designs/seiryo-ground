@@ -103,7 +103,7 @@ interface ButtonProps
 // animation: `${popOutNoBlur} 0.3s`,
 const Button: React.FC<ButtonProps> = ({ intent, size, ...props }) => {
   // const [tap1] = useSound("/sound/tap-1-sg.mp3", { playbackRate: 1.1 });
-  const [tap2] = useSound("/sound/tap-2-sg.mp3", { playbackRate: 1.1 });
+  const [tap2] = useSound("/sound/tap-2-sg.mp3");
 
   return (
     <button

@@ -4,7 +4,7 @@ import Container from "../../../components/general/Container";
 import Toggle from "../../../components/input/Toggle";
 import HorizontalRadio from "../../../components/input/HorizontalRadio";
 import Button from "../../../components/button/Button";
-import RadixDialog from "../../../components/radix/RadixDialog";
+import RadixDialog from "../../../components/radix/Dialog";
 import { EyeOpenIcon } from "@radix-ui/react-icons";
 
 const UiElements = () => {
