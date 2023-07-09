@@ -63,48 +63,11 @@ export default function ProfileContainer({
 }: {
   upgradable: boolean;
 }) {
-  const [user] = useAuthState(auth);
   const router = useRouter();
-  const [signInWithGoogle] = useSignInWithGoogle(auth);
+
 
   console.log(user);
 
   return (
-    <ProfileCardStyled
-      onClick={() => router.push("/profile")}
-      upgradable={upgradable}
-    >
-      <ProfileCardContentStyled>
-        {user ? (
-          <AlignItems>
-            <ProfileImage
-              width={"35"}
-              height={"35"}
-              alt={"profile image"}
-              src={user.photoURL}
-              onClick={() => {
-                router.push("/profile");
-              }}
-            />
-            <Grid>
-              <h4>{user.displayName}</h4>
-              <p>{user.email}</p>
-            </Grid>
-          </AlignItems>
-        ) : (
-          <AlignItems justifyContent={"center"} flexDirection={"column"}>
-            <h4>ログインする必要があります</h4>
-            <Button
-              size={"medium"}
-              styleType={"black"}
-              icon={<EnterIcon />}
-              onClick={() => signInWithGoogle()}
-            >
-              アカウント作成
-            </Button>
-          </AlignItems>
-        )}
-      </ProfileCardContentStyled>
-    </ProfileCardStyled>
   );
 }

@@ -27,16 +27,16 @@ const Header = () => {
   return (
     <header
       className={`
-        sticky top-0
-        bg-zinc-100
-        dark:bg-zinc-950
+        sticky top-0 backdrop-blur
+        bg-zinc-100/90
+        dark:bg-zinc-950/90
         border-b
         border-b-zinc-200
         dark:border-b-zinc-900 
         text-zinc-900
         dark:text-zinc-100
         flex justify-between items-center
-        px-10 py-3
+        px-10 py-1 z-10
       `}
     >
       <Align>
@@ -45,7 +45,41 @@ const Header = () => {
         </Link>
       </Align>
       <Align className={`gap-2`}>
-        {!user && (
+        {user ? (
+          <button
+            className={`
+              cursor-pointer p-0.5 pr-3 rounded-full
+              bg-gradient-to-b
+              from-zinc-100/50 
+              to-zinc-200 
+              dark:from-zinc-800 
+              dark:to-zinc-800/50 
+              border
+              border-zinc-200 
+              dark:border-zinc-800 
+            `}
+            onClick={() => {
+              router.push("/profile");
+            }}
+          >
+            <Align className={`gap-2`}>
+              <Image
+                width={"26"}
+                height={"26"}
+                alt={"profile image"}
+                src={user.photoURL}
+                className={`
+                  cursor-pointer
+                  rounded-full 
+                  border
+                  border-zinc-200 
+                  dark:border-zinc-800 
+                `}
+              />
+              <h6 className={`m-0`}>{user.displayName.split(" ")[0]}</h6>
+            </Align>
+          </button>
+        ) : (
           <RadixDialog
             title={"ログイン"}
             trigger={<Button icon={<PersonIcon />}>ログイン</Button>}
@@ -60,6 +94,7 @@ const Header = () => {
             </Align>
           </RadixDialog>
         )}
+
         <RadixDialog
           title="メニュー"
           trigger={
@@ -70,51 +105,6 @@ const Header = () => {
             />
           }
         >
-          {/* <ProfileContainer upgradable={upgradable ? true : false} /> */}
-          {user && (
-            <div
-              className={`
-              cursor-pointer px-6 py-4 mb-2 rounded-xl
-              bg-gradient-to-b
-              from-zinc-200/50 
-              to-zinc-200 
-              dark:from-zinc-800 
-              dark:to-zinc-800/50 
-
-              border
-              border-zinc-200 
-              dark:border-zinc-800 
-            `}
-              onClick={() => router.push("/profile")}
-            >
-              <Align className={`gap-3`}>
-                <div>
-                  <Image
-                    width={"40"}
-                    height={"40"}
-                    alt={"profile image"}
-                    src={user.photoURL}
-                    onClick={() => {
-                      router.push("/profile");
-                    }}
-                    className={`
-                      rounded-full 
-                      border
-                      border-zinc-200 
-                      dark:border-zinc-800 
-                    `}
-                  />
-                  <div
-                    className={`absolute w-2 h-2 bg-red-600 rounded-full top-5`}
-                  />
-                </div>
-                <div className={`grid gap-0`}>
-                  <h4 className={`m-0`}>{user.displayName}</h4>
-                  <p className={`m-0`}>{user.email}</p>
-                </div>
-              </Align>
-            </div>
-          )}
           <RadixDialog.Button onClick={() => router.push("/")}>
             <HomeIcon />
             メイン

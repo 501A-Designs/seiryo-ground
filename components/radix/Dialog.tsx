@@ -65,11 +65,12 @@ const RadixDialog: RadixDialogProps = ({
     <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
     <Dialog.Portal>
       <Dialog.Overlay
-        className={` backdrop-blur-sm 
+        className={`
+          cursor-pointer backdrop-blur-sm 
           bg-gradient-to-t 
           from-grayA1 
           to-gray-1
-          fixed inset-0
+          fixed inset-0 z-20
         `}
       />
       <Dialog.Content
@@ -87,8 +88,8 @@ const RadixDialog: RadixDialogProps = ({
           dark:bg-zinc-900
           p-4
           focus:outline-none 
-          overflow-y-scroll 
-          shadow-shadow1
+          overflow-y-scroll shadow-shadow3
+          z-20
         `}
       >
         <Align className={`justify-between`}>

@@ -2,15 +2,15 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { HeartIcon, TargetIcon } from "@radix-ui/react-icons";
 import Align from "../../lib/alignment/Align";
+import TypeBadge from "./TypeBadge";
 
-const Place = (props) => {
+const Place = ({ id, name, description, type }) => {
   const router = useRouter();
-  const data = props?.data;
   const averageRate = data?.averageRating;
 
   return (
     <div
-      key={props.key}
+      key={id}
       className={`
         cursor-pointer 
         h-max-content
@@ -24,17 +24,17 @@ const Place = (props) => {
         hover:bg-gray-300
         grid grid-cols-1 gap-2
       `}
-      onClick={() => router.push(`/place/${props.id}/`)}
+      onClick={() => router.push(`/place/${id}/`)}
     >
       <Align>
-        <TypeBadge width={"small"} type={data?.type} />
-        <h5>{data?.name}</h5>
+        <TypeBadge size={"small"} type={type} />
+        <h5>{name}</h5>
       </Align>
-      <p>{data?.description}</p>
+      <p>{description}</p>
       {/* {reviewsCollection?.docs.length > 0 &&
             <>{reviewsCollection.docs.length + '_'}review | </>
           } */}
-      <Align justifyContent={"spaceBetween"}>
+      <Align className={`justify-between`}>
         <Align>
           {overallScore > 0 && (
             <>

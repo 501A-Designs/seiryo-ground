@@ -30,11 +30,6 @@ export const { styled, getCssText, globalCss } = createStitches({
       // sgWhite: `linear-gradient(20deg, ${gray.gray2} 0%,white  100%)`,
       // sgBlack: `linear-gradient(20deg, black 0%,#383838  100%)`,
 
-      sgGreen: "linear-gradient(90deg, #C3F304 0%, #50F403 100%)",
-      sgBlue: "linear-gradient(90deg, #00F0FF 0%, #5FC3FB 100%)",
-      sgRed: "linear-gradient(90deg, #FFB422 0%, #FB7B5F 100%)",
-      sgPurple: "linear-gradient(90deg, #BA49FF 0%, #7856FF 100%)",
-
       // Card Colors
       levelOne: "linear-gradient(0deg, rgb(248, 248, 248) 0%, white 100%)",
       levelThree: "linear-gradient(0deg, #ccfcb6 0%, white 100%)",

@@ -1,73 +1,100 @@
 "use client";
 import { DocumentData, doc, updateDoc } from "firebase/firestore";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { ClipLoader } from "react-spinners";
 import useSound from "use-sound";
 import { auth, db } from "../../firebase";
-import AlignItems from "../../lib/alignment/Align";
-import Grid from "../../lib/alignment/Grid";
 import { checkLevel } from "../../lib/util/helper";
-import {
-  popOut,
-  rotateAndZoom,
-  rotateInBottonLeft,
-  spin,
-} from "../../lib/ux/keyframes";
-import { styled } from "../../stitches.config";
-import UniversalNav from "../lib/component/UniversalNav";
-import {
-  ArrowLeftIcon,
-  Cross1Icon,
-  DownloadIcon,
-  InfoCircledIcon,
-} from "@radix-ui/react-icons";
+import { DownloadIcon, ExitIcon, InfoCircledIcon } from "@radix-ui/react-icons";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocument } from "react-firebase-hooks/firestore";
 import Button from "../../components/button/Button";
-import Container from "../../components/general/Container";
+import { VariantProps, cva } from "cva";
+import Align from "../../lib/alignment/Align";
+import RadixDialog from "../../components/radix/Dialog";
+import Table from "../../components/general/Table";
+import { signOut } from "firebase/auth";
+import * as Progress from "@radix-ui/react-progress";
 
-export default function Profile() {
-  const router = useRouter();
-  const [user] = useAuthState(auth);
+export const cardColors = {
+  1: [
+    "from-green-400",
+    "to-green-600",
+    "dark:from-green-700",
+    "dark:to-green-900",
+  ],
+  2: ["from-blue-400", "to-blue-600", "dark:from-blue-700", "dark:to-blue-900"],
+  3: [
+    "from-orange-400",
+    "to-orange-600",
+    "dark:from-orange-700",
+    "dark:to-orange-900",
+  ],
+  4: ["from-red-400", "to-red-600", "dark:from-red-700", "dark:to-red-900"],
+  5: ["from-zinc-400", "to-zinc-600", "dark:from-zinc-700", "dark:to-zinc-900"],
+};
+
+const profileCard = cva(
+  [
+    "select-none",
+    "rounded-3xl",
+    "p-5",
+    "w-[300px]",
+    "h-[200px]",
+    "shadow-xl",
+    "border",
+    "border-zinc-200/40",
+    "dark:border-zinc-500/40",
+    "bg-gradient-to-br",
+  ],
+  {
+    variants: {
+      level: cardColors,
+      animate: {
+        true: ["animate-flip-card"],
+        false: [""],
+      },
+    },
+    defaultVariants: {
+      animate: false,
+    },
+  }
+);
+const ProfileCard = ({ user }) => {
   const [userData] = useDocument<DocumentData>(
     doc(db, `users/${user && user.uid}`)
   );
 
-  const [openDetails, setOpenDetails] = useState(false);
+  const [animate, setAnimate] = useState(false);
   const [showNewContent, setShowNewContent] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  // SOUND
   const [load1] = useSound("/sound/load-1-sg.mp3");
   const [celebrate1] = useSound("/sound/celebrate-1-sg.mp3");
   const [celebrate2] = useSound("/sound/celebrate-2-sg.mp3");
   const [tap2] = useSound("/sound/tap-2-sg.mp3", { playbackRate: 1.3 });
 
   const flip = async () => {
-    setOpenDetails(true);
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    setAnimate(true);
     celebrate2();
+    await new Promise((resolve) => setTimeout(resolve, 500));
     setShowNewContent(true);
-  };
-
-  const reFlip = () => {
-    setOpenDetails(false);
-    setShowNewContent(false);
-    tap2();
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    setAnimate(false);
   };
 
   const [upgradableLevel, setUpgradableLevel] = useState(0);
   const upgrade = async () => {
-    setLoading(true);
     load1();
+    setAnimate(true);
     await updateDoc(doc(db, `users/${user && user.uid}/`), {
       level: upgradableLevel,
     });
-    reFlip();
+    setShowNewContent(false);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     celebrate1();
-    setLoading(false);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setAnimate(false);
   };
 
   useEffect(() => {
@@ -82,249 +109,162 @@ export default function Profile() {
   }, [userData]);
 
   return (
-    <div className={`px-10`}>
-      <AlignItems className={`justify-center`}>
-        {user ? (
-          <Grid gap={"medium"}>
-            {userData && (
-              <>
-                <AlignItems className={`justify-center`}>
-                  {openDetails && (
-                    <Notification>
-                      {loading ? (
-                        <ClipLoader color="white" />
-                      ) : (
-                        <>
-                          <h5>カードをアップグレードできます。</h5>
-                          <p>清涼広場の機能をより活用しよう！</p>
-                        </>
-                      )}
-                    </Notification>
-                  )}
-                </AlignItems>
-                {!loading && userData && (
-                  <Perspective>
-                    <ProfileCard
-                      level={userData?.data()?.level}
-                      rotateAndZoom={openDetails}
-                    >
-                      {showNewContent ? (
-                        <Grid gap={"medium"}>
-                          <h3>{user.displayName}</h3>
-                          <Container intent={"filled"}>
-                            <Grid gap={"large"}>
-                              <Grid gap={"small"}>
-                                <p>Level {userData.data().level}から</p>
-                                <AlignItems>
-                                  <h2>Level {upgradableLevel}</h2>
-                                  <p>にアップグレード</p>
-                                </AlignItems>
-                              </Grid>
-                              <p>
-                                {user.displayName}おめでとうございます。
-                                <br />
-                                いつもSEIRYO
-                                GROUNDへの貢献大変ありがとうございます。
-                                <br />
-                                以下のボタンを押すとカードのアップグレードができます。
-                              </p>
-                              <AlignItems justifyContent={"center"}>
-                                <Button
-                                  intent={"black"}
-                                  onClick={() => upgrade()}
-                                  icon={<DownloadIcon />}
-                                >
-                                  アップグレード
-                                </Button>
-                              </AlignItems>
-                            </Grid>
-                          </Container>
-                        </Grid>
-                      ) : (
-                        <AlignItems className={`justify-between items-start`}>
-                          <div>
-                            <h5>SEIRYO GROUND | 清涼広場</h5>
-                            <div>
-                              <h2>{user.displayName}</h2>
-                              <p>{user.metadata.creationTime}</p>
-                            </div>
-                          </div>
-                          <VerticalText>
-                            <p>
-                              Level {userData?.data()?.level} Membership Card
-                            </p>
-                            <p>{user.metadata.lastSignInTime}</p>
-                          </VerticalText>
-                        </AlignItems>
-                      )}
-                    </ProfileCard>
-                  </Perspective>
-                )}
-              </>
-            )}
-          </Grid>
-        ) : (
-          <h4>ログインする必要がございます</h4>
-        )}
-      </AlignItems>
-      {/* {!loading && (
-        <UniversalNav
-          showInitially={true}
-          scrollPop={false}
-          popOnMount={true}
-          mount={showNewContent ? true : false}
-          minSize={"m"}
-          maxSize={"xl"}
-          dynamicButton={
-            <>
-              <Button
-                size={"small"}
-                intent={"transparent"}
-                icon={<ArrowLeftIcon />}
-                onClick={() => router.push("/")}
-              />
-              {showNewContent && (
-                <Button
-                  intent={"transparent"}
-                  icon={<Cross1Icon />}
-                  onClick={() => reFlip()}
-                >
-                  閉じる
-                </Button>
-              )}
-              <Button
-                size={"small"}
-                intent={"transparent"}
-                icon={<InfoCircledIcon />}
-                onClick={() => router.push("/levels")}
-              />
-            </>
-          }
+    <div
+      className={profileCard({
+        level: userData?.data().level,
+        animate: animate,
+      })}
+    >
+      {showNewContent ? (
+        <div
+          className={`
+            p-3 rounded-lg
+            bg-zinc-50/80 
+            dark:bg-zinc-950/80 
+            border border-zinc-100/50 dark:border-zinc-800/50
+            shadow-xl h-full
+          `}
+        >
+          <Align className={`justify-center gap-2 flex-col`}>
+            <h1 className={`text-black dark:text-white text-center mb-0`}>
+              Level {upgradableLevel}
+            </h1>
+            <p className={`text-zinc-800/50 dark:text-zinc-100/50 text-center`}>
+              おめでとうございます。
+              <br />
+              カードをアップグレードできます。
+            </p>
+            <Button onClick={() => upgrade()} icon={<DownloadIcon />}>
+              アップグレード
+            </Button>
+          </Align>
+        </div>
+      ) : (
+        <div className={`flex justify-between h-full`}>
+          <div className={`flex justify-end items-end`}>
+            <div>
+              <h2 className={`text-white`}>{user.displayName}</h2>
+              <p className={`text-white`}>{user.metadata.creationTime}</p>
+            </div>
+          </div>
+          <div
+            className={`flex justify-start items-center [writing-mode:vertical-rl] animate-pulse`}
+          >
+            <p className={`text-zinc-50/50`}>
+              清涼広場会員カード
+              <br />
+              Level {userData?.data()?.level} Card
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+interface ProgressBarProps extends React.HTMLAttributes<HTMLDivElement> {
+  name: string;
+  point: number;
+  max: number;
+}
+
+const ProgressBar: React.FC<ProgressBarProps> = ({
+  name,
+  point,
+  max,
+  className,
+}) => {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setProgress(100 * (point / max)), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div className={`grid gap-0 my-2`}>
+      <Align className={`justify-between`}>
+        <h6>{name}</h6>
+        <p>
+          {point}/{max}
+        </p>
+      </Align>
+      <Progress.Root
+        className={`
+          relative overflow-hidden 
+          bg-zinc-200/50
+          dark:bg-zinc-700/50 rounded-lg
+          border 
+          border-zinc-300/50
+          dark:border-zinc-700/50
+          w-full h-[10px] [transform: translateZ(0)]
+        `}
+        value={progress}
+      >
+        <Progress.Indicator
+          className={`
+            w-full h-full transition-transform duration-[660ms]
+            ease-[cubic-bezier(0.65, 0, 0.35, 1)] rounded-md
+            bg-gradient-to-r 
+            from-transparent
+            to-zinc-950
+            dark:to-zinc-50
+          `}
+          style={{ transform: `translateX(-${100 - progress}%)` }}
         />
-      )} */}
+      </Progress.Root>
+    </div>
+  );
+};
+
+export default function Profile() {
+  const [user] = useAuthState(auth);
+
+  return (
+    <div className={`px-10`}>
+      {user ? (
+        <div className={`grid`}>
+          <Align
+            className={`
+              justify-center flex-col gap-6 
+              [perspective:200px] z-0 my-20
+            `}
+          >
+            <ProfileCard user={user} />
+            <RadixDialog
+              title={user.displayName}
+              trigger={
+                <Button intent={"transparent"} icon={<InfoCircledIcon />}>
+                  詳細を確認
+                </Button>
+              }
+            >
+              <h5>ユーザー様の現在の状況</h5>
+              <ProgressBar name={"総数"} point={32} max={75} />
+              <ProgressBar name={"場所追加数"} point={32} max={75} />
+              <ProgressBar name={"レビュー数"} point={32} max={75} />
+              <hr />
+              <Align className={`justify-between`}>
+                <h5 className={`m-0`}>清涼広場から退出する</h5>
+                <Button
+                  intent={"red"}
+                  icon={<ExitIcon />}
+                  onClick={() => signOut(auth)}
+                >
+                  ログアウト
+                </Button>
+              </Align>
+            </RadixDialog>
+          </Align>
+          <div>
+            <h3>追加した場所</h3>
+            <h3>書いたレビュー</h3>
+            <h3>いいねした場所</h3>
+          </div>
+        </div>
+      ) : (
+        <h4>ログインする必要がございます</h4>
+      )}
     </div>
   );
 }
-
-const Perspective = styled("div", {
-  perspective: "200px",
-  minHeight: "400px",
-});
-
-const Notification = styled("div", {
-  textAlign: "center",
-  backgroundColor: "black",
-  padding: "1em 2.5em",
-  borderRadius: "$round",
-  width: "fit-content",
-  animation: `${popOut} 1s`,
-  h5: {
-    margin: "0",
-    color: "white",
-  },
-  p: {
-    margin: "0",
-    color: "$gray1",
-  },
-});
-
-const VerticalText = styled("div", {
-  fontSize: "$extraSmall",
-  writingMode: "vertical-rl",
-  p: {
-    margin: "0",
-  },
-});
-
-const ProfileCard = styled("div", {
-  borderRadius: "$r4",
-  padding: "$extraLarge",
-  width: "400px",
-  height: "230px",
-  boxShadow: "$shadow2",
-  border: "1px solid $gray6",
-  fontFamily: "$sgFont2",
-  transition: "$speed1",
-  animation: `${rotateInBottonLeft} 1s`,
-  img: {
-    borderRadius: "$round",
-    border: "1px solid $sgGray3",
-    animation: `${spin} linear infinite 10s`,
-  },
-  h2: {
-    margin: 0,
-    color: "inherit",
-  },
-  p: {
-    margin: "0",
-    color: "inherit",
-  },
-  h5: {
-    margin: 0,
-    color: "inherit",
-  },
-  variants: {
-    level: {
-      1: {
-        color: "black",
-        background: "$levelOne",
-        [`& ${VerticalText}`]: {
-          color: "gray",
-        },
-      },
-      2: {
-        color: "$blue1",
-        background:
-          "linear-gradient(45deg, $blue11 0%, $blue8 100%) url(https://grainy-gradients.vercel.app/noise.svg)",
-        [`& ${VerticalText}`]: {
-          color: "$blue6",
-        },
-      },
-      3: {
-        color: "$green1",
-        background: "linear-gradient(45deg, $green11 0%, $green8 100%)",
-        [`& ${VerticalText}`]: {
-          color: "$green6",
-        },
-      },
-      4: {
-        color: "$orange1",
-        background: "linear-gradient(45deg, $orange11 0%, $orange8 100%)",
-        [`& ${VerticalText}`]: {
-          color: "$orange6",
-        },
-      },
-      5: {
-        color: "$gray1",
-        background: "linear-gradient(45deg, $gray12 0%, $gray11 100%)",
-        [`& ${VerticalText}`]: {
-          color: "$gray6",
-        },
-      },
-    },
-    rotateAndZoom: {
-      true: {
-        animation: `${rotateAndZoom} 2s`,
-        h2: {
-          color: "$gray12",
-          margin: "0",
-        },
-        p: {
-          color: "$gray11",
-        },
-      },
-    },
-  },
-});
-
-// export async function getServerSideProps(){
-//   const userDataSnap = await getDoc(doc(db, `users/${user && user.uid}`));
-//   const userData = jsonParse(userDataSnap.data());
-
-//   return{
-//     props:{
-//       user,
-//       userData
-//     }
-//   }
-// }
