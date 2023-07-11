@@ -1,6 +1,5 @@
 import React, { forwardRef } from "react";
 import * as Select from "@radix-ui/react-select";
-import { styled } from "../../../stitches.config";
 import useSound from "use-sound";
 import {
   CheckIcon,

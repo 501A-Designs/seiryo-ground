@@ -21,8 +21,8 @@ module.exports = {
 
     extend: {
       colors: {
-        "seiryo-green-start": "#C3F304",
-        "seiryo-green-end": "#50F403",
+        "seiryo-green-start": "#C4F500",
+        "seiryo-green-end": "#05F800",
         "seiryo-blue-start": "#00F0FF",
         "seiryo-blue-end": "#5FC3FB",
         "seiryo-orange-start": "#FFB422",
@@ -41,7 +41,9 @@ module.exports = {
         "pop-in-dialog": "pop-in-dialog 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
         "pop-out-dialog": "pop-out-dialog 500ms",
         "scale-blur": "scale-blur 1s",
+        scale: "scale 0.5s",
         "flip-card": "flip-card 2s",
+        "bounce-left": "bounce-left 0.6s",
       },
       keyframes: {
         "pop-in-dialog": {
@@ -72,11 +74,10 @@ module.exports = {
         },
         scale: {
           "0%": {
-            transform: "scale(0.5)",
-            opacity: 0,
+            transform: "scale(0.25)",
           },
           "50%": {
-            transform: "scale(1.02)",
+            transform: "scale(1.2)",
           },
         },
         "scale-blur": {
@@ -105,6 +106,14 @@ module.exports = {
           },
           "80%": {
             transform: "scale(1.01)",
+          },
+        },
+        "bounce-left": {
+          "0%": {
+            transform: "translateX(0)",
+          },
+          "25%": {
+            transform: "translateX(3em)",
           },
         },
       },

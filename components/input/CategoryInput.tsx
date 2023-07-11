@@ -1,162 +1,126 @@
 import React from "react";
-import { styled } from "../../../stitches.config";
 import useSound from "use-sound";
-import useLocale from "../../util/useLocale";
-import { categories } from "../button/buttonData";
-import { Category } from "../../util/types";
-import { keyframes } from "@stitches/react";
+import { cva } from "cva";
+import { typeColor } from "../general/TypeBadge";
+import { PlaceForm } from "../../app/api/place/route";
+
+type category = "green" | "blue" | "orange" | "purple";
+const categories: category[] = ["green", "blue", "orange", "purple"];
+
+// ANIMATION
+// const shiftText = keyframes({
+
+// });
+
+const categoryInputItem = cva(
+  [
+    "flex",
+    "gap-2",
+    "items-center",
+    "cursor-pointer",
+    "text-center",
+    "text-xs",
+    "py-2",
+    "px-3",
+    "rounded-full",
+    "transition",
+    "duration-300",
+    "border",
+  ],
+  {
+    variants: {
+      checked: {
+        true: ["text-black", "dark:text-white", "filled"],
+        false: [
+          "border-transparent",
+          "bg-transparent",
+          "text-zinc-400",
+          "hover:bg-zinc-200/70",
+          "hover:text-zinc-500",
+          "dark:text-zinc-500",
+          "dark:hover:bg-zinc-800/70",
+          "dark:hover:text-zinc-300",
+        ],
+      },
+    },
+  }
+);
+
+const typeBadge = cva(
+  [
+    "flex",
+    "items-center",
+    "justify-center",
+    "italic",
+    "transition-all",
+    "duration-300",
+    "rounded-full",
+    "bg-gradient-to-r",
+  ],
+  {
+    variants: {
+      checked: {
+        true: ["w-[10px]", "h-[10px]", "animate-scale"],
+        false: ["w-[30px]", "h-[3px]"],
+      },
+      type: typeColor,
+    },
+  }
+);
 
 interface CategoryInputProps {
-  state: Category;
+  place: PlaceForm;
+  state: category | string;
   setState: any;
 }
 
-const CategoryInput: React.FC<CategoryInputProps> = (props) => {
-  const [select1] = useSound("/sound/select-1-sg.mp3", { playbackRate: 1.1 });
-  const { t } = useLocale();
-  const T = t.INPUT.CATEGORIES;
+const CategoryInput: React.FC<CategoryInputProps> = ({
+  place,
+  state,
+  setState,
+}) => {
+  const [select1] = useSound("/sound/select-1-sg.mp3");
 
   return (
-    <CategoryInputStyled>
+    <div className={`grid gap-0.5 w-full`}>
       {categories.map((item: any, i: any) => (
-        <CategoryInputItemStyled
-          checked={props.state === item}
+        <label
+          className={categoryInputItem({
+            checked: state === item,
+          })}
           htmlFor={i + item}
         >
           <input
+            className={`appearance-none absolute`}
             type="radio"
             name="categoryInput"
             value={item}
             id={i + item}
-            checked={props.state === item}
+            checked={state === item}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               select1();
-              props.setState(e.target.value);
+              setState({
+                ...place,
+                category: e.target.value,
+              });
             }}
           />
-          <LabelStyled checked={props.state === item} category={item} />
-          <span>
-            {item === "b" && T.BLUE}
-            {item === "g" && T.GREEN}
-            {item === "r" && T.RED}
-            {item === "p" && T.PURPLE}
+          <div
+            className={typeBadge({
+              checked: state === item,
+              type: item,
+            })}
+          />
+          <span className={state === item ? "animate-bounce-left" : ""}>
+            {item === "green" && "森。山。公園等"}
+            {item === "blue" && "海。池。川等"}
+            {item === "orange" && "建物。カフェ等"}
+            {item === "purple" && "その他"}
           </span>
-        </CategoryInputItemStyled>
+        </label>
       ))}
-    </CategoryInputStyled>
+    </div>
   );
 };
 
 export default CategoryInput;
-
-// ANIMATION
-const shiftText = keyframes({
-  "0%": {
-    transform: "translateX(0)",
-  },
-  "30%": {
-    transform: "translateX(40%)",
-  },
-});
-
-const scaleLabel = keyframes({
-  "0%": {
-    transform: "scale(1)",
-  },
-  "50%": {
-    transform: "scale(1.5)",
-  },
-});
-
-const CategoryInputStyled = styled("form", {
-  display: "grid",
-  gap: "0.25em",
-  maxWidth: "220px",
-  minWidth: "200px",
-  width: "100%",
-});
-
-const CategoryInputItemStyled = styled("label", {
-  gap: "$small",
-  display: "flex",
-  alignItems: "center",
-  fontFamily: "$sgFont1",
-  cursor: "pointer",
-  textAlign: "center",
-  padding: "0.5em 1em",
-  transition: "$speed1",
-  border: "1px solid transparent",
-  borderRadius: "$r2",
-  input: {
-    appearance: "none",
-    position: "absolute",
-  },
-  span: {
-    margin: 0,
-    fontSize: "$8",
-  },
-  variants: {
-    checked: {
-      true: {
-        span: {
-          color: "$gray3",
-          fontWeight: "bold",
-          animation: `${shiftText} 0.6s`,
-        },
-        backgroundColor: "$gray12",
-        borderColor: "$gray12",
-        shadow: "$shadow1",
-      },
-      false: {
-        span: {
-          color: "$gray10",
-        },
-        backgroundColor: "transparent",
-        "&:hover": {
-          backgroundColor: "$gray4",
-          borderColor: "$gray5",
-          span: {
-            color: "$gray11",
-          },
-        },
-      },
-    },
-  },
-});
-
-const LabelStyled = styled("div", {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  fontStyle: "italic",
-  borderRadius: "$r2",
-  transition: "$speed2",
-
-  variants: {
-    checked: {
-      true: {
-        width: "10px",
-        height: "10px",
-        animation: `${scaleLabel} 0.3s`,
-      },
-      false: {
-        width: "30px",
-        height: "6px",
-      },
-    },
-    category: {
-      b: {
-        background: "$sgBlue",
-      },
-      g: {
-        background: "$sgGreen",
-      },
-      r: {
-        background: "$sgRed",
-      },
-      p: {
-        background: "$sgPurple",
-      },
-    },
-  },
-});

@@ -1,5 +1,4 @@
 export type Size = "s" | "m" | "l";
-export type Category = "g" | "b" | "r" | "p";
 export type Cost = "g" | "c" | "e";
 
 export type PlacePaymentType = {

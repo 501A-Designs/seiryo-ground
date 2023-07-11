@@ -2,6 +2,43 @@ import React from "react";
 import useSound from "use-sound";
 import { VariantProps, cva } from "cva";
 
+const button = cva(
+  [
+    "text-xs",
+    "cursor-pointer",
+    "outline-none",
+    "justify-center",
+    "items-center",
+    "rounded-full",
+    "select-none",
+    "transition-all",
+  ],
+  {
+    variants: {
+      state: {
+        true: [
+          "filled",
+          "text-black",
+          "dark:text-white",
+          "h-8",
+          "w-8",
+          "animate-spin-scale",
+        ],
+        false: [
+          "border-none",
+          "bg-transparent",
+          "text-zinc-400",
+          "dark:text-zinc-500",
+          "hover:bg-zinc-200/70",
+          "dark:hover:bg-zinc-800/70",
+          "h-6",
+          "w-6",
+        ],
+      },
+    },
+  }
+);
+
 interface ToggleItemProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof button> {
@@ -15,6 +52,7 @@ const ToggleItem: React.FC<ToggleItemProps> = ({ state, intent, ...props }) => {
 
   return (
     <button
+      type="button"
       className={button({ state })}
       onMouseDown={() => {
         intent ? !state && select1() : !state && select2();
@@ -35,10 +73,8 @@ const Toggle: React.FC<ToggleProps> = (props) => {
   return (
     <div
       className={`
-        rounded-md 
-        p-2 
-        flex items-center justify-center gap-2 
-        w-full h-28
+        rounded-md w-fit h-5
+        flex items-center justify-center gap-1.5 
       `}
     >
       <ToggleItem
@@ -54,33 +90,5 @@ const Toggle: React.FC<ToggleProps> = (props) => {
     </div>
   );
 };
-
-const button = cva(
-  [
-    "text-sm",
-    "cursor-pointer",
-    "outline-none",
-    "justify-center",
-    "items-center",
-    "rounded-full",
-    "select-none",
-    "transition-all",
-  ],
-  {
-    variants: {
-      state: {
-        true: ["skeumorphic", "h-20", "w-20", "animate-spin-scale"],
-        false: [
-          "border-none",
-          "bg-transparent",
-          "text-zinc-500",
-          "dark:hover:bg-zinc-800",
-          "h-12",
-          "w-12",
-        ],
-      },
-    },
-  }
-);
 
 export default Toggle;

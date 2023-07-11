@@ -1,11 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import Container from "../../../components/general/Container";
 import Toggle from "../../../components/input/Toggle";
 import HorizontalRadio from "../../../components/input/HorizontalRadio";
 import Button from "../../../components/button/Button";
 import RadixDialog from "../../../components/radix/Dialog";
 import { EyeOpenIcon } from "@radix-ui/react-icons";
+import Align from "../../../lib/alignment/Align";
 
 const UiElements = () => {
   const [binaryToggle, setBinaryToggle] = useState(true);
@@ -34,34 +34,34 @@ const UiElements = () => {
 
   return (
     <>
-      <Container>
+      <div className={`container filled`}>
         <Toggle
           state={binaryToggle}
           onClick={() => setBinaryToggle(!binaryToggle)}
         />
-      </Container>
+      </div>
 
-      <Container className={`flex justify-center`}>
+      <div className={`container filled flex justify-center`}>
         <HorizontalRadio
           options={options}
           onChange={(option: any) => setSizeSelect(option.value)}
         />
-      </Container>
+      </div>
 
-      <Container className={`flex justify-center`}>
+      <div className={`container filled flex justify-center`}>
         <RadixDialog
           title={"Hello World"}
           trigger={<Button icon={<EyeOpenIcon />}>Open Dialog</Button>}
         >
           <h1>bruh</h1>
         </RadixDialog>
-      </Container>
+      </div>
 
-      {/* <Container>
-        <AlignItems justifyContent={"center"}>
+      <div className={`container filled flex justify-center`}>
+        <Align className={`justify-center`}>
           <CategoryInput state={categoryInput} setState={setCategoryInput} />
-        </AlignItems>
-      </Container> */}
+        </Ali>
+      </div>
     </>
   );
 };

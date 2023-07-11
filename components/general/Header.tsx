@@ -12,7 +12,9 @@ import {
   HomeIcon,
   IdCardIcon,
   InfoCircledIcon,
+  MagnifyingGlassIcon,
   PersonIcon,
+  PlusIcon,
 } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -46,39 +48,41 @@ const Header = () => {
       </Align>
       <Align className={`gap-2`}>
         {user ? (
-          <button
-            className={`
-              cursor-pointer p-0.5 pr-3 rounded-full
-              bg-gradient-to-b
-              from-zinc-100/50 
-              to-zinc-200 
-              dark:from-zinc-800 
-              dark:to-zinc-800/50 
-              border
-              border-zinc-200 
-              dark:border-zinc-800 
-            `}
-            onClick={() => {
-              router.push("/profile");
-            }}
-          >
-            <Align className={`gap-2`}>
-              <Image
-                width={"26"}
-                height={"26"}
-                alt={"profile image"}
-                src={user.photoURL}
-                className={`
-                  cursor-pointer
-                  rounded-full 
-                  border
-                  border-zinc-200 
-                  dark:border-zinc-800 
-                `}
-              />
-              <h6 className={`m-0`}>{user.displayName.split(" ")[0]}</h6>
-            </Align>
-          </button>
+          <>
+            <button
+              // bg-gradient-to-b
+              // from-zinc-100/50
+              // to-zinc-200
+              // dark:from-zinc-800
+              // dark:to-zinc-800/50
+              className={`
+                cursor-pointer p-0.5 pr-3 rounded-full
+                border
+                border-zinc-300/70 
+                dark:border-zinc-700/70 
+              `}
+              onClick={() => {
+                router.push("/profile");
+              }}
+            >
+              <Align className={`gap-2`}>
+                <Image
+                  width={"26"}
+                  height={"26"}
+                  alt={"profile image"}
+                  src={user.photoURL}
+                  className={`
+                    cursor-pointer
+                    rounded-full 
+                    border
+                    border-zinc-200 
+                    dark:border-zinc-800 
+                  `}
+                />
+                <h6 className={`m-0`}>{user.displayName.split(" ")[0]}</h6>
+              </Align>
+            </button>
+          </>
         ) : (
           <RadixDialog
             title={"ログイン"}
@@ -101,10 +105,11 @@ const Header = () => {
             <Button
               size={"small"}
               intent={"transparent"}
-              icon={<HamburgerMenuIcon />}
+              icon={<MagnifyingGlassIcon />}
             />
           }
         >
+          {/* <input type="text" placeholder="キーワードで場所を探す"></input> */}
           <RadixDialog.Button onClick={() => router.push("/")}>
             <HomeIcon />
             メイン

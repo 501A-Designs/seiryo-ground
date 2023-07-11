@@ -1,14 +1,16 @@
 import React from "react";
 import { VariantProps, cva } from "cva";
 
-const typeBadgeColors = cva(["rounded-full", "bg-gradient-to-r"], {
+export const typeColor = {
+  blue: ["from-blue-400", "to-blue-500"],
+  green: ["from-green-400", "to-green-500"],
+  orange: ["from-orange-400", "to-orange-500"],
+  purple: ["from-purple-400", "to-purple-500"],
+};
+
+const typeBadge = cva(["rounded-full", "bg-gradient-to-r"], {
   variants: {
-    type: {
-      blue: ["from-seiryo-blue-start", "to-seiryo-blue-end"],
-      green: ["from-seiryo-green-start", "to-seiryo-green-end"],
-      orange: ["from-seiryo-orange-start", "to-seiryo-orange-end"],
-      purple: ["from-seiryo-purple-start", "to-seiryo-purple-end"],
-    },
+    type: typeColor,
     size: {
       small: ["w-[10px]", "h-[10px]"],
       large: ["w-[20px]", "h-[20px]"],
@@ -18,10 +20,10 @@ const typeBadgeColors = cva(["rounded-full", "bg-gradient-to-r"], {
 
 interface TypeBadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof typeBadgeColors> {}
+    VariantProps<typeof typeBadge> {}
 
 const TypeBadge: React.FC<TypeBadgeProps> = ({ type, size }) => (
-  <div className={typeBadgeColors({ type, size })} />
+  <div className={typeBadge({ type, size })} />
 );
 
 export default TypeBadge;

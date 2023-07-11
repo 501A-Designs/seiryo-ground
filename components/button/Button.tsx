@@ -25,7 +25,7 @@ const button = cva(
         small: ["p-2", "min-w-35", "min-h-35", "text-base"],
       },
       intent: {
-        primary: ["skeumorphic"],
+        primary: ["skeumorphic-responsive"],
         secondary: [
           "border",
           "border-zinc-300",
