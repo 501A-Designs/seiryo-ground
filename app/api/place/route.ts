@@ -4,19 +4,21 @@ const prisma = new PrismaClient();
 
 import { NextResponse } from "next/server";
 
-export interface PlaceForm {
+export interface PlaceTypes {
   title: string;
   description: string;
-  // iso         String
+  iso: number;
   website: string;
-  category: string;
+  category: "blue" | "green" | "orange" | "purple";
 
   restroom: boolean;
   parking: boolean;
 
-  cash: boolean;
-  credit: boolean;
-  digital: boolean;
+  payment: {
+    cash: boolean;
+    credit: boolean;
+    digital: boolean;
+  };
 
   // created  DateTime @default(now())
   // modified DateTime @updatedAt
@@ -27,20 +29,11 @@ export interface PlaceForm {
 }
 
 export async function POST(request: Request) {
-  const data: PlaceForm = await request.json();
+  const data: PlaceTypes = await request.json();
   console.log("data: ", data);
 
-  const {
-    title,
-    description,
-    website,
-    category,
-    restroom,
-    parking,
-    cash,
-    credit,
-    digital,
-  } = data;
+  const { title, description, website, category, restroom, parking, payment } =
+    data;
 
   return NextResponse.json({
     title,
@@ -49,9 +42,7 @@ export async function POST(request: Request) {
     category,
     restroom,
     parking,
-    cash,
-    credit,
-    digital,
+    payment,
   });
 }
 

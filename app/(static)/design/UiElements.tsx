@@ -59,8 +59,8 @@ const UiElements = () => {
 
       <div className={`container filled flex justify-center`}>
         <Align className={`justify-center`}>
-          <CategoryInput state={categoryInput} setState={setCategoryInput} />
-        </Ali>
+          {/* <CategoryInput state={categoryInput} setState={setCategoryInput} /> */}
+        </Align>
       </div>
     </>
   );

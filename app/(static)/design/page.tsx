@@ -34,7 +34,6 @@ const Page = () => {
         フォントにも拘りました。長く悩んだ結果、最終的には「Clash
         Display」というフォントを使用することにしました。これに加え、pタグは他のテキストより薄い灰色にし、ヘッダータグは全て黒に設定しました。これに加え、フォントウェイトもヘッダー以外全て通常400にし、ヘッダーは少し太字になる500にしました。
       </p>
-      <input type="text" placeholder="bruh"></input>
       <Table
         caption={"A Table of Headings"}
         head={

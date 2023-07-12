@@ -19,7 +19,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
     <body
       className={`
         ${archivo.className}
-        bg-zinc-100
+        bg-zinc-50
         dark:bg-zinc-950
       `}
     >

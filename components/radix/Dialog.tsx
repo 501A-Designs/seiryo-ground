@@ -1,6 +1,6 @@
 import React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Cross2Icon } from "@radix-ui/react-icons";
+import { Cross1Icon } from "@radix-ui/react-icons";
 import Align from "../../lib/alignment/Align";
 import Button from "../button/Button";
 import useSound from "use-sound";
@@ -126,7 +126,7 @@ const RadixDialog: RadixDialogProps = ({
           </Dialog.Title>
           <Dialog.Close asChild>
             <Button
-              icon={<Cross2Icon />}
+              icon={<Cross1Icon />}
               intent={"transparent"}
               size={"small"}
             />

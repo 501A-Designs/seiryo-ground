@@ -1,5 +1,3 @@
-const { blackA, gray, grayA } = require("@radix-ui/colors");
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -31,13 +29,13 @@ module.exports = {
         "seiryo-purple-end": "#7856FF",
       },
       boxShadow: {
-        shadow1: `0px 0px 20px ${grayA.grayA5}`,
-        shadow2: `0px 0px 35px ${grayA.grayA5}`,
-        shadow3: `0px 0px 35px ${grayA.grayA6}`,
+        shadow1: `0px 0px 20px hsla(0, 0%, 0%, 0.090)`,
+        shadow2: `0px 0px 35px hsla(0, 0%, 0%, 0.090)`,
+        shadow3: `0px 0px 35px hsla(0, 0%, 0%, 0.114)`,
       },
       animation: {
         "spin-scale": "spin-scale 0.3s ease",
-        "stretch-bounce": "stretch-bounce 0.3s ease",
+        "stretch-bounce": "stretch-bounce 0.7s ease",
         "pop-in-dialog": "pop-in-dialog 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
         "pop-out-dialog": "pop-out-dialog 500ms",
         "scale-blur": "scale-blur 1s",
@@ -68,8 +66,8 @@ module.exports = {
         },
 
         "stretch-bounce": {
-          "0%": { width: "0%" },
-          "50%": { width: "150%" },
+          "0%": { width: "50%" },
+          "30%": { width: "150%" },
           "100%": { width: "100%" },
         },
         scale: {

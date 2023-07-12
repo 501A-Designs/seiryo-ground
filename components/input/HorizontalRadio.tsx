@@ -3,12 +3,13 @@ import useSound from "use-sound";
 import Align from "../../lib/alignment/Align";
 import { VariantProps, cva } from "cva";
 
-const div = cva(["rounded-full", "select-none", "cursor-pointer"], {
+const div = cva(["rounded-lg", "select-none", "cursor-pointer", "border"], {
   variants: {
     checked: {
       true: [
-        "skeumorphic",
-        // "grow",
+        "text-black",
+        "dark:text-white",
+        "filled",
         "w-full",
         "transition",
         "duration-150",
@@ -16,10 +17,15 @@ const div = cva(["rounded-full", "select-none", "cursor-pointer"], {
         "animate-stretch-bounce",
       ],
       false: [
-        "text-zinc-500 ",
-        "dark:hover:bg-zinc-800",
+        "border-transparent",
+        "bg-transparent",
+        "text-zinc-400",
+        "dark:text-zinc-500",
+        "hover:text-zinc-500",
+        "dark:hover:text-zinc-300",
+        "hover:bg-zinc-200/70",
+        "dark:hover:bg-zinc-800/70",
         "w-full",
-        // "grow-0",
         "transition",
         "duration-150",
         "ease-out",
@@ -38,17 +44,22 @@ const RadioItem: React.FC<RadioItemProps> = ({ checked, ...props }) => (
   <div className={div({ checked })} {...props} />
 );
 
+export interface HorizontalRadioOptionType {
+  label: string;
+  value: string;
+}
+
 interface RadioProps extends VariantProps<typeof div> {
-  options: object[];
+  options: HorizontalRadioOptionType[];
   onChange: (selectedOption: string) => void;
 }
 
 const HorizontalRadio: React.FC<RadioProps> = ({ options, onChange }) => {
-  const [select1] = useSound("/sound/select-1-sg.mp3", { playbackRate: 1.1 });
+  const [select1] = useSound("/sound/select-1-sg.mp3");
   const [selectedOption, setSelectedOption] = useState<string>("");
 
   return (
-    <Align className={`justify-between gap-1`}>
+    <Align className={`justify-between gap-0.5`}>
       {/* <Align className={`justify-center`}>
         {options.map((option: any, i) => (
           <>
@@ -81,7 +92,7 @@ const HorizontalRadio: React.FC<RadioProps> = ({ options, onChange }) => {
             className={`
               flex items-center flex-row
               justify-center max-h-5
-              px-4 py-4 cursor-pointer
+              px-4 py-4 cursor-pointer text-xs
             `}
           >
             {option.label}

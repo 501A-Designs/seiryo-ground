@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { cva, VariantProps } from "cva";
 import useSound from "use-sound";
 
@@ -22,7 +21,7 @@ const button = cva(
     variants: {
       size: {
         medium: ["px-4", "py-1.5", "text-xs"],
-        small: ["p-2", "min-w-35", "min-h-35", "text-base"],
+        small: ["p-1.5", "min-w-35", "min-h-35", "text-base"],
       },
       intent: {
         primary: ["skeumorphic-responsive"],
@@ -75,26 +74,16 @@ const button = cva(
 interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof button> {
-  // overRideSound?: any;
-  // backTapSound?: any;
-  onClick?: any;
   icon: JSX.Element;
 }
 
-// animation: `${popOutNoBlur} 0.3s`,
 const Button: React.FC<ButtonProps> = ({ intent, size, ...props }) => {
-  // const [tap1] = useSound("/sound/tap-1-sg.mp3", { playbackRate: 1.1 });
   const [tap2] = useSound("/sound/tap-2-sg.mp3");
 
   return (
     <button
       className={button({ intent, size })}
-      onMouseDown={
-        () => tap2()
-        // props.overRideSound
-        //   ? props.overRideSound
-        //   : () => (props.backTapSound ? tap2() : tap1())
-      }
+      onMouseDown={() => tap2()}
       {...props}
     >
       {props.icon && props.icon}

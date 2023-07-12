@@ -1,10 +1,3 @@
-export type Size = "s" | "m" | "l";
-export type Cost = "g" | "c" | "e";
-
-export type PlacePaymentType = {
-  [key: string]: boolean;
-};
-
 export type User = {
   displayName: string;
   photoURL: string;

@@ -2,15 +2,14 @@ import React from "react";
 import useSound from "use-sound";
 import { cva } from "cva";
 import { typeColor } from "../general/TypeBadge";
-import { PlaceForm } from "../../app/api/place/route";
+import { PlaceTypes } from "../../app/api/place/route";
 
-type category = "green" | "blue" | "orange" | "purple";
-const categories: category[] = ["green", "blue", "orange", "purple"];
-
-// ANIMATION
-// const shiftText = keyframes({
-
-// });
+const categories: PlaceTypes["category"][] = [
+  "green",
+  "blue",
+  "orange",
+  "purple",
+];
 
 const categoryInputItem = cva(
   [
@@ -35,11 +34,11 @@ const categoryInputItem = cva(
           "border-transparent",
           "bg-transparent",
           "text-zinc-400",
-          "hover:bg-zinc-200/70",
-          "hover:text-zinc-500",
           "dark:text-zinc-500",
-          "dark:hover:bg-zinc-800/70",
+          "hover:text-zinc-500",
           "dark:hover:text-zinc-300",
+          "hover:bg-zinc-200/70",
+          "dark:hover:bg-zinc-800/70",
         ],
       },
     },
@@ -69,8 +68,8 @@ const typeBadge = cva(
 );
 
 interface CategoryInputProps {
-  place: PlaceForm;
-  state: category | string;
+  place: PlaceTypes;
+  state: PlaceTypes["category"];
   setState: any;
 }
 
