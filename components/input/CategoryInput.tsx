@@ -4,12 +4,7 @@ import { cva } from "cva";
 import { typeColor } from "../general/TypeBadge";
 import { PlaceTypes } from "../../app/api/place/route";
 
-const categories: PlaceTypes["category"][] = [
-  "green",
-  "blue",
-  "orange",
-  "purple",
-];
+const categories: PlaceTypes["category"][] = ["g", "b", "o", "p"];
 
 const categoryInputItem = cva(
   [
@@ -29,17 +24,8 @@ const categoryInputItem = cva(
   {
     variants: {
       checked: {
-        true: ["text-black", "dark:text-white", "filled"],
-        false: [
-          "border-transparent",
-          "bg-transparent",
-          "text-zinc-400",
-          "dark:text-zinc-500",
-          "hover:text-zinc-500",
-          "dark:hover:text-zinc-300",
-          "hover:bg-zinc-200/70",
-          "dark:hover:bg-zinc-800/70",
-        ],
+        true: ["text-responsive-full", "filled"],
+        false: ["border-transparent", "bg-transparent", "hover-filled"],
       },
     },
   }
@@ -111,10 +97,10 @@ const CategoryInput: React.FC<CategoryInputProps> = ({
             })}
           />
           <span className={state === item ? "animate-bounce-left" : ""}>
-            {item === "green" && "森。山。公園等"}
-            {item === "blue" && "海。池。川等"}
-            {item === "orange" && "建物。カフェ等"}
-            {item === "purple" && "その他"}
+            {item === "g" && "森。山。公園等"}
+            {item === "b" && "海。池。川等"}
+            {item === "o" && "建物。カフェ等"}
+            {item === "p" && "その他"}
           </span>
         </label>
       ))}

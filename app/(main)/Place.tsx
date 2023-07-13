@@ -1,21 +1,32 @@
+"use client";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { HeartIcon, TargetIcon } from "@radix-ui/react-icons";
 import Align from "../../lib/alignment/Align";
-import TypeBadge from "./TypeBadge";
-import { prefectureOptions } from "../button/label";
-import { PlaceTypes } from "../../app/api/place/route";
+import TypeBadge from "../../components/general/TypeBadge";
+import { prefectureOptions } from "../../components/button/label";
+import { PlaceTypes } from "../api/place/route";
+import moment from "moment";
+import Button from "../../components/button/Button";
+import { Link1Icon } from "@radix-ui/react-icons";
 
-interface PlaceProps extends PlaceTypes {
+export interface PlaceDataProps extends PlaceTypes {
   id: string;
 }
 
-const Place: React.FC<PlaceProps> = ({
+const Place: React.FC<PlaceDataProps> = ({
   id,
   title,
   description,
   category,
   iso,
+  website,
+  restroom,
+  parking,
+  cash,
+  credit,
+  digital,
+  created,
+  modified,
 }) => {
   const router = useRouter();
 
@@ -24,7 +35,7 @@ const Place: React.FC<PlaceProps> = ({
       key={id}
       className={`
         cursor-pointer h-fit
-        p-4 rounded-xl 
+        p-4 rounded-lg 
         transition-all duration-300 
         border
         border-zinc-300/60
@@ -37,13 +48,26 @@ const Place: React.FC<PlaceProps> = ({
       `}
       onClick={() => router.push(`/place/${id}/`)}
     >
-      <Align className={`gap-2`}>
-        <TypeBadge size={"small"} type={category} />
-        <h5 className={`m-0`}>{title}</h5>
+      <Align className={`justify-between`}>
+        <Align className={`gap-2`}>
+          <TypeBadge size={"small"} category={category} />
+          <h5 className={`m-0`}>{title}</h5>
+        </Align>
+        {website && (
+          <Button
+            icon={<Link1Icon />}
+            intent={"transparent"}
+            size={"small"}
+            onClick={() => router.push(website)}
+          />
+        )}
       </Align>
       <p>{description}</p>
       <Align className={`justify-between`}>
         <Align>
+          <time className={`text-responsive-500 text-xs`}>
+            {moment(created).format("LL")}
+          </time>
           {/* {overallScore > 0 && (
             <>
               <TargetIcon />

@@ -19,7 +19,12 @@ const checkboxItem = cva(
     variants: {
       checked: {
         true: ["filled"],
-        false: ["border", "border-transparent", "bg-transparent"],
+        false: [
+          "border",
+          "border-transparent",
+          "bg-transparent",
+          "hover-filled",
+        ],
       },
     },
   }
@@ -72,8 +77,8 @@ const Checkbox: React.FC<CheckboxProps> = ({ options, onChange, labels }) => {
             className={`
               ${
                 selectedOptions[option]
-                  ? `animate-scale text-black dark:text-white`
-                  : `text-zinc-300 dark:text-zinc-700`
+                  ? `animate-scale text-responsive-full`
+                  : `text-responsive-400`
               }
             `}
           >

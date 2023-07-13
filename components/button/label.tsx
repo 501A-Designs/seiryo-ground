@@ -1,4 +1,3 @@
-import React from "react";
 import { CheckboxLabelType } from "../input/Checkbox";
 import { FilterSelectOptionType } from "../input/FilterSelect";
 // import { Category, Cost, Size } from "../../util/types";

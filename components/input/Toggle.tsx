@@ -18,22 +18,12 @@ const button = cva(
       state: {
         true: [
           "filled",
-          "text-black",
-          "dark:text-white",
+          "text-responsive-full",
           "h-8",
           "w-8",
           "animate-spin-scale",
         ],
-        false: [
-          "border-none",
-          "bg-transparent",
-          "text-zinc-400",
-          "dark:text-zinc-500",
-          "hover:bg-zinc-200/70",
-          "dark:hover:bg-zinc-800/70",
-          "h-6",
-          "w-6",
-        ],
+        false: ["border-none", "bg-transparent", "hover-filled", "h-6", "w-6"],
       },
     },
   }

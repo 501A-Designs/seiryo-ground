@@ -7,9 +7,8 @@ const div = cva(["rounded-lg", "select-none", "cursor-pointer", "border"], {
   variants: {
     checked: {
       true: [
-        "text-black",
-        "dark:text-white",
         "filled",
+        "text-responsive-full",
         "w-full",
         "transition",
         "duration-150",
@@ -19,12 +18,7 @@ const div = cva(["rounded-lg", "select-none", "cursor-pointer", "border"], {
       false: [
         "border-transparent",
         "bg-transparent",
-        "text-zinc-400",
-        "dark:text-zinc-500",
-        "hover:text-zinc-500",
-        "dark:hover:text-zinc-300",
-        "hover:bg-zinc-200/70",
-        "dark:hover:bg-zinc-800/70",
+        "hover-filled",
         "w-full",
         "transition",
         "duration-150",
@@ -56,7 +50,9 @@ interface RadioProps extends VariantProps<typeof div> {
 
 const HorizontalRadio: React.FC<RadioProps> = ({ options, onChange }) => {
   const [select1] = useSound("/sound/select-1-sg.mp3");
-  const [selectedOption, setSelectedOption] = useState<string>("");
+  const [selectedOption, setSelectedOption] = useState<string>(
+    options[0].value
+  );
 
   return (
     <Align className={`justify-between gap-0.5`}>

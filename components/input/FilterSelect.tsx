@@ -81,17 +81,11 @@ const FilterSelect: React.FC<FilterSelectProps> = ({
                 w-full p-1 text-xs rounded-lg
                 ${
                   state == option.value
-                    ? `filled text-black dark:text-white`
+                    ? `filled text-responsive-full`
                     : `
-                      text-zinc-400
-                      dark:text-zinc-500
-                      border
-                      border-transparent
-                      bg-transparent
-                      hover:text-zinc-500
-                      dark:hover:text-zinc-300
-                      hover:bg-zinc-200/70
-                      dark:hover:bg-zinc-800/70
+                    border
+                    border-transparent
+                    bg-transparent hover-filled
                     `
                 }
               `}

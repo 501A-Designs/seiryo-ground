@@ -90,8 +90,23 @@ hr {
 }
 
 @layer components {
+  /* TEXT */
+  .text-responsive-full {
+    @apply text-black dark:text-white;
+  }
+  .text-responsive-300 {
+    @apply text-zinc-300 dark:text-zinc-700;
+  }
+  .text-responsive-400 {
+    @apply text-zinc-400 dark:text-zinc-500;
+  }
+  .text-responsive-500 {
+    @apply text-zinc-500 dark:text-zinc-300;
+  }
+
+  /* INPUT */
   .input-text-outline {
-    @apply text-xs text-zinc-950 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-600 
+    @apply text-xs text-responsive-full placeholder:text-zinc-400 dark:placeholder:text-zinc-600 
     px-3 py-2.5 rounded-lg 
     border 
     border-zinc-200
@@ -141,6 +156,11 @@ hr {
     shadow-md;
   }
 
+  .hover-filled {
+    @apply hover:bg-zinc-200/70
+    dark:hover:bg-zinc-800/70 text-responsive-400
+    hover:text-responsive-500;
+  }
   .filled {
     @apply border
     border-zinc-200
