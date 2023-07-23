@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { createClient } from "contentful";
 import NewsThumbnail from "../../lib/component/NewsThumbNail";
 import Button from "../../lib/component/button/Button";
-import AlignItems from "../../lib/alignment/Align";
+import AlignItems from "../components/general/Align";
 import MainBody from "../../lib/alignment/Margin";
 import Grid from "../../lib/alignment/Grid";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";

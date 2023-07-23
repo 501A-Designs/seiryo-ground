@@ -1,12 +1,12 @@
 import { useRouter } from "next/router";
 import React from "react";
 import { styled } from "../../stitches.config";
-import AlignItems from "../alignment/Align";
+import AlignItems from "../../app/components/general/Align";
 import Grid from "../alignment/Grid";
 import Button from "../component/button/Button";
 import ProfileImage from "./ProfileImage";
 import { useAuthState, useSignInWithGoogle } from "react-firebase-hooks/auth";
-import { auth } from "../../firebase";
+import { auth } from "../../firebase/firebase";
 import { gradient } from "../ux/keyframes";
 import { EnterIcon } from "@radix-ui/react-icons";
 

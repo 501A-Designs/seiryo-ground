@@ -1,17 +1,13 @@
 import "./globals.css";
 import { Archivo } from "next/font/google";
 import Link from "next/link";
-import Align from "../lib/alignment/Align";
-import RadixDialog from "../components/radix/Dialog";
-import Button from "../components/button/Button";
-import { EnterIcon } from "@radix-ui/react-icons";
-import Header from "../components/general/Header";
+import Header from "./components/general/Header";
 
 const archivo = Archivo({ subsets: ["latin"] });
 
 export const metadata = {
   title: "SEIRYO GROUND",
-  description: "Find places where you can relax.",
+  description: "Find places where you can truly  relax.",
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => (
@@ -30,13 +26,13 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
           px-10 py-5
           grid grid-cols-4
           border-t 
-          border-t-zinc-300
+          border-t-zinc-200
           dark:border-t-zinc-800
           bg-gradient-to-b
-          from-zinc-200
+          from-zinc-100
           to-zinc-50
           dark:from-zinc-900
-          dark:to-zinc-950
+          dark:to-zinc-900/50
         `}
       >
         <div>

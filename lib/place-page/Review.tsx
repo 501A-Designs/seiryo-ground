@@ -1,6 +1,6 @@
 import React from "react";
 import { styled } from "../../stitches.config";
-import AlignItems from "../alignment/Align";
+import AlignItems from "../../app/components/general/Align";
 import Grid from "../alignment/Grid";
 
 const ReviewStyled = styled("div", {

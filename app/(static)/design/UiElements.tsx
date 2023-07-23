@@ -1,11 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import Toggle from "../../../components/input/Toggle";
-import HorizontalRadio from "../../../components/input/HorizontalRadio";
-import Button from "../../../components/button/Button";
-import RadixDialog from "../../../components/radix/Dialog";
 import { EyeOpenIcon } from "@radix-ui/react-icons";
-import Align from "../../../lib/alignment/Align";
+import Align from "../../components/general/Align";
+import Toggle from "../../components/input/Toggle";
+import HorizontalRadio from "../../components/input/HorizontalRadio";
+import RadixDialog from "../../components/radix/Dialog";
+import Button from "../../components/button/Button";
 
 const UiElements = () => {
   const [binaryToggle, setBinaryToggle] = useState(true);

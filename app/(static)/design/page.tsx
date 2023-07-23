@@ -1,4 +1,4 @@
-import Table from "../../../components/general/Table";
+import Table from "../../components/general/Table";
 import UiElements from "./UiElements";
 
 const Page = () => {

@@ -24,11 +24,12 @@ datasource db {
 }
 
 model User {
-  id      String   @id @unique
-  created DateTime @default(now())
+  id      Int      @id @default(autoincrement())
+  uid     String   @unique
+  level   Int      @default(1)
+  name    String   @db.TinyText
   reviews Review[]
   places  Place[]
-  // likes   Place[]
 }
 
 model Place {
@@ -50,8 +51,10 @@ model Place {
   modified DateTime @updatedAt
   reviews  Review[]
 
-  authorId String @unique
-  user     User   @relation(fields: [authorId], references: [id])
+  authorId Int
+  user     User @relation(fields: [authorId], references: [id])
+
+  @@index([authorId])
 }
 
 model Review {
@@ -60,11 +63,12 @@ model Review {
   description String   @db.LongText
   created     DateTime @default(now())
   modified    DateTime @updatedAt
-  authorId    String   @unique
+  authorId    Int
   user        User     @relation(fields: [authorId], references: [id])
 
   placeId Int?
   place   Place? @relation(fields: [placeId], references: [id])
 
   @@index([placeId])
+  @@index([authorId])
 }

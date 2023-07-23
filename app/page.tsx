@@ -1,10 +1,10 @@
-import Align from "../lib/alignment/Align";
-import { useState } from "react";
-import HorizontalRadio, {
-  HorizontalRadioOptionType,
-} from "../components/input/HorizontalRadio";
-import PlaceContainer from "./(main)/PlaceContainer";
-import CreatePlace from "./(main)/CreatePlace";
+import Align from "./components/general/Align";
+import getAllPlaces from "./util/getAllPlaces";
+import PlaceMasonryGrid from "./components/grid/PlaceMasonryGrid";
+// import HorizontalRadio, {
+//   HorizontalRadioOptionType,
+// } from "../components/input/HorizontalRadio";
+// import Explore from "./components/explore/explore";
 
 // const readDB = async () => {
 //   try {
@@ -21,39 +21,28 @@ import CreatePlace from "./(main)/CreatePlace";
 //   }
 // };
 
-const Page = () => {
+export default async function MainPage() {
   // const [postType, setPostType] = useState("place");
+  // const postTypeOptions: HorizontalRadioOptionType[] = [
+  //   {
+  //     label: "空間",
+  //     value: "place",
+  //   },
+  //   {
+  //     label: "意見",
+  //     value: "review",
+  //   },
+  //   {
+  //     label: "探す",
+  //     value: "search",
+  //   },
+  // ];
 
-  const postTypeOptions: HorizontalRadioOptionType[] = [
-    {
-      label: "空間",
-      value: "place",
-    },
-    {
-      label: "意見",
-      value: "review",
-    },
-    {
-      label: "探す",
-      value: "search",
-    },
-  ];
+  const data = await getAllPlaces();
 
   return (
-    <div className={`px-10`}>
-      <Align className={`justify-between my-4`}>
-        <h1>2023.7.12</h1>
-        <div className={`w-full max-w-lg`}>
-          {/* <HorizontalRadio
-            options={postTypeOptions}
-            onChange={(option: any) => setPostType(option.value)}
-          /> */}
-        </div>
-        <CreatePlace />
-      </Align>
-      <PlaceContainer />
+    <div className={`px-10 py-5`}>
+      <PlaceMasonryGrid data={data} />
     </div>
   );
-};
-
-export default Page;
+}

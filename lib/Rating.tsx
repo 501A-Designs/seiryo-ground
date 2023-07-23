@@ -1,6 +1,6 @@
 import React from "react";
 import { styled } from "../stitches.config";
-import AlignItems from "./alignment/Align";
+import AlignItems from "../app/components/general/Align";
 
 const RatingStyled = styled("div", {
   color: "$gray12",
