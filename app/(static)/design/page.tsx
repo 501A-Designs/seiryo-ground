@@ -1,7 +1,7 @@
 import Table from "../../components/general/Table";
 import UiElements from "./UiElements";
 
-const Page = () => {
+export default function DesignPage() {
   // const { t } = useLocale();
   // const tPayment = t.INPUT.PAYMENT;
   // const tCategories = t.INPUT.CATEGORIES;
@@ -34,63 +34,61 @@ const Page = () => {
         フォントにも拘りました。長く悩んだ結果、最終的には「Clash
         Display」というフォントを使用することにしました。これに加え、pタグは他のテキストより薄い灰色にし、ヘッダータグは全て黒に設定しました。これに加え、フォントウェイトもヘッダー以外全て通常400にし、ヘッダーは少し太字になる500にしました。
       </p>
-      <Table
-        caption={"A Table of Headings"}
-        head={
+      <Table caption={"A Table of Headings"}>
+        <thead>
           <tr>
             <th>Descriptor</th>
             <th>Sample Text</th>
           </tr>
-        }
-      >
-        <tr>
-          <td>Header 1</td>
-          <td>
-            <h1>SEIRYO GROUND</h1>
-          </td>
-        </tr>
-        <tr>
-          <td>Header 2</td>
-          <td>
-            <h2>SEIRYO GROUND</h2>
-          </td>
-        </tr>
-        <tr>
-          <td>Header 3</td>
-          <td>
-            <h3>SEIRYO GROUND</h3>
-          </td>
-        </tr>
-        <tr>
-          <td>Header 4</td>
-          <td>
-            <h4>SEIRYO GROUND</h4>
-          </td>
-        </tr>
-        <tr>
-          <td>Header 5</td>
-          <td>
-            <h5>SEIRYO GROUND</h5>
-          </td>
-        </tr>
-        <tr>
-          <td>Header 6</td>
-          <td>
-            <h6>SEIRYO GROUND</h6>
-          </td>
-        </tr>
-        <tr>
-          <td>Paragraph</td>
-          <td>
-            <p>
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cum,
-              omnis.
-            </p>
-          </td>
-        </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Header 1</td>
+            <td>
+              <h1>SEIRYO GROUND</h1>
+            </td>
+          </tr>
+          <tr>
+            <td>Header 2</td>
+            <td>
+              <h2>SEIRYO GROUND</h2>
+            </td>
+          </tr>
+          <tr>
+            <td>Header 3</td>
+            <td>
+              <h3>SEIRYO GROUND</h3>
+            </td>
+          </tr>
+          <tr>
+            <td>Header 4</td>
+            <td>
+              <h4>SEIRYO GROUND</h4>
+            </td>
+          </tr>
+          <tr>
+            <td>Header 5</td>
+            <td>
+              <h5>SEIRYO GROUND</h5>
+            </td>
+          </tr>
+          <tr>
+            <td>Header 6</td>
+            <td>
+              <h6>SEIRYO GROUND</h6>
+            </td>
+          </tr>
+          <tr>
+            <td>Paragraph</td>
+            <td>
+              <p>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cum,
+                omnis.
+              </p>
+            </td>
+          </tr>
+        </tbody>
       </Table>
     </>
   );
-};
-
-export default Page;
+}

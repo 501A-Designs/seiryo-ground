@@ -1,11 +1,5 @@
 import { PlaceDataProps } from "../components/general/Place";
 
-export type UserDataProps = {
-  id: string;
-  reviews: any[];
-  places: PlaceDataProps[];
-};
-
 export default async function getUser(uid: string) {
   try {
     const res = await fetch(`http://localhost:3000/api/user?uid=${uid}`);

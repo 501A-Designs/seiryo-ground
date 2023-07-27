@@ -12,16 +12,18 @@ const PlacePageLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <section className={`px-10`}>
       <div className={`pt-5`}>{children}</div>
-      <Align className={`gap-4 bottom-0 absolute`}>
-        <RelatedLink href={"/place"}>
-          <MagnifyingGlassIcon />
-          もっと探す
-        </RelatedLink>
-        <RelatedLink href={"/review"}>
-          <MagnifyingGlassIcon />
-          レビューから探す
-        </RelatedLink>
-      </Align>
+      <p>
+        <Align className={`gap-4 bottom-0 absolute`}>
+          <RelatedLink href={"/place"}>
+            <MagnifyingGlassIcon />
+            もっと探す
+          </RelatedLink>
+          <RelatedLink href={"/review"}>
+            <MagnifyingGlassIcon />
+            レビューから探す
+          </RelatedLink>
+        </Align>
+      </p>
     </section>
   );
 };

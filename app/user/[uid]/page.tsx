@@ -1,15 +1,19 @@
 import React from "react";
-import Id from "./id";
 import getUser from "../../util/getUser";
 import PlaceMasonryGrid from "../../components/grid/PlaceMasonryGrid";
+import UserCard, { UserDataTypes } from "./UserCard";
 
-export default async function Profile({ params }: { params: { uid: string } }) {
-  const userData = await getUser(params.uid);
-  const { reviews, places } = userData;
+export default async function UserPage({
+  params,
+}: {
+  params: { uid: string };
+}) {
+  const userData: UserDataTypes = await getUser(params.uid);
+  const { name, reviews, places } = userData;
   return (
     <div className={`px-10 py-5`}>
       <h1>Profile</h1>
-      <Id data={userData} />
+      <UserCard data={userData} />
 
       {reviews.length != 0 && (
         <section>

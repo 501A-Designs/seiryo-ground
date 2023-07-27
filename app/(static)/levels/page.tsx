@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import End from "../../../lib/End";
 import { CheckIcon } from "@radix-ui/react-icons";
-import Table from "../../../components/general/Table";
+import Table from "../../components/general/Table";
 
 const Page = () => {
   return (
@@ -18,48 +18,47 @@ const Page = () => {
       </p>
       <h3>Milestones</h3>
       <p>カードがアップグレードされるときのマイルストーン：</p>
-      <Table
-        caption={"レベル別機能使用権限"}
-        head={
+      <Table caption={"レベル別機能使用権限"}>
+        <thead>
           <tr>
             <th>Level</th>
             <th>Color</th>
             <th>Description</th>
           </tr>
-        }
-      >
-        <tr>
-          <td>1</td>
-          <td>緑</td>
-          <td>ログインした全てのユーザー様</td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>青</td>
-          <td>新しい場所を2ヶ所追加し、レビューを2件追加したユーザー様</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>柑</td>
-          <td>新しい場所を5ヶ所追加し、レビューを5件追加したユーザー様</td>
-        </tr>
-        <tr>
-          <td>4</td>
-          <td>赤</td>
-          <td>新しい場所を10ヶ所追加し、レビューを10件追加したユーザー様</td>
-        </tr>
-        <tr>
-          <td>5</td>
-          <td>黒</td>
-          <td>
-            新しい場所を20ヶ所以上追加し、レビューを20件追加したユーザー様
-          </td>
-        </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>緑</td>
+            <td>ログインした全てのユーザー様</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>青</td>
+            <td>新しい場所を2ヶ所追加し、レビューを2件追加したユーザー様</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>柑</td>
+            <td>新しい場所を5ヶ所追加し、レビューを5件追加したユーザー様</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>赤</td>
+            <td>新しい場所を10ヶ所追加し、レビューを10件追加したユーザー様</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>黒</td>
+            <td>
+              新しい場所を20ヶ所以上追加し、レビューを20件追加したユーザー様
+            </td>
+          </tr>
+        </tbody>
       </Table>
       <h3>Perks</h3>
-      <Table
-        caption={"レベル別機能使用権限"}
-        head={
+      <Table caption={"レベル別機能使用権限"}>
+        <thead>
           <tr>
             <th>Levels</th>
             <th>1</th>
@@ -68,148 +67,149 @@ const Page = () => {
             <th>4</th>
             <th>5</th>
           </tr>
-        }
-      >
-        <tr>
-          <td>場所の追加・レビューを作成</td>
-          <td>
-            <CheckIcon />
-          </td>
-          <td>
-            <CheckIcon />
-          </td>
-          <td>
-            <CheckIcon />
-          </td>
-          <td>
-            <CheckIcon />
-          </td>
-          <td>
-            <CheckIcon />
-          </td>
-        </tr>
-        <tr>
-          <td>レビューの著者を表示</td>
-          <td></td>
-          <td>
-            <CheckIcon />
-          </td>
-          <td>
-            <CheckIcon />
-          </td>
-          <td>
-            <CheckIcon />
-          </td>
-          <td>
-            <CheckIcon />
-          </td>
-        </tr>
-        <tr>
-          <td>公式サイトを編集</td>
-          <td></td>
-          <td>
-            <CheckIcon />
-          </td>
-          <td>
-            <CheckIcon />
-          </td>
-          <td>
-            <CheckIcon />
-          </td>
-          <td>
-            <CheckIcon />
-          </td>
-        </tr>
-        <tr>
-          <td>トイレ有無を編集</td>
-          <td></td>
-          <td>
-            <CheckIcon />
-          </td>
-          <td>
-            <CheckIcon />
-          </td>
-          <td>
-            <CheckIcon />
-          </td>
-          <td>
-            <CheckIcon />
-          </td>
-        </tr>
-        <tr>
-          <td>場所の大きさ</td>
-          <td></td>
-          <td></td>
-          <td>
-            <CheckIcon />
-          </td>
-          <td>
-            <CheckIcon />
-          </td>
-          <td>
-            <CheckIcon />
-          </td>
-        </tr>
-        <tr>
-          <td>支払い方法を編集</td>
-          <td></td>
-          <td></td>
-          <td>
-            <CheckIcon />
-          </td>
-          <td>
-            <CheckIcon />
-          </td>
-          <td>
-            <CheckIcon />
-          </td>
-        </tr>
-        <tr>
-          <td>カテゴリーを編集</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td>
-            <CheckIcon />
-          </td>
-          <td>
-            <CheckIcon />
-          </td>
-        </tr>
-        <tr>
-          <td>地図を編集</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td>
-            <CheckIcon />
-          </td>
-          <td>
-            <CheckIcon />
-          </td>
-        </tr>
-        <tr>
-          <td>概要を編集</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td>
-            <CheckIcon />
-          </td>
-          <td>
-            <CheckIcon />
-          </td>
-        </tr>
-        <tr>
-          <td>タイトルを編集</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td>
-            <CheckIcon />
-          </td>
-        </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>場所の追加・レビューを作成</td>
+            <td>
+              <CheckIcon />
+            </td>
+            <td>
+              <CheckIcon />
+            </td>
+            <td>
+              <CheckIcon />
+            </td>
+            <td>
+              <CheckIcon />
+            </td>
+            <td>
+              <CheckIcon />
+            </td>
+          </tr>
+          <tr>
+            <td>レビューの著者を表示</td>
+            <td></td>
+            <td>
+              <CheckIcon />
+            </td>
+            <td>
+              <CheckIcon />
+            </td>
+            <td>
+              <CheckIcon />
+            </td>
+            <td>
+              <CheckIcon />
+            </td>
+          </tr>
+          <tr>
+            <td>公式サイトを編集</td>
+            <td></td>
+            <td>
+              <CheckIcon />
+            </td>
+            <td>
+              <CheckIcon />
+            </td>
+            <td>
+              <CheckIcon />
+            </td>
+            <td>
+              <CheckIcon />
+            </td>
+          </tr>
+          <tr>
+            <td>トイレ有無を編集</td>
+            <td></td>
+            <td>
+              <CheckIcon />
+            </td>
+            <td>
+              <CheckIcon />
+            </td>
+            <td>
+              <CheckIcon />
+            </td>
+            <td>
+              <CheckIcon />
+            </td>
+          </tr>
+          <tr>
+            <td>場所の大きさ</td>
+            <td></td>
+            <td></td>
+            <td>
+              <CheckIcon />
+            </td>
+            <td>
+              <CheckIcon />
+            </td>
+            <td>
+              <CheckIcon />
+            </td>
+          </tr>
+          <tr>
+            <td>支払い方法を編集</td>
+            <td></td>
+            <td></td>
+            <td>
+              <CheckIcon />
+            </td>
+            <td>
+              <CheckIcon />
+            </td>
+            <td>
+              <CheckIcon />
+            </td>
+          </tr>
+          <tr>
+            <td>カテゴリーを編集</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+              <CheckIcon />
+            </td>
+            <td>
+              <CheckIcon />
+            </td>
+          </tr>
+          <tr>
+            <td>地図を編集</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+              <CheckIcon />
+            </td>
+            <td>
+              <CheckIcon />
+            </td>
+          </tr>
+          <tr>
+            <td>概要を編集</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+              <CheckIcon />
+            </td>
+            <td>
+              <CheckIcon />
+            </td>
+          </tr>
+          <tr>
+            <td>タイトルを編集</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+              <CheckIcon />
+            </td>
+          </tr>
+        </tbody>
       </Table>
       <End>
         このさきコンテンツはないです。

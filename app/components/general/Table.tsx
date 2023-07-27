@@ -1,5 +1,13 @@
 import React from "react";
 import { VariantProps, cva } from "cva";
+import { CircleIcon, Cross2Icon } from "@radix-ui/react-icons";
+import Align from "./Align";
+
+const TableCheck: React.FC<{ checked: boolean }> = ({ checked, ...props }) => (
+  <Align {...props} className={`w-full justify-center`}>
+    {checked ? <CircleIcon /> : <Cross2Icon />}
+  </Align>
+);
 
 const table = cva("table", {
   variants: {
@@ -17,36 +25,19 @@ const table = cva("table", {
 export interface TableProps
   extends React.TableHTMLAttributes<HTMLTableElement>,
     VariantProps<typeof table> {
-  caption: string;
-  head: JSX.Element;
-  column?: string;
+  caption?: string;
 }
 
-const Table: React.FC<TableProps> = ({
-  textAlign,
-  caption,
-  column,
-  ...props
-}) => (
+interface TableComponent extends React.FC<TableProps> {
+  Check: React.FC<{ checked: boolean }>;
+}
+
+const Table: TableComponent = ({ textAlign, caption, ...props }) => (
   <table {...props}>
-    <caption>{caption}</caption>
-    {column && (
-      <colgroup>
-        {column.split(" ").map((w: string) => (
-          <col width={w} />
-        ))}
-      </colgroup>
-    )}
-    <thead>{props.head}</thead>
-    <tbody className={`shadow-shadow1`}>{props.children}</tbody>
+    {caption && <caption>{caption}</caption>}
+    {props.children}
   </table>
 );
 
+Table.Check = TableCheck;
 export default Table;
-
-// elements: {
-//   caption: [
-
-//   ],
-//   th: ['text-sm'],
-// },

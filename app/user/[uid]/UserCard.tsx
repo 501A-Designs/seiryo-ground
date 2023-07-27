@@ -15,26 +15,10 @@ import { signOut } from "firebase/auth";
 import * as Progress from "@radix-ui/react-progress";
 import Button from "../../components/button/Button";
 import RadixDialog from "../../components/radix/Dialog";
+import { userLevelColor } from "../../components/badge/UserLevelBadge";
+import { PlaceDataProps } from "../../components/general/Place";
 
-export const cardColors = {
-  1: [
-    "from-green-400",
-    "to-green-600",
-    "dark:from-green-700",
-    "dark:to-green-900",
-  ],
-  2: ["from-blue-400", "to-blue-600", "dark:from-blue-700", "dark:to-blue-900"],
-  3: [
-    "from-orange-400",
-    "to-orange-600",
-    "dark:from-orange-700",
-    "dark:to-orange-900",
-  ],
-  4: ["from-red-400", "to-red-600", "dark:from-red-700", "dark:to-red-900"],
-  5: ["from-zinc-400", "to-zinc-600", "dark:from-zinc-700", "dark:to-zinc-900"],
-};
-
-const idCard = cva(
+const userCard = cva(
   [
     "select-none",
     "rounded-3xl",
@@ -49,10 +33,9 @@ const idCard = cva(
   ],
   {
     variants: {
-      level: cardColors,
+      level: userLevelColor,
       animate: {
         true: ["animate-flip-card"],
-        false: [""],
       },
     },
     defaultVariants: {
@@ -67,12 +50,7 @@ interface ProgressBarProps extends React.HTMLAttributes<HTMLDivElement> {
   max: number;
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({
-  name,
-  point,
-  max,
-  className,
-}) => {
+const ProgressBar: React.FC<ProgressBarProps> = ({ name, point, max }) => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -116,7 +94,14 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   );
 };
 
-export default function Id({ data }) {
+export interface UserDataTypes {
+  name: string;
+  level: 1 | 2 | 3 | 4 | 5;
+  reviews: any[];
+  places: PlaceDataProps[];
+}
+
+const UserCard: React.FC<{ data: UserDataTypes }> = ({ data }) => {
   const [user] = useAuthState(auth);
 
   const [animate, setAnimate] = useState(false);
@@ -150,13 +135,13 @@ export default function Id({ data }) {
     setAnimate(false);
   };
 
-  let placeCount = data.places.length;
-  let reviewCount = data.reviews.length;
+  const { name, level, reviews, places } = data;
+  const placeCount = places.length;
+  const reviewCount = reviews.length;
 
   useEffect(() => {
     if (user) {
       if (checkLevel(placeCount, reviewCount) != data.level) {
-        console.log(checkLevel(placeCount, reviewCount), data.level);
         flip();
         setUpgradableLevel(checkLevel(placeCount, reviewCount));
       }
@@ -175,8 +160,8 @@ export default function Id({ data }) {
             `}
             >
               <div
-                className={idCard({
-                  level: data.level,
+                className={userCard({
+                  level: level,
                   animate: animate,
                 })}
               >
@@ -212,7 +197,7 @@ export default function Id({ data }) {
                   <div className={`flex justify-between h-full`}>
                     <div className={`flex justify-end items-end`}>
                       <div>
-                        <h2 className={`text-white`}>{user.displayName}</h2>
+                        <h2 className={`text-white`}>{name}</h2>
                         <p className={`text-white`}>
                           {user.metadata.creationTime}
                         </p>
@@ -224,7 +209,7 @@ export default function Id({ data }) {
                       <p className={`text-zinc-50/50`}>
                         清涼広場会員カード
                         <br />
-                        Level {data.level} Card
+                        Level {level} Card
                       </p>
                     </div>
                   </div>
@@ -264,4 +249,6 @@ export default function Id({ data }) {
       )}
     </>
   );
-}
+};
+
+export default UserCard;

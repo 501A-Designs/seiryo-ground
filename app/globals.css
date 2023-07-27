@@ -61,24 +61,55 @@ li {
 }
 
 table {
-  @apply border border-zinc-400 dark:border-zinc-700 divide-y divide-zinc-400 dark:divide-zinc-700 text-center w-full
-  p-0 mx-0 my-4;
+  @apply border-collapse divide-y divide-zinc-400 dark:divide-zinc-700 text-center w-full
+  p-0 m-0;
 }
 
 th {
-  @apply px-4 py-2 border border-zinc-200 border-b-zinc-300  dark:border-zinc-800 dark:border-b-zinc-700 bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-300 font-normal text-xs uppercase;
+  @apply px-4 py-2 border border-zinc-200   dark:border-zinc-800 bg-transparent text-zinc-800 dark:text-zinc-300 font-normal text-xs uppercase;
 }
 
 td {
-  @apply px-4 py-2 border border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-400 text-left text-xs;
+  @apply px-4 py-2 border border-zinc-300 dark:border-zinc-700 bg-transparent text-zinc-900 dark:text-zinc-400 text-left text-xs;
 }
+
+table tr td:first-child,
+th:first-child {
+  @apply border-l-transparent;
+}
+
+table tr:first-child th {
+  @apply border-t-transparent;
+}
+
+table tr td:last-child,
+th:last-child {
+  @apply border-r-transparent;
+}
+
+table tr:last-child td {
+  @apply border-b-transparent;
+}
+
+/* table tr:first-child th:first-child {
+  @apply rounded-tl-md;
+}
+table tr:first-child th:last-child {
+  @apply rounded-tr-md;
+}
+table tr:last-child td:first-child {
+  @apply rounded-bl-md;
+}
+table tr:last-child td:last-child {
+  @apply rounded-br-md;
+} */
 
 caption {
   @apply my-3 caption-bottom text-zinc-400 dark:text-zinc-500 text-xs;
 }
 
 a {
-  @apply text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-500 decoration-solid underline decoration-zinc-400 dark:decoration-zinc-500;
+  @apply text-inherit text-zinc-700 dark:text-zinc-300 hover:text-zinc-500 decoration-solid underline decoration-zinc-400 dark:decoration-zinc-500;
 }
 /* textDecorationStyle: "none",
 borderColor: "$gray2",
@@ -87,6 +118,22 @@ color: "inherit", */
 
 hr {
   @apply bg-gradient-to-r from-transparent via-zinc-200 dark:via-zinc-800 to-transparent border-none h-[0.8px] w-full rounded-full my-3;
+}
+
+input[type="range"] {
+  @apply appearance-none border-transparent bg-zinc-200 dark:bg-zinc-800 h-0.5 cursor-pointer focus:outline-none active:outline-none my-3 rounded-full w-full;
+}
+input[type="range"]::-webkit-slider-thumb {
+  @apply appearance-none w-4 h-4 shadow-shadow2 rounded-full border
+  border-zinc-700
+  dark:border-zinc-200
+  text-zinc-100
+  dark:text-zinc-900 
+  bg-gradient-to-b
+  to-zinc-900
+  dark:to-zinc-300
+  from-zinc-700
+  dark:from-zinc-100;
 }
 
 @layer components {

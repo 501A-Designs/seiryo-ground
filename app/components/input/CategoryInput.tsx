@@ -1,8 +1,8 @@
 import React from "react";
 import useSound from "use-sound";
 import { cva } from "cva";
-import { typeColor } from "../general/TypeBadge";
 import { PlaceFormTypes } from "../create/CreatePlace";
+import { categoryColor } from "../badge/CategoryBadge";
 
 const categories: PlaceFormTypes["category"][] = ["g", "b", "o", "p"];
 
@@ -31,7 +31,7 @@ const categoryInputItem = cva(
   }
 );
 
-const typeBadge = cva(
+const categoryBadge = cva(
   [
     "flex",
     "items-center",
@@ -48,7 +48,7 @@ const typeBadge = cva(
         true: ["w-[10px]", "h-[10px]", "animate-scale"],
         false: ["w-[30px]", "h-[3px]"],
       },
-      type: typeColor,
+      type: categoryColor,
     },
   }
 );
@@ -91,7 +91,7 @@ const CategoryInput: React.FC<CategoryInputProps> = ({
             }}
           />
           <div
-            className={typeBadge({
+            className={categoryBadge({
               checked: state === item,
               type: item,
             })}

@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 import { useAuthState, useSignInWithGoogle } from "react-firebase-hooks/auth";
 import { auth } from "../../../firebase/firebase";
 import Align from "./Align";
-import { NewUserTypes } from "../../api/create-profile/route";
+import { NewUserTypes } from "../../api/create-user/route";
 import CreatePlace from "../create/CreatePlace";
 
 const Header = () => {
@@ -35,8 +35,8 @@ const Header = () => {
           name: user.displayName,
         };
 
-        const createProfile = async () =>
-          await fetch("http://localhost:3000/api/create-profile", {
+        const createUser = async () =>
+          await fetch("http://localhost:3000/api/create-user", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -54,7 +54,7 @@ const Header = () => {
               console.error("Error:", error);
             });
 
-        createProfile();
+        createUser();
       }
     }
   }, [user]);
@@ -87,7 +87,7 @@ const Header = () => {
               size={"small"}
               intent={"transparent"}
               icon={<PersonIcon />}
-              onClick={() => router.push(`/${user.uid}`)}
+              onClick={() => router.push(`/user/${user.uid}`)}
             />
           </>
         ) : (

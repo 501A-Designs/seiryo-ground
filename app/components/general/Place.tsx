@@ -8,7 +8,7 @@ import moment from "moment";
 
 import { Link1Icon } from "@radix-ui/react-icons";
 import { PlaceFormTypes } from "../create/CreatePlace";
-import TypeBadge from "./TypeBadge";
+import TypeBadge from "../badge/CategoryBadge";
 import Button from "../button/Button";
 import { prefectureOptions } from "../button/label";
 
